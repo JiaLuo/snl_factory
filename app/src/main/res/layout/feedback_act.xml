@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="23dp"
+        android:layout_gravity="center"
+        android:background="@drawable/feedback_edit_bg"
+        android:layout_width="match_parent"
+        android:layout_height="152dp">
+        <EditText
+            android:id="@+id/feedback_content"
+            android:maxLength="100"
+            android:cursorVisible="false"
+            android:background="@null"
+            android:paddingTop="10dp"
+            android:paddingLeft="12dp"
+            android:gravity="left"
+            android:textSize="14sp"
+            android:textColorHint="#cccccc"
+            android:hint="@string/feedback_hint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/feedback_edit_max_num"
+            android:paddingBottom="20dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="0/100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/feedback_button"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/white"
+        android:background="@drawable/login"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:text="提交"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="310dp"
+        android:layout_height="46dp"/>
+</LinearLayout>

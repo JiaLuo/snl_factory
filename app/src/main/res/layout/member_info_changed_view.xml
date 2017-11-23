@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/collect_clothes_bg"
+        android:layout_width="227dp"
+        android:layout_height="145dp">
+        <TextView
+            android:id="@+id/tv_personal_member"
+            android:background="@drawable/single_or_more_selector"
+            android:text="个人会员"
+            android:textColor="@color/black_text"
+            android:gravity="center"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="15sp"
+            android:layout_width="136dp"
+            android:layout_height="39dp"/>
+        <TextView
+            android:id="@+id/tv_enterprise_member"
+            android:background="@drawable/single_or_more_selector"
+            android:text="企业会员"
+            android:textColor="@color/black_text"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:textSize="15sp"
+            android:layout_width="136dp"
+            android:layout_height="39dp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+   <EditText
+       android:id="@+id/et_input_cooperation_store"
+       android:layout_marginLeft="20dp"
+       android:layout_marginRight="20dp"
+       android:layout_marginTop="10dp"
+       android:background="@drawable/check_clothes_img_lin_bg"
+       android:hint="请输入合作门店名称"
+       android:textSize="14sp"
+       android:paddingLeft="8dp"
+       android:layout_width="match_parent"
+       android:layout_height="48dp"/>
+    <ListView
+        android:id="@+id/cooperation_store_list"
+        android:layout_below="@id/et_input_cooperation_store"
+        android:background="@drawable/check_clothes_img_lin_bg"
+        android:divider="@null"
+        android:layout_marginBottom="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"/>
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:id="@+id/cooperation_store_edit_bt"
+        android:gravity="center"
+        android:text="编辑"
+        android:textColor="@color/white"
+        android:background="@color/base_color"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"/>
+
+</RelativeLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:background="#f2fefe"
+              android:gravity="center_vertical">
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/groupIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/btn_browser2"/>
+    <TextView
+        android:layout_marginLeft="12dp"
+        android:id="@+id/groupto"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:gravity="center_vertical|left"/>
+</RelativeLayout>

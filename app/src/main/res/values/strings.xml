@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SnlFactory</string>
+    <string name="order_manage">订单处理</string>
+    <string name="offline_cash">线下收银</string>
+    <string name="manage">管理</string>
+    <string name="settings">设置</string>
+    <string name="invite_friend_info">1、你邀请来的好友，终身的洗衣下单，每笔都按成交总额的1%返现到您的账户里。\n
+2、通过作弊手段恶意获取返现奖励，将被强制取消所得，且数额巨大的将依法追究刑事责任。\n
+3、所邀请好友完成订单时，返现即时到帐，可在个人中心—返现余额中查看，邀请越多返现越多。\n
+4、返现金额可在平台无门槛消费。</string>
+    <string name="feedback_hint">请输入您的意见或建议，我们会认真对待每一份反馈，持续改进，已获得您的认可</string>
+    <string name="pass_role_info">*密码为6~18位字母、数字组合</string>
+
+    <string name="picker_sure">确定</string>
+    <string name="picker_cancel">取消</string>
+    <string name="picker_title">选择时间</string>
+
+    <string name="picker_year">年</string>
+    <string name="picker_month">月</string>
+    <string name="picker_day">日</string>
+    <string name="picker_hour">时</string>
+    <string name="picker_minute">分</string>
+</resources>

@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="应收"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/tv_order_sum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="￥124.00"
+                    android:textColor="#b3b3b3"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="品项折扣"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/tv_brand_discount_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="-￥0.00"
+                    android:textColor="#b3b3b3"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="实收"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/tv_net_receipts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="￥124.00"
+                    android:textColor="@color/red"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@color/base_bg"
+                android:padding="15dp"
+                android:text="选择支付方式"
+                android:textColor="#999999"/>
+            <!--<ListView-->
+            <!--android:id="@+id/pay_mode_list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:dividerHeight="3dp"-->
+            <!--android:divider="@color/white"-->
+            <!--android:scrollbars="none"/>-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="61dp"
+                android:layout_marginLeft="12dp">
+
+                <ImageView
+                    android:id="@+id/iv_platform_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/platform_member_img"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/iv_platform_member"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/platform_balance_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="平台会员卡支付"
+                        android:textColor="@color/black_text"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/platform_balance_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="平台余额：1000"
+                        android:textColor="#999999"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_go_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="9dp"
+                        android:text="去购买"
+                        android:textColor="#999999"
+                        android:textSize="13sp"/>
+
+                    <ImageView
+                        android:id="@+id/iv_right_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="12dp"
+                        android:background="@drawable/right_arrow"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/platform_member_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/mode_of_payment_selector"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/rebates_balance_platformPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/platform_member_selector"
+                    android:text="当前余额不足"
+                    android:textColor="@color/red"
+                    android:textSize="13sp"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_vip_member"
+                android:layout_width="match_parent"
+                android:layout_height="61dp"
+                android:layout_marginLeft="12dp">
+
+                <ImageView
+                    android:id="@+id/iv_vip_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/vip_member_img"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@id/iv_vip_member"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="专店会员卡支付"
+                        android:textColor="@color/black_text"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/vip_balance_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="专享余额：500.50"
+                        android:textColor="#999999"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/vip_member_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/mode_of_payment_selector"/>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/vip_member_card_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp">
+
+                <ImageView
+                    android:id="@+id/iv_rebates_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rebates_balance_img"/>
+
+                <TextView
+                    android:id="@+id/return_cash_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/iv_rebates_balance"
+                    android:text="现金支付"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:id="@+id/cash_pay_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/mode_of_payment_selector"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_cash_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/return_cash_balance"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/discount_bg"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/nine_cash_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="九折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/eight_cash_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/nine_cash_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="八折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/seven_cash_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/eight_cash_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="七折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/special_cash_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nine_cash_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="特殊折扣"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/rounding_cash_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/eight_cash_discount"
+                        android:layout_toRightOf="@id/special_cash_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="取整抹零"
+                        android:textColor="@color/black_text"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/message_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/weixin_img"/>
+
+                <TextView
+                    android:id="@+id/tv_wxpay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/message_pay"
+                    android:text="微信支付"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:id="@+id/wx_pay_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/mode_of_payment_selector"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_wxpay_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_wxpay"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/discount_bg"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/nine_wxpay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="九折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/eight_wxpay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/nine_wxpay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="八折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/seven_wxpay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/eight_wxpay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="七折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/special_wxpay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nine_wxpay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="特殊折扣"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/rounding_wxpay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/eight_wxpay_discount"
+                        android:layout_toRightOf="@id/special_wxpay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="取整抹零"
+                        android:textColor="@color/black_text"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/payment_treasure_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/zhifubao_img"/>
+
+                <TextView
+                    android:id="@+id/tv_alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@id/payment_treasure_pay"
+                    android:text="支付宝支付"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:id="@+id/ali_pay_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="11dp"
+                    android:layout_marginRight="11dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/mode_of_payment_selector"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_alipay_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_alipay"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/discount_bg"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/nine_alipay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="九折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/eight_alipay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/nine_alipay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="八折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/seven_alipay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/eight_alipay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:padding="20dp"
+                        android:text="七折"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/special_alipay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nine_alipay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="特殊折扣"
+                        android:textColor="@color/black_text"/>
+
+                    <TextView
+                        android:id="@+id/rounding_alipay_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/eight_alipay_discount"
+                        android:layout_toRightOf="@id/special_alipay_discount"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="取整抹零"
+                        android:textColor="@color/black_text"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+
+            <TextView
+                android:id="@+id/confirm_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="37dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="37dp"
+                android:background="@drawable/login"
+                android:gravity="center"
+                android:text="确认支付"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

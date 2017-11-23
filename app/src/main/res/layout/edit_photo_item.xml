@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_marginTop="20dp"
+        android:id="@+id/edit_clothes_img"
+        android:layout_centerVertical="true"
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        fresco:failureImage="@drawable/default_bg"
+        fresco:placeholderImage="@drawable/default_bg"/>
+    <ImageView
+        android:padding="10dp"
+        android:id="@+id/edit_photo_delete"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/delete_photo_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
