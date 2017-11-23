@@ -7,4 +7,4 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/java/com/shinaier/laundry/snlfactory/network/Constants
+/app/src/main/java/com/shinaier/laundry/snlfactory/network/Constants.java
