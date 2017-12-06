@@ -13,4 +13,7 @@
     <dimen name="picker_line_width">1dp</dimen>
     <dimen name="picker_line_mar">15dp</dimen>
     <dimen name="picker_height">230dp</dimen>
+    <dimen name="grid_expected_size">120dp</dimen>
+
+    <dimen name="title_bar_size">67dp</dimen>
 </resources>

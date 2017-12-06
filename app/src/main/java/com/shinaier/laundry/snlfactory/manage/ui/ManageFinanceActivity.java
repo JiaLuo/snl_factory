@@ -14,6 +14,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.adapter.ManageFinanceAdapter;
+import com.shinaier.laundry.snlfactory.manage.fragment.ManageFinanceFragment;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;

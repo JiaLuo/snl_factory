@@ -1,4 +1,4 @@
-package com.shinaier.laundry.snlfactory.manage.ui;
+package com.shinaier.laundry.snlfactory.manage.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

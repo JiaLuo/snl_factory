@@ -1,11 +1,13 @@
 package com.shinaier.laundry.snlfactory.main.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
@@ -13,12 +15,14 @@ import com.common.utils.PreferencesUtils;
 import com.common.utils.StringUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.base.BaseActivity;
+import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.base.WebViewActivity;
 import com.shinaier.laundry.snlfactory.main.MainActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.PhotoVerifyCodeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UserEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
@@ -33,8 +37,9 @@ import java.util.IdentityHashMap;
  * Created by 张家洛 on 2017/2/8.
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_LOGIN = 0x1;
+    private static final int REQUEST_CODE_PHOTO_VERIFY_CODE = 0x2;
 
     @ViewInject(R.id.login_put_num)
     private EditText loginPutNum;
@@ -46,33 +51,57 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextView forgetPassword;
     @ViewInject(R.id.person_protocol)
     private TextView personProtocol;
+    @ViewInject(R.id.left_button)
+    private ImageView leftButton;
+    @ViewInject(R.id.picture_verify_code_img)
+    private SimpleDraweeView pictureVerifyCodeImg;
+    @ViewInject(R.id.picture_verify_code)
+    private EditText pictureVerifyCode;
+
     private String phoneNum;
     private String userPassword;
     private String registrationID;
+    private String captcha;
+    private String unique;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_act);
         ViewInjectUtils.inject(this);
+        loadImgVerifyData();
         initView();
     }
 
+    private void loadImgVerifyData() {
+        //获取图片验证码
+        requestHttpData(Constants.Urls.URL_GET_PHOTO_VERIFY_CODE,REQUEST_CODE_PHOTO_VERIFY_CODE);
+    }
+
     private void initView() {
+        setCenterTitle("商家登录");
+
+        leftButton.setVisibility(View.GONE);
         loginBt.setOnClickListener(this);
         personProtocol.setOnClickListener(this);
         forgetPassword.setOnClickListener(this);
+        pictureVerifyCodeImg.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_bt:
-                phoneNum = loginPutNum.getText().toString();
-                userPassword = loginPutPassword.getText().toString();
+                String phoneNum = loginPutNum.getText().toString();
+                String userPassword = loginPutPassword.getText().toString();
+                String photoCode = pictureVerifyCode.getText().toString();
                 if(checkPhoneNumber(phoneNum)){
                     if(!TextUtils.isEmpty(userPassword)){
-                        login();
+                        if (!TextUtils.isEmpty(photoCode)){
+                            login(phoneNum,userPassword,photoCode);
+                        }else {
+                            ToastUtil.shortShow(this,"请输入图片验证码");
+                        }
                     }else {
                         ToastUtil.shortShow(this,"请输入密码");
                     }
@@ -87,14 +116,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.forget_password:
                 startActivity(new Intent(this,FindPasswordActivity.class));
                 break;
+            case R.id.picture_verify_code_img:
+                //更换图片验证码
+                loadImgVerifyData();
+                break;
         }
     }
 
-    private void login() {
+    private void login(String phoneNum,String userPassword,String photoCode) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("username",phoneNum);
-        params.put("password",userPassword);
-        params.put("registration_id", PreferencesUtils.getString(this,"registrationID"));
+        params.put("mobile_number",phoneNum);
+        params.put("passwd",userPassword);
+        params.put("captcha",captcha);
+        params.put("unique",unique);
+        params.put("code",photoCode);
+        params.put("bind_id", PreferencesUtils.getString(this,"registrationID"));
         requestHttpData(Constants.Urls.URL_POST_LOGIN,REQUEST_CODE_LOGIN, FProtocol.HttpMethod.POST,params);
     }
 
@@ -102,13 +138,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void parseData(int requestCode, String data) {
         super.parseData(requestCode, data);
         switch (requestCode){
+            case REQUEST_CODE_PHOTO_VERIFY_CODE:
+                if (data != null){
+                    PhotoVerifyCodeEntity photoVerifyCodeEntity = Parsers.getPhotoVerifyCodeEntity(data);
+                    if (photoVerifyCodeEntity != null){
+                        if (photoVerifyCodeEntity.getCode() == 0){
+                            //加密码
+                            captcha = photoVerifyCodeEntity.getResult().getCaptcha();
+                            //唯一码
+                            unique = photoVerifyCodeEntity.getResult().getUnique();
+                            //base 64之后的图片信息
+                            String image = photoVerifyCodeEntity.getResult().getImage();
+                            //截取后台返回的图片信息 转bitmap
+                            String newImg = image.substring(image.indexOf(",") + 1,image.length() );
+                            //base64图片信息转bitmap
+                            Bitmap bitmap = CommonTools.stringtoBitmap(newImg);
+                            pictureVerifyCodeImg.setImageBitmap(bitmap);
+                        }else {
+                            ToastUtil.shortShow(this,photoVerifyCodeEntity.getMsg());
+                        }
+                    }
+                }
+                break;
             case REQUEST_CODE_LOGIN:
                 if(data != null){
                     UserEntity userEntity = Parsers.getUserEntity(data);
                     if(userEntity.getRetcode() == 0){
-                        UserCenter.setToken(this,userEntity.getData().getToken());
-                        UserCenter.setUid(this,userEntity.getData().getUid());
-                        UserCenter.setRole(this,userEntity.getData().getRole());
+                        UserCenter.setToken(this,userEntity.getToken());
+                        UserCenter.setRoot(this,userEntity.getIsRoot());
+//                        UserCenter.setUid(this,userEntity.getData().getUid());
+//                        UserCenter.setRole(this,userEntity.getData().getRole());
                         UserCenter.saveLoginStatus(this,true);
                         startActivity(new Intent(this, MainActivity.class));
                         finish();

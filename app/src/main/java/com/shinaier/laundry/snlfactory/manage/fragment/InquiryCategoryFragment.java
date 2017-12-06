@@ -1,4 +1,4 @@
-package com.shinaier.laundry.snlfactory.manage.ui;
+package com.shinaier.laundry.snlfactory.manage.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.adapter.InquiryCategoryAdapter;
+import com.shinaier.laundry.snlfactory.manage.ui.OrderDetailActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.OrderInquiryEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;

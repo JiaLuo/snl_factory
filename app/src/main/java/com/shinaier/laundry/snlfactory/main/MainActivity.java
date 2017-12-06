@@ -19,7 +19,7 @@ import com.common.utils.DeviceUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.TabsActivity;
 import com.shinaier.laundry.snlfactory.download.DownloadApk;
-import com.shinaier.laundry.snlfactory.manage.ui.ManageFragment;
+import com.shinaier.laundry.snlfactory.manage.fragment.ManageFragment;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.OfflineCashFragment;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.OrderManageFragment;
 import com.shinaier.laundry.snlfactory.receiver.MyReceiver;
@@ -130,7 +130,7 @@ public class MainActivity extends TabsActivity {
                 OrderManageFragment.class, null);
         addTab(initTabView(R.drawable.navigation_order_inquiry_selector, R.string.offline_cash),
                 OfflineCashFragment.class, null);
-        if(!UserCenter.getRole(this).equals("2")){
+        if(UserCenter.getRoot(this).equals("1")){ //是否为店长 1 是 0 否
             addTab(initTabView(R.drawable.navigation_manage_selector, R.string.manage),
                     ManageFragment.class, null);
         }

@@ -26,7 +26,6 @@ import com.shinaier.laundry.snlfactory.setting.view.RevisePhoneDialog;
 import com.shinaier.laundry.snlfactory.setting.view.ReviseServiceDialog;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
 
@@ -69,8 +68,8 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
     private ImageView leftButton;
     @ViewInject(R.id.rl_vip_info)
     private RelativeLayout rlVipInfo;
-    @ViewInject(R.id.normal_vip_discount)
-    private TextView normalVipDiscount;
+//    @ViewInject(R.id.normal_vip_discount)
+//    private TextView normalVipDiscount;
     @ViewInject(R.id.gold_vip_discount)
     private TextView goldVipDiscount;
     @ViewInject(R.id.diamond_vip_discount)
@@ -156,9 +155,15 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         switch (requestCode){
             case REQUEST_CODE_STORE_INFO:
                 if(data != null){
-                    storeInfoEntity = Parsers.getStoreInfoEntity(data);
+                    StoreInfoEntity storeInfoEntity = Parsers.getStoreInfoEntity(data);
                     setLoadingStatus(LoadingStatus.GONE);
-                    setStoreInfo();
+                    if (storeInfoEntity != null){
+                        if (storeInfoEntity.getCode() == 0){
+                            StoreInfoEntity.StoreInfoResult result = storeInfoEntity.getResult();
+                            setStoreInfo(result);
+                        }
+                    }
+
                 }else {
                     setLoadingStatus(LoadingStatus.EMPTY);
                 }
@@ -202,20 +207,20 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         }
     }
 
-    private void setStoreInfo() {
-        storeNum.setText(storeInfoEntity.getId());
-        storeName.setText(storeInfoEntity.getmName());
-        storePhoneNum.setText(storeInfoEntity.getPhone());
-        serviceScopeNum.setText(storeInfoEntity.getRound() + "km");
-        storeAddressDetail.setText(storeInfoEntity.getAddress());
-        homeServiceNum.setText("上门服务费:" + storeInfoEntity.getFuwuAmount() + "元");
-        fulledSubtractNum.setText("满减件数:" + storeInfoEntity.getFuwuNum() + "件");
-        fulledSubtractMoney.setText("满减金额：" + storeInfoEntity.getFuwuTotal() + "元");
-        normalVipDiscount.setText("普通会员：无折扣 充值" + storeInfoEntity.getCards().get(0).getPrice()+ "元");
-        goldVipDiscount.setText("黄金会员：" + storeInfoEntity.getCards().get(1).getDiscount()
-                + "折 充值" + storeInfoEntity.getCards().get(1).getPrice() + "元");
-        diamondVipDiscount.setText("钻石会员：" + storeInfoEntity.getCards().get(2).getDiscount()
-                + "折 充值 " + storeInfoEntity.getCards().get(2).getPrice() +" 元");
+    private void setStoreInfo(StoreInfoEntity.StoreInfoResult result) {
+        storeNum.setText(result.getMerchant().getId());
+        storeName.setText(result.getMerchant().getmName());
+        storePhoneNum.setText(result.getMerchant().getPhoneNumber());
+        serviceScopeNum.setText(result.getMerchant().getmRange() + "km");
+        storeAddressDetail.setText(result.getMerchant().getmAddress());
+        homeServiceNum.setText("上门服务费:" + result.getMerchant().getFreightPrice() + "元");
+        fulledSubtractNum.setText("满减件数:" + result.getMerchant().getFreightFreeNum() + "件");
+        fulledSubtractMoney.setText("满减金额：" + result.getMerchant().getFreightFreeAmount() + "元");
+//        normalVipDiscount.setText("普通会员：无折扣 充值" + storeInfoEntity.getCards().get(0).getPrice()+ "元");
+        goldVipDiscount.setText("黄金会员：" + result.getCards().get(0).getDiscount()
+                + "折 充值" + result.getCards().get(0).getPrice() + "元");
+        diamondVipDiscount.setText("钻石会员：" + result.getCards().get(1).getDiscount()
+                + "折 充值 " + result.getCards().get(1).getPrice() +" 元");
     }
 
 
@@ -245,9 +250,9 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 serviceDialog.show();
                 break;
             case R.id.rl_door_to_door_service:
-                doorToDoorServiceDialog = new DoorToDoorServiceDialog(this, R.style.timerDialog,handler,storeInfoEntity);
-                doorToDoorServiceDialog.setView();
-                doorToDoorServiceDialog.show();
+//                doorToDoorServiceDialog = new DoorToDoorServiceDialog(this, R.style.timerDialog,handler,storeInfoEntity);
+//                doorToDoorServiceDialog.setView();
+//                doorToDoorServiceDialog.show();
                 break;
             case R.id.left_button:
                 finish();
@@ -258,8 +263,8 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 break;
             case R.id.rl_vip_info:
                 Intent intent = new Intent(this,VipCardDetailActivity.class);
-                ArrayList<StoreInfoEntity.StoreINfoCards> cards = (ArrayList<StoreInfoEntity.StoreINfoCards>) storeInfoEntity.getCards();
-                intent.putParcelableArrayListExtra("cards",cards);
+//                ArrayList<StoreInfoEntity.StoreINfoCards> cards = (ArrayList<StoreInfoEntity.StoreINfoCards>) storeInfoEntity.getCards();
+//                intent.putParcelableArrayListExtra("cards",cards);
                 startActivity(intent);
                 break;
         }

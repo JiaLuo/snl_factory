@@ -1,8 +1,5 @@
 package com.shinaier.laundry.snlfactory.network.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,224 +8,193 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/18.
  */
 
-public class StoreInfoEntity implements Parcelable {
-    @SerializedName("id")
-    private String id;
-    @SerializedName("mname")
-    private String mName;
-    @SerializedName("address")
-    private String address;
-    @SerializedName("phone")
-    private String phone;
-    @SerializedName("round")
-    private String round;
-    @SerializedName("fuwu_amount")
-    private String fuwuAmount;
-    @SerializedName("fuwu_num")
-    private String fuwuNum;
-    @SerializedName("fuwu_total")
-    private String fuwuTotal;
-    @SerializedName("qrcode")
-    private String qrCode;
-    @SerializedName("cards")
-    private List<StoreINfoCards> cards;
+public class StoreInfoEntity {
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private StoreInfoResult result;
 
-    protected StoreInfoEntity(Parcel in) {
-        id = in.readString();
-        mName = in.readString();
-        address = in.readString();
-        phone = in.readString();
-        round = in.readString();
-        fuwuAmount = in.readString();
-        fuwuNum = in.readString();
-        fuwuTotal = in.readString();
-        qrCode = in.readString();
-        cards = in.createTypedArrayList(StoreINfoCards.CREATOR);
+    public int getCode() {
+        return code;
     }
 
-    public static final Creator<StoreInfoEntity> CREATOR = new Creator<StoreInfoEntity>() {
-        @Override
-        public StoreInfoEntity createFromParcel(Parcel in) {
-            return new StoreInfoEntity(in);
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public StoreInfoResult getResult() {
+        return result;
+    }
+
+    public void setResult(StoreInfoResult result) {
+        this.result = result;
+    }
+
+    public class StoreInfoResult{
+        @SerializedName("merchant")
+        private StoreInfoMerchant merchant;
+        @SerializedName("mcards")
+        private List<StoreInfoCards> cards;
+
+        public StoreInfoMerchant getMerchant() {
+            return merchant;
         }
 
-        @Override
-        public StoreInfoEntity[] newArray(int size) {
-            return new StoreInfoEntity[size];
-        }
-    };
-
-    public List<StoreINfoCards> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<StoreINfoCards> cards) {
-        this.cards = cards;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(mName);
-        dest.writeString(address);
-        dest.writeString(phone);
-        dest.writeString(round);
-        dest.writeString(fuwuAmount);
-        dest.writeString(fuwuNum);
-        dest.writeString(fuwuTotal);
-        dest.writeString(qrCode);
-        dest.writeTypedList(cards);
-    }
-
-    public static class StoreINfoCards implements Parcelable {
-        @SerializedName("id")
-        private String id;
-        @SerializedName("card_name")
-        private String cardName;
-        @SerializedName("discount")
-        private String discount;
-        @SerializedName("price")
-        private String price;
-
-        protected StoreINfoCards(Parcel in) {
-            id = in.readString();
-            cardName = in.readString();
-            discount = in.readString();
-            price = in.readString();
+        public void setMerchant(StoreInfoMerchant merchant) {
+            this.merchant = merchant;
         }
 
-        public static final Creator<StoreINfoCards> CREATOR = new Creator<StoreINfoCards>() {
-            @Override
-            public StoreINfoCards createFromParcel(Parcel in) {
-                return new StoreINfoCards(in);
+        public List<StoreInfoCards> getCards() {
+            return cards;
+        }
+
+        public void setCards(List<StoreInfoCards> cards) {
+            this.cards = cards;
+        }
+
+        public class StoreInfoCards{
+            @SerializedName("id")
+            private String id;
+            @SerializedName("card_name")
+            private String cardName;
+            @SerializedName("discount")
+            private String discount;
+            @SerializedName("price")
+            private String price;
+
+            public String getId() {
+                return id;
             }
 
-            @Override
-            public StoreINfoCards[] newArray(int size) {
-                return new StoreINfoCards[size];
+            public void setId(String id) {
+                this.id = id;
             }
-        };
 
-        public String getId() {
-            return id;
+            public String getCardName() {
+                return cardName;
+            }
+
+            public void setCardName(String cardName) {
+                this.cardName = cardName;
+            }
+
+            public String getDiscount() {
+                return discount;
+            }
+
+            public void setDiscount(String discount) {
+                this.discount = discount;
+            }
+
+            public String getPrice() {
+                return price;
+            }
+
+            public void setPrice(String price) {
+                this.price = price;
+            }
         }
+        public class StoreInfoMerchant{
+            @SerializedName("id")
+            private String id;
+            @SerializedName("mname")
+            private String mName;
+            @SerializedName("phone_number")
+            private String phoneNumber;
+            @SerializedName("mrange")
+            private String mRange;
+            @SerializedName("freight_price")
+            private String freightPrice;
+            @SerializedName("freight_free_num")
+            private String freightFreeNum;
+            @SerializedName("freight_free_amount")
+            private String freightFreeAmount;
+            @SerializedName("maddress")
+            private String mAddress;
+            @SerializedName("mdesc")
+            private String mDesc;
 
-        public void setId(String id) {
-            this.id = id;
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getmName() {
+                return mName;
+            }
+
+            public void setmName(String mName) {
+                this.mName = mName;
+            }
+
+            public String getPhoneNumber() {
+                return phoneNumber;
+            }
+
+            public void setPhoneNumber(String phoneNumber) {
+                this.phoneNumber = phoneNumber;
+            }
+
+            public String getmRange() {
+                return mRange;
+            }
+
+            public void setmRange(String mRange) {
+                this.mRange = mRange;
+            }
+
+            public String getFreightPrice() {
+                return freightPrice;
+            }
+
+            public void setFreightPrice(String freightPrice) {
+                this.freightPrice = freightPrice;
+            }
+
+            public String getFreightFreeNum() {
+                return freightFreeNum;
+            }
+
+            public void setFreightFreeNum(String freightFreeNum) {
+                this.freightFreeNum = freightFreeNum;
+            }
+
+            public String getFreightFreeAmount() {
+                return freightFreeAmount;
+            }
+
+            public void setFreightFreeAmount(String freightFreeAmount) {
+                this.freightFreeAmount = freightFreeAmount;
+            }
+
+            public String getmAddress() {
+                return mAddress;
+            }
+
+            public void setmAddress(String mAddress) {
+                this.mAddress = mAddress;
+            }
+
+            public String getmDesc() {
+                return mDesc;
+            }
+
+            public void setmDesc(String mDesc) {
+                this.mDesc = mDesc;
+            }
         }
-
-        public String getCardName() {
-            return cardName;
-        }
-
-        public void setCardName(String cardName) {
-            this.cardName = cardName;
-        }
-
-        public String getDiscount() {
-            return discount;
-        }
-
-        public void setDiscount(String discount) {
-            this.discount = discount;
-        }
-
-        public String getPrice() {
-            return price;
-        }
-
-        public void setPrice(String price) {
-            this.price = price;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(id);
-            dest.writeString(cardName);
-            dest.writeString(discount);
-            dest.writeString(price);
-        }
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
-        this.mName = mName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getRound() {
-        return round;
-    }
-
-    public void setRound(String round) {
-        this.round = round;
-    }
-
-    public String getFuwuAmount() {
-        return fuwuAmount;
-    }
-
-    public void setFuwuAmount(String fuwuAmount) {
-        this.fuwuAmount = fuwuAmount;
-    }
-
-    public String getFuwuNum() {
-        return fuwuNum;
-    }
-
-    public void setFuwuNum(String fuwuNum) {
-        this.fuwuNum = fuwuNum;
-    }
-
-    public String getFuwuTotal() {
-        return fuwuTotal;
-    }
-
-    public void setFuwuTotal(String fuwuTotal) {
-        this.fuwuTotal = fuwuTotal;
-    }
-
-    public String getQrCode() {
-        return qrCode;
-    }
-
-    public void setQrCode(String qrCode) {
-        this.qrCode = qrCode;
     }
 }

@@ -11,8 +11,18 @@ public class UserEntity {
     private int retcode;
     @SerializedName("status")
     private String status;
-    @SerializedName("data")
-    private Data data;
+    @SerializedName("token")
+    private String token;
+    @SerializedName("is_root")
+    private String isRoot;
+
+    public String getIsRoot() {
+        return isRoot;
+    }
+
+    public void setIsRoot(String isRoot) {
+        this.isRoot = isRoot;
+    }
 
     public int getRetcode() {
         return retcode;
@@ -30,48 +40,12 @@ public class UserEntity {
         this.status = status;
     }
 
-    public Data getData() {
-        return data;
+    public String getToken() {
+        return token;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setToken(String token) {
+        this.token = token;
     }
-
-    public class Data{
-        @SerializedName("uid")
-        private String uid;
-        @SerializedName("role")
-        private String role;
-        @SerializedName("token")
-        private String token;
-
-        public String getUid() {
-            return uid;
-        }
-
-        public void setUid(String uid) {
-            this.uid = uid;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public void setRole(String role) {
-            this.role = role;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-    }
-
-
-
 
 }

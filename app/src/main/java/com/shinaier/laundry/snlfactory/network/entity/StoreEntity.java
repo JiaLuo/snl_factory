@@ -7,74 +7,125 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class StoreEntity {
-    @SerializedName("mname")
-    private String mname;
-    @SerializedName("circle_logo")
-    private String circleLogo;
-    @SerializedName("state") //1 正常营业 其他是休息
-    private String state;
-    @SerializedName("total") // 今日营业额
-    private double total;
-    @SerializedName("order_count") // 订单总数
-    private String orderCount;
-    @SerializedName("average") //评分
-    private String average;
-    @SerializedName("messageState") // 1 有消息 0 无消息
-    private int messageState;
 
-    public int getMessageState() {
-        return messageState;
+    /**
+     *
+     {
+     {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": {
+     "mname": “诗奈尔上海总部",    店铺名
+     "mlogo": "http://xiyi.wzj.dev.shuxier.com/uploads/2016-11-10/58241f642ceb3.png",    店铺logo
+     "mstatus": “10",    店铺状态：10-营业中；11-休息
+     "maddress": “万达广场",    店铺地址
+     "mlevel": “5.0",    店铺星级
+     "amount": “0",    今日营业额
+     "order_count": “0”    今日订单量
+     }
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private StoreResult result;
+
+    public int getCode() {
+        return code;
     }
 
-    public void setMessageState(int messageState) {
-        this.messageState = messageState;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getMname() {
-        return mname;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMname(String mname) {
-        this.mname = mname;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getCircleLogo() {
-        return circleLogo;
+    public StoreResult getResult() {
+        return result;
     }
 
-    public void setCircleLogo(String circleLogo) {
-        this.circleLogo = circleLogo;
+    public void setResult(StoreResult result) {
+        this.result = result;
     }
 
-    public String getState() {
-        return state;
-    }
+    public class StoreResult{
+        @SerializedName("mname")
+        private String mname;
+        @SerializedName("mlogo")
+        private String mlogo;
+        @SerializedName("mstatus") //10 正常营业 11 休息
+        private String mstatus;
+        @SerializedName("maddress")
+        private String maddress;
+        @SerializedName("mlevel")
+        private String mlevel;
+        @SerializedName("amount")
+        private double amount;
+        @SerializedName("order_count")
+        private String orderCount;
 
-    public void setState(String state) {
-        this.state = state;
-    }
+        public String getMname() {
+            return mname;
+        }
 
-    public double getTotal() {
-        return total;
-    }
+        public void setMname(String mname) {
+            this.mname = mname;
+        }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
+        public String getMlogo() {
+            return mlogo;
+        }
 
-    public String getOrderCount() {
-        return orderCount;
-    }
+        public void setMlogo(String mlogo) {
+            this.mlogo = mlogo;
+        }
 
-    public void setOrderCount(String orderCount) {
-        this.orderCount = orderCount;
-    }
+        public String getMstatus() {
+            return mstatus;
+        }
 
-    public String getAverage() {
-        return average;
-    }
+        public void setMstatus(String mstatus) {
+            this.mstatus = mstatus;
+        }
 
-    public void setAverage(String average) {
-        this.average = average;
+        public String getMaddress() {
+            return maddress;
+        }
+
+        public void setMaddress(String maddress) {
+            this.maddress = maddress;
+        }
+
+        public String getMlevel() {
+            return mlevel;
+        }
+
+        public void setMlevel(String mlevel) {
+            this.mlevel = mlevel;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
+
+        public String getOrderCount() {
+            return orderCount;
+        }
+
+        public void setOrderCount(String orderCount) {
+            this.orderCount = orderCount;
+        }
     }
 }

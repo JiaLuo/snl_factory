@@ -1,7 +1,6 @@
 package com.werb.pickphotoview.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -17,7 +15,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -136,7 +133,7 @@ public class PickUtils {
 
     public Uri getUri(File file) {
         try {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String authority = context.getApplicationInfo().packageName + ".provider";
                 Log.d(PickConfig.TAG, "authority:" + authority);
                 return FileProvider.getUriForFile(context.getApplicationContext(), authority, file);
@@ -163,6 +160,7 @@ public class PickUtils {
 
     public String getFilePath(){
         File oldFile = getPhotoFile();
+        Log.e("zhang","file uri = " + getUri(oldFile));
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         File newFile = new File(dir + File.separator + "Camera", getPhotoFileName());
         // 复制文件

@@ -56,6 +56,7 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
     private String updateUrl;
     private UpdateDialog updateDialog;
     private CommonDialog dialog;
+    private SettingsEntity.SettingsResult result;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -126,7 +127,7 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
                 startActivity(new Intent(context,RevisePasswordActivity.class));
                 break;
             case R.id.rl_customer_service:
-                tell(settingsEntity.getService());
+                tell(result.getService());
                 break;
             case R.id.quit_login_bt:
 
@@ -174,16 +175,17 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
         switch (requestCode){
             case REQUEST_CODE_SETTINGS:
                 if(data != null){
-                    settingsEntity = Parsers.getSettingsEntity(data);
-                    String imgPath = Constants.Urls.URL_BASE_DOMAIN + settingsEntity.getCircleLogo();
-                    Uri uri = Uri.parse(imgPath);
-                    ivStoreImg.setImageURI(uri);
-                    storeName.setText(settingsEntity.getMname());
-                    storePhoneNumber.setText(settingsEntity.getPhone());
-                    storeCardNum.setText(settingsEntity.getCardNumber());
-                    areaManageName.setText(settingsEntity.getManager());
-                    customerServicePhoneNum.setText(settingsEntity.getService());
-                    rlCustomerService.setOnClickListener(this);
+                    SettingsEntity settingsEntity = Parsers.getSettingsEntity(data);
+                    if (settingsEntity != null){
+                        if (settingsEntity.getCode() == 0){
+                            result = settingsEntity.getResult();
+                            setInfo();
+
+                        }else {
+                            ToastUtil.shortShow(context,settingsEntity.getMsg());
+                        }
+                    }
+
                 }
                 break;
             case REQUEST_CODE_UPDATE_VERSION:
@@ -205,5 +207,18 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
                 }
                 break;
         }
+    }
+
+    /**
+     * 设置基本信息
+     */
+    private void setInfo() {
+        ivStoreImg.setImageURI( Uri.parse(result.getmLogo()));
+        storeName.setText(result.getmName());
+        storePhoneNumber.setText(result.getMobileNumber());
+        storeCardNum.setText(result.getBankCard());
+        areaManageName.setText(result.getManager());
+        customerServicePhoneNum.setText(result.getService());
+        rlCustomerService.setOnClickListener(this);
     }
 }

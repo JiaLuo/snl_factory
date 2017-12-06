@@ -1,11 +1,8 @@
 package com.shinaier.laundry.snlfactory.base;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,11 +30,6 @@ public class ToolBarActivity extends BaseActivity {
 
     @Override
     public void setContentView(int layoutResID) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.base_color));
-        }
         super.setContentView(R.layout.base_toolbar_frame);
         root = (ViewGroup) findViewById(R.id.frame_container);
         View.inflate(this, layoutResID, root);

@@ -224,24 +224,24 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
                 if (data != null){
                     StoreInfoEntity storeInfoEntity = Parsers.getStoreInfoEntity(data);
                     if (storeInfoEntity != null){
-                        if (storeInfoEntity.getCards() != null && storeInfoEntity.getCards().size() > 0){
-                            //设置普通会员信息
-                            tvMemberNormal.setText(storeInfoEntity.getCards().get(0).getCardName());
-                            if (storeInfoEntity.getCards().get(0).getDiscount().equals("10.0")){
-                                memberNormalDiscount.setText("无折扣");
-                            }else {
-                                memberNormalDiscount.setText(storeInfoEntity.getCards().get(0).getDiscount() + "折");
-                            }
-                            memberNormalRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(0).getPrice());
-                            //设置黄金会员信息
-                            tvMemberGold.setText(storeInfoEntity.getCards().get(1).getCardName());
-                            memberGoldDiscount.setText(storeInfoEntity.getCards().get(1).getDiscount() + "折");
-                            memberGoldRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(1).getPrice());
-                            //设置钻石会员信息
-                            tvMemberDiamond.setText(storeInfoEntity.getCards().get(2).getCardName());
-                            memberDiamondDiscount.setText(storeInfoEntity.getCards().get(2).getDiscount() + "折");
-                            memberDiamondRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(2).getPrice());
-                        }
+//                        if (storeInfoEntity.getCards() != null && storeInfoEntity.getCards().size() > 0){
+//                            //设置普通会员信息
+//                            tvMemberNormal.setText(storeInfoEntity.getCards().get(0).getCardName());
+//                            if (storeInfoEntity.getCards().get(0).getDiscount().equals("10.0")){
+//                                memberNormalDiscount.setText("无折扣");
+//                            }else {
+//                                memberNormalDiscount.setText(storeInfoEntity.getCards().get(0).getDiscount() + "折");
+//                            }
+//                            memberNormalRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(0).getPrice());
+//                            //设置黄金会员信息
+//                            tvMemberGold.setText(storeInfoEntity.getCards().get(1).getCardName());
+//                            memberGoldDiscount.setText(storeInfoEntity.getCards().get(1).getDiscount() + "折");
+//                            memberGoldRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(1).getPrice());
+//                            //设置钻石会员信息
+//                            tvMemberDiamond.setText(storeInfoEntity.getCards().get(2).getCardName());
+//                            memberDiamondDiscount.setText(storeInfoEntity.getCards().get(2).getDiscount() + "折");
+//                            memberDiamondRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(2).getPrice());
+//                        }
                     }
                 }
                 break;

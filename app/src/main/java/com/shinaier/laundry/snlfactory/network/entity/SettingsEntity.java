@@ -7,64 +7,112 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SettingsEntity {
-    @SerializedName("card_number")
-    private String cardNumber;
-    @SerializedName("circle_logo")
-    private String circleLogo;
-    @SerializedName("manager")
-    private String manager;
-    @SerializedName("mname")
-    private String mname;
-    @SerializedName("phone")
-    private String phone;
-    @SerializedName("service")
-    private String service;
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": {
+     "mname": "测试店铺",
+     "mlogo": "http://snltest.oss-cn-beijing.aliyuncs.com/clean/2017/12/02/5a22885b704b78.72938771.jpg",
+     "bank_card": “0232****0323”,
+     "mobile_number": "18745729547",
+     "manager": “王海华",              区域经理
+     "service": “010-58207998”    客服电话
+     }
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private SettingsResult result;
 
-    public String getCardNumber() {
-        return cardNumber;
+    public int getCode() {
+        return code;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getCircleLogo() {
-        return circleLogo;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setCircleLogo(String circleLogo) {
-        this.circleLogo = circleLogo;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getManager() {
-        return manager;
+    public SettingsResult getResult() {
+        return result;
     }
 
-    public void setManager(String manager) {
-        this.manager = manager;
+    public void setResult(SettingsResult result) {
+        this.result = result;
     }
 
-    public String getMname() {
-        return mname;
-    }
+    public class SettingsResult{
 
-    public void setMname(String mname) {
-        this.mname = mname;
-    }
+        @SerializedName("mname")
+        private String mName;
+        @SerializedName("mlogo")
+        private String mLogo;
+        @SerializedName("bank_card")
+        private String bankCard;
+        @SerializedName("mobile_number")
+        private String mobileNumber;
+        @SerializedName("manager")
+        private String manager;
+        @SerializedName("service")
+        private String service;
 
-    public String getPhone() {
-        return phone;
-    }
+        public String getmName() {
+            return mName;
+        }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+        public void setmName(String mName) {
+            this.mName = mName;
+        }
 
-    public String getService() {
-        return service;
-    }
+        public String getmLogo() {
+            return mLogo;
+        }
 
-    public void setService(String service) {
-        this.service = service;
+        public void setmLogo(String mLogo) {
+            this.mLogo = mLogo;
+        }
+
+        public String getBankCard() {
+            return bankCard;
+        }
+
+        public void setBankCard(String bankCard) {
+            this.bankCard = bankCard;
+        }
+
+        public String getMobileNumber() {
+            return mobileNumber;
+        }
+
+        public void setMobileNumber(String mobileNumber) {
+            this.mobileNumber = mobileNumber;
+        }
+
+        public String getManager() {
+            return manager;
+        }
+
+        public void setManager(String manager) {
+            this.manager = manager;
+        }
+
+        public String getService() {
+            return service;
+        }
+
+        public void setService(String service) {
+            this.service = service;
+        }
     }
 }

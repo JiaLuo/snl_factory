@@ -42,6 +42,7 @@ import com.shinaier.laundry.snlfactory.network.entity.OrderInquiryEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderPrintEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderSendEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderTakeOrderEntities;
+import com.shinaier.laundry.snlfactory.network.entity.PhotoVerifyCodeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.PlatformPaySuccessEntity;
 import com.shinaier.laundry.snlfactory.network.entity.PrintRechargeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.QuestionSettingSuccessEntities;
@@ -88,15 +89,16 @@ public class Parsers {
      * @return
      */
     public static StoreEntity getStoreEntity(String data){
-        StoreEntity storeEntity = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            storeEntity = gson.fromJson(data1,new TypeToken<StoreEntity>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return storeEntity;
+//        StoreEntity storeEntity = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            storeEntity = gson.fromJson(data1,new TypeToken<StoreEntity>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return storeEntity;
+        return gson.fromJson(data,new TypeToken<StoreEntity>(){}.getType());
     }
 
     /**
@@ -241,16 +243,17 @@ public class Parsers {
      * @return
      */
     public static StoreInfoEntity getStoreInfoEntity(String data){
-        StoreInfoEntity storeInfoEntity = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            storeInfoEntity = gson.fromJson(data1,new TypeToken<StoreInfoEntity>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return storeInfoEntity;
+//        StoreInfoEntity storeInfoEntity = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            storeInfoEntity = gson.fromJson(data1,new TypeToken<StoreInfoEntity>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return storeInfoEntity;
+        return gson.fromJson(data,new TypeToken<StoreInfoEntity>(){}.getType());
     }
 
     /**
@@ -277,16 +280,17 @@ public class Parsers {
      * @return
      */
     public static SettingsEntity getSettingsEntity(String data){
-        SettingsEntity settingsEntity = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            settingsEntity = gson.fromJson(data1,new TypeToken<SettingsEntity>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return settingsEntity;
+//        SettingsEntity settingsEntity = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            settingsEntity = gson.fromJson(data1,new TypeToken<SettingsEntity>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return settingsEntity;
+        return gson.fromJson(data,new TypeToken<SettingsEntity>(){}.getType());
     }
 
     /**
@@ -690,5 +694,14 @@ public class Parsers {
      */
     public static OperateAnalysisEntities getOperateAnalysisEntities(String data){
         return gson.fromJson(data,new TypeToken<OperateAnalysisEntities>(){}.getType());
+    }
+
+    /**
+     * 获取图片验证码
+     * @param data
+     * @return
+     */
+    public static PhotoVerifyCodeEntity getPhotoVerifyCodeEntity(String data){
+        return gson.fromJson(data,new TypeToken<PhotoVerifyCodeEntity>(){}.getType());
     }
 }

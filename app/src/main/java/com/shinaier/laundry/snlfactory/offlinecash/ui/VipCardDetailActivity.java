@@ -15,11 +15,9 @@ import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
-import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
 
@@ -44,29 +42,29 @@ public class VipCardDetailActivity extends ToolBarActivity implements View.OnCli
     private TextView vipCardConfirm;
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
-    private ArrayList<StoreInfoEntity.StoreINfoCards> cards;
+//    private ArrayList<StoreInfoEntity.StoreINfoCards> cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vip_card_detail_act);
         ViewInjectUtils.inject(this);
-        cards = getIntent().getParcelableArrayListExtra("cards");
+//        cards = getIntent().getParcelableArrayListExtra("cards");
         initView();
     }
 
     private void initView() {
         setCenterTitle("专店会员卡");
-        String rawValueNormalPrice = cards.get(0).getPrice();
-        String rawValueGoldDiscount = cards.get(1).getDiscount();
-        String rawValueGoldPrice = cards.get(1).getPrice();
-        String rawValueDiamondDiscount = cards.get(2).getDiscount();
-        String rawValueDiamondPrice = cards.get(2).getPrice();
-        normalCardMoney.setHint(subString(rawValueNormalPrice));
-        goldCardDiscount.setHint(subString(rawValueGoldDiscount));
-        goldCardMoney.setHint(subString(rawValueGoldPrice));
-        diamondCardDiscount.setHint(subString(rawValueDiamondDiscount));
-        diamondCardMoney.setHint(subString(rawValueDiamondPrice));
+//        String rawValueNormalPrice = cards.get(0).getPrice();
+//        String rawValueGoldDiscount = cards.get(1).getDiscount();
+//        String rawValueGoldPrice = cards.get(1).getPrice();
+//        String rawValueDiamondDiscount = cards.get(2).getDiscount();
+//        String rawValueDiamondPrice = cards.get(2).getPrice();
+//        normalCardMoney.setHint(subString(rawValueNormalPrice));
+//        goldCardDiscount.setHint(subString(rawValueGoldDiscount));
+//        goldCardMoney.setHint(subString(rawValueGoldPrice));
+//        diamondCardDiscount.setHint(subString(rawValueDiamondDiscount));
+//        diamondCardMoney.setHint(subString(rawValueDiamondPrice));
         vipCardConfirm.setOnClickListener(this);
         leftButton.setOnClickListener(this);
     }
@@ -85,14 +83,14 @@ public class VipCardDetailActivity extends ToolBarActivity implements View.OnCli
                         if (!TextUtils.isEmpty(goldMoney)){
                             if (!TextUtils.isEmpty(diamondDiscount)){
                                 if (!TextUtils.isEmpty(diamondMoney)){
-                                    cards.get(0).setDiscount("10");
-                                    cards.get(0).setPrice(normalMoney);
-                                    cards.get(1).setDiscount(goldDiscount);
-                                    cards.get(1).setPrice(goldMoney);
-                                    cards.get(2).setDiscount(diamondDiscount);
-                                    cards.get(2).setPrice(diamondMoney);
-                                    String jsonData = getJsonData(cards);
-                                    editMemberRule(jsonData);
+//                                    cards.get(0).setDiscount("10");
+//                                    cards.get(0).setPrice(normalMoney);
+//                                    cards.get(1).setDiscount(goldDiscount);
+//                                    cards.get(1).setPrice(goldMoney);
+//                                    cards.get(2).setDiscount(diamondDiscount);
+//                                    cards.get(2).setPrice(diamondMoney);
+//                                    String jsonData = getJsonData(cards);
+//                                    editMemberRule(jsonData);
                                 }else {
                                     ToastUtil.shortShow(this,"请输入钻石会员充值金额");
                                 }
@@ -139,40 +137,40 @@ public class VipCardDetailActivity extends ToolBarActivity implements View.OnCli
     }
 
 
-    private String getJsonData(ArrayList<StoreInfoEntity.StoreINfoCards> cards){
-        StringBuffer stringBuffer = new StringBuffer();
-        if (cards.size() > 0){
-            for (int i = 0; i < cards.size(); i++) {
-                if (i == 0){
-                    if (cards.size() == 1){
-                        stringBuffer.append('[').append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
-                                .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
-                                .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
-                                .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append("]");
-                    }else{
-                        stringBuffer.append('[').append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
-                                .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
-                                .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
-                                .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append(",");
-                    }
-                }else if (i >0 && i<cards.size()-1){
-                    stringBuffer.append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
-                            .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
-                            .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
-                            .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append(",");
-                }else{
-                    stringBuffer.append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
-                            .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
-                            .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
-                            .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append("]");
-                }
-            }
-        }else {
-            ToastUtil.shortShow(this,"暂时没卡");
-
-        }
-        return stringBuffer.toString();
-    }
+//    private String getJsonData(ArrayList<StoreInfoEntity.StoreINfoCards> cards){
+//        StringBuffer stringBuffer = new StringBuffer();
+//        if (cards.size() > 0){
+//            for (int i = 0; i < cards.size(); i++) {
+//                if (i == 0){
+//                    if (cards.size() == 1){
+//                        stringBuffer.append('[').append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
+//                                .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
+//                                .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
+//                                .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append("]");
+//                    }else{
+//                        stringBuffer.append('[').append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
+//                                .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
+//                                .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
+//                                .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append(",");
+//                    }
+//                }else if (i >0 && i<cards.size()-1){
+//                    stringBuffer.append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
+//                            .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
+//                            .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
+//                            .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append(",");
+//                }else{
+//                    stringBuffer.append('{').append('"'+"id"+'"'+":"+'"'+cards.get(i).getId()+'"'+',')
+//                            .append('"'+"card_name"+'"'+":"+'"'+cards.get(i).getCardName()+'"'+',')
+//                            .append('"'+"discount"+'"'+":"+'"'+cards.get(i).getDiscount()+'"'+',')
+//                            .append('"'+"price"+'"'+":"+'"'+ cards.get(i).getPrice()+'"'+'}').append("]");
+//                }
+//            }
+//        }else {
+//            ToastUtil.shortShow(this,"暂时没卡");
+//
+//        }
+//        return stringBuffer.toString();
+//    }
 
     //编辑价格
     private void editMemberRule(String jsonData){

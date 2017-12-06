@@ -1,4 +1,4 @@
-package com.shinaier.laundry.snlfactory.manage.ui;
+package com.shinaier.laundry.snlfactory.manage.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +24,15 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.manage.ui.CashBackActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.MakeCashCouponActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.ManageCommodityActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.ManageEmployeeActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.ManageFinanceActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.MessageNoticeActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.OperateAnalysisActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.OrderInquiryActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.UserEvaluateActivity;
 import com.shinaier.laundry.snlfactory.manage.view.SwitchView;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
@@ -55,6 +64,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
     private StoreEntity storeEntity;
     private SwitchView ivStoreSwitch;
     private TextView tvStoreSwitch;
+    private TextView storeLocation;
 
     @Nullable
     @Override
@@ -87,6 +97,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
         todayOrderNum =  view.findViewById(R.id.today_order_num);
         ivStoreSwitch =  view.findViewById(R.id.iv_store_switch);
         tvStoreSwitch =  view.findViewById(R.id.tv_store_switch);
+        storeLocation = (TextView) view.findViewById(R.id.store_location);
         LinearLayout llManageFinance =  view.findViewById(R.id.ll_manage_finance);
         LinearLayout llCommodityManage =  view.findViewById(R.id.ll_commodity_manage);
         LinearLayout llInviteFriend =  view.findViewById(R.id.ll_invite_friend);
@@ -116,8 +127,15 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
         switch (requestCode){
             case REQUEST_CODE_MANAGE:
                 if(data != null){
-                    storeEntity = Parsers.getStoreEntity(data);
-                    setStoreInfo();
+                    StoreEntity storeEntity = Parsers.getStoreEntity(data);
+                    if (storeEntity != null){
+                        if (storeEntity.getCode() == 0){
+                            StoreEntity.StoreResult result = storeEntity.getResult();
+                            setStoreInfo(result);
+                        }else {
+                            ToastUtil.shortShow(context,storeEntity.getMsg());
+                        }
+                    }
                 }
                 break;
             case REQUEST_CODE_STORE_STATUS:
@@ -132,26 +150,29 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    private void setStoreInfo() {
-        storeName.setText(storeEntity.getMname());
-        String path = Constants.Urls.URL_BASE_DOMAIN + storeEntity.getCircleLogo();
+    private void setStoreInfo(StoreEntity.StoreResult result) {
+        //设置店铺名称
+        storeName.setText(result.getMname());
+        //设置店铺logo
+        String path = result.getMlogo();
         Uri uri = Uri.parse(path);
         storeImg.setImageURI(uri);
-        ratingBarStore.setRating(Float.parseFloat(storeEntity.getAverage()));
-        collectStarInfo.setText(storeEntity.getAverage());
+        //设置店铺评分
+        ratingBarStore.setRating(Float.parseFloat(result.getMlevel()));
+        collectStarInfo.setText(result.getMlevel());
 
         SpannableStringBuilder ssb1 = new SpannableStringBuilder();
-        String total = formatMoney(storeEntity.getTotal());
+        String total = formatMoney(result.getAmount());
         ssb1.append("￥" + total);
-        if(storeEntity.getTotal() >= 0 && storeEntity.getTotal() < 10){
+        if(result.getAmount() >= 0 && result.getAmount() < 10){
             ssb1.setSpan(new AbsoluteSizeSpan(DeviceUtil.dp_to_px(context,23)),1,2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }else if(storeEntity.getTotal() >= 10 && storeEntity.getTotal() < 100){
+        }else if(result.getAmount() >= 10 && result.getAmount() < 100){
             ssb1.setSpan(new AbsoluteSizeSpan(DeviceUtil.dp_to_px(context,23)),1,3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        }else if(storeEntity.getTotal() >= 100 && storeEntity.getTotal() < 1000){
+        }else if(result.getAmount() >= 100 && result.getAmount() < 1000){
             ssb1.setSpan(new AbsoluteSizeSpan(DeviceUtil.dp_to_px(context,23)),1,4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
-        if (storeEntity.getState().equals("1")){
+        if (result.getMstatus().equals("10")){
             ivStoreSwitch.setOpened(true);
             tvStoreSwitch.setText("营业中");
             tvStoreSwitch.setTextColor(Color.parseColor("#ff6f43"));
@@ -161,7 +182,9 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
             tvStoreSwitch.setTextColor(Color.parseColor("#b2b2b2"));
         }
         todayBusinessVolume.setText(ssb1);
-        todayOrderNum.setText(storeEntity.getOrderCount());
+        todayOrderNum.setText(result.getOrderCount());
+
+        storeLocation.setText(result.getMaddress());
 
     }
 

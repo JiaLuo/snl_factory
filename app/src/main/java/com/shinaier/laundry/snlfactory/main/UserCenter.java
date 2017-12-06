@@ -13,6 +13,7 @@ public class UserCenter {
     public static UserCenter instance = null;
 
     public static final String USER_PRE_KEY_TOKEN = "user_pre_token";
+    public static final String USER_PRE_KEY_IS_ROOT = "user_pre_is_root";
     public static final String USER_PRE_KEY_UID = "user_pre_uid";
     public static final String USER_PRE_KEY_ROLE = "user_pre_role";
 
@@ -59,6 +60,13 @@ public class UserCenter {
         return PreferencesUtils.getString(context,USER_PRE_KEY_ROLE);
     }
 
+    public static void setRoot(Context context,String isRoot){
+        PreferencesUtils.putString(context,USER_PRE_KEY_IS_ROOT,isRoot);
+    }
+
+    public static String getRoot(Context context){
+        return PreferencesUtils.getString(context,USER_PRE_KEY_IS_ROOT);
+    }
 
     public static void saveLoginStatus(Context context, boolean flag){
         PreferencesUtils.putBoolean(context,"USER_PRE_KEY_TOKEN",flag);

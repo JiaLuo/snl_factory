@@ -48,9 +48,9 @@ public class DoorToDoorServiceDialog extends Dialog {
         final TextView edReviseMoney = (TextView) view.findViewById(R.id.ed_revise_money);
         TextView reviseDoorCancel = (TextView) view.findViewById(R.id.revise_door_cancel);
         TextView reviseDoorConfirm = (TextView) view.findViewById(R.id.revise_door_confirm);
-        edReviseDoorServiceMoney.setText(storeInfoEntity.getFuwuAmount());
-        edReviseClothesNumber.setText(storeInfoEntity.getFuwuNum());
-        edReviseMoney.setText(storeInfoEntity.getFuwuTotal());
+//        edReviseDoorServiceMoney.setText(storeInfoEntity.getFuwuAmount());
+//        edReviseClothesNumber.setText(storeInfoEntity.getFuwuNum());
+//        edReviseMoney.setText(storeInfoEntity.getFuwuTotal());
         reviseDoorConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

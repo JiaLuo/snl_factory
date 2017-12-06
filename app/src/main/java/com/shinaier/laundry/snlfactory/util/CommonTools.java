@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
@@ -16,6 +17,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Base64;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.TextView;
@@ -365,5 +367,24 @@ public class CommonTools {
 		style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.base_color)), fstart, fend,
 				Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 		numtext.setText(style);
+	}
+
+	/**
+	 * base64 图片信息转 bitmap
+	 * @param string base64 图片信息
+	 * @return bitmap图片
+	 */
+	public static Bitmap stringtoBitmap(String string){
+		//将字符串转换成Bitmap类型
+		Bitmap bitmap = null;
+		try {
+			byte[] bitmapArray;
+			bitmapArray = Base64.decode(string, Base64.DEFAULT);
+			bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bitmap;
 	}
 }

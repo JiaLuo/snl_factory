@@ -81,10 +81,9 @@ public class RevisePasswordActivity extends ToolBarActivity implements View.OnCl
                         if(matnoNewPassword.matches()&& matenNewPassword.matches() && matNewPassword.matches()){
                             if(newPassword.equals(confirmPassword)){
                                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                params.put("new_password",newPassword);
-                                params.put("old_password",bygonePassword);
                                 params.put("token", UserCenter.getToken(this));
-                                params.put("uid",UserCenter.getUid(this));
+                                params.put("new",newPassword);
+                                params.put("old",bygonePassword);
                                 requestHttpData(Constants.Urls.URL_POST_REVISE_PASSWORD,REQUEST_CODE_REVISE_PASSWORD, FProtocol.HttpMethod.POST,params);
                             }else {
                                 ToastUtil.shortShow(this,"新密码两次输入不一致");

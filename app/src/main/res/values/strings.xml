@@ -20,4 +20,6 @@
     <string name="picker_day">日</string>
     <string name="picker_hour">时</string>
     <string name="picker_minute">分</string>
+
+    <string name="filter_vcode">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 </resources>

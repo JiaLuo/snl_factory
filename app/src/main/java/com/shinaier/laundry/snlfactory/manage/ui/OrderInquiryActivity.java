@@ -13,6 +13,7 @@ import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.manage.adapter.OrderInquiryAdapter;
+import com.shinaier.laundry.snlfactory.manage.fragment.InquiryCategoryFragment;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.ClearEditText;
 
