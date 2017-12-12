@@ -77,10 +77,7 @@ public class Parsers {
      * @return
      */
     public static UserEntity getUserEntity(String data){
-        UserEntity userEntity = null;
-        userEntity =  gson.fromJson(data,new TypeToken<UserEntity>(){}.getType());
-//        JSONObject jsonObject = new JSONObject(userCenter.getData());
-        return userEntity;
+        return gson.fromJson(data,new TypeToken<UserEntity>(){}.getType());
     }
 
     /**

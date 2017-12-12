@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Entity {
-    @SerializedName("retcode")
+    @SerializedName("code")
     private int retcode;
-    @SerializedName("status")
+    @SerializedName("msg")
     private String status;
 
     public int getRetcode() {

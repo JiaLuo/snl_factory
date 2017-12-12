@@ -163,7 +163,7 @@ public class LoginActivity extends ToolBarActivity implements View.OnClickListen
             case REQUEST_CODE_LOGIN:
                 if(data != null){
                     UserEntity userEntity = Parsers.getUserEntity(data);
-                    if(userEntity.getRetcode() == 0){
+                    if(userEntity.getCode() == 0){
                         UserCenter.setToken(this,userEntity.getToken());
                         UserCenter.setRoot(this,userEntity.getIsRoot());
 //                        UserCenter.setUid(this,userEntity.getData().getUid());
@@ -172,8 +172,8 @@ public class LoginActivity extends ToolBarActivity implements View.OnClickListen
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
 
-                    } else if(userEntity.getRetcode() == 1){
-                        ToastUtil.shortShow(this,userEntity.getStatus());
+                    } else {
+                        ToastUtil.shortShow(this,userEntity.getMsg());
                     }
                 }
                 break;

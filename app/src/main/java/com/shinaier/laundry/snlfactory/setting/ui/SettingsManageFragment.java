@@ -25,6 +25,7 @@ import com.shinaier.laundry.snlfactory.download.DownloadApk;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.main.ui.LoginActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.SettingsEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UpdataEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
@@ -41,6 +42,7 @@ import java.util.IdentityHashMap;
 public class SettingsManageFragment extends BaseFragment implements View.OnClickListener {
     private static final int REQUEST_CODE_SETTINGS = 0x1;
     private static final int REQUEST_CODE_UPDATE_VERSION = 0x2;
+    private static final int REQUEST_CODE_QUIT_LOGIN = 0x3;
 
     private View view;
     private Context context;
@@ -138,9 +140,11 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        UserCenter.cleanLoginInfo(context);
-                        startActivity(new Intent(context,LoginActivity.class));
-                        ExitManager.instance.exit();
+                        //退出登录 清除registrationID 防止退出登录之后还有消息推送
+                        IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
+                        params.put("token",UserCenter.getToken(context));
+//                        params.put("registration_id",PreferencesUtils.getString(context,"registrationID"));
+                        requestHttpData(Constants.Urls.URL_POST_QUIT_LOGIN,REQUEST_CODE_QUIT_LOGIN, FProtocol.HttpMethod.POST,params);
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -202,6 +206,20 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
                             updateUrl = updataEntity.getDatas().getUrl();
                         }else {
                             ToastUtil.shortShow(context,"当前已是最新版本");
+                        }
+                    }
+                }
+                break;
+            case REQUEST_CODE_QUIT_LOGIN:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+                            UserCenter.cleanLoginInfo(context);
+                            startActivity(new Intent(context,LoginActivity.class));
+                            ExitManager.instance.exit();
+                        }else {
+                            ToastUtil.shortShow(context,"退出登录失败，请重新再试");
                         }
                     }
                 }

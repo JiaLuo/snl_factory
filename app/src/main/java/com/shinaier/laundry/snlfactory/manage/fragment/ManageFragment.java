@@ -206,13 +206,13 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                     tvStoreSwitch.setText("营业中");
                     tvStoreSwitch.setTextColor(Color.parseColor("#ff6f43"));
                 }else {
-                    isBusiness = "3";
+                    isBusiness = "0";
                     tvStoreSwitch.setText("休息中");
                     tvStoreSwitch.setTextColor(Color.parseColor("#b2b2b2"));
                 }
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token",UserCenter.getToken(context));
-                params.put("state", isBusiness);
+                params.put("open", isBusiness);
                 requestHttpData(Constants.Urls.URL_POST_STORE_STATUS,REQUEST_CODE_STORE_STATUS, FProtocol.HttpMethod.POST,params);
 
                 break;

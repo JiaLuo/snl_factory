@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
     @SerializedName("token")
     private String token;
     @SerializedName("is_root")
@@ -24,22 +24,6 @@ public class UserEntity {
         this.isRoot = isRoot;
     }
 
-    public int getRetcode() {
-        return retcode;
-    }
-
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getToken() {
         return token;
     }
@@ -48,4 +32,19 @@ public class UserEntity {
         this.token = token;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 }
