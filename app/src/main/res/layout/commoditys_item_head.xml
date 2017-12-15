@@ -4,14 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <RelativeLayout
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/commodity_clothes_name"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="19dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="16dp"
             android:text="上装类"
             android:textColor="@color/black_text"
             android:textSize="14sp"
@@ -19,6 +19,8 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_commodity_add"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
             android:text="+添加"
             android:layout_alignParentRight="true"
             android:textColor="@color/red"
@@ -58,17 +60,4 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-    <com.shinaier.laundry.snlfactory.view.WrapHeightListView
-        android:id="@+id/commodity_manage_inner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerHeight="1dp"
-        android:divider="@color/comminute_line"
-        android:scrollbars="none"/>
-    <View
-        android:id="@+id/listview_bottom_view"
-        android:layout_marginBottom="6dp"
-        android:background="@color/comminute_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
 </LinearLayout>

@@ -1,26 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
     <include layout="@layout/load_data_status_view"/>
-    <ExpandableListView
-        android:id="@+id/aad_commodity_list"
+    <!--<ExpandableListView-->
+    <!--android:id="@+id/aad_commodity_list"-->
+    <!--android:visibility="gone"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:cacheColorHint="@color/white"-->
+    <!--android:choiceMode="singleChoice"-->
+    <!--android:drawSelectorOnTop="false"-->
+    <!--android:fastScrollEnabled="false"-->
+    <!--android:footerDividersEnabled="true"-->
+    <!--android:groupIndicator="@null"-->
+    <!--android:layout_marginBottom="47dp"-->
+    <!--android:layout_marginLeft="11dp"-->
+    <!--android:layout_marginRight="11dp"-->
+    <!--android:layout_marginTop="3dp"-->
+    <!--android:scrollingCache="true" />-->
+    <LinearLayout
+        android:id="@+id/ll_cate_name"
         android:visibility="gone"
+        android:background="@color/base_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@color/white"
-        android:choiceMode="singleChoice"
-        android:drawSelectorOnTop="false"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="true"
-        android:groupIndicator="@null"
-        android:layout_marginBottom="47dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_marginTop="3dp"
-        android:scrollingCache="true" />
+        android:layout_height="36dp">
+        <TextView
+            android:id="@+id/add_commodity_name"
+            android:layout_marginLeft="12dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center_vertical"
+            android:text="高质量洗衣"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
+    <ScrollView
+        android:layout_below="@id/ll_cate_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.shinaier.laundry.snlfactory.view.WrapHeightListView
+                android:id="@+id/add_commodity_list"
+                android:divider="@color/comminute_line"
+                android:dividerHeight="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"/>
+            <View
+                android:id="@+id/add_commodity_line"
+                android:background="@color/comminute_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+        </LinearLayout>
+
+    </ScrollView>
     <RelativeLayout
         android:id="@+id/rl_confirm"
         android:visibility="gone"

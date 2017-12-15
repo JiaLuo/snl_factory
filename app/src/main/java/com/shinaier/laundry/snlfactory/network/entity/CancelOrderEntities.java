@@ -9,11 +9,11 @@ import java.util.List;
  */
 
 public class CancelOrderEntities {
-    @SerializedName("data")
+    @SerializedName("result")
     private List<String> data;
-    @SerializedName("retcode")
+    @SerializedName("code")
     private int retcode;
-    @SerializedName("status")
+    @SerializedName("msg")
     private String status;
 
     public List<String> getData() {

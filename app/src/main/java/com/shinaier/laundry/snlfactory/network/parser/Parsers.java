@@ -11,6 +11,7 @@ import com.shinaier.laundry.snlfactory.network.entity.CashBackEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ColorSettingSuccessEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CraftworkAddPriceEntities;
+import com.shinaier.laundry.snlfactory.network.entity.EditCommodityEntity;
 import com.shinaier.laundry.snlfactory.network.entity.EditItemShowEntities;
 import com.shinaier.laundry.snlfactory.network.entity.EmployeeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
@@ -140,16 +141,17 @@ public class Parsers {
      * @return
      */
     public static ManageCommodityEntities getManageCommodityEntities(String data){
-        ManageCommodityEntities manageCommodityEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            manageCommodityEntities = gson.fromJson(data1,new TypeToken<ManageCommodityEntities>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return manageCommodityEntities;
+//        ManageCommodityEntities manageCommodityEntities = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            manageCommodityEntities = gson.fromJson(data1,new TypeToken<ManageCommodityEntities>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return manageCommodityEntities;
+        return gson.fromJson(data,new TypeToken<ManageCommodityEntities>(){}.getType());
     }
 
     /**
@@ -158,16 +160,17 @@ public class Parsers {
      * @return
      */
     public static AddCommodityEntities getAddCommodityEntities(String data){
-        AddCommodityEntities addCommodityEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            addCommodityEntities = gson.fromJson(data1,new TypeToken<AddCommodityEntities>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return addCommodityEntities;
+//        AddCommodityEntities addCommodityEntities = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            addCommodityEntities = gson.fromJson(data1,new TypeToken<AddCommodityEntities>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return addCommodityEntities;
+        return gson.fromJson(data,new TypeToken<AddCommodityEntities>(){}.getType());
     }
 
     /**
@@ -700,5 +703,14 @@ public class Parsers {
      */
     public static PhotoVerifyCodeEntity getPhotoVerifyCodeEntity(String data){
         return gson.fromJson(data,new TypeToken<PhotoVerifyCodeEntity>(){}.getType());
+    }
+
+    /**
+     * 商家编辑项目获取项目信息
+     * @param data
+     * @return
+     */
+    public static EditCommodityEntity getEditCommodityEntity(String data){
+        return gson.fromJson(data,new TypeToken<EditCommodityEntity>(){}.getType());
     }
 }

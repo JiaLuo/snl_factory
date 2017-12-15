@@ -256,6 +256,13 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
+        <activity android:name=".setting.ui.SetStoreInfoActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".manage.ui.ManageCommodityEditActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
 
         <service
             android:name=".service.JobSchedulerService"

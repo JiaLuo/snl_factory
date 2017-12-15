@@ -14,7 +14,6 @@ import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
-import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
@@ -90,8 +89,8 @@ public class FindPasswordActivity extends ToolBarActivity implements View.OnClic
                 phoneNums = inputNum.getText().toString();
                 if(checkPhoneNumber(phoneNums)){
                     IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                    params.put("token", UserCenter.getToken(this));
-                    params.put("username", phoneNums);
+//                    params.put("token", UserCenter.getToken(this));
+                    params.put("mobile_number", phoneNums);
                     requestHttpData(Constants.Urls.URL_POST_GAIN_VERIFY_CODE,REQUEST_CODE_VERIFY_CODE, FProtocol.HttpMethod.POST,params);
                 }else {
                     ToastUtil.shortShow(this,"请输入手机号");
@@ -121,10 +120,10 @@ public class FindPasswordActivity extends ToolBarActivity implements View.OnClic
                                 if(checkPhoneNumber(phoneNums)){
                                     if(!TextUtils.isEmpty(verifyCode)){
                                         IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                        params.put("username",phoneNums);
-                                        params.put("password",passwordNum);
-                                        params.put("token", UserCenter.getToken(this));
-                                        params.put("code",verifyCode);
+                                        params.put("mobile_number",phoneNums);
+                                        params.put("passwd",passwordNum);
+//                                        params.put("token", UserCenter.getToken(this));
+                                        params.put("sms_code",verifyCode);
                                         requestHttpData(Constants.Urls.URL_POST_FORGET_PASSWORD_CONFIRM,REQUEST_CODE_FORGET_PASSWORD,
                                                 FProtocol.HttpMethod.POST,params);
                                     }else {

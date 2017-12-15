@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -22,12 +23,20 @@ import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.VipCardDetailActivity;
+import com.shinaier.laundry.snlfactory.setting.adapter.EditStoreModularAdapter;
+import com.shinaier.laundry.snlfactory.setting.adapter.MerchantCardDiscountInfoAdapter;
+import com.shinaier.laundry.snlfactory.setting.adapter.StoreModularAdapter;
+import com.shinaier.laundry.snlfactory.setting.entity.StoreModular;
+import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
 import com.shinaier.laundry.snlfactory.setting.view.RevisePhoneDialog;
 import com.shinaier.laundry.snlfactory.setting.view.ReviseServiceDialog;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
+import com.shinaier.laundry.snlfactory.view.WrapHeightGridView;
+import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
-
+import java.util.List;
 
 
 /**
@@ -37,8 +46,9 @@ import java.util.IdentityHashMap;
 public class StoreDetailActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_STORE_INFO = 0x1;
     private static final int REQUEST_CODE_REVISE_PHONE = 0x2;
-    private static final int REQUEST_CODE_REVISE_RANGE = 0x3;
-    private static final int REQUEST_CODE_REVISE_MONEY = 0x4;
+//    private static final int REQUEST_CODE_REVISE_RANGE = 0x3;
+//    private static final int REQUEST_CODE_REVISE_MONEY = 0x4;
+    private static final int REQUEST_CODE_REVISE_STORE_MODULAR = 0x3;
 
     @ViewInject(R.id.store_num)
     private TextView storeNum;
@@ -68,15 +78,27 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
     private ImageView leftButton;
     @ViewInject(R.id.rl_vip_info)
     private RelativeLayout rlVipInfo;
-//    @ViewInject(R.id.normal_vip_discount)
-//    private TextView normalVipDiscount;
-    @ViewInject(R.id.gold_vip_discount)
-    private TextView goldVipDiscount;
-    @ViewInject(R.id.diamond_vip_discount)
-    private TextView diamondVipDiscount;
 
+
+    @ViewInject(R.id.rl_store_info)
+    private RelativeLayout rlStoreInfo;
+    @ViewInject(R.id.store_info_content)
+    private TextView storeInfoContent;
+    @ViewInject(R.id.rl_store_modular)
+    private RelativeLayout rlStoreModular;
+    @ViewInject(R.id.tore_modular_list)
+    private WrapHeightGridView toreModularList;
+    @ViewInject(R.id.discount_info_list)
+    private WrapHeightListView discountInfoList;
 
     private StoreInfoEntity storeInfoEntity;
+    private ReviseServiceDialog serviceDialog;
+    private RevisePhoneDialog phoneDialog;
+    private DoorToDoorServiceDialog doorToDoorServiceDialog;
+    private List<StoreModular> storeModulars = new ArrayList<>();
+    private List<String> modularStrings = new ArrayList<>(); //送洗的id list
+    private CollectClothesDialog collectClothesDialog;
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -85,10 +107,7 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 case 1:
                     String edRevisePhone = (String) msg.obj;
                     if(!TextUtils.isEmpty(edRevisePhone)){
-                        IdentityHashMap<String,String> revisePhoneParams = new IdentityHashMap<>();
-                        revisePhoneParams.put("token", UserCenter.getToken(StoreDetailActivity.this));
-                        revisePhoneParams.put("phone", edRevisePhone);
-                        requestHttpData(Constants.Urls.URL_POST_STORE_INFO,REQUEST_CODE_REVISE_PHONE, FProtocol.HttpMethod.POST,revisePhoneParams);
+                        reviseStoreInfo(msg.what,edRevisePhone,"","");
                     }else {
                         ToastUtil.shortShow(StoreDetailActivity.this,"填写内容不能为空");
                     }
@@ -96,10 +115,7 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 case 2:
                     String reviseRange = (String)msg.obj;
                     if(!TextUtils.isEmpty(reviseRange)){
-                        IdentityHashMap<String,String> reviseRangeParams = new IdentityHashMap<>();
-                        reviseRangeParams.put("token", UserCenter.getToken(StoreDetailActivity.this));
-                        reviseRangeParams.put("round",reviseRange);
-                        requestHttpData(Constants.Urls.URL_POST_STORE_INFO,REQUEST_CODE_REVISE_RANGE, FProtocol.HttpMethod.POST,reviseRangeParams);
+                        reviseStoreInfo(msg.what,reviseRange,"","");
                     }else {
                         ToastUtil.shortShow(StoreDetailActivity.this,"填写内容不能为空");
                     }
@@ -109,19 +125,23 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                     String reviseDoorServiceMoney = data.getString("reviseDoorServiceMoney");
                     String reviseClothesNumber = data.getString("reviseClothesNumber");
                     String reviseMoney = data.getString("reviseMoney");
-                    IdentityHashMap<String,String> reviseMoneyParams = new IdentityHashMap<>();
-                    reviseMoneyParams.put("token", UserCenter.getToken(StoreDetailActivity.this));
-                    reviseMoneyParams.put("fuwu_amount",reviseDoorServiceMoney);
-                    reviseMoneyParams.put("fuwu_num",reviseClothesNumber);
-                    reviseMoneyParams.put("fuwu_total",reviseMoney);
-                    requestHttpData(Constants.Urls.URL_POST_STORE_INFO,REQUEST_CODE_REVISE_MONEY, FProtocol.HttpMethod.POST,reviseMoneyParams);
+                    if (!TextUtils.isEmpty(reviseDoorServiceMoney)){
+                        if (!TextUtils.isEmpty(reviseClothesNumber)){
+                            if (!TextUtils.isEmpty(reviseMoney)){
+                                reviseStoreInfo(msg.what,reviseDoorServiceMoney,reviseClothesNumber,reviseMoney);
+                            }else {
+                                ToastUtil.shortShow(StoreDetailActivity.this,"请输入满减金额");
+                            }
+                        }else {
+                            ToastUtil.shortShow(StoreDetailActivity.this,"请输入满减件数");
+                        }
+                    }else {
+                        ToastUtil.shortShow(StoreDetailActivity.this,"请输入上门服务费");
+                    }
                     break;
             }
         }
     };
-    private ReviseServiceDialog serviceDialog;
-    private RevisePhoneDialog phoneDialog;
-    private DoorToDoorServiceDialog doorToDoorServiceDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +149,12 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         setContentView(R.layout.store_detail_act);
         ViewInjectUtils.inject(this);
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
     }
 
     private void initView() {
@@ -141,6 +167,8 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         rlDoorToDoorService.setOnClickListener(this);
         leftButton.setOnClickListener(this);
         rlVipInfo.setOnClickListener(this);
+        rlStoreInfo.setOnClickListener(this);
+        rlStoreModular.setOnClickListener(this);
     }
 
     private void loadData() {
@@ -155,7 +183,7 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         switch (requestCode){
             case REQUEST_CODE_STORE_INFO:
                 if(data != null){
-                    StoreInfoEntity storeInfoEntity = Parsers.getStoreInfoEntity(data);
+                    storeInfoEntity = Parsers.getStoreInfoEntity(data);
                     setLoadingStatus(LoadingStatus.GONE);
                     if (storeInfoEntity != null){
                         if (storeInfoEntity.getCode() == 0){
@@ -174,60 +202,56 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                     if(entity.getRetcode() == 0){
                         loadData();
                         ToastUtil.shortShow(this,"修改成功");
-                        phoneDialog.dismiss();
+                        dialogDismiss(phoneDialog,serviceDialog,doorToDoorServiceDialog);
                     }else {
                         ToastUtil.shortShow(this,entity.getStatus());
                     }
                 }
                 break;
-            case REQUEST_CODE_REVISE_RANGE:
-                if(data != null){
+            case REQUEST_CODE_REVISE_STORE_MODULAR:
+                if (data != null){
                     Entity entity = Parsers.getEntity(data);
-                    if(entity.getRetcode() == 0){
-                        loadData();
-                        ToastUtil.shortShow(this,"修改成功");
-                        serviceDialog.dismiss();
-                    }else {
-                        ToastUtil.shortShow(this,entity.getStatus());
-                    }
-                }
-                break;
-            case REQUEST_CODE_REVISE_MONEY:
-                if(data != null){
-                    Entity entity = Parsers.getEntity(data);
-                    if(entity.getRetcode() == 0){
-                        loadData();
-                        ToastUtil.shortShow(this,"修改成功");
-                        doorToDoorServiceDialog.dismiss();
-                    }else {
-                        ToastUtil.shortShow(this,entity.getStatus());
+                    if (entity != null) {
+                        if (entity.getRetcode() == 0){
+                            if (collectClothesDialog != null){
+                                if (collectClothesDialog.isShowing()){
+                                    collectClothesDialog.dismiss();
+                                    loadData();
+                                }
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,entity.getStatus());
+                        }
                     }
                 }
                 break;
         }
     }
 
-    private void setStoreInfo(StoreInfoEntity.StoreInfoResult result) {
-        storeNum.setText(result.getMerchant().getId());
-        storeName.setText(result.getMerchant().getmName());
-        storePhoneNum.setText(result.getMerchant().getPhoneNumber());
-        serviceScopeNum.setText(result.getMerchant().getmRange() + "km");
-        storeAddressDetail.setText(result.getMerchant().getmAddress());
-        homeServiceNum.setText("上门服务费:" + result.getMerchant().getFreightPrice() + "元");
-        fulledSubtractNum.setText("满减件数:" + result.getMerchant().getFreightFreeNum() + "件");
-        fulledSubtractMoney.setText("满减金额：" + result.getMerchant().getFreightFreeAmount() + "元");
-//        normalVipDiscount.setText("普通会员：无折扣 充值" + storeInfoEntity.getCards().get(0).getPrice()+ "元");
-        goldVipDiscount.setText("黄金会员：" + result.getCards().get(0).getDiscount()
-                + "折 充值" + result.getCards().get(0).getPrice() + "元");
-        diamondVipDiscount.setText("钻石会员：" + result.getCards().get(1).getDiscount()
-                + "折 充值 " + result.getCards().get(1).getPrice() +" 元");
-    }
+    /**
+     * 谈起的dialog关闭
+     * @param phoneDialog 修改电话的dialog
+     * @param serviceDialog 服务范围的dialog
+     * @param doorToDoorServiceDialog 上门服务费dialog
+     */
+    private void dialogDismiss(RevisePhoneDialog phoneDialog, ReviseServiceDialog serviceDialog, DoorToDoorServiceDialog doorToDoorServiceDialog) {
+        if (phoneDialog != null){
+            if (phoneDialog.isShowing()){
+                phoneDialog.dismiss();
+            }
+        }
 
+        if (serviceDialog != null){
+            if (serviceDialog.isShowing()){
+                serviceDialog.dismiss();
+            }
+        }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadData();
+        if (doorToDoorServiceDialog != null){
+            if (doorToDoorServiceDialog.isShowing()){
+                doorToDoorServiceDialog.dismiss();
+            }
+        }
     }
 
     @Override
@@ -240,19 +264,22 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
 //                startActivity(qrCodeIntent);
 //                break;
             case R.id.rl_store_phone:
+                //弹起修改电话的dialog
                 phoneDialog = new RevisePhoneDialog(this, R.style.timerDialog,handler);
                 phoneDialog.setView();
                 phoneDialog.show();
                 break;
             case R.id.rl_service_scope:
+                //弹起修改服务范围的dialog
                 serviceDialog = new ReviseServiceDialog(this, R.style.timerDialog,handler);
                 serviceDialog.setView();
                 serviceDialog.show();
                 break;
             case R.id.rl_door_to_door_service:
-//                doorToDoorServiceDialog = new DoorToDoorServiceDialog(this, R.style.timerDialog,handler,storeInfoEntity);
-//                doorToDoorServiceDialog.setView();
-//                doorToDoorServiceDialog.show();
+                //弹起上门服务费的dialog
+                doorToDoorServiceDialog = new DoorToDoorServiceDialog(this, R.style.timerDialog,handler,storeInfoEntity);
+                doorToDoorServiceDialog.setView();
+                doorToDoorServiceDialog.show();
                 break;
             case R.id.left_button:
                 finish();
@@ -262,13 +289,24 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 loadData();
                 break;
             case R.id.rl_vip_info:
-                Intent intent = new Intent(this,VipCardDetailActivity.class);
-//                ArrayList<StoreInfoEntity.StoreINfoCards> cards = (ArrayList<StoreInfoEntity.StoreINfoCards>) storeInfoEntity.getCards();
-//                intent.putParcelableArrayListExtra("cards",cards);
-                startActivity(intent);
+                //设置专店会员卡
+                startActivity( new Intent(this,VipCardDetailActivity.class));
+                break;
+            case R.id.rl_store_info:
+                //设置商家信息
+                Intent storeContIntent = new Intent(this,SetStoreInfoActivity.class);
+                storeContIntent.putExtra("store_content",storeInfoEntity.getResult().getMerchant().getmDesc());
+                startActivity(storeContIntent);
+                break;
+            case R.id.rl_store_modular:
+                //设置门店模块
+                planModularDatas();
+                modularView();
                 break;
         }
     }
+
+
 
     @Override
     public void mistake(int requestCode, FProtocol.NetDataProtocol.ResponseStatus status, String errorMessage) {
@@ -278,5 +316,139 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                 setLoadingStatus(LoadingStatus.RETRY);
                 break;
         }
+    }
+
+    /**
+     * 修改门店基础信息
+     * @param what 点击哪个dialog
+     * @param edRevisePhone 门店电话 服务范围  上门服务费
+     * @param s 满减件数
+     * @param s1 满减金额
+     */
+    private void reviseStoreInfo(int what, String edRevisePhone, String s, String s1) {
+        IdentityHashMap<String,String> revisePhoneParams = new IdentityHashMap<>();
+        revisePhoneParams.put("token", UserCenter.getToken(this));
+        if (what == 1){
+            revisePhoneParams.put("phone_number", edRevisePhone);
+        }else if (what == 2){
+            revisePhoneParams.put("mrange", edRevisePhone);
+        }else if (what == 3){
+            revisePhoneParams.put("freight_price", edRevisePhone);
+            revisePhoneParams.put("freight_free_num", s);
+            revisePhoneParams.put(";freight_free_amount", s1);
+        }
+        requestHttpData(Constants.Urls.URL_POST_STORE_INFO,REQUEST_CODE_REVISE_PHONE, FProtocol.HttpMethod.POST,revisePhoneParams);
+    }
+
+    /**
+     * 设置门店模块 准备弹起view的数据
+     */
+    private void planModularDatas() {
+        storeModulars.clear();//清空adapter的集合
+        int allSize = storeInfoEntity.getAllModule().size(); //获取所有模块的size
+        int size = storeInfoEntity.getResult().getModule().size(); //获取门店模块的size
+        for (int i = 0; i < allSize; i++) {
+            String module = storeInfoEntity.getAllModule().get(i).getModule();
+            String moduleName = storeInfoEntity.getAllModule().get(i).getModuleName();
+            StoreModular storeMoluar = new StoreModular(module,moduleName);
+            storeModulars.add(storeMoluar);
+            for (int j = 0; j < size; j++) {
+                //判断相同的至为选中
+                if (storeInfoEntity.getAllModule().get(i).getModule().equals(storeInfoEntity.getResult().getModule().get(j).getModule())){
+                    storeModulars.get(i).isSelect = 0;
+                    break;
+                }
+            }
+        }
+    }
+
+    //门店模块的view
+    private void modularView() {
+        View inflate = View.inflate(this, R.layout.store_modular_select_view, null);
+        WrapHeightGridView editStoreModularList = inflate.findViewById(R.id.edit_store_modular_list);
+        TextView singleTakeClothesCancel = inflate.findViewById(R.id.single_take_clothes_cancel);
+        TextView singleTakeClothesConfirm = inflate.findViewById(R.id.single_take_clothes_confirm);
+        final EditStoreModularAdapter editStoreModularAdapter = new EditStoreModularAdapter(this,storeModulars);
+        editStoreModularList.setAdapter(editStoreModularAdapter);
+
+        editStoreModularAdapter.setSelectModularListener(new EditStoreModularAdapter.SelectModularListener() {
+            @Override
+            public void onClick(int position) {
+                if (storeModulars.get(position).isSelect == 0){
+                    storeModulars.get(position).isSelect = 1;
+                }else {
+                    storeModulars.get(position).isSelect = 0;
+                }
+                editStoreModularAdapter.notifyDataSetChanged();
+            }
+        });
+        collectClothesDialog = new CollectClothesDialog(this, R.style.DialogTheme, inflate);
+        collectClothesDialog.show();
+
+        singleTakeClothesCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collectClothesDialog.dismiss();
+            }
+        });
+        singleTakeClothesConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                        storeInfoEntity.getAllModule().get()
+                modularStrings.clear();
+                StringBuffer stringBuffer = new StringBuffer();
+                for (int i = 0; i < storeInfoEntity.getAllModule().size(); i++) {
+                    if (storeModulars.get(i).isSelect == 0){
+                        modularStrings.add(storeInfoEntity.getAllModule().get(i).getModule());
+                    }
+                }
+
+                if (modularStrings.size() > 0) {
+                    for (int i = 0; i < modularStrings.size(); i++) {
+                        if (i == 0) {
+                            if (modularStrings.size() == 1) {
+                                stringBuffer.append("[").append('"').append(modularStrings.get(i)).append('"').append("]");
+                            } else {
+                                stringBuffer.append("[").append('"').append(modularStrings.get(i)).append('"').append(",");
+                            }
+                        } else if (i > 0 && i < modularStrings.size() - 1) {
+                            stringBuffer.append('"').append(modularStrings.get(i)).append('"').append(",");
+                        } else {
+                            stringBuffer.append('"').append(modularStrings.get(i)).append('"').append("]");
+                        }
+                    }
+                } else {
+                    LogUtil.e("zhang","aaaaaaaaaa");
+                    return;
+                }
+
+                IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
+                params.put("token",UserCenter.getToken(StoreDetailActivity.this));
+                params.put("modules",stringBuffer.toString());
+                requestHttpData(Constants.Urls.URL_POST_REVISE_STORE_MODULAR,REQUEST_CODE_REVISE_STORE_MODULAR, FProtocol.HttpMethod.POST,params);
+            }
+        });
+    }
+
+    /**
+     * 这是页面信息
+     * @param result 返回来的数据
+     */
+    private void setStoreInfo(StoreInfoEntity.StoreInfoResult result) {
+        storeNum.setText(result.getMerchant().getId()); //门店编号
+        storeName.setText(result.getMerchant().getmName()); //门店名称
+        storePhoneNum.setText(result.getMerchant().getPhoneNumber()); //门店电话
+        serviceScopeNum.setText(result.getMerchant().getmRange() + "km"); //门店服务范围
+        storeAddressDetail.setText(result.getMerchant().getmAddress()); //门店地址
+        homeServiceNum.setText("上门服务费:" + result.getMerchant().getFreightPrice() + "元");
+        fulledSubtractNum.setText("满减件数:" + result.getMerchant().getFreightFreeNum() + "件");
+        fulledSubtractMoney.setText("满减金额：" + result.getMerchant().getFreightFreeAmount() + "元");
+        storeInfoContent.setText(result.getMerchant().getmDesc()); //商家信息
+        //专店会员卡信息
+        MerchantCardDiscountInfoAdapter merchantCardDiscountInfoAdapter = new MerchantCardDiscountInfoAdapter(this,result.getCards());
+        discountInfoList.setAdapter(merchantCardDiscountInfoAdapter);
+        //门店模块
+        StoreModularAdapter storeModularAdapter = new StoreModularAdapter(this,result.getModule());
+        toreModularList.setAdapter(storeModularAdapter);
     }
 }

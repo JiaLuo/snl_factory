@@ -1,11 +1,14 @@
 package com.shinaier.laundry.snlfactory.manage.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.common.network.FProtocol;
 import com.common.utils.ToastUtil;
@@ -13,12 +16,13 @@ import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
-import com.shinaier.laundry.snlfactory.manage.adapter.AddCommoditysAdapter;
+import com.shinaier.laundry.snlfactory.manage.adapter.AddCommodityAdapter;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.AddCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
+import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -33,39 +37,64 @@ public class AddCommodityActivity extends ToolBarActivity implements View.OnClic
     private static final int REQUEST_CODE_ADD_COMMODITY_SHOW = 0x1;
     private static final int REQUEST_CODE_ADD_COMMODITY_ADD = 0x2;
 
-    @ViewInject(R.id.aad_commodity_list)
-    private ExpandableListView aadCommodityList;
+    @ViewInject(R.id.add_commodity_name)
+    private TextView addCommodityName;
+    @ViewInject(R.id.add_commodity_list)
+    private WrapHeightListView addCommodityList;
+    @ViewInject(R.id.add_commodity_line)
+    private View addCommodityLine;
     @ViewInject(R.id.rl_confirm)
     private RelativeLayout rlConfirm;
+    @ViewInject(R.id.ll_cate_name)
+    private LinearLayout llCateName;
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
 
     private List<String> stringList = new ArrayList<>();
     private StringBuffer stringBuffer = new StringBuffer();
-    private List<AddCommodityEntities.Item.Goods> goods;
-    private AddCommoditysAdapter addCommoditysAdapter;
+    private String cateId;
+    private AddCommodityEntities addCommodityEntities;
+    private AddCommodityAdapter addCommodityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_commodity_act);
         ViewInjectUtils.inject(this);
+        Intent intent = getIntent();
+        cateId = intent.getStringExtra("cate_id");
+        String cateName = intent.getStringExtra("cate_name");
         loadData();
-        initView();
+        initView(cateName);
     }
 
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
+        params.put("cate_id",cateId);
         requestHttpData(Constants.Urls.URL_POST_ADD_COMMODITY_SHOW,REQUEST_CODE_ADD_COMMODITY_SHOW, FProtocol.HttpMethod.POST,params);
     }
 
-    private void initView() {
+    private void initView(String cateName) {
         setCenterTitle("添加商品");
+        addCommodityName.setText(cateName);
         initLoadingView(this);
         setLoadingStatus(LoadingStatus.LOADING);
         rlConfirm.setOnClickListener(this);
         leftButton.setOnClickListener(this);
+        addCommodityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(addCommodityEntities.getResult().get(position).isChanged){
+                    addCommodityEntities.getResult().get(position).isChanged = false;
+                }else{
+                    addCommodityEntities.getResult().get(position).isChanged = true;
+                    String itemId = addCommodityEntities.getResult().get(position).getId();
+                    stringList.add(itemId);
+                }
+                addCommodityAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -90,12 +119,12 @@ public class AddCommodityActivity extends ToolBarActivity implements View.OnClic
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token",UserCenter.getToken(this));
                 if(!TextUtils.isEmpty(s)){
-                    params.put("th_id",s);
+                    params.put("item_json",s);
                 }else {
                     ToastUtil.shortShow(this,"您还没有选择要添加的项目");
                     return;
                 }
-                requestHttpData(Constants.Urls.URL_POST_ADD_COMMODITY_SHOW,REQUEST_CODE_ADD_COMMODITY_ADD, FProtocol.HttpMethod.POST,params);
+                requestHttpData(Constants.Urls.URL_POST_ADD_COMMODITY,REQUEST_CODE_ADD_COMMODITY_ADD, FProtocol.HttpMethod.POST,params);
                 break;
             case R.id.left_button:
                 finish();
@@ -113,44 +142,33 @@ public class AddCommodityActivity extends ToolBarActivity implements View.OnClic
         switch (requestCode){
             case REQUEST_CODE_ADD_COMMODITY_SHOW:
                 if(data != null){
-                    final AddCommodityEntities addCommodityEntities = Parsers.getAddCommodityEntities(data);
-                    if(addCommodityEntities != null && addCommodityEntities.getItem() != null &&
-                            addCommodityEntities.getItem().size() > 0){
-                        setLoadingStatus(LoadingStatus.GONE);
-                        aadCommodityList.setVisibility(View.VISIBLE);
-                        rlConfirm.setVisibility(View.VISIBLE);
-
-                        for (int i = 0; i < addCommodityEntities.getItem().size(); i++) {
-                            goods = addCommodityEntities.getItem().get(i).getGoods();
-                        }
-                        addCommoditysAdapter = new AddCommoditysAdapter(addCommodityEntities.getItem(),this);
-                        aadCommodityList.setAdapter(addCommoditysAdapter);
-
-                        for (int i = 0; i < addCommodityEntities.getItem().size(); i++) {
-                            aadCommodityList.expandGroup(i);
-                        }
-                        addCommoditysAdapter.setSelectListener(new AddCommoditysAdapter.SelectListener() {
-                            @Override
-                            public void onSelect(int groupPosition, int childPosition) {
-                                if(addCommodityEntities.getItem().get(groupPosition).getGoods().get(childPosition).isChanged){
-                                    addCommodityEntities.getItem().get(groupPosition).getGoods().get(childPosition).isChanged = false;
-                                }else{
-                                    addCommodityEntities.getItem().get(groupPosition).getGoods().get(childPosition).isChanged = true;
-                                    String id = addCommodityEntities.getItem().get(groupPosition).getGoods().get(childPosition).getId();
-                                   stringList.add(id);
-
-                                }
-                                addCommoditysAdapter.notifyDataSetChanged();
+                    addCommodityEntities = Parsers.getAddCommodityEntities(data);
+                    setLoadingStatus(LoadingStatus.GONE);
+                    if (addCommodityEntities != null){
+                        if (addCommodityEntities.getCode() == 0){
+                            if (addCommodityEntities.getResult() != null && addCommodityEntities.getResult().size() > 0){
+                                addCommodityLine.setVisibility(View.VISIBLE); //listview下面的线
+                                addCommodityList.setVisibility(View.VISIBLE); //listview
+                                rlConfirm.setVisibility(View.VISIBLE); //确认按钮
+                                llCateName.setVisibility(View.VISIBLE); //衣服类别的标题
+                                addCommodityAdapter = new AddCommodityAdapter(this, addCommodityEntities.getResult());
+                                addCommodityList.setAdapter(addCommodityAdapter);
+                            }else {
+                                setLoadingStatus(LoadingStatus.EMPTY);
+                                llCateName.setVisibility(View.GONE);
+                                addCommodityList.setVisibility(View.GONE);
+                                addCommodityLine.setVisibility(View.GONE);
+                                rlConfirm.setVisibility(View.GONE);
                             }
-                        });
-                    }else {
-                        setLoadingStatus(LoadingStatus.EMPTY);
-                        aadCommodityList.setVisibility(View.GONE);
-                        rlConfirm.setVisibility(View.GONE);
+                        }else {
+                            ToastUtil.shortShow(this, addCommodityEntities.getMsg());
+                        }
                     }
                 }else {
                     setLoadingStatus(LoadingStatus.EMPTY);
-                    aadCommodityList.setVisibility(View.GONE);
+                    llCateName.setVisibility(View.GONE);
+                    addCommodityList.setVisibility(View.GONE);
+                    addCommodityLine.setVisibility(View.GONE);
                     rlConfirm.setVisibility(View.GONE);
                 }
                 break;

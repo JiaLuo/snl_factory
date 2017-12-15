@@ -178,6 +178,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
             <RelativeLayout
+                android:id="@+id/rl_store_modular"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="门店模块"
+                    android:textSize="16sp"
+                    android:textColor="@color/black_text"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginBottom="17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/iv_store_modular"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/arrow_right_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <com.shinaier.laundry.snlfactory.view.WrapHeightGridView
+                    android:id="@+id/tore_modular_list"
+                    android:layout_toLeftOf="@id/iv_store_modular"
+                    android:layout_centerVertical="true"
+                    android:numColumns="3"
+                    android:horizontalSpacing="2dp"
+                    android:verticalSpacing="1dp"
+                    android:listSelector="@android:color/transparent"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:scrollbars="none"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <View
+                android:background="#cccccc"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <RelativeLayout
                 android:id="@+id/rl_door_to_door_service"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -270,41 +311,17 @@
                     android:background="@drawable/arrow_right_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <LinearLayout
-                    android:id="@+id/ll_vip_discount_info"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="17dp"
+                <com.shinaier.laundry.snlfactory.view.WrapHeightListView
+                    android:id="@+id/discount_info_list"
                     android:layout_toLeftOf="@id/iv_vip_info_right"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <!--<TextView-->
-                        <!--android:id="@+id/normal_vip_discount"-->
-                        <!--android:text="普通会员：无折扣 充值200元"-->
-                        <!--android:textSize="16sp"-->
-                        <!--android:textColor="#999999"-->
-                        <!--android:layout_gravity="end"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"/>-->
-                    <TextView
-                        android:id="@+id/gold_vip_discount"
-                        android:layout_gravity="end"
-                        android:text="黄金会员：9折 充值500元"
-                        android:textSize="16sp"
-                        android:textColor="#999999"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <TextView
-                        android:id="@+id/diamond_vip_discount"
-                        android:layout_gravity="end"
-                        android:text="钻石会员：8折 充值1000元"
-                        android:textColor="#999999"
-                        android:textSize="16sp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="16dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
+                    android:layout_centerVertical="true"
+                    android:divider="@color/transparent"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginBottom="17dp"
+                    android:dividerHeight="12dp"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"/>
             </RelativeLayout>
             <View
                 android:background="#cccccc"

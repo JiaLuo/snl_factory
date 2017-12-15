@@ -12,14 +12,24 @@ import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
 import java.util.List;
 
+
 /**
  * Created by 张家洛 on 2017/2/14.
  */
 
-public class ManageCommodityAdapter extends BaseAdapterNew<ManageCommodityEntities.ItemType> {
+public class ManageCommodityAdapter extends BaseAdapterNew<ManageCommodityEntities.ManageCommodityResult> {
+    // TODO: 2017/12/15 暂时先不删
     private PositionListener listener;
+    private AddCommodityListener addCommodityListener;
+    public interface AddCommodityListener{
+        void onAddCommodityClick(int position);
+    }
+    public void setAddCommodityListener(AddCommodityListener addCommodityListener){
+        this.addCommodityListener = addCommodityListener;
+    }
     public interface PositionListener{
-        void onClick(int position, int innerPosition);
+        void onEditClick(int position,int innerPosition);
+        void onDeleteClick(int position,int innerPosition);
     }
 
     public void setPositionListener(PositionListener listener){
@@ -27,7 +37,7 @@ public class ManageCommodityAdapter extends BaseAdapterNew<ManageCommodityEntiti
     }
 
     private Context context;
-    public ManageCommodityAdapter(Context context, List<ManageCommodityEntities.ItemType> mDatas) {
+    public ManageCommodityAdapter(Context context, List<ManageCommodityEntities.ManageCommodityResult> mDatas) {
         super(context, mDatas);
         this.context = context;
     }
@@ -39,24 +49,42 @@ public class ManageCommodityAdapter extends BaseAdapterNew<ManageCommodityEntiti
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        ManageCommodityEntities.ItemType item = getItem(position);
-        TextView serveName = ViewHolder.get(convertView,R.id.serve_name);
-        TextView priceNum = ViewHolder.get(convertView,R.id.price_num);
-        TextView washTime = ViewHolder.get(convertView,R.id.wash_time);
+        ManageCommodityEntities.ManageCommodityResult item = getItem(position);
+        TextView commodityClothesName = ViewHolder.get(convertView,R.id.commodity_clothes_name);
+        TextView tvCommodityAdd = ViewHolder.get(convertView,R.id.tv_commodity_add);
+        View listviewBottomView = ViewHolder.get(convertView,R.id.listview_bottom_view);
+
         WrapHeightListView commodityManageInner = ViewHolder.get(convertView,R.id.commodity_manage_inner);
         if(item != null){
-            serveName.setText(item.getErName());
-            priceNum.setText("价格");
-            washTime.setText("洗护周期");
-
-            CommodityInnerAdapter commodityInnerAdapter = new CommodityInnerAdapter(context,item.getItem());
+            if (item.getItemses().size() > 0){
+                listviewBottomView.setVisibility(View.VISIBLE);
+            }else {
+                listviewBottomView.setVisibility(View.GONE);
+            }
+            commodityClothesName.setText(item.getCateName());
+            CommodityInnerAdapter commodityInnerAdapter = new CommodityInnerAdapter(context,item.getItemses());
             commodityManageInner.setAdapter(commodityInnerAdapter);
+            tvCommodityAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (addCommodityListener != null){
+                        addCommodityListener.onAddCommodityClick(position);
+                    }
+                }
+            });
 
             commodityInnerAdapter.setInnerPositionListener(new CommodityInnerAdapter.InnerPositionListener() {
                 @Override
-                public void onInnerClick(int innerPosition) {
+                public void onInnerDelete(int innerPosition) {
                     if(listener != null){
-                        listener.onClick(position,innerPosition);
+                        listener.onDeleteClick(position,innerPosition);
+                    }
+                }
+
+                @Override
+                public void onInnerEdit(int innerPosition) {
+                    if(listener != null){
+                        listener.onEditClick(position,innerPosition);
                     }
                 }
             });

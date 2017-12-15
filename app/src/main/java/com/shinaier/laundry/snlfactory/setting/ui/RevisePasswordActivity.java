@@ -1,5 +1,6 @@
 package com.shinaier.laundry.snlfactory.setting.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,9 +14,11 @@ import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.main.ui.LoginActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
+import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
 import java.util.IdentityHashMap;
@@ -115,7 +118,10 @@ public class RevisePasswordActivity extends ToolBarActivity implements View.OnCl
                         ToastUtil.shortShow(this,entity.getStatus());
                     }else if(entity.getRetcode() == 0){
                         ToastUtil.shortShow(this,"修改密码成功");
-                         finish();
+//                         finish();
+                        UserCenter.cleanLoginInfo(this);
+                        startActivity(new Intent(this,LoginActivity.class));
+                        ExitManager.instance.exit();
                     }else {
                         ToastUtil.shortShow(this,entity.getStatus());
                     }

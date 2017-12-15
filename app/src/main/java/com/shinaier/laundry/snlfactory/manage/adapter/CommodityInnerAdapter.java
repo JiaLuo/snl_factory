@@ -1,7 +1,6 @@
 package com.shinaier.laundry.snlfactory.manage.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,18 +17,19 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/14.
  */
 
-public class CommodityInnerAdapter extends BaseAdapterNew<ManageCommodityEntities.ItemType.Item> {
+public class CommodityInnerAdapter extends BaseAdapterNew<ManageCommodityEntities.ManageCommodityResult.ManageCommodityItems> {
     private InnerPositionListener listener;
 
     public interface InnerPositionListener{
-        void onInnerClick(int position);
+        void onInnerDelete(int position);
+        void onInnerEdit(int position);
     }
 
     public void setInnerPositionListener(InnerPositionListener listener){
         this.listener = listener;
     }
 
-    public CommodityInnerAdapter(Context context, List<ManageCommodityEntities.ItemType.Item> mDatas) {
+    public CommodityInnerAdapter(Context context, List<ManageCommodityEntities.ManageCommodityResult.ManageCommodityItems> mDatas) {
         super(context, mDatas);
     }
 
@@ -40,25 +40,29 @@ public class CommodityInnerAdapter extends BaseAdapterNew<ManageCommodityEntitie
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        ManageCommodityEntities.ItemType.Item item = getItem(position);
+        ManageCommodityEntities.ManageCommodityResult.ManageCommodityItems item = getItem(position);
         TextView clothesName = ViewHolder.get(convertView,R.id.clothes_name);
         TextView clothesPrice = ViewHolder.get(convertView,R.id.clothes_price);
-        TextView clothesTime = ViewHolder.get(convertView,R.id.clothes_time);
+        ImageView ivCommodityDelete = ViewHolder.get(convertView,R.id.iv_commodity_delete);
         ImageView ivCommodityEdit = ViewHolder.get(convertView,R.id.iv_commodity_edit);
 
         if(item != null){
-            clothesName.setText(item.getName());
-            clothesPrice.setText(item.getPrice() + "元");
-            if(!TextUtils.isEmpty(item.getCycle())){
-                clothesTime.setText("预计" + item.getCycle() + "天");
-            }else {
-                clothesTime.setText("预计0天");
-            }
+            clothesName.setText(item.getItemName());
+            clothesPrice.setText(item.getItemPrice() + "元");
+
             ivCommodityEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(listener != null){
-                        listener.onInnerClick(position);
+                        listener.onInnerEdit(position);
+                    }
+                }
+            });
+            ivCommodityDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        listener.onInnerDelete(position);
                     }
                 }
             });

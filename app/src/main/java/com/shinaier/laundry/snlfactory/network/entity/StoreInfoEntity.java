@@ -15,6 +15,8 @@ public class StoreInfoEntity {
     private String msg;
     @SerializedName("result")
     private StoreInfoResult result;
+    @SerializedName("all_module")
+    private List<StoreInfoAllModule> allModule;
 
     public int getCode() {
         return code;
@@ -37,7 +39,39 @@ public class StoreInfoEntity {
     }
 
     public void setResult(StoreInfoResult result) {
+
         this.result = result;
+    }
+
+    public List<StoreInfoAllModule> getAllModule() {
+        return allModule;
+    }
+
+    public void setAllModule(List<StoreInfoAllModule> allModule) {
+        this.allModule = allModule;
+    }
+
+    public class StoreInfoAllModule{
+        @SerializedName("module")
+        private String module;
+        @SerializedName("module_name")
+        private String moduleName;
+
+        public String getModule() {
+            return module;
+        }
+
+        public void setModule(String module) {
+            this.module = module;
+        }
+
+        public String getModuleName() {
+            return moduleName;
+        }
+
+        public void setModuleName(String moduleName) {
+            this.moduleName = moduleName;
+        }
     }
 
     public class StoreInfoResult{
@@ -45,6 +79,16 @@ public class StoreInfoEntity {
         private StoreInfoMerchant merchant;
         @SerializedName("mcards")
         private List<StoreInfoCards> cards;
+        @SerializedName("module")
+        private List<StoreInfoModule> module;
+
+        public List<StoreInfoModule> getModule() {
+            return module;
+        }
+
+        public void setModule(List<StoreInfoModule> module) {
+            this.module = module;
+        }
 
         public StoreInfoMerchant getMerchant() {
             return merchant;
@@ -60,6 +104,29 @@ public class StoreInfoEntity {
 
         public void setCards(List<StoreInfoCards> cards) {
             this.cards = cards;
+        }
+
+        public class StoreInfoModule{
+            @SerializedName("module")
+            private String module;
+            @SerializedName("module_name")
+            private String moduleName;
+
+            public String getModule() {
+                return module;
+            }
+
+            public void setModule(String module) {
+                this.module = module;
+            }
+
+            public String getModuleName() {
+                return moduleName;
+            }
+
+            public void setModuleName(String moduleName) {
+                this.moduleName = moduleName;
+            }
         }
 
         public class StoreInfoCards{
