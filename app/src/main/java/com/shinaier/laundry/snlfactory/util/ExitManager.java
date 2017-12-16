@@ -16,6 +16,7 @@ public class ExitManager {
 	private List<Activity> addItemList = new LinkedList<>();
 	private List<Activity> addOfflineCollectList = new LinkedList<>(); //线下收衣activity集合
 	private List<Activity> editOfflineCollectList = new LinkedList<>(); // 线下收衣编辑衣服
+	private List<Activity> makeCashCouponList = new LinkedList<>(); // 生成代金券
 
 	private ExitManager(){
 	}
@@ -76,5 +77,18 @@ public class ExitManager {
 		if (activity != null && activityList.contains(activity)){
 			activityList.remove(activity);
 		}
+	}
+
+	public void addCashCouponActivity(Activity activity){
+		makeCashCouponList.add(activity);
+	}
+
+	public void exitCahsCouponActivity(){
+		for (Activity activity: makeCashCouponList){
+			if (!activity.isFinishing()){
+				activity.finish();
+			}
+		}
+		makeCashCouponList.clear();
 	}
 }

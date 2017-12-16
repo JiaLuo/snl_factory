@@ -5,7 +5,6 @@
               android:layout_height="match_parent">
     <LinearLayout
         android:layout_marginTop="11dp"
-        android:layout_marginRight="20dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -23,8 +22,10 @@
             android:id="@+id/et_make_cash_coupon_num"
             android:maxLength="14"
             android:lines="1"
+            android:paddingLeft="6dp"
             android:hint="请填写整数"
             android:textSize="12sp"
+            android:inputType="number"
             android:background="@drawable/check_clothes_img_lin_bg"
             android:textCursorDrawable="@null"
             android:layout_weight="3"
@@ -32,13 +33,13 @@
             android:layout_height="34dp"/>
         <TextView
             android:text="张"
+            android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="11dp"
-        android:layout_marginRight="20dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:gravity="right"
-            android:text="代金券金额："
+            android:text="金额："
             android:textColor="@color/black_text"
             android:textSize="14sp"
             android:layout_weight="2"
@@ -56,24 +57,27 @@
             android:id="@+id/et_cash_coupon_money"
             android:maxLength="14"
             android:lines="1"
+            android:paddingLeft="6dp"
             android:textSize="12sp"
             android:background="@drawable/check_clothes_img_lin_bg"
             android:textCursorDrawable="@null"
+            android:inputType="number"
             android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="34dp"/>
         <TextView
             android:text="元"
+            android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="11dp"
-        android:layout_marginRight="20dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_marginRight="35dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -81,23 +85,91 @@
             android:text="开始使用日期："
             android:textColor="@color/black_text"
             android:textSize="14sp"
-            android:layout_weight="2"
+            android:layout_weight="2.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/ed_add_employee_name"
-            android:maxLength="14"
-            android:lines="1"
-            android:textSize="12sp"
+        <RelativeLayout
+            android:id="@+id/rl_cash_coupon_start_time"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/check_clothes_img_lin_bg"
-            android:textCursorDrawable="@null"
-            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:layout_weight="4"
             android:layout_width="0dp"
-            android:layout_height="34dp"/>
+            android:layout_height="34dp">
+            <TextView
+                android:id="@+id/cash_coupon_start_time"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                android:paddingLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_alignParentRight="true"
+                android:background="#55999999"
+                android:layout_width="35dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/down_arrow_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="11dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginRight="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
-            android:text="元"
-            android:layout_weight="1"
+            android:gravity="right"
+            android:text="结束使用日期："
+            android:textColor="@color/black_text"
+            android:textSize="14sp"
+            android:layout_weight="2.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:id="@+id/rl_cash_coupon_end_time"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/check_clothes_img_lin_bg"
+            android:orientation="horizontal"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="34dp">
+            <TextView
+                android:id="@+id/cash_coupon_end_time"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                android:paddingLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_alignParentRight="true"
+                android:background="#55999999"
+                android:layout_width="35dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/down_arrow_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/generate_bt"
+        android:text="一键生成"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:gravity="center"
+        android:background="@color/base_color"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="43dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
 </LinearLayout>

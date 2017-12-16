@@ -263,6 +263,15 @@
         <activity android:name=".manage.ui.activity.ManageCommodityEditActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
+        <activity android:name=".manage.ui.activity.CashCouponCenterActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".manage.ui.activity.CashCouponActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".manage.ui.activity.MakeCashCouponActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
 
         <service
             android:name=".service.JobSchedulerService"

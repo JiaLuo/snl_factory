@@ -8,6 +8,8 @@ import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
 import com.shinaier.laundry.snlfactory.network.entity.BuyPlateformCardEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CancelOrderEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CashBackEntity;
+import com.shinaier.laundry.snlfactory.network.entity.CashCouponCenterEntity;
+import com.shinaier.laundry.snlfactory.network.entity.CashCouponEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ColorSettingSuccessEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CraftworkAddPriceEntities;
@@ -712,5 +714,22 @@ public class Parsers {
      */
     public static EditCommodityEntity getEditCommodityEntity(String data){
         return gson.fromJson(data,new TypeToken<EditCommodityEntity>(){}.getType());
+    }
+
+    /**
+     * 卡券中心卡券查询
+     * @param data
+     * @return
+     */
+    public static CashCouponCenterEntity getCashCouponCenterEntity(String data){
+        return gson.fromJson(data,new TypeToken<CashCouponCenterEntity>(){}.getType());
+    }
+    /**
+     * 制作代金券
+     * @param data
+     * @return
+     */
+    public static CashCouponEntity getCashCouponEntity(String data){
+        return gson.fromJson(data,new TypeToken<CashCouponEntity>(){}.getType());
     }
 }

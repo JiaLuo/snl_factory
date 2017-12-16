@@ -25,7 +25,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.CashBackActivity;
-import com.shinaier.laundry.snlfactory.manage.ui.activity.MakeCashCouponActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.CashCouponCenterActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageCommodityActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageEmployeeActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageFinanceActivity;
@@ -255,7 +255,8 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.ll_make_cash_coupon:
                 //制作代金券
-                startActivity(new Intent(context,MakeCashCouponActivity.class));
+//                startActivity(new Intent(context,MakeCashCouponActivity.class));
+                startActivity(new Intent(context,CashCouponCenterActivity.class));
                 break;
         }
     }
