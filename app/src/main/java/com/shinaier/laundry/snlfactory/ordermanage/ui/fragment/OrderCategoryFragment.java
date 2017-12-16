@@ -542,7 +542,7 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
 //                        orderManageList.setCanAddMore(false);
 //                    }
 //                }
-                break;w
+                break;
             case REQUEST_CODE_CLEAN_MORE:
                 orderManageList.onRefreshComplete();
                 if(data != null){
