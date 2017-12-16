@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shinaier.laundry.snlfactory.ordermanage.ui.OrderCategoryFragment;
+import com.shinaier.laundry.snlfactory.ordermanage.ui.fragment.OrderCategoryFragment;
 
 import java.util.List;
 

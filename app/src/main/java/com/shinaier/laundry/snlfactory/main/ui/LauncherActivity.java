@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.base.BaseActivity;
+import com.shinaier.laundry.snlfactory.base.activity.BaseActivity;
 import com.shinaier.laundry.snlfactory.main.MainActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.util.ConfigUtils;

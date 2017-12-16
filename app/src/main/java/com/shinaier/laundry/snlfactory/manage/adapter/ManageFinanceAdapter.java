@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shinaier.laundry.snlfactory.manage.fragment.ManageFinanceFragment;
+import com.shinaier.laundry.snlfactory.manage.ui.fragment.ManageFinanceFragment;
 
 import java.util.List;
 

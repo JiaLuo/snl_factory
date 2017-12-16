@@ -54,15 +54,15 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.ManageFinanceActivity"
+        <activity android:name=".manage.ui.activity.ManageFinanceActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.ManageCommodityActivity"
+        <activity android:name=".manage.ui.activity.ManageCommodityActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.AddCommodityActivity"
+        <activity android:name=".manage.ui.activity.AddCommodityActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
@@ -70,76 +70,76 @@
                   <!--android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"-->
                   <!--android:screenOrientation="portrait"-->
             <!--/>-->
-        <activity android:name=".manage.ui.UserEvaluateActivity"
+        <activity android:name=".manage.ui.activity.UserEvaluateActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.MessageNoticeActivity"
+        <activity android:name=".manage.ui.activity.MessageNoticeActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.ManageEmployeeActivity"
+        <activity android:name=".manage.ui.activity.ManageEmployeeActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.StoreDetailActivity"
+        <activity android:name=".setting.ui.activity.StoreDetailActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".base.WebViewActivity"
+        <activity android:name=".base.activity.WebViewActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.CashBackActivity"
+        <activity android:name=".manage.ui.activity.CashBackActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.FeedbackActivity"
+        <activity android:name=".setting.ui.activity.FeedbackActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.RevisePasswordActivity"
+        <activity android:name=".setting.ui.activity.RevisePasswordActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.OrderInquiryResultActivity"
+        <activity android:name=".manage.ui.activity.OrderInquiryResultActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.CancelOrderActivity"
+        <activity android:name=".ordermanage.ui.activity.CancelOrderActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.CraftworkAddPriceActivity"
+        <activity android:name=".ordermanage.ui.activity.CraftworkAddPriceActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustNothing"
             />
-        <activity android:name=".ordermanage.ui.CheckClothesActivity"
+        <activity android:name=".ordermanage.ui.activity.CheckClothesActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.OrderDetailActivity"
+        <activity android:name=".manage.ui.activity.OrderDetailActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.BigImageActivity"
+        <activity android:name=".ordermanage.ui.activity.BigImageActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.ColorSettingActivity"
+        <activity android:name=".ordermanage.ui.activity.ColorSettingActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.QuestionInfoActivity"
+        <activity android:name=".ordermanage.ui.activity.QuestionInfoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.AddPhotoActivity"
+        <activity android:name=".ordermanage.ui.activity.AddPhotoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.EditPhotoActivity"
+        <activity android:name=".ordermanage.ui.activity.EditPhotoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
@@ -147,120 +147,120 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.BigPhotoActivity"
+        <activity android:name=".ordermanage.ui.activity.BigPhotoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.AddProjectActivity"
+        <activity android:name=".ordermanage.ui.activity.AddProjectActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.OrderInquiryActivity"
+        <activity android:name=".manage.ui.activity.OrderInquiryActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.ScanActivity"
+        <activity android:name=".offlinecash.ui.activity.ScanActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.MemberInfoActivity"
+        <activity android:name=".offlinecash.ui.activity.MemberInfoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OrderPayActivity"
+        <activity android:name=".offlinecash.ui.activity.OrderPayActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.BuyMemberCardActivity"
+        <activity android:name=".offlinecash.ui.activity.BuyMemberCardActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.SendLaundryActivity"
+        <activity android:name=".offlinecash.ui.activity.SendLaundryActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustNothing"
             />
-        <activity android:name=".offlinecash.ui.TakeClothesActivity"
+        <activity android:name=".offlinecash.ui.activity.TakeClothesActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.StatisticsActivity"
+        <activity android:name=".offlinecash.ui.activity.StatisticsActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineOrderDetailActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineOrderDetailActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.VipCardDetailActivity"
+        <activity android:name=".offlinecash.ui.activity.VipCardDetailActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberManageActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberManageActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberDetailActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberDetailActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberConsumeActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberConsumeActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberBalanceActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberBalanceActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberAddActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberAddActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineMemberRechargeActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineMemberRechargeActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineAddVisitorActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineAddVisitorActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.ConnectBluetoothActivity"
+        <activity android:name=".setting.ui.activity.ConnectBluetoothActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.PrintActivity"
+        <activity android:name=".offlinecash.ui.activity.PrintActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.OperateAnalysisActivity"
+        <activity android:name=".manage.ui.activity.OperateAnalysisActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.OfflineEnterpriseAddActivity"
+        <activity android:name=".offlinecash.ui.activity.OfflineEnterpriseAddActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.LeaveFactoryActivity"
+        <activity android:name=".offlinecash.ui.activity.LeaveFactoryActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.CooperationStoreActivity"
+        <activity android:name=".setting.ui.activity.CooperationStoreActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.AddEmployeeActivity"
+        <activity android:name=".manage.ui.activity.AddEmployeeActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.IntoFactoryActivity"
+        <activity android:name=".offlinecash.ui.activity.IntoFactoryActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".setting.ui.SetStoreInfoActivity"
+        <activity android:name=".setting.ui.activity.SetStoreInfoActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".manage.ui.ManageCommodityEditActivity"
+        <activity android:name=".manage.ui.activity.ManageCommodityEditActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
 

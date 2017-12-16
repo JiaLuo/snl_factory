@@ -3,7 +3,7 @@ package com.zbar.lib.decode;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.shinaier.laundry.snlfactory.offlinecash.ui.ScanActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.ScanActivity;
 
 import java.util.concurrent.CountDownLatch;
 

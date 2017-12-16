@@ -7,7 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.ScanActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.ScanActivity;
 import com.zbar.lib.ZbarManager;
 import com.zbar.lib.bitmap.PlanarYUVLuminanceSource;
 
