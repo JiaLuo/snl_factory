@@ -17,44 +17,25 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/25.
  */
 
-public class CategoryTakeOrderAdapter extends BaseAdapterNew<OrderTakeOrderEntities.TakeOrderData> {
+public class CategoryTakeOrderAdapter extends BaseAdapterNew<OrderTakeOrderEntities.OrderTakeOrderResult> {
+    private List<OrderTakeOrderEntities.OrderTakeOrderResult> mDatas;
     private PositionListener listener;
-    private GotoDetailListener gotoDetailListener;
-    private TelNumListener telNumListener;
-    private String countNum;
-
-    public interface TelNumListener{
-        void onTelPhone(int position);
-    }
-
-    public void setTelNumListener(TelNumListener telNumListener){
-        this.telNumListener = telNumListener;
-    }
-
     public interface PositionListener{
         void cancelOnClick(int position);
         void confirmOnClick(int position);
-    }
-
-    public interface GotoDetailListener{
-        void onClick(int position);
-    }
-
-    public void setGotoDetailListener(GotoDetailListener gotoDetailListener){
-        this.gotoDetailListener = gotoDetailListener;
+        void onTellClick(int position);
+        void onGotoDetail(int position);
     }
 
     public void setPositionListener(PositionListener listener){
         this.listener = listener;
     }
 
-    public CategoryTakeOrderAdapter(Context context, List<OrderTakeOrderEntities.TakeOrderData> mDatas) {
+    public CategoryTakeOrderAdapter(Context context, List<OrderTakeOrderEntities.OrderTakeOrderResult> mDatas) {
         super(context, mDatas);
+        this.mDatas = mDatas;
     }
 
-    public void setCountNum(String countNum){
-        this.countNum = countNum;
-    }
 
     @Override
     protected int getResourceId(int Position) {
@@ -63,7 +44,7 @@ public class CategoryTakeOrderAdapter extends BaseAdapterNew<OrderTakeOrderEntit
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        OrderTakeOrderEntities.TakeOrderData item = getItem(position);
+        OrderTakeOrderEntities.OrderTakeOrderResult item = getItem(position);
         TextView takeOrderNumber = ViewHolder.get(convertView,R.id.take_order_number);
         TextView takeOrderBespeakTimeDetail = ViewHolder.get(convertView,R.id.take_order_bespeak_time_detail);
         TextView takeOrderName = ViewHolder.get(convertView,R.id.take_order_name);
@@ -79,12 +60,12 @@ public class CategoryTakeOrderAdapter extends BaseAdapterNew<OrderTakeOrderEntit
         if(item != null){
             takeOrderNumber.setText("订单号：" + item.getOrdersn());
             takeOrderBespeakTimeDetail.setText(item.getTime());
-            takeOrderName.setText(item.getName());
-            takeOrderPhoneNum.setText(item.getPhone());
-            takeOrderAddress.setText(item.getAdr());
-            takeOrderNowTime.setText("时间:" + item.getCreateTime());
+            takeOrderName.setText(item.getuName());
+            takeOrderPhoneNum.setText(item.getuMobile());
+            takeOrderAddress.setText(item.getuAddress());
+            takeOrderNowTime.setText("时间:" + item.getTime());
             takeOrderCancelOrder.setText("取消订单");
-            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+            employeeLineNum.setText(mDatas.size() - position + "");
             takeOrderCancelOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -106,16 +87,16 @@ public class CategoryTakeOrderAdapter extends BaseAdapterNew<OrderTakeOrderEntit
             llTakeOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(gotoDetailListener != null){
-                        gotoDetailListener.onClick(position);
+                    if(listener != null){
+                        listener.onGotoDetail(position);
                     }
                 }
             });
             llTakeOrderPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(telNumListener != null){
-                        telNumListener.onTelPhone(position);
+                    if(listener != null){
+                        listener.onTellClick(position);
                     }
                 }
             });

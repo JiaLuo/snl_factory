@@ -19,6 +19,12 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -34,4 +40,8 @@ dependencies {
     compile 'com.github.promeg:tinypinyin:1.0.0'
     //zxing
     compile 'com.google.zxing:core:3.2.1'
+
+    //viewpager indicator依赖包
+    compile(name: 'viewpagerindicator', ext: 'aar')
+    compile 'cn.lightsky.infiniteindicator:library:1.2.2'
 }

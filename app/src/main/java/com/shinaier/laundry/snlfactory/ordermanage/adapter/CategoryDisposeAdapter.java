@@ -17,47 +17,25 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/24.
  */
 
-public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.Data> {
+public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.OrderDisposeResult> {
+    private List<OrderDisposeEntities.OrderDisposeResult> mDatas;
     private PositionListener listener;
-    private GotoDetailListener gotoDetailListener;
-    private TelPhoneListener telPhoneListener;
-    private String countNum;
-    public interface TelPhoneListener{
-        void onTelPhone(int position);
-    }
-
-    public void setTelPhoneListener(TelPhoneListener telPhoneListener){
-        this.telPhoneListener = telPhoneListener;
-    }
-
     public interface PositionListener{
         void cancelOnClick(int position);
         void confirmOnClick(int position);
-    }
-
-    public interface GotoDetailListener{
-        void onClick(int position);
-    }
-
-    public void setGotoDetailListener(GotoDetailListener gotoDetailListener){
-        this.gotoDetailListener = gotoDetailListener;
+        void onTellClick(int position);
+        void onGotoDetail(int position);
     }
 
     public void setPositionListener(PositionListener listener){
         this.listener = listener;
     }
 
-    private Context context;
-    private List<OrderDisposeEntities.Data> mDatas;
-    public CategoryDisposeAdapter(Context context, List<OrderDisposeEntities.Data> mDatas) {
+    public CategoryDisposeAdapter(Context context, List<OrderDisposeEntities.OrderDisposeResult> mDatas) {
         super(context, mDatas);
-        this.context = context;
         this.mDatas = mDatas;
     }
 
-    public void setCountNum(String countNum){
-        this.countNum = countNum;
-    }
 
     @Override
     protected int getResourceId(int Position) {
@@ -66,7 +44,7 @@ public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        OrderDisposeEntities.Data item = getItem(position);
+        OrderDisposeEntities.OrderDisposeResult item = getItem(position);
         TextView orderDisposeNumber = ViewHolder.get(convertView,R.id.order_dispose_number);
         TextView orderDisposeName = ViewHolder.get(convertView,R.id.order_dispose_name);
         TextView orderDisposeBespeakTimeDetail = ViewHolder.get(convertView,R.id.order_dispose_bespeak_time_detail);
@@ -80,13 +58,13 @@ public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.
         LinearLayout llOrderDisposePhone = ViewHolder.get(convertView,R.id.ll_order_dispose_phone);
 
         if(item != null){
-            orderDisposeNumber.setText("订单号：" + item.getOrdersn());
-            orderDisposeName.setText(item.getName());
+            orderDisposeNumber.setText("订单号：" + item.getOrderSn());
+            orderDisposeName.setText(item.getuName());
             orderDisposeBespeakTimeDetail.setText(item.getTime());
-            orderDisposePhoneNum.setText(item.getPhone());
-            orderDisposeAddress.setText(item.getAdr());
-            orderDisposeNowTime.setText(item.getCreateTime());
-            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+            orderDisposePhoneNum.setText(item.getuMobile());
+            orderDisposeAddress.setText(item.getuAddress());
+            orderDisposeNowTime.setText(item.getTime());
+            employeeLineNum.setText(mDatas.size() - position + "");
             orderDisposeCancel.setText("取消订单");
 
             orderDisposeCancel.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +88,8 @@ public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.
             llOrderDispose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(gotoDetailListener != null){
-                        gotoDetailListener.onClick(position);
+                    if(listener != null){
+                        listener.onGotoDetail(position);
                     }
                 }
             });
@@ -119,8 +97,8 @@ public class CategoryDisposeAdapter extends BaseAdapterNew<OrderDisposeEntities.
             llOrderDisposePhone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(telPhoneListener != null){
-                        telPhoneListener.onTelPhone(position);
+                    if(listener != null){
+                        listener.onTellClick(position);
                     }
                 }
             });

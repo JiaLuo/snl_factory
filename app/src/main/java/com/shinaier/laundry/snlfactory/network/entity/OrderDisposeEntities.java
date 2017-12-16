@@ -9,90 +9,86 @@ import java.util.List;
  */
 
 public class OrderDisposeEntities {
-    @SerializedName("count")
-    private int count;
-    @SerializedName("data")
-    private List<Data> datas;
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("dataCount")
-    private String dataCount;
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": [
+     {
+     "id": “5",           订单ID
+     "ordersn": “171213201325249678",    订单编号
+     "time": "2018-09-20 12:00~13:00”,     用户预约时间
+     "umobile": "18745729547",
+     "uname": "杨云龙",
+     "uaddress": "北京市朝阳区万达广场三号楼1902室",
+     "otime": "2017.12.16 10:29”               下单时间
+     }
+     ]
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<OrderDisposeResult> results;
 
-    public String getDataCount() {
-        return dataCount;
+    public int getCode() {
+        return code;
     }
 
-    public void setDataCount(String dataCount) {
-        this.dataCount = dataCount;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public int getCount() {
-        return count;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public List<Data> getDatas() {
-        return datas;
+    public List<OrderDisposeResult> getResults() {
+        return results;
     }
 
-    public void setDatas(List<Data> datas) {
-        this.datas = datas;
+    public void setResults(List<OrderDisposeResult> results) {
+        this.results = results;
     }
 
-    public int getRetcode() {
-        return retcode;
-    }
+    public class OrderDisposeResult{
+//        @SerializedName("adr")
+//        private String adr;
+//        @SerializedName("create_time")
+//        private String createTime;
+//        @SerializedName("id")
+//        private String id;
+//        @SerializedName("name")
+//        private String name;
+//        @SerializedName("ordersn")
+//        private String ordersn;
+//        @SerializedName("phone")
+//        private String phone;
+//        @SerializedName("state")
+//        private int state;
+//        @SerializedName("time")
+//        private String time;
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public class Data{
-        @SerializedName("adr")
-        private String adr;
-        @SerializedName("create_time")
-        private String createTime;
         @SerializedName("id")
         private String id;
-        @SerializedName("name")
-        private String name;
         @SerializedName("ordersn")
-        private String ordersn;
-        @SerializedName("phone")
-        private String phone;
-        @SerializedName("state")
-        private int state;
+        private String orderSn;
         @SerializedName("time")
         private String time;
-
-        public String getAdr() {
-            return adr;
-        }
-
-        public void setAdr(String adr) {
-            this.adr = adr;
-        }
-
-        public String getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("uaddress")
+        private String uAddress;
+        @SerializedName("otime")
+        private String oTime;
 
         public String getId() {
             return id;
@@ -102,36 +98,12 @@ public class OrderDisposeEntities {
             this.id = id;
         }
 
-        public String getName() {
-            return name;
+        public String getOrderSn() {
+            return orderSn;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getOrdersn() {
-            return ordersn;
-        }
-
-        public void setOrdersn(String ordersn) {
-            this.ordersn = ordersn;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public int getState() {
-            return state;
-        }
-
-        public void setState(int state) {
-            this.state = state;
+        public void setOrderSn(String orderSn) {
+            this.orderSn = orderSn;
         }
 
         public String getTime() {
@@ -140,6 +112,38 @@ public class OrderDisposeEntities {
 
         public void setTime(String time) {
             this.time = time;
+        }
+
+        public String getuMobile() {
+            return uMobile;
+        }
+
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public String getuName() {
+            return uName;
+        }
+
+        public void setuName(String uName) {
+            this.uName = uName;
+        }
+
+        public String getuAddress() {
+            return uAddress;
+        }
+
+        public void setuAddress(String uAddress) {
+            this.uAddress = uAddress;
+        }
+
+        public String getoTime() {
+            return oTime;
+        }
+
+        public void setoTime(String oTime) {
+            this.oTime = oTime;
         }
     }
 }

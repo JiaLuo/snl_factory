@@ -9,96 +9,75 @@ import java.util.List;
  */
 
 public class OrderTakeOrderEntities {
-    @SerializedName("count")
-    private int count;
-    @SerializedName("data")
-    private List<TakeOrderData> takeOrderDataList;
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("dataCount")
-    private String dataCount;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<OrderTakeOrderResult> results;
 
-    public String getDataCount() {
-        return dataCount;
+    public int getCode() {
+        return code;
     }
 
-    public void setDataCount(String dataCount) {
-        this.dataCount = dataCount;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public int getCount() {
-        return count;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public List<TakeOrderData> getTakeOrderDataList() {
-        return takeOrderDataList;
+    public List<OrderTakeOrderResult> getResults() {
+        return results;
     }
 
-    public void setTakeOrderDataList(List<TakeOrderData> takeOrderDataList) {
-        this.takeOrderDataList = takeOrderDataList;
+    public void setResults(List<OrderTakeOrderResult> results) {
+        this.results = results;
     }
 
-    public int getRetcode() {
-        return retcode;
-    }
+    public class OrderTakeOrderResult{
+//        @SerializedName("adr")
+//        private String adr;
+//        @SerializedName("create_time")
+//        private String createTime;
+//        @SerializedName("id")
+//        private String id;
+//        @SerializedName("item_state")
+//        private int itemState;
+//        @SerializedName("name")
+//        private String name;
+//        @SerializedName("ordersn")
+//        private String ordersn;
+//        @SerializedName("phone")
+//        private String phone;
+//        @SerializedName("state")
+//        private String state;
+//        @SerializedName("time")
+//        private String time;
+//        @SerializedName("up_time")
+//        private String upTime;
+//        @SerializedName("update_time") // 最近操作的时间
+//        private String updateTime;
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public class TakeOrderData{
-        @SerializedName("adr")
-        private String adr;
-        @SerializedName("create_time")
-        private String createTime;
         @SerializedName("id")
         private String id;
-        @SerializedName("item_state")
-        private int itemState;
-        @SerializedName("name")
-        private String name;
         @SerializedName("ordersn")
         private String ordersn;
-        @SerializedName("phone")
-        private String phone;
-        @SerializedName("state")
-        private String state;
         @SerializedName("time")
         private String time;
-        @SerializedName("up_time")
-        private String upTime;
-        @SerializedName("update_time") // 最近操作的时间
-        private String updateTime;
-
-        public String getAdr() {
-            return adr;
-        }
-
-        public void setAdr(String adr) {
-            this.adr = adr;
-        }
-
-        public String getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("uaddress")
+        private String uAddress;
+        @SerializedName("otime")
+        private String oTime;
 
         public String getId() {
             return id;
@@ -106,22 +85,6 @@ public class OrderTakeOrderEntities {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public int getItemState() {
-            return itemState;
-        }
-
-        public void setItemState(int itemState) {
-            this.itemState = itemState;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public String getOrdersn() {
@@ -132,22 +95,6 @@ public class OrderTakeOrderEntities {
             this.ordersn = ordersn;
         }
 
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
         public String getTime() {
             return time;
         }
@@ -156,20 +103,36 @@ public class OrderTakeOrderEntities {
             this.time = time;
         }
 
-        public String getUpTime() {
-            return upTime;
+        public String getuMobile() {
+            return uMobile;
         }
 
-        public void setUpTime(String upTime) {
-            this.upTime = upTime;
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
         }
 
-        public String getUpdateTime() {
-            return updateTime;
+        public String getuName() {
+            return uName;
         }
 
-        public void setUpdateTime(String updateTime) {
-            this.updateTime = updateTime;
+        public void setuName(String uName) {
+            this.uName = uName;
+        }
+
+        public String getuAddress() {
+            return uAddress;
+        }
+
+        public void setuAddress(String uAddress) {
+            this.uAddress = uAddress;
+        }
+
+        public String getoTime() {
+            return oTime;
+        }
+
+        public void setoTime(String oTime) {
+            this.oTime = oTime;
         }
     }
 }

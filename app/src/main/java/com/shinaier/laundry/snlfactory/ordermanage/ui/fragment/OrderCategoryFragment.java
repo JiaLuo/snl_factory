@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
-import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.widget.FootLoadingListView;
 import com.common.widget.PullToRefreshBase;
@@ -35,10 +34,7 @@ import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryCleaningAdapt
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryDisposeAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategorySendAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryTakeOrderAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectActivity;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CancelOrderActivity;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CheckClothesActivity;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CraftworkAddPriceActivity;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -160,121 +156,121 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
                 if(data != null){
                     orderManageList.onRefreshComplete();
                     if(status == 0){
-                        orderDisposeEntities = Parsers.getOrderManageEntities(data);
-                        if(orderDisposeEntities != null && orderDisposeEntities.getDatas() != null &&
-                                orderDisposeEntities.getDatas().size() > 0){
-                            setLoadingStatus(LoadingStatus.GONE);
-                            orderManageList.setVisibility(View.VISIBLE);
-                            manageCategoryDisposeAdapter = new CategoryDisposeAdapter(context, orderDisposeEntities.getDatas());
-                            manageCategoryDisposeAdapter.setCountNum(orderDisposeEntities.getDataCount());
-                            orderManageList.setAdapter(manageCategoryDisposeAdapter);
-                            manageCategoryDisposeAdapter.setPositionListener(new CategoryDisposeAdapter.PositionListener() {
-                                @Override
-                                public void cancelOnClick(int position) {
-                                    Intent intent = new Intent(context,CancelOrderActivity.class);
-                                    intent.putExtra("id", orderDisposeEntities.getDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void confirmOnClick(int position) {
-                                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                    params.put("token",UserCenter.getToken(context));
-                                    params.put("state",String.valueOf(status));
-                                    params.put("id", orderDisposeEntities.getDatas().get(position).getId());
-                                    requestHttpData(Constants.Urls.URL_POST_ORDER_MANAGE,REQUEST_CODE_ORDER_CONFRIM, FProtocol.HttpMethod.POST,params);
-                                }
-                            });
-
-                            manageCategoryDisposeAdapter.setTelPhoneListener(new CategoryDisposeAdapter.TelPhoneListener() {
-                                @Override
-                                public void onTelPhone(int position) {
-                                    tell(orderDisposeEntities.getDatas().get(position).getPhone());
-                                }
-                            });
-
-                            manageCategoryDisposeAdapter.setGotoDetailListener(new CategoryDisposeAdapter.GotoDetailListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    Intent intent = new Intent(context,OrderDetailActivity.class);
-                                    intent.putExtra("id",orderDisposeEntities.getDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            if( manageCategoryDisposeAdapter.getPage() < orderDisposeEntities.getCount()){
-                                orderManageList.setCanAddMore(true);
-                            }else {
-                                orderManageList.setCanAddMore(false);
-                            }
-                        }else {
-                            setLoadingStatus(LoadingStatus.EMPTY);
-                            manageCategoryDisposeAdapter = new CategoryDisposeAdapter(context, new ArrayList<OrderDisposeEntities.Data>());
-                            orderManageList.setAdapter(manageCategoryDisposeAdapter);
-                            orderManageList.setCanAddMore(false);
-                        }
+//                        orderDisposeEntities = Parsers.getOrderManageEntities(data);
+//                        if(orderDisposeEntities != null && orderDisposeEntities.getDatas() != null &&
+//                                orderDisposeEntities.getDatas().size() > 0){
+//                            setLoadingStatus(LoadingStatus.GONE);
+//                            orderManageList.setVisibility(View.VISIBLE);
+//                            manageCategoryDisposeAdapter = new CategoryDisposeAdapter(context, orderDisposeEntities.getDatas());
+//                            manageCategoryDisposeAdapter.setCountNum(orderDisposeEntities.getDataCount());
+//                            orderManageList.setAdapter(manageCategoryDisposeAdapter);
+//                            manageCategoryDisposeAdapter.setPositionListener(new CategoryDisposeAdapter.PositionListener() {
+//                                @Override
+//                                public void cancelOnClick(int position) {
+//                                    Intent intent = new Intent(context,CancelOrderActivity.class);
+//                                    intent.putExtra("id", orderDisposeEntities.getDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//
+//                                @Override
+//                                public void confirmOnClick(int position) {
+//                                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                                    params.put("token",UserCenter.getToken(context));
+//                                    params.put("state",String.valueOf(status));
+//                                    params.put("id", orderDisposeEntities.getDatas().get(position).getId());
+//                                    requestHttpData(Constants.Urls.URL_POST_ORDER_MANAGE,REQUEST_CODE_ORDER_CONFRIM, FProtocol.HttpMethod.POST,params);
+//                                }
+//                            });
+//
+//                            manageCategoryDisposeAdapter.setTelPhoneListener(new CategoryDisposeAdapter.TelPhoneListener() {
+//                                @Override
+//                                public void onTelPhone(int position) {
+//                                    tell(orderDisposeEntities.getDatas().get(position).getPhone());
+//                                }
+//                            });
+//
+//                            manageCategoryDisposeAdapter.setGotoDetailListener(new CategoryDisposeAdapter.GotoDetailListener() {
+//                                @Override
+//                                public void onClick(int position) {
+//                                    Intent intent = new Intent(context,OrderDetailActivity.class);
+//                                    intent.putExtra("id",orderDisposeEntities.getDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            if( manageCategoryDisposeAdapter.getPage() < orderDisposeEntities.getCount()){
+//                                orderManageList.setCanAddMore(true);
+//                            }else {
+//                                orderManageList.setCanAddMore(false);
+//                            }
+//                        }else {
+//                            setLoadingStatus(LoadingStatus.EMPTY);
+//                            manageCategoryDisposeAdapter = new CategoryDisposeAdapter(context, new ArrayList<OrderDisposeEntities.Data>());
+//                            orderManageList.setAdapter(manageCategoryDisposeAdapter);
+//                            orderManageList.setCanAddMore(false);
+//                        }
                     }else if(status == 1){
-                        orderTakeOrderEntities = Parsers.getOrderTakeOrderEntities(data);
-                        if(orderTakeOrderEntities != null && orderTakeOrderEntities.getTakeOrderDataList() != null &&
-                                orderTakeOrderEntities.getTakeOrderDataList().size() > 0){
-                            setLoadingStatus(LoadingStatus.GONE);
-                            orderManageList.setVisibility(View.VISIBLE);
-                            categoryTakeOrderAdapter = new CategoryTakeOrderAdapter(context, orderTakeOrderEntities.getTakeOrderDataList());
-                            categoryTakeOrderAdapter.setCountNum(orderTakeOrderEntities.getDataCount());
-                            orderManageList.setAdapter(categoryTakeOrderAdapter);
-                            categoryTakeOrderAdapter.setGotoDetailListener(new CategoryTakeOrderAdapter.GotoDetailListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    Intent intent = new Intent(context,OrderDetailActivity.class);
-                                    intent.putExtra("id",orderTakeOrderEntities.getTakeOrderDataList().get(position).getId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            categoryTakeOrderAdapter.setPositionListener(new CategoryTakeOrderAdapter.PositionListener() {
-                                @Override
-                                public void cancelOnClick(int position) {
-                                    Intent intent = new Intent(context,CancelOrderActivity.class);
-                                    intent.putExtra("id", orderTakeOrderEntities.getTakeOrderDataList().get(position).getId());
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void confirmOnClick(int position) {
-                                    String id = orderTakeOrderEntities.getTakeOrderDataList().get(position).getId();
-                                    if (orderTakeOrderEntities.getTakeOrderDataList().get(position).getItemState() == 1){
-                                        LogUtil.e("zhang","3333333333333333");
-                                        Intent intent = new Intent(context,CraftworkAddPriceActivity.class);
-                                        intent.putExtra("id",id);
-                                        startActivity(intent);
-                                    } else {
-                                        LogUtil.e("zhang","4444444444444444");
-                                        Intent intent = new Intent(context,AddProjectActivity.class);
-                                        intent.putExtra("orderId",id);
-                                        intent.putExtra("extra_from",ONLINE_ADDITEM);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-
-                            categoryTakeOrderAdapter.setTelNumListener(new CategoryTakeOrderAdapter.TelNumListener() {
-                                @Override
-                                public void onTelPhone(int position) {
-                                    tell(orderTakeOrderEntities.getTakeOrderDataList().get(position).getPhone());
-                                }
-                            });
-
-                            if( categoryTakeOrderAdapter.getPage() < orderTakeOrderEntities.getCount()){
-                                orderManageList.setCanAddMore(true);
-                            }else {
-                                orderManageList.setCanAddMore(false);
-                            }
-                        }else {
-                            setLoadingStatus(LoadingStatus.EMPTY);
-                            categoryTakeOrderAdapter = new CategoryTakeOrderAdapter(context, new ArrayList<OrderTakeOrderEntities.TakeOrderData>());
-                            orderManageList.setAdapter(categoryTakeOrderAdapter);
-                            orderManageList.setCanAddMore(false);
-                        }
+//                        orderTakeOrderEntities = Parsers.getOrderTakeOrderEntities(data);
+//                        if(orderTakeOrderEntities != null && orderTakeOrderEntities.getTakeOrderDataList() != null &&
+//                                orderTakeOrderEntities.getTakeOrderDataList().size() > 0){
+//                            setLoadingStatus(LoadingStatus.GONE);
+//                            orderManageList.setVisibility(View.VISIBLE);
+//                            categoryTakeOrderAdapter = new CategoryTakeOrderAdapter(context, orderTakeOrderEntities.getTakeOrderDataList());
+//                            categoryTakeOrderAdapter.setCountNum(orderTakeOrderEntities.getDataCount());
+//                            orderManageList.setAdapter(categoryTakeOrderAdapter);
+//                            categoryTakeOrderAdapter.setGotoDetailListener(new CategoryTakeOrderAdapter.GotoDetailListener() {
+//                                @Override
+//                                public void onClick(int position) {
+//                                    Intent intent = new Intent(context,OrderDetailActivity.class);
+//                                    intent.putExtra("id",orderTakeOrderEntities.getTakeOrderDataList().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            categoryTakeOrderAdapter.setPositionListener(new CategoryTakeOrderAdapter.PositionListener() {
+//                                @Override
+//                                public void cancelOnClick(int position) {
+//                                    Intent intent = new Intent(context,CancelOrderActivity.class);
+//                                    intent.putExtra("id", orderTakeOrderEntities.getTakeOrderDataList().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//
+//                                @Override
+//                                public void confirmOnClick(int position) {
+//                                    String id = orderTakeOrderEntities.getTakeOrderDataList().get(position).getId();
+//                                    if (orderTakeOrderEntities.getTakeOrderDataList().get(position).getItemState() == 1){
+//                                        LogUtil.e("zhang","3333333333333333");
+//                                        Intent intent = new Intent(context,CraftworkAddPriceActivity.class);
+//                                        intent.putExtra("id",id);
+//                                        startActivity(intent);
+//                                    } else {
+//                                        LogUtil.e("zhang","4444444444444444");
+//                                        Intent intent = new Intent(context,AddProjectActivity.class);
+//                                        intent.putExtra("orderId",id);
+//                                        intent.putExtra("extra_from",ONLINE_ADDITEM);
+//                                        startActivity(intent);
+//                                    }
+//                                }
+//                            });
+//
+//                            categoryTakeOrderAdapter.setTelNumListener(new CategoryTakeOrderAdapter.TelNumListener() {
+//                                @Override
+//                                public void onTelPhone(int position) {
+//                                    tell(orderTakeOrderEntities.getTakeOrderDataList().get(position).getPhone());
+//                                }
+//                            });
+//
+//                            if( categoryTakeOrderAdapter.getPage() < orderTakeOrderEntities.getCount()){
+//                                orderManageList.setCanAddMore(true);
+//                            }else {
+//                                orderManageList.setCanAddMore(false);
+//                            }
+//                        }else {
+//                            setLoadingStatus(LoadingStatus.EMPTY);
+//                            categoryTakeOrderAdapter = new CategoryTakeOrderAdapter(context, new ArrayList<OrderTakeOrderEntities.TakeOrderData>());
+//                            orderManageList.setAdapter(categoryTakeOrderAdapter);
+//                            orderManageList.setCanAddMore(false);
+//                        }
                     }else if(status == 2){
                         orderCleanEntities = Parsers.getOrderCleanEntities(data);
                         if(orderCleanEntities != null && orderCleanEntities.getDatas() != null &&
@@ -524,29 +520,29 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
                 }
                 break;
             case REQUEST_CODE_ORDER_MANAGE_MORE:
-                orderManageList.onRefreshComplete();
-                if(data != null){
-                    OrderDisposeEntities orderManageEntities = Parsers.getOrderManageEntities(data);
-                    manageCategoryDisposeAdapter.addDatas(orderManageEntities.getDatas());
-                    if( manageCategoryDisposeAdapter.getPage() < orderManageEntities.getCount()){
-                        orderManageList.setCanAddMore(true);
-                    }else {
-                        orderManageList.setCanAddMore(false);
-                    }
-                }
+//                orderManageList.onRefreshComplete();
+//                if(data != null){
+//                    OrderDisposeEntities orderManageEntities = Parsers.getOrderManageEntities(data);
+//                    manageCategoryDisposeAdapter.addDatas(orderManageEntities.getDatas());
+//                    if( manageCategoryDisposeAdapter.getPage() < orderManageEntities.getCount()){
+//                        orderManageList.setCanAddMore(true);
+//                    }else {
+//                        orderManageList.setCanAddMore(false);
+//                    }
+//                }
                 break;
             case REQUEST_CODE_TAKE_ORDER_MORE:
-                orderManageList.onRefreshComplete();
-                if(data != null){
-                    OrderTakeOrderEntities orderTakeOrderEntities = Parsers.getOrderTakeOrderEntities(data);
-                    categoryTakeOrderAdapter.addDatas(orderTakeOrderEntities.getTakeOrderDataList());
-                    if( categoryTakeOrderAdapter.getPage() < orderTakeOrderEntities.getCount()){
-                        orderManageList.setCanAddMore(true);
-                    }else {
-                        orderManageList.setCanAddMore(false);
-                    }
-                }
-                break;
+//                orderManageList.onRefreshComplete();
+//                if(data != null){
+//                    OrderTakeOrderEntities orderTakeOrderEntities = Parsers.getOrderTakeOrderEntities(data);
+//                    categoryTakeOrderAdapter.addDatas(orderTakeOrderEntities.getTakeOrderDataList());
+//                    if( categoryTakeOrderAdapter.getPage() < orderTakeOrderEntities.getCount()){
+//                        orderManageList.setCanAddMore(true);
+//                    }else {
+//                        orderManageList.setCanAddMore(false);
+//                    }
+//                }
+                break;w
             case REQUEST_CODE_CLEAN_MORE:
                 orderManageList.onRefreshComplete();
                 if(data != null){

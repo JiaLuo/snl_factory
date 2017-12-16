@@ -309,7 +309,7 @@ public class Parsers {
      * @param data
      * @return
      */
-    public static OrderDisposeEntities getOrderManageEntities(String data){
+    public static OrderDisposeEntities getOrderDisposeEntities(String data){
         return gson.fromJson(data,new TypeToken<OrderDisposeEntities>(){}.getType());
     }
 
