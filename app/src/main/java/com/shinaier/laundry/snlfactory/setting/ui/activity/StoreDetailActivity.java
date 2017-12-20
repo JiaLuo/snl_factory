@@ -22,7 +22,6 @@ import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.VipCardDetailActivity;
 import com.shinaier.laundry.snlfactory.setting.adapter.EditStoreModularAdapter;
 import com.shinaier.laundry.snlfactory.setting.adapter.MerchantCardDiscountInfoAdapter;
 import com.shinaier.laundry.snlfactory.setting.adapter.StoreModularAdapter;

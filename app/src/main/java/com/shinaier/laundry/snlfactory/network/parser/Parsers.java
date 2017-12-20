@@ -22,6 +22,7 @@ import com.shinaier.laundry.snlfactory.network.entity.InviteFriendEntity;
 import com.shinaier.laundry.snlfactory.network.entity.ManageCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceDetailEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceEntities;
+import com.shinaier.laundry.snlfactory.network.entity.MerchantCardInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.MessageNoticeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineCustomInfoEntity;
@@ -731,5 +732,14 @@ public class Parsers {
      */
     public static CashCouponEntity getCashCouponEntity(String data){
         return gson.fromJson(data,new TypeToken<CashCouponEntity>(){}.getType());
+    }
+
+    /**
+     * 商家修改会员卡获取会员卡信息
+     * @param data
+     * @return
+     */
+    public static MerchantCardInfoEntity getMerchantCardInfoEntity(String data){
+        return gson.fromJson(data,new TypeToken<MerchantCardInfoEntity>(){}.getType());
     }
 }
