@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class CashCouponActivity extends ToolBarActivity implements View.OnClickL
 
     private ArrayList<CashCouponEntity.CashCouponResult> cashCouponResults;
     private StringBuffer buffer = new StringBuffer();
+    private CashCouponEntity cashCouponEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,25 @@ public class CashCouponActivity extends ToolBarActivity implements View.OnClickL
         setCenterTitle("卡券详情");
         leftButton.setOnClickListener(this);
         copyCashCoupon.setOnClickListener(this);
+        cashCouponList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            private String sn;
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (cashCouponResults != null){
+                    sn = cashCouponResults.get(i).getSn();
+                }else {
+                    sn = cashCouponEntity.getResult().get(i).getSn();
+                }
+
+                buffer.delete(0,buffer.length());
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("copy_cash_coupon",sn);
+                cm.setPrimaryClip(clipData);
+                ToastUtil.shortShow(CashCouponActivity.this,"复制成功");
+            }
+        });
         if (cashCouponResults != null){
             CashCouponAdapter cashCouponAdapter = new CashCouponAdapter(this,cashCouponResults);
             cashCouponList.setAdapter(cashCouponAdapter);
@@ -90,19 +111,11 @@ public class CashCouponActivity extends ToolBarActivity implements View.OnClickL
             case R.id.copy_cash_coupon:
                 //一键复制
                 if (cashCouponResults != null){
-                    for (int i = 0; i < cashCouponResults.size(); i++) {
-                        if(i == 0){
-                            if(cashCouponResults.size() == 1){
-                                buffer.append(cashCouponResults.get(i).getSn());
-                            }else {
-                                buffer.append(cashCouponResults.get(i).getSn()).append("\r\n");
-                            }
-                        }else if(i > 0 && i < cashCouponResults.size() -1){
-                            buffer.append(cashCouponResults.get(i).getSn()).append("\r\n");
-                        }else {
-                            buffer.append(cashCouponResults.get(i).getSn());
-                        }
-                    }
+                    //生成之后直接带过来的数据
+                    getCopyData(cashCouponResults);
+                }else {
+                    //点击列表查询详情，网络请求获取的数据。
+                    getCopyData((ArrayList<CashCouponEntity.CashCouponResult>) cashCouponEntity.getResult());
                 }
 
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -113,21 +126,38 @@ public class CashCouponActivity extends ToolBarActivity implements View.OnClickL
         }
     }
 
+    private void getCopyData(ArrayList<CashCouponEntity.CashCouponResult> copyDatas) {
+        buffer.delete(0,buffer.length());
+        for (int i = 0; i < copyDatas.size(); i++) {
+            if(i == 0){
+                if(copyDatas.size() == 1){
+                    buffer.append(copyDatas.get(i).getSn());
+                }else {
+                    buffer.append(copyDatas.get(i).getSn()).append("\r\n");
+                }
+            }else if(i > 0 && i < copyDatas.size() -1){
+                buffer.append(copyDatas.get(i).getSn()).append("\r\n");
+            }else {
+                buffer.append(copyDatas.get(i).getSn());
+            }
+        }
+    }
+
     @Override
     protected void parseData(int requestCode, String data) {
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_CASH_COUPON_DETAIL:
                 if (data != null){
-                    CashCouponEntity cashCouponEntity = Parsers.getCashCouponEntity(data);
+                    cashCouponEntity = Parsers.getCashCouponEntity(data);
                     if (cashCouponEntity != null){
                         if (cashCouponEntity.getCode() == 0){
                             if (cashCouponEntity.getResult() != null && cashCouponEntity.getResult().size() > 0){
-                                CashCouponAdapter cashCouponAdapter = new CashCouponAdapter(this,cashCouponEntity.getResult());
+                                CashCouponAdapter cashCouponAdapter = new CashCouponAdapter(this, cashCouponEntity.getResult());
                                 cashCouponList.setAdapter(cashCouponAdapter);
                             }
                         }else {
-                            ToastUtil.shortShow(this,cashCouponEntity.getMsg());
+                            ToastUtil.shortShow(this, cashCouponEntity.getMsg());
                         }
                     }
                 }
