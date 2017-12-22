@@ -3,41 +3,40 @@ package com.shinaier.laundry.snlfactory.network.entity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by 张家洛 on 2017/8/11.
  */
 
 public class UploadAddPhotoEntity implements Serializable {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private List<String> datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private String result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public List<String> getDatas() {
-        return datas;
+    public String getResult() {
+        return result;
     }
 
-    public void setDatas(List<String> datas) {
-        this.datas = datas;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

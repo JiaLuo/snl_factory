@@ -52,9 +52,9 @@ public class CheckClothesImgAdapter extends BaseAdapterNew<String> {
             ivClothesImg.setBackground(context.getResources().getDrawable(R.drawable.plus_photo));
         }else if(mDatas.size() >= 4){
             if (position < 3){
-                String imgPath = Constants.Urls.URL_BASE_DOMAIN + getItem(position);
-                Uri uri = Uri.parse(imgPath);
-                ivClothesImg.setImageURI(uri);
+                //                String imgPath = Constants.Urls.URL_BASE_DOMAIN + getItem(position);
+//                Uri uri = Uri.parse(imgPath);
+                ivClothesImg.setImageURI(Uri.parse(getItem(position)));
                 if(position == 2){
                     rlShowPhotoNum.setVisibility(View.VISIBLE);
                     if(mDatas.size() >= 12){
@@ -70,7 +70,7 @@ public class CheckClothesImgAdapter extends BaseAdapterNew<String> {
             if (position < mDatas.size()){
                 String imgPath = Constants.Urls.URL_BASE_DOMAIN + getItem(position);
                 Uri uri = Uri.parse(imgPath);
-                ivClothesImg.setImageURI(uri);
+                ivClothesImg.setImageURI(Uri.parse(getItem(position)));
             }else if(position == mDatas.size()){
                 ivClothesImg.setImageResource(R.drawable.edit_photo);
             }

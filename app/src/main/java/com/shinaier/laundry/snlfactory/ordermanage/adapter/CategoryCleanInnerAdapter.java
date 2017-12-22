@@ -15,11 +15,11 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/25.
  */
 
-public class CategoryCleanInnerAdapter extends BaseAdapterNew<OrderCleanEntities.CleanData.CleanItem> {
+public class CategoryCleanInnerAdapter extends BaseAdapterNew<OrderCleanEntities.OrderCleanResult.OrderCleanItems> {
     private int type = 0;
-    private List<OrderCleanEntities.CleanData.CleanItem> mDatas;
+    private List<OrderCleanEntities.OrderCleanResult.OrderCleanItems> mDatas;
 
-    public CategoryCleanInnerAdapter(Context context, List<OrderCleanEntities.CleanData.CleanItem> mDatas) {
+    public CategoryCleanInnerAdapter(Context context, List<OrderCleanEntities.OrderCleanResult.OrderCleanItems> mDatas) {
         super(context, mDatas);
         this.mDatas = mDatas;
     }
@@ -47,15 +47,15 @@ public class CategoryCleanInnerAdapter extends BaseAdapterNew<OrderCleanEntities
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OrderCleanEntities.CleanData.CleanItem item = getItem(position);
+        OrderCleanEntities.OrderCleanResult.OrderCleanItems item = getItem(position);
         TextView cleanClothesName = ViewHolder.get(convertView,R.id.clean_clothes_name);
         TextView cleanClothesNum = ViewHolder.get(convertView,R.id.clean_clothes_num);
         TextView cleanClothesPrice = ViewHolder.get(convertView,R.id.clean_clothes_price);
 
         if(item != null){
-            cleanClothesName.setText(item.getgName());
-            cleanClothesNum.setText("x" + item.getNumber());
-            cleanClothesPrice.setText("￥" + item.getPrice());
+            cleanClothesName.setText(item.getItemName());
+//            cleanClothesNum.setText("x" + item.getNumber());
+            cleanClothesPrice.setText("￥" + item.getItemPrice());
         }
     }
 }

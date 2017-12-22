@@ -4,8 +4,53 @@
               android:background="@color/white"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_color_setting_hint"
+            android:text="您可输入具体颜色或选择颜色"
+            android:textColor="#fb4d4d"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:id="@+id/rl_color_setting_describe"
+            android:layout_below="@id/tv_color_setting_hint"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center"
+            android:background="@drawable/check_clothes_img_lin_bg"
+            android:layout_width="match_parent"
+            android:layout_height="96dp">
+                <EditText
+                    android:id="@+id/et_color_setting_describe"
+                    android:maxLength="20"
+                    android:background="@null"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="12dp"
+                    android:gravity="left"
+                    android:textSize="14sp"
+                    android:textColorHint="#cccccc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/color_setting_describe_max_num"
+                    android:paddingBottom="8dp"
+                    android:paddingRight="8dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="0/20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+
         <com.shinaier.laundry.snlfactory.view.FlowLayout
             android:id="@+id/select_color"
+            android:layout_below="@id/rl_color_setting_describe"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:background="@color/white"

@@ -13,7 +13,6 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.EditPhotoAdapter;
@@ -35,11 +34,11 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
     private ImageView leftButton;
     @ViewInject(R.id.edit_clothes_img)
     private WrapHeightGridView editClothesImg;
-    private CheckClothesEntities clothesEntities;
     private EditPhotoAdapter adapter;
     private String imgPath;
     private int position;
-    private ArrayList<String> imgs;
+    private ArrayList<String> itemImages;
+    private String itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +46,21 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
         setContentView(R.layout.edit_photo_act);
         ViewInjectUtils.inject(this);
         Intent intent = getIntent();
-        clothesEntities = intent.getParcelableExtra("entity");
+        itemImages = intent.getStringArrayListExtra("item_images");
         position = intent.getIntExtra("position", 0);
+        itemId = intent.getStringExtra("item_id");
         initView();
     }
 
     private void initView() {
         setCenterTitle("编辑图片");
         leftButton.setOnClickListener(this);
-        adapter = new EditPhotoAdapter(this,clothesEntities.getImgs());
+        adapter = new EditPhotoAdapter(this,itemImages);
         editClothesImg.setAdapter(adapter);
         editClothesImg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayList<String> imgs = (ArrayList<String>) clothesEntities.getImgs();
+                ArrayList<String> imgs = (ArrayList<String>) itemImages;
                 Intent intent = new Intent(EditPhotoActivity.this,BigPhotoActivity.class);
                 intent.putExtra("imagePosition",i);
                 intent.putStringArrayListExtra("imagePath",imgs);
@@ -70,12 +70,11 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
         adapter.setDeletePhotoListener(new EditPhotoAdapter.DeletePhotoListener() {
             @Override
             public void onDelete(int position) {
-                imgPath = clothesEntities.getImgs().get(position);
+                imgPath = itemImages.get(position);
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token", UserCenter.getToken(EditPhotoActivity.this));
-                params.put("image",imgPath);
-                params.put("orderid",clothesEntities.getOrderId());
-                params.put("id",clothesEntities.getId());
+                params.put("url",imgPath);
+                params.put("item_id",itemId);
                 requestHttpData(Constants.Urls.URL_POST_DELETE_CLOTHES_PHOTO,REQUEST_CODE_DELETE_PHOTO, FProtocol.HttpMethod.POST,params);
 
             }
@@ -86,7 +85,7 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.left_button:
-                if (imgs != null){
+                if (itemImages != null){
                     backPreviousPage();
                 }
                 finish();
@@ -102,10 +101,9 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
                 if(data != null){
                     Entity entity = Parsers.getEntity(data);
                     if(entity.getRetcode() == 0){
-                        imgs = (ArrayList<String>) clothesEntities.getImgs();
-                        imgs.remove(imgPath);
+                        itemImages.remove(imgPath);
                         adapter.notifyDataSetChanged();
-                        if(clothesEntities.getImgs().size() == 0){
+                        if(itemImages.size() == 0){
                             backPreviousPage();
                         }
                     }else {
@@ -118,7 +116,7 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        if (imgs != null){
+        if (itemImages != null){
             backPreviousPage();
         }
         super.onBackPressed();
@@ -127,7 +125,7 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
     private void backPreviousPage() {
             Intent intent = new Intent(this,CheckClothesActivity.class);
             intent.putExtra("position",position);
-            intent.putStringArrayListExtra("photo_entity",imgs);
+            intent.putStringArrayListExtra("photo_entity",itemImages);
             setResult(RESULT_OK,intent);
             finish();
     }

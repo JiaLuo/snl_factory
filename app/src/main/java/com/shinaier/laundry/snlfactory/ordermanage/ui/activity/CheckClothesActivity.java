@@ -2,6 +2,7 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.common.network.FProtocol;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
+import com.google.gson.Gson;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
@@ -18,12 +20,14 @@ import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderPrintEntity;
+import com.shinaier.laundry.snlfactory.network.json.GsonObjectDeserializer;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.entities.PrintEntity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.MemberInfoActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OrderPayActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.PrintActivity;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CheckClothesAdapter;
+import com.shinaier.laundry.snlfactory.ordermanage.entities.ParserEntity;
 import com.shinaier.laundry.snlfactory.ordermanage.view.ActionSheetDialog;
 import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
@@ -50,6 +54,7 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
     public static final int REQUEST_CODE_EDIT_ADD_PHOTO = 0x7;
     public static final int REQUEST_CODE_SETTING_COLOR = 0x8;
     private static final int REQUEST_CODE_ORDER_PRINT = 0x10;
+    public static final int REQUEST_CODE_ASSESSMENT = 0x11;
 
     @ViewInject(R.id.check_clothes_list)
     private ListView checkClothesList;
@@ -68,11 +73,13 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
 
     private String id;
     private int extraFrom;
-    private List<CheckClothesEntities> checkClothesEntities;
+    private CheckClothesEntities checkClothesEntities;
     private boolean isCollectPay = false;
     private CheckClothesAdapter checkClothesAdapter;
     private PrintEntity printEntity = new PrintEntity();
     private CommonDialog dialog;
+    private StringBuffer stringBuffer = new StringBuffer();
+    private Gson gson = GsonObjectDeserializer.produceGson();
 
 
 
@@ -98,7 +105,7 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("id",id);
+        params.put("oid",id);
         requestHttpData(Constants.Urls.URL_POST_CHECK_CLOTHES,REQUEST_CODE_CHECK_CLOTHES, FProtocol.HttpMethod.POST,params);
     }
 
@@ -131,104 +138,102 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 if(data != null){
                     checkClothesEntities = Parsers.getCheckClothesEntities(data);
                     setLoadingStatus(LoadingStatus.GONE);
-                    checkClothesAdapter = new CheckClothesAdapter(this, checkClothesEntities);
-                    checkClothesList.setAdapter(checkClothesAdapter);
-                    checkClothesAdapter.setEditPhotoListener(new CheckClothesAdapter.EditPhotoListener() {
-                        private ArrayList<String> imgs;
+                    if (checkClothesEntities != null){
+                        if (checkClothesEntities.getCode() == 0){
+                            checkClothesAdapter = new CheckClothesAdapter(this,checkClothesEntities.getResults());
+                            checkClothesList.setAdapter(checkClothesAdapter);
 
-                        @Override
-                        public void onEditPhotoClick(final int position) {
-                            imgs = (ArrayList<String>) checkClothesEntities.get(position).getImgs();
-                            final CheckClothesEntities entities = checkClothesEntities.get(position);
-                            ActionSheetDialog dialog = new ActionSheetDialog(CheckClothesActivity.this);
-                            dialog.builder().addSheetItem("编辑图片", ActionSheetDialog.SheetItemColor.Green, new ActionSheetDialog.OnSheetItemClickListener() {
+                            checkClothesAdapter.setEditPhotoListener(new CheckClothesAdapter.EditPhotoListener() {
+                                private ArrayList<String> imgs;
+
                                 @Override
-                                public void onClick(int which) {
-                                    Intent intent = new Intent(CheckClothesActivity.this,EditPhotoActivity.class);
-                                    intent.putExtra("entity",entities);
+                                public void onEditPhotoClick(final int position) {
+                                    imgs = (ArrayList<String>)checkClothesEntities.getResults().get(position).getItemImages();
+                                    ActionSheetDialog dialog = new ActionSheetDialog(CheckClothesActivity.this);
+                                    dialog.builder().addSheetItem("编辑图片", ActionSheetDialog.SheetItemColor.Green, new ActionSheetDialog.OnSheetItemClickListener() {
+                                        @Override
+                                        public void onClick(int which) {
+                                            Intent intent = new Intent(CheckClothesActivity.this,EditPhotoActivity.class);
+                                            intent.putStringArrayListExtra("item_images",imgs);
+                                            intent.putExtra("position",position);
+                                            intent.putExtra("item_id",checkClothesEntities.getResults().get(position).getId());
+                                            startActivityForResult(intent,REQUEST_CODE_EDIT_PHOTO);
+
+                                        }
+                                    }).addSheetItem("添加照片", ActionSheetDialog.SheetItemColor.Green, new ActionSheetDialog.OnSheetItemClickListener() {
+                                        @Override
+                                        public void onClick(int which) {
+                                            if (CheckClothesActivity.this.checkClothesEntities.getResults().get(position).getItemImages().size() <  12){
+                                                Intent intent = new Intent(CheckClothesActivity.this,AddPhotoActivity.class);
+                                                intent.putExtra("item_id", checkClothesEntities.getResults().get(position).getId());
+                                                intent.putStringArrayListExtra("imgs", imgs);
+                                                intent.putExtra("extra",FROM_CODE);
+                                                intent.putExtra("position",position);
+                                                startActivityForResult(intent,REQUEST_CODE_EDIT_ADD_PHOTO);
+                                            }else {
+                                                ToastUtil.shortShow(CheckClothesActivity.this,"已经添加超过12张图片了。");
+                                            }
+                                        }
+                                    }).show();
+
+                                }
+                            });
+
+                            checkClothesAdapter.setAddPhotoListener(new CheckClothesAdapter.AddPhotoListener() {
+                                @Override
+                                public void onAddPhotoClick(int position) {
+                                    Intent intent = new Intent(CheckClothesActivity.this,AddPhotoActivity.class);
+                                    intent.putExtra("item_id",checkClothesEntities.getResults().get(position).getId());
                                     intent.putExtra("position",position);
-                                    startActivityForResult(intent,REQUEST_CODE_EDIT_PHOTO);
-
+                                    startActivityForResult(intent,REQUEST_CODE_ADD_PHOTO);
                                 }
-                            }).addSheetItem("添加照片", ActionSheetDialog.SheetItemColor.Green, new ActionSheetDialog.OnSheetItemClickListener() {
+                            });
+
+                            checkClothesAdapter.setEditPositionListener(new CheckClothesAdapter.EditPositionListener() {
                                 @Override
-                                public void onClick(int which) {
-                                    if (checkClothesEntities.get(position).getImgs().size() <  12){
-                                        Intent intent = new Intent(CheckClothesActivity.this,AddPhotoActivity.class);
-                                        intent.putExtra("orderId", checkClothesEntities.get(position).getOrderId());
-                                        intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                                        intent.putStringArrayListExtra("imgs", imgs);
-                                        intent.putExtra("extra",FROM_CODE);
-                                        intent.putExtra("position",position);
-                                        startActivityForResult(intent,REQUEST_CODE_EDIT_ADD_PHOTO);
-                                    }else {
-                                        ToastUtil.shortShow(CheckClothesActivity.this,"已经添加超过12张图片了。");
-                                    }
+                                public void onEditQuestion(int position) {
+                                    Intent intent = new Intent(CheckClothesActivity.this,QuestionInfoActivity.class);
+                                    intent.putExtra("item_id", checkClothesEntities.getResults().get(position).getId());
+                                    intent.putExtra("problem_data",checkClothesEntities.getResults().get(position).getProblemData());
+                                    intent.putExtra("position",position);
+                                    startActivityForResult(intent,REQUEST_CODE_QUESTIONS);
                                 }
-                            }).show();
 
-                        }
-                    });
+                                @Override
+                                public void onEditColor(int position) {
+                                    Intent intent = new Intent(CheckClothesActivity.this,ColorSettingActivity.class);
+                                    intent.putExtra("item_id", checkClothesEntities.getResults().get(position).getId());
+                                    intent.putExtra("color_data", checkClothesEntities.getResults().get(position).getColorData());
+                                    intent.putExtra("position",position);
+                                    startActivityForResult(intent,REQUEST_CODE_SETTING_COLOR);
+                                }
 
-                    checkClothesAdapter.setAddPhotoListener(new CheckClothesAdapter.AddPhotoListener() {
-                        @Override
-                        public void onAddPhotoClick(int position) {
-                            Intent intent = new Intent(CheckClothesActivity.this,AddPhotoActivity.class);
-                            intent.putExtra("orderId", checkClothesEntities.get(position).getOrderId());
-                            intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                            intent.putExtra("position",position);
-                            startActivityForResult(intent,REQUEST_CODE_ADD_PHOTO);
-                        }
-                    });
+                                @Override
+                                public void onEditAssess(int position) {
+                                    Intent intent = new Intent(CheckClothesActivity.this,CleanedAssessmentActivity.class);
+                                    intent.putExtra("item_id", checkClothesEntities.getResults().get(position).getId());
+                                    intent.putExtra("forecast_data", checkClothesEntities.getResults().get(position).getForecastData());
+                                    intent.putExtra("position",position);
+                                    startActivityForResult(intent,REQUEST_CODE_ASSESSMENT);
+                                }
+                            });
+                            checkClothesAdapter.setShowBigPhotoListener(new CheckClothesAdapter.ShowBigPhotoListener() {
+                                @Override
+                                public void onShowBigPhoto(int position, int innerPosition) {
+                                    ArrayList<String> imgs = (ArrayList<String>) checkClothesEntities.getResults().get(position).getItemImages();
+                                    Intent intent = new Intent(CheckClothesActivity.this,BigPhotoActivity.class);
+                                    intent.putExtra("imagePosition",innerPosition);
+                                    intent.putStringArrayListExtra("imagePath",imgs);
+                                    startActivity(intent);
+                                }
 
-                    checkClothesAdapter.setPositionListener(new CheckClothesAdapter.PositionListener() {
-                        @Override
-                        public void onColorSetting(int position) {
-                            Intent intent = new Intent(CheckClothesActivity.this,ColorSettingActivity.class);
-                            intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                            intent.putExtra("position",position);
-                            startActivityForResult(intent,REQUEST_CODE_SETTING_COLOR);
-                        }
+                            });
 
-                        @Override
-                        public void onQuestionInfo(int position) {
-                            Intent intent = new Intent(CheckClothesActivity.this,QuestionInfoActivity.class);
-                            intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                            intent.putExtra("position",position);
-                            startActivityForResult(intent,REQUEST_CODE_QUESTIONS);
+                        }else {
+                            ToastUtil.shortShow(this,checkClothesEntities.getMsg());
                         }
-                    });
+                    }
 
-                    checkClothesAdapter.setEditPositionListener(new CheckClothesAdapter.EditPositionListener() {
-                        @Override
-                        public void onEditQuestion(int position) {
-                            Intent intent = new Intent(CheckClothesActivity.this,QuestionInfoActivity.class);
-                            intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                            intent.putExtra("entity", checkClothesEntities.get(position).getItemNote());
-                            intent.putExtra("position",position);
-                            startActivityForResult(intent,REQUEST_CODE_QUESTIONS);
-                        }
-
-                        @Override
-                        public void onEditColor(int position) {
-                            Intent intent = new Intent(CheckClothesActivity.this,ColorSettingActivity.class);
-                            intent.putExtra("itemId", checkClothesEntities.get(position).getId());
-                            intent.putExtra("entity", checkClothesEntities.get(position).getColor());
-                            intent.putExtra("position",position);
-                            startActivityForResult(intent,REQUEST_CODE_SETTING_COLOR);
-                        }
-                    });
-                    checkClothesAdapter.setShowBigPhotoListener(new CheckClothesAdapter.ShowBigPhotoListener() {
-                        @Override
-                        public void onShowBigPhoto(int position, int innerPosition) {
-                            ArrayList<String> imgs = (ArrayList<String>) checkClothesEntities.get(position).getImgs();
-                            Intent intent = new Intent(CheckClothesActivity.this,BigPhotoActivity.class);
-                            intent.putExtra("imagePosition",innerPosition);
-                            intent.putStringArrayListExtra("imagePath",imgs);
-                            startActivity(intent);
-                        }
-
-                    });
                 }
                 break;
             case REQUEST_CODE_NOW_PAY:
@@ -377,14 +382,14 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 if (resultCode == RESULT_OK){
                     ArrayList<String> uploadAddPhoto = data.getStringArrayListExtra("upload_photo");
                     int position = data.getIntExtra("position", 0);
-                    List<String> imgs = checkClothesEntities.get(position).getImgs();
+                    List<String> imgs = checkClothesEntities.getResults().get(position).getItemImages();
                     for (int i = 0; i < uploadAddPhoto.size(); i++) {
                         String s = uploadAddPhoto.get(i);
                         imgs.add(s);
                     }
 
                     if (checkClothesEntities != null){
-                        checkClothesEntities.get(position).setImgs(imgs);
+                        checkClothesEntities.getResults().get(position).setItemImages(imgs);
                         checkClothesAdapter.notifyDataSetChanged();
                     }
                 }
@@ -394,8 +399,8 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                     int position = data.getIntExtra("position", 0);
                     ArrayList<String> photoEntity = data.getStringArrayListExtra("photo_entity");
                     if (checkClothesEntities != null){
-                            checkClothesEntities.get(position).setImgs(photoEntity);
-                            checkClothesAdapter.notifyDataSetChanged();
+                        checkClothesEntities.getResults().get(position).setItemImages(photoEntity);
+                        checkClothesAdapter.notifyDataSetChanged();
                     }
                 }
                 break;
@@ -403,38 +408,116 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 if (resultCode == RESULT_OK){
                     ArrayList<String> uploadPhoto = data.getStringArrayListExtra("upload_photo");
                     int position = data.getIntExtra("position", 0);
-                    List<String> imgs = checkClothesEntities.get(position).getImgs();
+                    List<String> imgs = checkClothesEntities.getResults().get(position).getItemImages();
                     for (int i = 0; i < uploadPhoto.size(); i++) {
                         String uploadPhotoDatas = uploadPhoto.get(i);
                         imgs.add(uploadPhotoDatas);
                     }
 
+
+
                     if (checkClothesEntities != null){
-                        checkClothesEntities.get(position).setImgs(imgs);
+                        checkClothesEntities.getResults().get(position).setItemImages(imgs);
                         checkClothesAdapter.notifyDataSetChanged();
                     }
                 }
                 break;
             case REQUEST_CODE_SETTING_COLOR:
                 if (resultCode == RESULT_OK){
-                    String color = data.getStringExtra("color");
+                    ParserEntity parserEntity = (ParserEntity) data.getSerializableExtra("color");
                     int position = data.getIntExtra("position", 0);
+                    String toJsonColorData = gson.toJson(parserEntity);
+                    String content = parserEntity.getContent();
+                    List<String> options = parserEntity.getOptions();
+
+                    editColorForResult(options);
+
+
                     if (checkClothesEntities != null){
-                        checkClothesEntities.get(position).setColor(color);
+                        if (!TextUtils.isEmpty(content) && options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setColor(stringBuffer.toString() + ";" + content);
+                            checkClothesEntities.getResults().get(position).setColorData(toJsonColorData);
+                        }else if (options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setColor(stringBuffer.toString());
+                            checkClothesEntities.getResults().get(position).setColorData(toJsonColorData);
+                        }else {
+                            checkClothesEntities.getResults().get(position).setColor(content);
+                            checkClothesEntities.getResults().get(position).setColorData(toJsonColorData);
+                        }
                         checkClothesAdapter.notifyDataSetChanged();
                     }
                 }
                 break;
             case REQUEST_CODE_QUESTIONS:
                 if (resultCode == RESULT_OK){
-                    String question = data.getStringExtra("question");
+                    ParserEntity parserEntity = (ParserEntity) data.getSerializableExtra("question");
                     int position = data.getIntExtra("position", 0);
+                    String toJsonColorData = gson.toJson(parserEntity);
+                    String content = parserEntity.getContent();
+                    List<String> options = parserEntity.getOptions();
+
+                    editColorForResult(options);
+
                     if (checkClothesEntities != null){
-                        checkClothesEntities.get(position).setItemNote(question);
+                        if (!TextUtils.isEmpty(content) && options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setProblem(stringBuffer.toString() + ";"+ content);
+                            checkClothesEntities.getResults().get(position).setProblemData(toJsonColorData);
+                        }else if (options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setProblem(stringBuffer.toString());
+                            checkClothesEntities.getResults().get(position).setProblemData(toJsonColorData);
+                        }else {
+                            checkClothesEntities.getResults().get(position).setProblem(content);
+                            checkClothesEntities.getResults().get(position).setProblemData(toJsonColorData);
+                        }
                         checkClothesAdapter.notifyDataSetChanged();
                     }
                 }
                 break;
+            case REQUEST_CODE_ASSESSMENT:
+                if (resultCode == RESULT_OK){
+                    ParserEntity parserEntity = (ParserEntity) data.getSerializableExtra("assess");
+                    int position = data.getIntExtra("position", 0);
+                    String toJsonColorData = gson.toJson(parserEntity);
+                    String content = parserEntity.getContent();
+                    List<String> options = parserEntity.getOptions();
+
+                    editColorForResult(options);
+
+                    if (checkClothesEntities != null){
+                        if (!TextUtils.isEmpty(content) && options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setForecast(stringBuffer.toString() + ";"+ content);
+                            checkClothesEntities.getResults().get(position).setForecastData(toJsonColorData);
+                        }else if (options.size() > 0){
+                            checkClothesEntities.getResults().get(position).setForecast(stringBuffer.toString());
+                            checkClothesEntities.getResults().get(position).setForecastData(toJsonColorData);
+                        }else {
+                            checkClothesEntities.getResults().get(position).setForecast(content);
+                            checkClothesEntities.getResults().get(position).setForecastData(toJsonColorData);
+                        }
+                        checkClothesAdapter.notifyDataSetChanged();
+                    }
+                }
+                break;
+
+        }
+    }
+
+    private void editColorForResult(List<String> options) {
+        // stringbuffer添加新数据之前要清空一下
+        stringBuffer.delete(0,stringBuffer.length());
+        //遍历用户选择的颜色数据，添加分隔符
+        for (int i = 0; i < options.size(); i++) {
+            if(i == 0){
+                if(options.size() == 1){
+                    stringBuffer.append(options.get(i));
+                }else {
+                    stringBuffer.append(options.get(i)).append(";");
+                }
+            }else if(i > 0 && i < options.size() -1){
+                stringBuffer.append(options.get(i)).append(";");
+            }else {
+                stringBuffer.append(options.get(i));
+            }
         }
     }
 }

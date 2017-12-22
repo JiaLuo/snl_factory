@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/check_clothes_num"
             android:text="数量：x1"
             android:textColor="#999999"
             android:textSize="12sp"
@@ -28,48 +27,58 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
     <com.shinaier.laundry.snlfactory.view.WrapHeightGridView
+        android:id="@+id/check_clothes_img"
         android:layout_marginLeft="12dp"
-            android:id="@+id/check_clothes_img"
-            android:numColumns="4"
-            android:horizontalSpacing="1dp"
-            android:verticalSpacing="1dp"
-            android:listSelector="@android:color/transparent"
-            android:cacheColorHint="@android:color/transparent"
-            android:scrollbars="none"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:numColumns="4"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/ll_color_and_question"-->
+    <!--android:layout_marginTop="15dp"-->
+    <!--android:layout_marginBottom="15dp"-->
+    <!--android:gravity="end"-->
+    <!--android:layout_gravity="end"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--<TextView-->
+    <!--android:id="@+id/color_setting_bt"-->
+    <!--android:textColor="@color/black_text"-->
+    <!--android:paddingTop="3dp"-->
+    <!--android:paddingBottom="3dp"-->
+    <!--android:textSize="13sp"-->
+    <!--android:layout_marginRight="12dp"-->
+    <!--android:background="@drawable/cancel_order_bt"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/question_info_bt"-->
+    <!--android:textColor="@color/black_text"-->
+    <!--android:paddingTop="3dp"-->
+    <!--android:paddingBottom="3dp"-->
+    <!--android:layout_marginRight="12dp"-->
+    <!--android:background="@drawable/cancel_order_bt"-->
+    <!--android:textSize="13sp"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/cleaned_assessment_bt"-->
+    <!--android:textColor="@color/black_text"-->
+    <!--android:paddingTop="3dp"-->
+    <!--android:paddingBottom="3dp"-->
+    <!--android:textSize="13sp"-->
+    <!--android:layout_marginRight="12dp"-->
+    <!--android:background="@drawable/cancel_order_bt"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!--</LinearLayout>-->
     <LinearLayout
-        android:id="@+id/ll_color_and_question"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="end"
-        android:layout_gravity="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/color_setting_bt"
-            android:textColor="@color/black_text"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:textSize="13sp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/cancel_order_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/question_info_bt"
-            android:textColor="@color/black_text"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/cancel_order_bt"
-            android:textSize="13sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginBottom="10dp"
         android:id="@+id/ll_color_info"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -100,6 +109,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_question_info"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -121,6 +131,36 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/question_info_edit"
+            android:text="编辑"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/base_color"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_cleaned_assessment_info"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black_text"
+            android:textSize="13sp"
+            android:layout_marginLeft="12dp"
+            android:text="洗后预估述："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/cleaned_assessment_info"
+            android:lines="1"
+            android:layout_weight="0.8"
+            android:text="大片油渍"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/cleaned_assessment_info_edit"
             android:text="编辑"
             android:layout_marginRight="12dp"
             android:textColor="@color/base_color"

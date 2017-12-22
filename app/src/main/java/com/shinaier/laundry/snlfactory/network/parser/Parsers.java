@@ -420,17 +420,18 @@ public class Parsers {
      * @param data
      * @return
      */
-    public static List<CheckClothesEntities> getCheckClothesEntities(String data){
-        List<CheckClothesEntities> clothesEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            clothesEntities = gson.fromJson(data1,new TypeToken<List<CheckClothesEntities>>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return clothesEntities;
+    public static CheckClothesEntities getCheckClothesEntities(String data){
+        //        List<CheckClothesEntities> clothesEntities = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            clothesEntities = gson.fromJson(data1,new TypeToken<List<CheckClothesEntities>>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return clothesEntities;
+        return gson.fromJson(data,new TypeToken<CheckClothesEntities>(){}.getType());
     }
 
     /**

@@ -4,10 +4,9 @@
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
     <TextView
-        android:id="@+id/tv_question_setting_hint"
-        android:text="您可输入具体颜色或选择颜色"
+        android:id="@+id/tv_cleaned_assessment_hint"
+        android:text="您可输入或选择洗后预估述"
         android:textColor="#fb4d4d"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
@@ -15,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <RelativeLayout
-        android:id="@+id/rl_question_setting_describe"
-        android:layout_below="@id/tv_question_setting_hint"
+        android:id="@+id/rl_cleaned_assessment_describe"
+        android:layout_below="@id/tv_cleaned_assessment_hint"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="12dp"
@@ -26,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="96dp">
         <EditText
-            android:id="@+id/et_question_setting_describe"
+            android:id="@+id/et_cleaned_assessment_describe"
             android:maxLength="20"
             android:background="@null"
             android:paddingTop="10dp"
@@ -37,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <TextView
-            android:id="@+id/question_setting_describe_max_num"
+            android:id="@+id/cleaned_assessment_max_num"
             android:paddingBottom="8dp"
             android:paddingRight="8dp"
             android:layout_alignParentRight="true"
@@ -48,8 +47,8 @@
     </RelativeLayout>
 
     <com.shinaier.laundry.snlfactory.view.FlowLayout
-        android:id="@+id/select_question"
-        android:layout_below="@id/rl_question_setting_describe"
+        android:id="@+id/cleaned_assessment"
+        android:layout_below="@id/rl_cleaned_assessment_describe"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:background="@color/white"
@@ -61,13 +60,13 @@
         android:focusable="false"/>
 
     <com.shinaier.laundry.snlfactory.view.PinnedHeaderExpandableListView
+        android:id="@+id/cleaned_assessment_list"
         android:layout_marginBottom="44dp"
-        android:id="@+id/question_list"
-        android:layout_below="@id/select_question"
+        android:layout_below="@id/cleaned_assessment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="0.0dp"
-        android:cacheColorHint="#00000000"
+        android:cacheColorHint="@color/white"
         android:choiceMode="singleChoice"
         android:drawSelectorOnTop="false"
         android:fastScrollEnabled="false"
@@ -76,8 +75,7 @@
         android:scrollbars="vertical"
         android:scrollingCache="true" />
     <TextView
-
-        android:id="@+id/question_confirm"
+        android:id="@+id/cleaned_assessment_confirm"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:text="确定"

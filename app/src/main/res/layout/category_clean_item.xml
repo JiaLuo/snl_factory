@@ -49,29 +49,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.shinaier.laundry.snlfactory.view.WrapHeightListView
-                    android:divider="#f7f7f7"
                     android:id="@+id/order_clean_list_more"
+                    android:divider="#f7f7f7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="none"/>
                 <RelativeLayout
-                    android:layout_below="@id/order_clean_list_more"
-                    android:layout_marginTop="4dp"
                     android:id="@+id/rl_order_clean_show_more"
+                    android:layout_below="@id/order_clean_list_more"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/clean_show_surplus"
                         android:textSize="14sp"
                         android:textColor="#b2b2b2"
-                        android:id="@+id/clean_show_surplus"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="17dp"
                         android:text="查看更多"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <ImageView
                         android:id="@+id/clean_show_surplus_img"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_centerInParent="true"
                         android:layout_toRightOf="@id/clean_show_surplus"
                         android:background="@drawable/ic_down_arrow"
@@ -79,10 +77,10 @@
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
                 <RelativeLayout
-                    android:layout_below="@id/rl_order_clean_show_more"
                     android:id="@+id/rl_clean_price_item"
+                    android:layout_below="@id/rl_order_clean_show_more"
                     android:gravity="end"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -93,18 +91,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/order_clean_freight_num"
                         android:textSize="12sp"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/red"
                         android:layout_marginRight="12dp"
-                        android:id="@+id/order_clean_freight_num"
                         android:text="￥12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:layout_marginTop="4dp"
                         android:id="@+id/order_clean_special_craftwork"
+                        android:layout_marginTop="4dp"
                         android:layout_below="@id/order_clean_freight"
                         android:textSize="12sp"
                         android:textColor="@color/black_text"
@@ -113,9 +111,10 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:layout_marginTop="4dp"
                         android:id="@+id/order_clean_special_craftwork_num"
+                        android:layout_marginTop="4dp"
                         android:text="￥23"
+                        android:textSize="12sp"
                         android:textColor="@color/red"
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/order_clean_freight_num"
@@ -123,10 +122,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/take_order_maintain_clean"
                         android:layout_marginTop="4dp"
                         android:textColor="@color/black_text"
                         android:layout_below="@id/order_clean_special_craftwork"
-                        android:id="@+id/take_order_maintain_clean"
                         android:text="保值清洗费："
                         android:textSize="12sp"
                         android:layout_width="wrap_content"
@@ -139,11 +138,12 @@
                         android:layout_below="@id/order_clean_special_craftwork_num"
                         android:textColor="@color/red"
                         android:layout_marginRight="12dp"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:layout_marginTop="4dp"
                         android:id="@+id/take_order_favourable"
+                        android:layout_marginTop="4dp"
                         android:text="优惠金额"
                         android:layout_below="@id/take_order_maintain_clean"
                         android:textColor="@color/black_text"
@@ -151,9 +151,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/take_order_favourable_num"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
-                        android:id="@+id/take_order_favourable_num"
+                        android:textSize="12sp"
                         android:text="￥0.00"
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/take_order_maintain_clean_num"
@@ -168,8 +169,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textColor="@color/black_text"
                             android:id="@+id/take_order_actual_payment"
+                            android:textColor="@color/black_text"
                             android:text="共"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -182,17 +183,6 @@
                         <TextView
                             android:text="件，"
                             android:textColor="@color/black_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/take_order_chinese_total_first"
-                            android:text="共"
-                            android:textColor="@color/black_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/take_order_chinese_total_num"
-                            android:text="￥20，"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
@@ -215,28 +205,6 @@
                 android:background="#f7f7f7"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/take_order_bespeak_time"
-                    android:textSize="13sp"
-                    android:textColor="@color/black_text"
-                    android:layout_marginTop="13dp"
-                    android:text="预约上门时间："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/take_order_bespeak_time_detail"
-                    android:text="2016.12.10 16:30"
-                    android:layout_marginTop="13dp"
-                    android:textColor="@color/red"
-                    android:textSize="13sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/ll_take_order_phone"
                 android:layout_width="match_parent"
@@ -263,8 +231,8 @@
             </LinearLayout>
 
             <TextView
-                android:layout_marginRight="12dp"
                 android:id="@+id/take_order_address"
+                android:layout_marginRight="12dp"
                 android:layout_marginTop="13dp"
                 android:textSize="13sp"
                 android:textColor="@color/black_text"
@@ -304,8 +272,8 @@
             <TextView
                 android:id="@+id/take_order_cancel"
                 android:textColor="@color/black_text"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:textSize="12sp"
                 android:background="@drawable/cancel_order_bt"
                 android:layout_width="wrap_content"

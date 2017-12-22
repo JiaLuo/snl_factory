@@ -3,10 +3,12 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +21,10 @@ import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.QuestionSettingSuccessEntities;
+import com.shinaier.laundry.snlfactory.network.json.GsonObjectDeserializer;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.QuestionExpandableAdapter;
+import com.shinaier.laundry.snlfactory.ordermanage.entities.ParserEntity;
 import com.shinaier.laundry.snlfactory.ordermanage.entities.QuestionsEntity;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.FlowLayout;
@@ -47,17 +51,21 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
     private TextView questionConfirm;
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
+    @ViewInject(R.id.et_question_setting_describe)
+    private EditText etQuestionSettingDescribe;
+    @ViewInject(R.id.question_setting_describe_max_num)
+    private TextView questionSettingDescribeMaxNum;
 
     private List<String> cquestionTitle = new ArrayList<>();
     private List<String> outList = new ArrayList<>();
     private QuestionsEntity questionsEntitys;
     private QuestionExpandableAdapter adapter;
-    private TextView textView;
-    private StringBuffer stringBuffer = new StringBuffer();
     private String itemId;
-    private String extraQuestion;
-    private List<String> questionsList = new ArrayList<>();
+    private String problemData;
     private int position;
+    private Gson gson = GsonObjectDeserializer.produceGson();
+    private ParserEntity parserEntity;
+    private List<String> options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +73,8 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
         setContentView(R.layout.question_info_act);
         ViewInjectUtils.inject(this);
         Intent intent = getIntent();
-        itemId = intent.getStringExtra("itemId");
-        extraQuestion = intent.getStringExtra("entity");
+        itemId = intent.getStringExtra("item_id");
+        problemData = intent.getStringExtra("problem_data");
         position = intent.getIntExtra("position", 0);
         initView();
         initData();
@@ -74,8 +82,30 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
 
     private void initView() {
         setCenterTitle("描述设置");
+        parserEntity = gson.fromJson(problemData, ParserEntity.class);
+        options = parserEntity.getOptions();
+        etQuestionSettingDescribe.setText(parserEntity.getContent());
+
         questionConfirm.setOnClickListener(this);
         leftButton.setOnClickListener(this);
+
+        etQuestionSettingDescribe.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                questionSettingDescribeMaxNum.setText(s.length()+ "/20");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         cquestionTitle.add("污渍情况（食品类）");
         cquestionTitle.add("污渍情况（颜色类）");
         cquestionTitle.add("污渍情况（其他生活类）");
@@ -110,25 +140,19 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
         adapter = new QuestionExpandableAdapter(questionsEntitys.getQuestions(), cquestionTitle, getApplicationContext(),questionList);
         questionList.setAdapter(adapter);
 
-        if (!TextUtils.isEmpty(extraQuestion)){
-            String[] split = extraQuestion.split(",");
-            for (int i = 0; i <split.length ; i++) {
-                questionsList.add(split[i]);
-            }
-            for (int k = 0; k < questionsList.size(); k++) {
-                String s = questionsList.get(k);
-                for (int i = 0; i < 4 ; i++) {
-                    for (int j = 0; j < questionsEntitys.getQuestions().get(i).size(); j++) {
-                        if (s.equals(questionsEntitys.getQuestions().get(i).get(j).getQuestion())){
-                            questionsEntitys.getQuestions().get(i).get(j).setIscheck(1);
-                        }
+        for (int k = 0; k < options.size(); k++) {
+            String s = options.get(k);
+            for (int i = 0; i < 4 ; i++) {
+                for (int j = 0; j < questionsEntitys.getQuestions().get(i).size(); j++) {
+                    if (s.equals(questionsEntitys.getQuestions().get(i).get(j).getQuestion())){
+                        questionsEntitys.getQuestions().get(i).get(j).setIscheck(1);
                     }
                 }
             }
-            adapter.notifyDataSetChanged();
-            outList.addAll(questionsList);
-            initFlow();
         }
+        adapter.notifyDataSetChanged();
+        outList.addAll(options);
+        initFlow();
 
         adapter.setPositionListener(new QuestionExpandableAdapter.PositionListener() {
             @Override
@@ -158,7 +182,7 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
         selectQuestion.removeAllViews();
         if (outList != null && outList.size() > 0){
             for (int i = 0; i < outList.size(); i++){
-                textView = new TextView(this);
+                TextView textView = new TextView(this);
                 textView.setBackgroundResource(R.drawable.login);
                 textView.setText(outList.get(i));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
@@ -193,26 +217,15 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.question_confirm:
-                stringBuffer.delete(0,stringBuffer.length());
-                for (int i = 0; i < outList.size(); i++) {
-                    if(i == 0){
-                        if(outList.size() == 1){
-                            stringBuffer.append(outList.get(i));
-                        }else {
-                            stringBuffer.append(outList.get(i)).append(",");
-                        }
-                    }else if(i > 0 && i < outList.size() -1){
-                        stringBuffer.append(outList.get(i)).append(",");
-                    }else {
-                        stringBuffer.append(outList.get(i));
-                    }
-                }
+                String inputQuestionDescribe = etQuestionSettingDescribe.getText().toString();
+                parserEntity.setOptions(outList);
+                parserEntity.setContent(inputQuestionDescribe);
+                String s = gson.toJson(parserEntity);
 
-                String questionString = stringBuffer.toString();
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token", UserCenter.getToken(this));
-                params.put("id",itemId);
-                params.put("item_note",questionString);
+                params.put("item_id",itemId);
+                params.put("data",s);
                 requestHttpData(Constants.Urls.URL_POST_QUESTION_SETTING,REQUEST_CODE_QUESTION_SETTING, FProtocol.HttpMethod.POST,params);
                 break;
             case R.id.left_button:
@@ -231,7 +244,7 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
                     if(questionSettingSuccessEntities != null){
                         if(questionSettingSuccessEntities.getRetcode() == 0){
                             Intent intent = new Intent(this,CheckClothesActivity.class);
-                            intent.putExtra("question",stringBuffer.toString());
+                            intent.putExtra("question",parserEntity);
                             intent.putExtra("position",position);
                             setResult(RESULT_OK,intent);
                             finish();

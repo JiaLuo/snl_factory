@@ -34,7 +34,6 @@ import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryCleaningAdapt
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryDisposeAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategorySendAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryTakeOrderAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CheckClothesActivity;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -272,76 +271,76 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
 //                            orderManageList.setCanAddMore(false);
 //                        }
                     }else if(status == 2){
-                        orderCleanEntities = Parsers.getOrderCleanEntities(data);
-                        if(orderCleanEntities != null && orderCleanEntities.getDatas() != null &&
-                                orderCleanEntities.getDatas().size() > 0){
-                            setLoadingStatus(LoadingStatus.GONE);
-                            orderManageList.setVisibility(View.VISIBLE);
-                            categoryCleanAdapter = new CategoryCleanAdapter(context, orderCleanEntities.getDatas());
-                            categoryCleanAdapter.setCountNum(orderCleanEntities.getDataCount());
-                            orderManageList.setAdapter(categoryCleanAdapter);
-
-                            categoryCleanAdapter.setGotoDetailListener(new CategoryCleanAdapter.GotoDetailListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    Intent intent = new Intent(context,OrderDetailActivity.class);
-                                    intent.putExtra("id",orderCleanEntities.getDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            categoryCleanAdapter.setCleanShowMoreListener(new CategoryCleanAdapter.CleanShowMoreListener() {
-                                @Override
-                                public void onClick(int position, ImageView iv, TextView tv) {
-                                    OrderCleanEntities.CleanData cleanData = orderCleanEntities.getDatas().get(position);
-                                    if (cleanData.isOpen){
-                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
-                                        tv.setText("隐藏更多选项");
-                                    }else{
-                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
-                                        tv.setText("查看更多");
-                                    }
-                                    categoryCleanAdapter.notifyDataSetChanged();
-                                }
-                            });
-
-                            categoryCleanAdapter.setPositionListener(new CategoryCleanAdapter.PositionListener() {
-                                @Override
-                                public void onCheck(int position) {
-                                    Intent intent = new Intent(context,CheckClothesActivity.class);
-                                    intent.putExtra("id", orderCleanEntities.getDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onChecked(int position) {
-                                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                    params.put("token",UserCenter.getToken(context));
-                                    params.put("orderid",orderCleanEntities.getDatas().get(position).getId());
-                                    requestHttpData(Constants.Urls.URL_POST_CHECKED_CLOTHES,REQUEST_CODE_CHECKED_CLOTHES,
-                                            FProtocol.HttpMethod.POST,params);
-                                }
-                            });
-
-                            categoryCleanAdapter.setTelPhoneListener(new CategoryCleanAdapter.TelPhoneListener() {
-                                @Override
-                                public void onTelPhone(int position) {
-                                    tell(orderCleanEntities.getDatas().get(position).getPhone());
-                                }
-                            });
-
-                            if( categoryCleanAdapter.getPage() < orderCleanEntities.getCount()){
-                                orderManageList.setCanAddMore(true);
-                            }else {
-                                orderManageList.setCanAddMore(false);
-                            }
-
-                        }else {
-                            setLoadingStatus(LoadingStatus.EMPTY);
-                            categoryCleanAdapter = new CategoryCleanAdapter(context, new ArrayList<OrderCleanEntities.CleanData>());
-                            orderManageList.setAdapter(categoryCleanAdapter);
-                            orderManageList.setCanAddMore(false);
-                        }
+//                        orderCleanEntities = Parsers.getOrderCleanEntities(data);
+//                        if(orderCleanEntities != null && orderCleanEntities.getDatas() != null &&
+//                                orderCleanEntities.getDatas().size() > 0){
+//                            setLoadingStatus(LoadingStatus.GONE);
+//                            orderManageList.setVisibility(View.VISIBLE);
+//                            categoryCleanAdapter = new CategoryCleanAdapter(context, orderCleanEntities.getDatas());
+//                            categoryCleanAdapter.setCountNum(orderCleanEntities.getDataCount());
+//                            orderManageList.setAdapter(categoryCleanAdapter);
+//
+//                            categoryCleanAdapter.setGotoDetailListener(new CategoryCleanAdapter.GotoDetailListener() {
+//                                @Override
+//                                public void onClick(int position) {
+//                                    Intent intent = new Intent(context,OrderDetailActivity.class);
+//                                    intent.putExtra("id",orderCleanEntities.getDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            categoryCleanAdapter.setCleanShowMoreListener(new CategoryCleanAdapter.CleanShowMoreListener() {
+//                                @Override
+//                                public void onClick(int position, ImageView iv, TextView tv) {
+//                                    OrderCleanEntities.CleanData cleanData = orderCleanEntities.getDatas().get(position);
+//                                    if (cleanData.isOpen){
+//                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
+//                                        tv.setText("隐藏更多选项");
+//                                    }else{
+//                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
+//                                        tv.setText("查看更多");
+//                                    }
+//                                    categoryCleanAdapter.notifyDataSetChanged();
+//                                }
+//                            });
+//
+//                            categoryCleanAdapter.setPositionListener(new CategoryCleanAdapter.PositionListener() {
+//                                @Override
+//                                public void onCheck(int position) {
+//                                    Intent intent = new Intent(context,CheckClothesActivity.class);
+//                                    intent.putExtra("id", orderCleanEntities.getDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//
+//                                @Override
+//                                public void onChecked(int position) {
+//                                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                                    params.put("token",UserCenter.getToken(context));
+//                                    params.put("orderid",orderCleanEntities.getDatas().get(position).getId());
+//                                    requestHttpData(Constants.Urls.URL_POST_CHECKED_CLOTHES,REQUEST_CODE_CHECKED_CLOTHES,
+//                                            FProtocol.HttpMethod.POST,params);
+//                                }
+//                            });
+//
+//                            categoryCleanAdapter.setTelPhoneListener(new CategoryCleanAdapter.TelPhoneListener() {
+//                                @Override
+//                                public void onTelPhone(int position) {
+//                                    tell(orderCleanEntities.getDatas().get(position).getPhone());
+//                                }
+//                            });
+//
+//                            if( categoryCleanAdapter.getPage() < orderCleanEntities.getCount()){
+//                                orderManageList.setCanAddMore(true);
+//                            }else {
+//                                orderManageList.setCanAddMore(false);
+//                            }
+//
+//                        }else {
+//                            setLoadingStatus(LoadingStatus.EMPTY);
+//                            categoryCleanAdapter = new CategoryCleanAdapter(context, new ArrayList<OrderCleanEntities.CleanData>());
+//                            orderManageList.setAdapter(categoryCleanAdapter);
+//                            orderManageList.setCanAddMore(false);
+//                        }
                     }else if(status == 3){
                         final OrderCleaningEntities orderCleaningEntities = Parsers.getOrderCleaningEntities(data);
                         if(orderCleaningEntities != null && orderCleaningEntities.getCleaningDatas() != null &&
@@ -544,16 +543,16 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
 //                }
                 break;
             case REQUEST_CODE_CLEAN_MORE:
-                orderManageList.onRefreshComplete();
-                if(data != null){
-                    OrderCleanEntities orderCleanEntities = Parsers.getOrderCleanEntities(data);
-                    categoryCleanAdapter.addDatas(orderCleanEntities.getDatas());
-                    if( categoryCleanAdapter.getPage() < orderCleanEntities.getCount()){
-                        orderManageList.setCanAddMore(true);
-                    }else {
-                        orderManageList.setCanAddMore(false);
-                    }
-                }
+//                orderManageList.onRefreshComplete();
+//                if(data != null){
+//                    OrderCleanEntities orderCleanEntities = Parsers.getOrderCleanEntities(data);
+//                    categoryCleanAdapter.addDatas(orderCleanEntities.getDatas());
+//                    if( categoryCleanAdapter.getPage() < orderCleanEntities.getCount()){
+//                        orderManageList.setCanAddMore(true);
+//                    }else {
+//                        orderManageList.setCanAddMore(false);
+//                    }
+//                }
                 break;
             case REQUEST_CODE_CLEANING_MORE:
                 orderManageList.onRefreshComplete();

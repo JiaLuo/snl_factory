@@ -11,221 +11,199 @@ import java.util.List;
  * Created by 张家洛 on 2017/3/2.
  */
 
-public class CheckClothesEntities implements Parcelable {
-    @SerializedName("color")
-    private String color;
-    @SerializedName("create_time")
-    private String createTime;
-    @SerializedName("g_name")
-    private String gName;
-    @SerializedName("hedging")
-    private String hedging;
-    @SerializedName("id")
-    private String id;
-    @SerializedName("img")
-    private List<String> imgs;
-    @SerializedName("img_count")
-    private String imgCount;
-    @SerializedName("item_note")
-    private String itemNote;
-    @SerializedName("item_title")
-    private String itemTitle;
-    @SerializedName("itemid")
-    private String itemId;
-    @SerializedName("number")
-    private String number;
-    @SerializedName("orderid")
-    private String orderId;
-    @SerializedName("price")
-    private String price;
-    @SerializedName("special")
-    private String special;
-    @SerializedName("special_comment")
-    private String specialComment;
-    @SerializedName("type")
-    private int type;
+public class CheckClothesEntities {
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": [
+     {
+     "id": “10",           项目ID
+     "color": “",             颜色
+     "problem": “",           问题
+     "forecast": “",        洗后预估
+     "forecast_data": “”,        洗后预估数据空字符时：用户未选择
+     "color_data": “[[\"red\",\"brown\"],\"fdfdfdf\"]",  颜色数据
+     "problem_data": "[[\"dirty sugar\",\"hard tidy\"],\"hard clean\”]",
+     问题描述数据:json格式,0索引为用户选择的列表,1索引为用户输入的内容
+     "item_images": [
+     "http://www.asyic.com/index/cu/erjvdnetgms.afm.jpg"   图片列表
+     ]
+     },
+     {
+     "id": “12",
+     "color": "",
+     "problem": "",
+     "forecast": "",
+     "item_images": []
+     }
+     ]
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<CheckClothesResult> results;
 
-    protected CheckClothesEntities(Parcel in) {
-        color = in.readString();
-        createTime = in.readString();
-        gName = in.readString();
-        hedging = in.readString();
-        id = in.readString();
-        imgs = in.createStringArrayList();
-        imgCount = in.readString();
-        itemNote = in.readString();
-        itemTitle = in.readString();
-        itemId = in.readString();
-        number = in.readString();
-        orderId = in.readString();
-        price = in.readString();
-        special = in.readString();
-        specialComment = in.readString();
-        type = in.readInt();
+    public int getCode() {
+        return code;
     }
 
-    public static final Creator<CheckClothesEntities> CREATOR = new Creator<CheckClothesEntities>() {
-        @Override
-        public CheckClothesEntities createFromParcel(Parcel in) {
-            return new CheckClothesEntities(in);
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<CheckClothesResult> getResults() {
+        return results;
+    }
+
+    public void setResults(List<CheckClothesResult> results) {
+        this.results = results;
+    }
+
+    public static class CheckClothesResult implements Parcelable{
+        @SerializedName("id")
+        private String id;
+        @SerializedName("item_name")
+        private String itemName;
+        @SerializedName("color")
+        private String color;
+        @SerializedName("problem")
+        private String problem;
+        @SerializedName("forecast")
+        private String forecast;
+        @SerializedName("forecast_data")
+        private String forecastData;
+        @SerializedName("color_data")
+        private String colorData;
+        @SerializedName("problem_data")
+        private String problemData;
+        @SerializedName("item_images")
+        private List<String> itemImages;
+
+        protected CheckClothesResult(Parcel in) {
+            id = in.readString();
+            itemName = in.readString();
+            color = in.readString();
+            problem = in.readString();
+            forecast = in.readString();
+            forecastData = in.readString();
+            colorData = in.readString();
+            problemData = in.readString();
+            itemImages = in.createStringArrayList();
         }
 
         @Override
-        public CheckClothesEntities[] newArray(int size) {
-            return new CheckClothesEntities[size];
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeString(itemName);
+            dest.writeString(color);
+            dest.writeString(problem);
+            dest.writeString(forecast);
+            dest.writeString(forecastData);
+            dest.writeString(colorData);
+            dest.writeString(problemData);
+            dest.writeStringList(itemImages);
         }
-    };
 
-    public String getColor() {
-        return color;
-    }
+        @Override
+        public int describeContents() {
+            return 0;
+        }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+        public static final Creator<CheckClothesResult> CREATOR = new Creator<CheckClothesResult>() {
+            @Override
+            public CheckClothesResult createFromParcel(Parcel in) {
+                return new CheckClothesResult(in);
+            }
 
-    public String getCreateTime() {
-        return createTime;
-    }
+            @Override
+            public CheckClothesResult[] newArray(int size) {
+                return new CheckClothesResult[size];
+            }
+        };
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
+        public String getForecastData() {
+            return forecastData;
+        }
 
-    public String getgName() {
-        return gName;
-    }
+        public void setForecastData(String forecastData) {
+            this.forecastData = forecastData;
+        }
 
-    public void setgName(String gName) {
-        this.gName = gName;
-    }
+        public String getColorData() {
+            return colorData;
+        }
 
-    public String getHedging() {
-        return hedging;
-    }
+        public void setColorData(String colorData) {
+            this.colorData = colorData;
+        }
 
-    public void setHedging(String hedging) {
-        this.hedging = hedging;
-    }
+        public String getProblemData() {
+            return problemData;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public void setProblemData(String problemData) {
+            this.problemData = problemData;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public String getItemName() {
+            return itemName;
+        }
 
-    public List<String> getImgs() {
-        return imgs;
-    }
+        public void setItemName(String itemName) {
+            this.itemName = itemName;
+        }
 
-    public void setImgs(List<String> imgs) {
-        this.imgs = imgs;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public String getImgCount() {
-        return imgCount;
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public void setImgCount(String imgCount) {
-        this.imgCount = imgCount;
-    }
+        public String getColor() {
+            return color;
+        }
 
-    public String getItemNote() {
-        return itemNote;
-    }
+        public void setColor(String color) {
+            this.color = color;
+        }
 
-    public void setItemNote(String itemNote) {
-        this.itemNote = itemNote;
-    }
+        public String getProblem() {
+            return problem;
+        }
 
-    public String getItemTitle() {
-        return itemTitle;
-    }
+        public void setProblem(String problem) {
+            this.problem = problem;
+        }
 
-    public void setItemTitle(String itemTitle) {
-        this.itemTitle = itemTitle;
-    }
+        public String getForecast() {
+            return forecast;
+        }
 
-    public String getItemId() {
-        return itemId;
-    }
+        public void setForecast(String forecast) {
+            this.forecast = forecast;
+        }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
+        public List<String> getItemImages() {
+            return itemImages;
+        }
 
-    public String getNumber() {
-        return number;
-    }
+        public void setItemImages(List<String> itemImages) {
+            this.itemImages = itemImages;
+        }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getSpecial() {
-        return special;
-    }
-
-    public void setSpecial(String special) {
-        this.special = special;
-    }
-
-    public String getSpecialComment() {
-        return specialComment;
-    }
-
-    public void setSpecialComment(String specialComment) {
-        this.specialComment = specialComment;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(color);
-        parcel.writeString(createTime);
-        parcel.writeString(gName);
-        parcel.writeString(hedging);
-        parcel.writeString(id);
-        parcel.writeStringList(imgs);
-        parcel.writeString(imgCount);
-        parcel.writeString(itemNote);
-        parcel.writeString(itemTitle);
-        parcel.writeString(itemId);
-        parcel.writeString(number);
-        parcel.writeString(orderId);
-        parcel.writeString(price);
-        parcel.writeString(special);
-        parcel.writeString(specialComment);
-        parcel.writeInt(type);
     }
 }

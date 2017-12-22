@@ -4,14 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.common.utils.DeviceUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class BigPhotoAdapter extends BaseAdapterNew<String> {
         super(context, mDatas);
         mImageWidth = DeviceUtil.getWidth(context);
 //        mImageHeight = (int) (mImageWidth * ((float) 300 / (float) 480));
-        mImageHeight = DeviceUtil.getHeight(context) - CommonTools.getStatusBarHeight(context) - CommonTools.dp2px(context,53);
+        mImageHeight = DeviceUtil.getHeight(context) - CommonTools.getStatusBarHeight(context) - CommonTools.dp2px(context,44);
     }
 
     @Override
@@ -43,9 +41,7 @@ public class BigPhotoAdapter extends BaseAdapterNew<String> {
         layoutParams.width = mImageWidth;
         layoutParams.height = mImageHeight;
         imgSideslip.setPadding(0, 0, 0, 0);
-        imgSideslip.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        String path = Constants.Urls.URL_BASE_DOMAIN + getItem(position);
-        Uri uri = Uri.parse(path);
-        imgSideslip.setImageURI(uri);
+//        imgSideslip.setScaleType(SimpleDraweeView.ScaleType.FIT_CENTER);
+        imgSideslip.setImageURI(Uri.parse(getItem(position)));
     }
 }

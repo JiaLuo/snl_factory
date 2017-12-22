@@ -1,7 +1,6 @@
 package com.shinaier.laundry.snlfactory.ordermanage.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,12 +22,12 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/25.
  */
 
-public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.CleanData> {
+public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.OrderCleanResult> {
     private Context context;
     private RelativeLayout rlOrderCleanShowMore;
     private TextView cleanShowSurplus;
     private WrapHeightListView orderCleanListMore;
-    private List<OrderCleanEntities.CleanData> mDatas;
+    private List<OrderCleanEntities.OrderCleanResult> mDatas;
     private ImageView cleanShowSurplusImg;
     private CleanShowMoreListener cleanShowMoreListener;
     private RelativeLayout rlCleanPriceItem;
@@ -70,7 +69,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
         this.gotoDetailListener = gotoDetailListener;
     }
 
-    public CategoryCleanAdapter(Context context, List<OrderCleanEntities.CleanData> mDatas) {
+    public CategoryCleanAdapter(Context context, List<OrderCleanEntities.OrderCleanResult> mDatas) {
         super(context, mDatas);
         this.context = context;
         this.mDatas = mDatas;
@@ -87,7 +86,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        OrderCleanEntities.CleanData item = getItem(position);
+        OrderCleanEntities.OrderCleanResult item = getItem(position);
         TextView orderCleanNumber = ViewHolder.get(convertView,R.id.order_clean_number);
         orderCleanListMore = ViewHolder.get(convertView, R.id.order_clean_list_more);
         rlOrderCleanShowMore = ViewHolder.get(convertView, R.id.rl_order_clean_show_more);
@@ -99,12 +98,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
         TextView takeOrderMaintainCleanNum = ViewHolder.get(convertView,R.id.take_order_maintain_clean_num);
         TextView takeOrderFavourableNum = ViewHolder.get(convertView,R.id.take_order_favourable_num);
         TextView takeOrderTotalNum = ViewHolder.get(convertView,R.id.take_order_total_num);
-        TextView takeOrderChineseTotalFirst = ViewHolder.get(convertView,R.id.take_order_chinese_total_first);
-        TextView takeOrderChineseTotalNum = ViewHolder.get(convertView,R.id.take_order_chinese_total_num);
-        TextView takeOrderChineseTotalSecond = ViewHolder.get(convertView,R.id.take_order_chinese_total_second);
         TextView takeOrderOutOfPocket = ViewHolder.get(convertView,R.id.take_order_out_of_pocket);
-        TextView takeOrderBespeakTime = ViewHolder.get(convertView,R.id.take_order_bespeak_time);
-        TextView takeOrderBespeakTimeDetail = ViewHolder.get(convertView,R.id.take_order_bespeak_time_detail);
         TextView takeOrderOrderName = ViewHolder.get(convertView,R.id.take_order_order_name);
         TextView takeOrderPhoneNum = ViewHolder.get(convertView,R.id.take_order_phone_num);
         TextView takeOrderAddress = ViewHolder.get(convertView,R.id.take_order_address);
@@ -117,24 +111,53 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
 
         if(item != null){
             orderCleanNumber.setText("订单号：" + item.getOrdersn());
-            List<OrderCleanEntities.CleanData.CleanItem> cleanItems = item.getCleanItems();
+            List<OrderCleanEntities.OrderCleanResult.OrderCleanItems> cleanItems = item.getItemses();
             initInnerList(cleanItems,position);
 
-            if(item.getCleanItems() != null){
-                takeOrderBespeakTime.setVisibility(View.GONE);
-                takeOrderBespeakTimeDetail.setVisibility(View.GONE);
+            takeOrderOrderName.setText(item.getuName());
+            takeOrderPhoneNum.setText(item.getuMobile());
+            takeOrderAddress.setText(item.getuAddress());
+            takeOrderNowTime.setText("时间：" + item.getoTime());
+//            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+            takeOrderCancel.setText("检查衣物");
+            takeOrderContactStore.setText("检查完成");
+
+            if (item.getChecked().equals("0")){ //是否可以检查完成:1-是;然否
+                takeOrderContactStore.setBackgroundResource(R.drawable.check_not);
+                takeOrderContactStore.setTextColor(context.getResources().getColor(R.color.white));
+                takeOrderContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+                takeOrderContactStore.setOnClickListener(null);
             }else {
-                takeOrderBespeakTimeDetail.setVisibility(View.VISIBLE);
-                takeOrderBespeakTime.setVisibility(View.VISIBLE);
-                takeOrderBespeakTimeDetail.setText(item.getTime());
+                takeOrderContactStore.setBackgroundResource(R.drawable.login);
+                takeOrderContactStore.setTextColor(context.getResources().getColor(R.color.white));
+                takeOrderContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+                takeOrderContactStore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(listener != null){
+                            listener.onChecked(position);
+                        }
+                    }
+                });
             }
 
-            takeOrderOrderName.setText(item.getName());
-            takeOrderPhoneNum.setText(item.getPhone());
-            takeOrderAddress.setText(item.getAdr());
-            takeOrderNowTime.setText("时间：" + item.getCreateTime());
-            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
-            takeOrderCancel.setText("检查衣物");
+            orderCleanFreightNum.setText("￥" + item.getFreightPrice());
+            orderCleanSpecialCraftworkNum.setText("￥" + item.getCraftPrice());
+            takeOrderMaintainCleanNum.setText("￥" + (item.getKeepPrice()));
+            takeOrderFavourableNum.setText("￥" + item.getReducePrice());
+            takeOrderTotalNum.setText(String.valueOf(cleanItems.size()));
+            takeOrderOutOfPocket.setText("￥" + item.getPayAmount());
+
+            llCleanItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(gotoDetailListener != null){
+                        gotoDetailListener.onClick(position);
+                    }
+                }
+            });
             takeOrderCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -152,73 +175,10 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
                     }
                 }
             });
-            List<OrderCleanEntities.CleanData.CleanItem> cleanItems1 = item.getCleanItems();
-            for (int i = 0; i < cleanItems1.size(); i++) {
-                String color = cleanItems1.get(i).getColor();
-                String itemNote = cleanItems1.get(i).getItemNote();
-                if(item.getPayState() == 0 || color == null || itemNote == null){
-                    takeOrderContactStore.setBackgroundResource(R.drawable.check_not);
-                    takeOrderContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                    takeOrderContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-                            DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-                }else {
-                    takeOrderContactStore.setBackgroundResource(R.drawable.login);
-                    takeOrderContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                    takeOrderContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-                            DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-                }
-            }
-
-            takeOrderContactStore.setText("检查完成");
-            takeOrderContactStore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
-                        listener.onChecked(position);
-                    }
-                }
-            });
-
-            orderCleanFreightNum.setText("￥" + item.getFreight());
-            orderCleanSpecialCraftworkNum.setText("￥" + item.getSpecial());
-            takeOrderMaintainCleanNum.setText("￥" + (item.getHedging()));
-            takeOrderFavourableNum.setText("￥" + item.getCouponPrice());
-            takeOrderTotalNum.setText(String.valueOf(item.getSum()));
-            if(item.getPayState() == 1){
-                takeOrderChineseTotalFirst.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                takeOrderChineseTotalNum.setText("￥" +item.getAmount() + "，");
-                takeOrderChineseTotalNum.setTextColor(context.getResources().getColor(R.color.black_text));
-                takeOrderChineseTotalNum.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                takeOrderChineseTotalSecond.setVisibility(View.VISIBLE);
-                takeOrderOutOfPocket.setVisibility(View.VISIBLE);
-                if(item.getPayAmount() != null){
-                    takeOrderOutOfPocket.setVisibility(View.VISIBLE);
-                    takeOrderOutOfPocket.setText("￥" + item.getPayAmount());
-                    takeOrderOutOfPocket.setTextColor(context.getResources().getColor(R.color.red));
-                }else {
-                    takeOrderOutOfPocket.setVisibility(View.GONE);
-                }
-            }else {
-                takeOrderChineseTotalFirst.getPaint().setFlags(0);
-                takeOrderChineseTotalNum.setText("￥" +item.getAmount() );
-                takeOrderChineseTotalNum.setTextColor(context.getResources().getColor(R.color.red));
-                takeOrderChineseTotalNum.getPaint().setFlags(0);
-                takeOrderChineseTotalSecond.setVisibility(View.GONE);
-                takeOrderOutOfPocket.setVisibility(View.GONE);
-            }
-
-            llCleanItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(gotoDetailListener != null){
-                        gotoDetailListener.onClick(position);
-                    }
-                }
-            });
         }
     }
 
-    private void initInnerList(List<OrderCleanEntities.CleanData.CleanItem> cleanItems, final int position) {
+    private void initInnerList(List<OrderCleanEntities.OrderCleanResult.OrderCleanItems> cleanItems, final int position) {
         if(cleanItems != null){
             if (cleanItems.size() <= 2){
                 rlOrderCleanShowMore.setVisibility(View.GONE);
@@ -259,7 +219,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Clea
             });
             rlCleanPriceItem.setVisibility(View.VISIBLE);
         }else {
-            List<OrderCleanEntities.CleanData.CleanItem> item1 = new ArrayList<>();
+            List<OrderCleanEntities.OrderCleanResult.OrderCleanItems> item1 = new ArrayList<>();
             final CategoryCleanInnerAdapter categoryCleanInnerAdapter = new CategoryCleanInnerAdapter(context,item1);
             orderCleanListMore.setAdapter(categoryCleanInnerAdapter);
 

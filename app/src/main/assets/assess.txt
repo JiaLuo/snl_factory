@@ -1,0 +1,1 @@
+{"assess":[[{"assesses": "洗后发白","ischeck": 0},{"assesses": "织后有印","ischeck": 0},{"assesses": "洗后结块","ischeck": 0},{"assesses": "缩水里衬长","ischeck": 0},{"assesses": "易断线","ischeck": 0},{"assesses": "洗后皮易开线","ischeck": 0},{"assesses": "洗后可能掉色","ischeck": 0},{"assesses": "装饰物易掉","ischeck": 0},{"assesses": "注意洗涤","ischeck": 0}]]}

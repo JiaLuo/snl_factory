@@ -272,6 +272,9 @@
         <activity android:name=".manage.ui.activity.MakeCashCouponActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
+        <activity android:name=".ordermanage.ui.activity.CleanedAssessmentActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
 
         <service
             android:name=".service.JobSchedulerService"

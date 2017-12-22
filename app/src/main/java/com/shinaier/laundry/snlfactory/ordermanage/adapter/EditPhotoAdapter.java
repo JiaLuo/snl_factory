@@ -9,7 +9,6 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.network.Constants;
 
 import java.util.List;
 
@@ -44,8 +43,7 @@ public class EditPhotoAdapter extends BaseAdapterNew<String> {
         ImageView editPhotoDelete = ViewHolder.get(convertView,R.id.edit_photo_delete);
 
         if(item != null){
-            String imgPath = Constants.Urls.URL_BASE_DOMAIN + item;
-            editClothesImg.setImageURI(Uri.parse(imgPath));
+            editClothesImg.setImageURI(Uri.parse(item));
             editPhotoDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

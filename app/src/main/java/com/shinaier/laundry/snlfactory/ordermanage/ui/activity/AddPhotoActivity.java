@@ -52,7 +52,6 @@ public class AddPhotoActivity extends ToolBarActivity {
 
     private List<String> temp = new ArrayList<>();
     private AddphotoAdapter adapter;
-    private String orderId;
     private String itemId;
     private int upLoadImageNum = 0;
     private int upLoadImageNumRecord = 0; //记录图片上传个数
@@ -67,8 +66,7 @@ public class AddPhotoActivity extends ToolBarActivity {
         setContentView(R.layout.add_photo_act);
         ViewInjectUtils.inject(this);
         Intent intent = getIntent();
-        orderId = intent.getStringExtra("orderId");
-        itemId = intent.getStringExtra("itemId");
+        itemId = intent.getStringExtra("item_id");
         imgs = intent.getStringArrayListExtra("imgs");
 
         from = intent.getIntExtra("extra", 0);
@@ -102,20 +100,18 @@ public class AddPhotoActivity extends ToolBarActivity {
                         file = new File(BitmapUtil.revitionLocalImage(AddPhotoActivity.this, temp.get(i)));
                         IdentityHashMap<String,String> params = new IdentityHashMap<>();
                         params.put("token", UserCenter.getToken(AddPhotoActivity.this));
-                        params.put("orderid",orderId);
-                        params.put("id",itemId);
+                        params.put("item_id",itemId);
                         requestHttpData(Constants.Urls.URL_POST_CLOTHES_PHOTO,REQUEST_CODE_CLOTHES_PHOTO, FProtocol.HttpMethod.POST
-                                ,params,"file", file);
+                                ,params,"image", file);
                     }
                 }else {
                     for (int i = 0; i < temp.size(); i++) {
                         file = new File(BitmapUtil.revitionLocalImage(AddPhotoActivity.this, temp.get(i)));
                         IdentityHashMap<String,String> params = new IdentityHashMap<>();
                         params.put("token", UserCenter.getToken(AddPhotoActivity.this));
-                        params.put("orderid",orderId);
-                        params.put("id",itemId);
+                        params.put("item_id",itemId);
                         requestHttpData(Constants.Urls.URL_POST_CLOTHES_PHOTO,REQUEST_CODE_CLOTHES_PHOTO, FProtocol.HttpMethod.POST
-                                ,params,"file", file);
+                                ,params,"image", file);
                     }
                 }
             }
@@ -200,10 +196,9 @@ public class AddPhotoActivity extends ToolBarActivity {
                 if (data != null){
                     UploadAddPhotoEntity uploadAddPhotoEntity = Parsers.getUploadAddPhotoEntity(data);
                     if (uploadAddPhotoEntity != null){
-                        if (uploadAddPhotoEntity.getRetcode() == 0){
-                            List<String> datas = uploadAddPhotoEntity.getDatas();
-                            String photo = datas.get(0);
-                            allPhotos.add(photo);
+                        if (uploadAddPhotoEntity.getCode() == 0){
+                            String result = uploadAddPhotoEntity.getResult();
+                            allPhotos.add(result);
 
                             upLoadImageNumRecord++;
                             if (upLoadImageNumRecord == upLoadImageNum){
@@ -215,7 +210,7 @@ public class AddPhotoActivity extends ToolBarActivity {
                                 finish();
                             }
                         }else {
-                            ToastUtil.shortShow(this,uploadAddPhotoEntity.getStatus());
+                            ToastUtil.shortShow(this,uploadAddPhotoEntity.getMsg());
                         }
                     }
                 }
