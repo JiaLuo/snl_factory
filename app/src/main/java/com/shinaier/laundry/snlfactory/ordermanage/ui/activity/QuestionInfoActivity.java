@@ -20,7 +20,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.QuestionSettingSuccessEntities;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.json.GsonObjectDeserializer;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.QuestionExpandableAdapter;
@@ -240,16 +240,18 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
         switch (requestCode){
             case REQUEST_CODE_QUESTION_SETTING:
                 if(data != null){
-                    QuestionSettingSuccessEntities questionSettingSuccessEntities = Parsers.getQuestionSettingSuccessEntities(data);
-                    if(questionSettingSuccessEntities != null){
-                        if(questionSettingSuccessEntities.getRetcode() == 0){
+                    Entity entity = Parsers.getEntity(data);
+                    if(entity != null){
+                        if(entity.getRetcode() == 0){
                             Intent intent = new Intent(this,CheckClothesActivity.class);
                             intent.putExtra("question",parserEntity);
                             intent.putExtra("position",position);
                             setResult(RESULT_OK,intent);
                             finish();
+                        }else if (entity.getRetcode() == 1){
+                            ToastUtil.shortShow(this,"请输入或选择颜色描述");
                         }else {
-                            ToastUtil.shortShow(this,questionSettingSuccessEntities.getStatus());
+                            ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }
                 }

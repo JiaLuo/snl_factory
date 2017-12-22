@@ -36,6 +36,7 @@ import java.util.IdentityHashMap;
 public class OrderManageWillCleanFragment extends BaseFragment implements View.OnClickListener{
     private static final int REQUEST_CODE_WILL_CLEAN = 0x1;
     private static final int REQUEST_CODE_CHECKED_CLOTHES = 0x2;
+    private static final int REQUEST_CODE_WILL_CLEAN_MORE = 0x3;
 
     private Context context;
     private FootLoadingListView orderManageWillCleanList;
@@ -66,12 +67,14 @@ public class OrderManageWillCleanFragment extends BaseFragment implements View.O
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(context));
         if (isMore){
-
+            params.put("page",categoryCleanAdapter.getPage() + 1 + "" );
+            code = REQUEST_CODE_WILL_CLEAN_MORE;
         }else {
             params.put("page","1");
+            code = REQUEST_CODE_WILL_CLEAN;
         }
         params.put("limit","10");
-        requestHttpData(Constants.Urls.URL_POST_WILL_CLEAN,REQUEST_CODE_WILL_CLEAN, FProtocol.HttpMethod.POST,params);
+        requestHttpData(Constants.Urls.URL_POST_WILL_CLEAN,code, FProtocol.HttpMethod.POST,params);
     }
 
     private void initView(View view) {
@@ -181,6 +184,18 @@ public class OrderManageWillCleanFragment extends BaseFragment implements View.O
 
                 }
                 break;
+            case REQUEST_CODE_WILL_CLEAN_MORE:
+                orderManageWillCleanList.onRefreshComplete();
+                if(data != null){
+                    OrderCleanEntities orderCleanEntities = Parsers.getOrderCleanEntities(data);
+                    categoryCleanAdapter.addDatas(orderCleanEntities.getResults());
+                    if( categoryCleanAdapter.getPage() < orderCleanEntities.getPageCount()){
+                        orderManageWillCleanList.setCanAddMore(true);
+                    }else {
+                        orderManageWillCleanList.setCanAddMore(false);
+                    }
+                }
+                break;
         }
     }
 
@@ -198,7 +213,7 @@ public class OrderManageWillCleanFragment extends BaseFragment implements View.O
         super.mistake(requestCode, status, errorMessage);
         switch (requestCode){
             case REQUEST_CODE_WILL_CLEAN:
-
+                setLoadingStatus(LoadingStatus.RETRY);
                 break;
         }
     }

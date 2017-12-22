@@ -60,10 +60,9 @@ public class EditPhotoActivity extends ToolBarActivity implements View.OnClickLi
         editClothesImg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayList<String> imgs = (ArrayList<String>) itemImages;
                 Intent intent = new Intent(EditPhotoActivity.this,BigPhotoActivity.class);
                 intent.putExtra("imagePosition",i);
-                intent.putStringArrayListExtra("imagePath",imgs);
+                intent.putStringArrayListExtra("imagePath",itemImages);
                 startActivity(intent);
             }
         });

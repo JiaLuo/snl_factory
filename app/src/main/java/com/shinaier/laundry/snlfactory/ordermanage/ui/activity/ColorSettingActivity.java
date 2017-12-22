@@ -21,7 +21,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.ColorSettingSuccessEntities;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.json.GsonObjectDeserializer;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.ColorExpandableAdapter;
@@ -238,9 +238,9 @@ public class ColorSettingActivity extends ToolBarActivity implements View.OnClic
         switch (requestCode){
             case REQUEST_CODE_COLOR_SETTING:
                 if(data != null){
-                    ColorSettingSuccessEntities colorSettingSuccessEntities = Parsers.getColorSettingSuccessEntities(data);
-                    if(colorSettingSuccessEntities != null){
-                        if(colorSettingSuccessEntities.getRetcode() == 0){
+                    Entity entity = Parsers.getEntity(data);
+                    if(entity != null){
+                        if(entity.getRetcode() == 0){
                             Intent intent = new Intent(this,CheckClothesActivity.class);
                             intent.putExtra("color", parserEntity);
                             intent.putExtra("position",position);
@@ -248,7 +248,7 @@ public class ColorSettingActivity extends ToolBarActivity implements View.OnClic
                             finish();
 
                         }else {
-                            ToastUtil.shortShow(this,colorSettingSuccessEntities.getStatus());
+                            ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }
                 }
