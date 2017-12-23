@@ -182,17 +182,17 @@
                             android:textColor="@color/black_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/send_chinese_total_first"
-                            android:text="共"
-                            android:textColor="@color/black_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/send_chinese_total_num"
-                            android:text="￥20，"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        <!--<TextView-->
+                            <!--android:id="@+id/send_chinese_total_first"-->
+                            <!--android:text="共"-->
+                            <!--android:textColor="@color/black_text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/send_chinese_total_num"-->
+                            <!--android:text="￥20，"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"/>-->
                         <TextView
                             android:id="@+id/send_chinese_total_second"
                             android:text="共"
@@ -212,27 +212,27 @@
                 android:background="#f7f7f7"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/send_bespeak_time"
-                    android:textSize="13sp"
-                    android:textColor="@color/black_text"
-                    android:layout_marginTop="13dp"
-                    android:text="预约上门时间："
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/send_bespeak_time_detail"
-                    android:text="2016.12.10 16:30"
-                    android:layout_marginTop="13dp"
-                    android:textColor="@color/red"
-                    android:textSize="13sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/send_bespeak_time"-->
+                    <!--android:textSize="13sp"-->
+                    <!--android:textColor="@color/black_text"-->
+                    <!--android:layout_marginTop="13dp"-->
+                    <!--android:text="预约上门时间："-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/send_bespeak_time_detail"-->
+                    <!--android:text="2016.12.10 16:30"-->
+                    <!--android:layout_marginTop="13dp"-->
+                    <!--android:textColor="@color/red"-->
+                    <!--android:textSize="13sp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"/>-->
+            <!--</LinearLayout>-->
             <LinearLayout
                 android:id="@+id/ll_send_phone"
                 android:layout_width="match_parent"

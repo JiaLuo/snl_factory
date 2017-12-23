@@ -9,23 +9,39 @@ import java.util.List;
  */
 
 public class OrderCleaningEntities {
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<OrderCleaningResult> results;
     @SerializedName("count")
     private int count;
-    @SerializedName("data")
-    private List<CleaningData> cleaningDatas;
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("dataCount")
-    private String dataCount;
+    @SerializedName("page_count")
+    private int pageCount;
 
-    public String getDataCount() {
-        return dataCount;
+    public int getCode() {
+        return code;
     }
 
-    public void setDataCount(String dataCount) {
-        this.dataCount = dataCount;
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<OrderCleaningResult> getResults() {
+        return results;
+    }
+
+    public void setResults(List<OrderCleaningResult> results) {
+        this.results = results;
     }
 
     public int getCount() {
@@ -36,140 +52,43 @@ public class OrderCleaningEntities {
         this.count = count;
     }
 
-    public List<CleaningData> getCleaningDatas() {
-        return cleaningDatas;
+    public int getPageCount() {
+        return pageCount;
     }
 
-    public void setCleaningDatas(List<CleaningData> cleaningDatas) {
-        this.cleaningDatas = cleaningDatas;
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 
-    public int getRetcode() {
-        return retcode;
-    }
-
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public class CleaningData{
-        @SerializedName("adr")
-        private String adr;
-        @SerializedName("amount")
-        private String amount;
-        @SerializedName("coupon_price")
-        private String couponPrice;
-        @SerializedName("create_time")
-        private String createTime;
-        @SerializedName("freight")
-        private String freight;
-        @SerializedName("hedging")
-        private String hedging;
+    public class OrderCleaningResult{
         @SerializedName("id")
         private String id;
-        @SerializedName("item")
-        private List<CleaningItem> cleaningItems;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("num")
-        private String num;
         @SerializedName("ordersn")
         private String ordersn;
+        @SerializedName("craft_price")
+        private String craftPrice;
+        @SerializedName("reduce_price")
+        private String reducePrice;
+        @SerializedName("freight_price")
+        private String freightPrice;
+        @SerializedName("amount")
+        private String amount;
         @SerializedName("pay_amount")
         private String payAmount;
-
-        @SerializedName("pay_state")
-        private int payState;
-        @SerializedName("phone")
-        private String phone;
-        @SerializedName("special")
-        private String special;
-        @SerializedName("state")
-        private int state;
-        @SerializedName("sum")
-        private String sum;
-        @SerializedName("time")
-        private String time;
-        @SerializedName("up_time")
-        private String upTime;
-        @SerializedName("update_time")
-        private String updateTime;
-        @SerializedName("through")
-        private String through;
+        @SerializedName("keep_price")
+        private String keepPrice;
+        @SerializedName("otime")
+        private String oTime;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("uaddress")
+        private String uAddress;
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("items")
+        private List<OrderCleaningItems> itemses;
 
         public boolean isOpen = false;
-
-        public String getThrough() {
-            return through;
-        }
-
-        public void setThrough(String through) {
-            this.through = through;
-        }
-
-        public String getPayAmount() {
-            return payAmount;
-        }
-
-        public void setPayAmount(String payAmount) {
-            this.payAmount = payAmount;
-        }
-
-        public String getAdr() {
-            return adr;
-        }
-
-        public void setAdr(String adr) {
-            this.adr = adr;
-        }
-
-        public String getAmount() {
-            return amount;
-        }
-
-        public void setAmount(String amount) {
-            this.amount = amount;
-        }
-
-        public String getCouponPrice() {
-            return couponPrice;
-        }
-
-        public void setCouponPrice(String couponPrice) {
-            this.couponPrice = couponPrice;
-        }
-
-        public String getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
-
-        public String getFreight() {
-            return freight;
-        }
-
-        public void setFreight(String freight) {
-            this.freight = freight;
-        }
-
-        public String getHedging() {
-            return hedging;
-        }
-
-        public void setHedging(String hedging) {
-            this.hedging = hedging;
-        }
 
         public String getId() {
             return id;
@@ -177,30 +96,6 @@ public class OrderCleaningEntities {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public List<CleaningItem> getCleaningItems() {
-            return cleaningItems;
-        }
-
-        public void setCleaningItems(List<CleaningItem> cleaningItems) {
-            this.cleaningItems = cleaningItems;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getNum() {
-            return num;
-        }
-
-        public void setNum(String num) {
-            this.num = num;
         }
 
         public String getOrdersn() {
@@ -211,220 +106,124 @@ public class OrderCleaningEntities {
             this.ordersn = ordersn;
         }
 
-        public int getPayState() {
-            return payState;
+        public String getCraftPrice() {
+            return craftPrice;
         }
 
-        public void setPayState(int payState) {
-            this.payState = payState;
+        public void setCraftPrice(String craftPrice) {
+            this.craftPrice = craftPrice;
         }
 
-        public String getPhone() {
-            return phone;
+        public String getReducePrice() {
+            return reducePrice;
         }
 
-        public void setPhone(String phone) {
-            this.phone = phone;
+        public void setReducePrice(String reducePrice) {
+            this.reducePrice = reducePrice;
         }
 
-        public String getSpecial() {
-            return special;
+        public String getFreightPrice() {
+            return freightPrice;
         }
 
-        public void setSpecial(String special) {
-            this.special = special;
+        public void setFreightPrice(String freightPrice) {
+            this.freightPrice = freightPrice;
         }
 
-        public int getState() {
-            return state;
+        public String getAmount() {
+            return amount;
         }
 
-        public void setState(int state) {
-            this.state = state;
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
 
-        public String getSum() {
-            return sum;
+        public String getPayAmount() {
+            return payAmount;
         }
 
-        public void setSum(String sum) {
-            this.sum = sum;
+        public void setPayAmount(String payAmount) {
+            this.payAmount = payAmount;
         }
 
-        public String getTime() {
-            return time;
+        public String getKeepPrice() {
+            return keepPrice;
         }
 
-        public void setTime(String time) {
-            this.time = time;
+        public void setKeepPrice(String keepPrice) {
+            this.keepPrice = keepPrice;
         }
 
-        public String getUpTime() {
-            return upTime;
+        public String getoTime() {
+            return oTime;
         }
 
-        public void setUpTime(String upTime) {
-            this.upTime = upTime;
+        public void setoTime(String oTime) {
+            this.oTime = oTime;
         }
 
-        public String getUpdateTime() {
-            return updateTime;
+        public String getuName() {
+            return uName;
         }
 
-        public void setUpdateTime(String updateTime) {
-            this.updateTime = updateTime;
+        public void setuName(String uName) {
+            this.uName = uName;
         }
 
-        public class CleaningItem{
-            @SerializedName("color")
-            private String color;
-            @SerializedName("create_time")
-            private String createTime;
-            @SerializedName("g_name")
-            private String gName;
-            @SerializedName("hedging")
-            private String hedging;
-            @SerializedName("id")
-            private String id;
-            @SerializedName("item_note")
-            private String itemNote;
-            @SerializedName("item_title")
-            private String itemTitle;
-            @SerializedName("itemid")
-            private String itemId;
-            @SerializedName("number")
-            private String number;
-            @SerializedName("orderid")
-            private String orderId;
-            @SerializedName("price")
-            private String price;
-            @SerializedName("special")
-            private String special;
-            @SerializedName("special_comment")
-            private String specialComment;
-            @SerializedName("type")
-            private String type;
-            @SerializedName("put_number")
-            private String putNumber;
+        public String getuAddress() {
+            return uAddress;
+        }
 
-            public String getPutNumber() {
-                return putNumber;
+        public void setuAddress(String uAddress) {
+            this.uAddress = uAddress;
+        }
+
+        public String getuMobile() {
+            return uMobile;
+        }
+
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public List<OrderCleaningItems> getItemses() {
+            return itemses;
+        }
+
+        public void setItemses(List<OrderCleaningItems> itemses) {
+            this.itemses = itemses;
+        }
+
+        public class OrderCleaningItems{
+            @SerializedName("item_name")
+            private String itemName;
+            @SerializedName("item_price")
+            private String itemPrice;
+            @SerializedName("put_sn")
+            private String putSn;
+
+            public String getItemName() {
+                return itemName;
             }
 
-            public void setPutNumber(String putNumber) {
-                this.putNumber = putNumber;
+            public void setItemName(String itemName) {
+                this.itemName = itemName;
             }
 
-            public String getColor() {
-                return color;
+            public String getItemPrice() {
+                return itemPrice;
             }
 
-            public void setColor(String color) {
-                this.color = color;
+            public void setItemPrice(String itemPrice) {
+                this.itemPrice = itemPrice;
             }
 
-            public String getCreateTime() {
-                return createTime;
+            public String getPutSn() {
+                return putSn;
             }
 
-            public void setCreateTime(String createTime) {
-                this.createTime = createTime;
-            }
-
-            public String getgName() {
-                return gName;
-            }
-
-            public void setgName(String gName) {
-                this.gName = gName;
-            }
-
-            public String getHedging() {
-                return hedging;
-            }
-
-            public void setHedging(String hedging) {
-                this.hedging = hedging;
-            }
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getItemNote() {
-                return itemNote;
-            }
-
-            public void setItemNote(String itemNote) {
-                this.itemNote = itemNote;
-            }
-
-            public String getItemTitle() {
-                return itemTitle;
-            }
-
-            public void setItemTitle(String itemTitle) {
-                this.itemTitle = itemTitle;
-            }
-
-            public String getItemId() {
-                return itemId;
-            }
-
-            public void setItemId(String itemId) {
-                this.itemId = itemId;
-            }
-
-            public String getNumber() {
-                return number;
-            }
-
-            public void setNumber(String number) {
-                this.number = number;
-            }
-
-            public String getOrderId() {
-                return orderId;
-            }
-
-            public void setOrderId(String orderId) {
-                this.orderId = orderId;
-            }
-
-            public String getPrice() {
-                return price;
-            }
-
-            public void setPrice(String price) {
-                this.price = price;
-            }
-
-            public String getSpecial() {
-                return special;
-            }
-
-            public void setSpecial(String special) {
-                this.special = special;
-            }
-
-            public String getSpecialComment() {
-                return specialComment;
-            }
-
-            public void setSpecialComment(String specialComment) {
-                this.specialComment = specialComment;
-            }
-
-            public String getType() {
-                return type;
-            }
-
-            public void setType(String type) {
-                this.type = type;
+            public void setPutSn(String putSn) {
+                this.putSn = putSn;
             }
         }
     }

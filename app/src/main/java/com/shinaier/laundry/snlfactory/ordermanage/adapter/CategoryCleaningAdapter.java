@@ -1,7 +1,6 @@
 package com.shinaier.laundry.snlfactory.ordermanage.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
-import com.common.utils.DeviceUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleaningEntities;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
@@ -18,17 +16,15 @@ import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.GONE;
-
 /**
  * Created by 张家洛 on 2017/2/28.
  */
 
-public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntities.CleaningData> {
+public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntities.OrderCleaningResult> {
     private RelativeLayout rlOrderCleaningShowMore;
     private TextView cleaningShowSurplus;
     private Context context;
-    private List<OrderCleaningEntities.CleaningData> mDatas;
+    private List<OrderCleaningEntities.OrderCleaningResult> mDatas;
     private WrapHeightListView orderCleaningListMore;
     private ImageView cleaningShowSurplusImg;
     private CleaningShowMoreListener cleaningShowMoreListener;
@@ -69,7 +65,7 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
         this.gotoDetailListener = gotoDetailListener;
     }
 
-    public CategoryCleaningAdapter(Context context, List<OrderCleaningEntities.CleaningData> mDatas) {
+    public CategoryCleaningAdapter(Context context, List<OrderCleaningEntities.OrderCleaningResult> mDatas) {
         super(context, mDatas);
         this.context = context;
         this.mDatas = mDatas;
@@ -86,7 +82,7 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        OrderCleaningEntities.CleaningData item = getItem(position);
+        OrderCleaningEntities.OrderCleaningResult item = getItem(position);
         TextView orderCleaningNumber = ViewHolder.get(convertView,R.id.order_cleaning_number);
         orderCleaningListMore = ViewHolder.get(convertView, R.id.order_cleaning_list_more);
         rlOrderCleaningShowMore = ViewHolder.get(convertView, R.id.rl_order_cleaning_show_more);
@@ -98,12 +94,12 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
         TextView takeOrderMaintainCleaningNum = ViewHolder.get(convertView,R.id.take_order_maintain_cleaning_num);
         TextView takeOrderFavourableCleaningNum = ViewHolder.get(convertView,R.id.take_order_favourable_cleaning_num);
         TextView cleaningTotalNum = ViewHolder.get(convertView,R.id.cleaning_total_num);
-        TextView cleaningChineseTotalFirst = ViewHolder.get(convertView,R.id.cleaning_chinese_total_first);
-        TextView cleaningChineseTotalNum = ViewHolder.get(convertView,R.id.cleaning_chinese_total_num);
-        TextView cleaningChineseTotalSecond = ViewHolder.get(convertView,R.id.cleaning_chinese_total_second);
+//        TextView cleaningChineseTotalFirst = ViewHolder.get(convertView,R.id.cleaning_chinese_total_first);
+//        TextView cleaningChineseTotalNum = ViewHolder.get(convertView,R.id.cleaning_chinese_total_num);
+//        TextView cleaningChineseTotalSecond = ViewHolder.get(convertView,R.id.cleaning_chinese_total_second);
         TextView cleaningOutOfPocket = ViewHolder.get(convertView,R.id.cleaning_out_of_pocket);
-        TextView cleaningBespeakTime = ViewHolder.get(convertView,R.id.cleaning_bespeak_time);
-        TextView cleaningBespeakTimeDetail = ViewHolder.get(convertView,R.id.cleaning_bespeak_time_detail);
+//        TextView cleaningBespeakTime = ViewHolder.get(convertView,R.id.cleaning_bespeak_time);
+//        TextView cleaningBespeakTimeDetail = ViewHolder.get(convertView,R.id.cleaning_bespeak_time_detail);
         TextView cleaningOrderName = ViewHolder.get(convertView,R.id.cleaning_order_name);
         TextView cleaningPhoneNum = ViewHolder.get(convertView,R.id.cleaning_phone_num);
         TextView cleaningAddress = ViewHolder.get(convertView,R.id.cleaning_address);
@@ -116,35 +112,39 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
 
         if(item != null){
             orderCleaningNumber.setText("订单号：" + item.getOrdersn());
-            List<OrderCleaningEntities.CleaningData.CleaningItem> cleaningItems = item.getCleaningItems();
+            List<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> cleaningItems = item.getItemses();
             initInnerList(cleaningItems,position);
 
-            if(item.getCleaningItems() != null){
-                cleaningBespeakTime.setVisibility(View.GONE);
-                cleaningBespeakTimeDetail.setVisibility(View.GONE);
-            }else {
-                cleaningBespeakTimeDetail.setVisibility(View.VISIBLE);
-                cleaningBespeakTime.setVisibility(View.VISIBLE);
-                cleaningBespeakTimeDetail.setText(item.getTime());
-            }
+//            if(item.getCleaningItems() != null){
+//                cleaningBespeakTime.setVisibility(View.GONE);
+//                cleaningBespeakTimeDetail.setVisibility(View.GONE);
+//            }else {
+//                cleaningBespeakTimeDetail.setVisibility(View.VISIBLE);
+//                cleaningBespeakTime.setVisibility(View.VISIBLE);
+//                cleaningBespeakTimeDetail.setText(item.getTime());
+//            }
 
-            cleaningOrderName.setText(item.getName());
-            cleaningPhoneNum.setText(item.getPhone());
-            cleaningAddress.setText(item.getAdr());
-            cleaningNowTime.setText("时间：" + item.getCreateTime());
+            cleaningOrderName.setText(item.getuName());
+            cleaningPhoneNum.setText(item.getuMobile());
+            cleaningAddress.setText(item.getuAddress());
+            cleaningNowTime.setText("时间：" + item.getoTime());
             cleaningCancel.setVisibility(View.GONE);
-            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
-            if (item.getThrough().equals("1")){
-                cleaningContactStore.setBackgroundResource(R.drawable.login);
-                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-            }else {
-                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
-                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-            }
+
+//            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+
+            // TODO: 2017/12/22 需要后台一个参数来判断按钮是否置灰
+
+//            if (item.getThrough().equals("1")){
+//                cleaningContactStore.setBackgroundResource(R.drawable.login);
+//                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+//                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
+//                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
+//            }else {
+//                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
+//                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+//                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
+//                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
+//            }
             cleaningContactStore.setText("清洗完成");
             cleaningContactStore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,31 +164,32 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
                 }
             });
 
-            orderCleaningFreightNum.setText("￥" + item.getFreight());
-            orderCleaningSpecialCraftworkNum.setText("￥" + item.getSpecial());
-            takeOrderMaintainCleaningNum.setText("￥" + item.getHedging());
-            takeOrderFavourableCleaningNum.setText("￥" + item.getCouponPrice());
-            cleaningTotalNum.setText(item.getSum());
+            orderCleaningFreightNum.setText("￥" + item.getFreightPrice());
+            orderCleaningSpecialCraftworkNum.setText("￥" + item.getCraftPrice());
+            takeOrderMaintainCleaningNum.setText("￥" + item.getKeepPrice());
+            takeOrderFavourableCleaningNum.setText("￥" + item.getReducePrice());
+            cleaningTotalNum.setText(String.valueOf(cleaningItems.size()));
+            cleaningOutOfPocket.setText("￥" + item.getPayAmount());
 
-            if(item.getPayState() == 1){
-                cleaningChineseTotalFirst.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                cleaningChineseTotalNum.setText("￥" +item.getAmount() + "，");
-                cleaningChineseTotalNum.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                cleaningChineseTotalSecond.setVisibility(View.VISIBLE);
-                cleaningOutOfPocket.setVisibility(View.VISIBLE);
-                if(item.getPayAmount() != null){
-                    cleaningOutOfPocket.setVisibility(View.VISIBLE);
-                    cleaningOutOfPocket.setText("￥" + item.getPayAmount());
-                }else {
-                    cleaningOutOfPocket.setVisibility(GONE);
-                }
-            }else {
-                cleaningChineseTotalFirst.getPaint().setFlags(0);
-                cleaningChineseTotalNum.setText("￥" +item.getAmount() );
-                cleaningChineseTotalNum.getPaint().setFlags(0);
-                cleaningChineseTotalSecond.setVisibility(GONE);
-                cleaningOutOfPocket.setVisibility(GONE);
-            }
+//            if(item.getPayState() == 1){
+//                cleaningChineseTotalFirst.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+//                cleaningChineseTotalNum.setText("￥" +item.getAmount() + "，");
+//                cleaningChineseTotalNum.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+//                cleaningChineseTotalSecond.setVisibility(View.VISIBLE);
+//                cleaningOutOfPocket.setVisibility(View.VISIBLE);
+//                if(item.getPayAmount() != null){
+//                    cleaningOutOfPocket.setVisibility(View.VISIBLE);
+//                    cleaningOutOfPocket.setText("￥" + item.getPayAmount());
+//                }else {
+//                    cleaningOutOfPocket.setVisibility(GONE);
+//                }
+//            }else {
+//                cleaningChineseTotalFirst.getPaint().setFlags(0);
+//                cleaningChineseTotalNum.setText("￥" +item.getAmount() );
+//                cleaningChineseTotalNum.getPaint().setFlags(0);
+//                cleaningChineseTotalSecond.setVisibility(GONE);
+//                cleaningOutOfPocket.setVisibility(GONE);
+//            }
 
             llCleaningItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,7 +202,7 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
         }
     }
 
-    private void initInnerList(List<OrderCleaningEntities.CleaningData.CleaningItem> cleaningItems, final int position) {
+    private void initInnerList(List<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> cleaningItems, final int position) {
         if(cleaningItems != null){
             if (cleaningItems.size() <= 2){
                 rlOrderCleaningShowMore.setVisibility(View.GONE);
@@ -243,7 +244,7 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
             rlCleaningPriceItem.setVisibility(View.VISIBLE);
 
         }else {
-            List<OrderCleaningEntities.CleaningData.CleaningItem> item1 = new ArrayList<>();
+            List<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> item1 = new ArrayList<>();
             CategoryCleaningInnerAdapter categoryCleaningInnerAdapter = new CategoryCleaningInnerAdapter(context,item1);
             orderCleaningListMore.setAdapter(categoryCleaningInnerAdapter);
             rlOrderCleaningShowMore.setVisibility(View.GONE);

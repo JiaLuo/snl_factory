@@ -2,16 +2,13 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.common.network.FProtocol;
 import com.common.utils.ToastUtil;
@@ -20,13 +17,10 @@ import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
-import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderDetailActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleanEntities;
-import com.shinaier.laundry.snlfactory.network.entity.OrderCleaningEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderDisposeEntities;
-import com.shinaier.laundry.snlfactory.network.entity.OrderSendEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderTakeOrderEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryCleanAdapter;
@@ -35,7 +29,6 @@ import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryDisposeAdapte
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategorySendAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryTakeOrderAdapter;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
 /**
@@ -342,166 +335,166 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
 //                            orderManageList.setCanAddMore(false);
 //                        }
                     }else if(status == 3){
-                        final OrderCleaningEntities orderCleaningEntities = Parsers.getOrderCleaningEntities(data);
-                        if(orderCleaningEntities != null && orderCleaningEntities.getCleaningDatas() != null &&
-                                orderCleaningEntities.getCleaningDatas().size() > 0){
-                            setLoadingStatus(LoadingStatus.GONE);
-                            orderManageList.setVisibility(View.VISIBLE);
-                            categoryCleaningAdapter = new CategoryCleaningAdapter(context,orderCleaningEntities.getCleaningDatas());
-                            categoryCleaningAdapter.setCountNum(orderCleaningEntities.getDataCount());
-                            orderManageList.setAdapter(categoryCleaningAdapter);
-                            categoryCleaningAdapter.setPositionListener(new CategoryCleaningAdapter.PositionListener() {
-                                @Override
-                                public void onPositionListener(int position) {
-                                    if (orderCleaningEntities.getCleaningDatas().get(position).getThrough().equals("1")){
-                                        final String id = orderCleaningEntities.getCleaningDatas().get(position).getId();
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                        builder.setTitle("提示");
-                                        builder.setMessage("是否确认清洗完成？");
-                                        builder.setNegativeButton("取消", null);
-                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                                params.put("token",UserCenter.getToken(context));
-                                                params.put("id", id);
-                                                requestHttpData(Constants.Urls.URL_POST_CLEANED_ORDER,REQUEST_CODE_ORDER_CLEANED, FProtocol.HttpMethod.POST,params);
-
-                                            }
-                                        });
-                                        AlertDialog alertDialog = builder.create();
-                                        alertDialog.show();
-                                    }else {
-                                        ToastUtil.shortShow(context,"订单中还有未挂号项目。");
-                                    }
-                                }
-                            });
-
-                            categoryCleaningAdapter.setGotoDetailListener(new CategoryCleaningAdapter.GotoDetailListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    Intent intent = new Intent(context,OrderDetailActivity.class);
-                                    intent.putExtra("id",orderCleaningEntities.getCleaningDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            categoryCleaningAdapter.setCleaningShowMoreListener(new CategoryCleaningAdapter.CleaningShowMoreListener() {
-                                @Override
-                                public void onClick(int position, ImageView iv, TextView tv) {
-                                    OrderCleaningEntities.CleaningData cleaningData = orderCleaningEntities.getCleaningDatas().get(position);
-                                    if (cleaningData.isOpen){
-
-                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
-                                        tv.setText("隐藏更多选项");
-                                    }else{
-                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
-                                        tv.setText("查看更多");
-                                    }
-                                    categoryCleaningAdapter.notifyDataSetChanged();
-                                }
-                            });
-
-                            categoryCleaningAdapter.setTelPhoneListener(new CategoryCleaningAdapter.TelPhoneListener() {
-                                @Override
-                                public void onTelPhone(int position) {
-                                    tell(orderCleaningEntities.getCleaningDatas().get(position).getPhone());
-                                }
-                            });
-
-                            if( categoryCleaningAdapter.getPage() < orderCleaningEntities.getCount()){
-                                orderManageList.setCanAddMore(true);
-                            }else {
-                                orderManageList.setCanAddMore(false);
-                            }
-                        }else {
-                            setLoadingStatus(LoadingStatus.EMPTY);
-                            categoryCleaningAdapter = new CategoryCleaningAdapter(context, new ArrayList<OrderCleaningEntities.CleaningData>());
-                            orderManageList.setAdapter(categoryCleaningAdapter);
-                            orderManageList.setCanAddMore(false);
-                        }
+//                        final OrderCleaningEntities orderCleaningEntities = Parsers.getOrderCleaningEntities(data);
+//                        if(orderCleaningEntities != null && orderCleaningEntities.getCleaningDatas() != null &&
+//                                orderCleaningEntities.getCleaningDatas().size() > 0){
+//                            setLoadingStatus(LoadingStatus.GONE);
+//                            orderManageList.setVisibility(View.VISIBLE);
+//                            categoryCleaningAdapter = new CategoryCleaningAdapter(context,orderCleaningEntities.getCleaningDatas());
+//                            categoryCleaningAdapter.setCountNum(orderCleaningEntities.getDataCount());
+//                            orderManageList.setAdapter(categoryCleaningAdapter);
+//                            categoryCleaningAdapter.setPositionListener(new CategoryCleaningAdapter.PositionListener() {
+//                                @Override
+//                                public void onPositionListener(int position) {
+//                                    if (orderCleaningEntities.getCleaningDatas().get(position).getThrough().equals("1")){
+//                                        final String id = orderCleaningEntities.getCleaningDatas().get(position).getId();
+//                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                                        builder.setTitle("提示");
+//                                        builder.setMessage("是否确认清洗完成？");
+//                                        builder.setNegativeButton("取消", null);
+//                                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                                                params.put("token",UserCenter.getToken(context));
+//                                                params.put("id", id);
+//                                                requestHttpData(Constants.Urls.URL_POST_CLEANED_ORDER,REQUEST_CODE_ORDER_CLEANED, FProtocol.HttpMethod.POST,params);
+//
+//                                            }
+//                                        });
+//                                        AlertDialog alertDialog = builder.create();
+//                                        alertDialog.show();
+//                                    }else {
+//                                        ToastUtil.shortShow(context,"订单中还有未挂号项目。");
+//                                    }
+//                                }
+//                            });
+//
+//                            categoryCleaningAdapter.setGotoDetailListener(new CategoryCleaningAdapter.GotoDetailListener() {
+//                                @Override
+//                                public void onClick(int position) {
+//                                    Intent intent = new Intent(context,OrderDetailActivity.class);
+//                                    intent.putExtra("id",orderCleaningEntities.getCleaningDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            categoryCleaningAdapter.setCleaningShowMoreListener(new CategoryCleaningAdapter.CleaningShowMoreListener() {
+//                                @Override
+//                                public void onClick(int position, ImageView iv, TextView tv) {
+//                                    OrderCleaningEntities.CleaningData cleaningData = orderCleaningEntities.getCleaningDatas().get(position);
+//                                    if (cleaningData.isOpen){
+//
+//                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
+//                                        tv.setText("隐藏更多选项");
+//                                    }else{
+//                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
+//                                        tv.setText("查看更多");
+//                                    }
+//                                    categoryCleaningAdapter.notifyDataSetChanged();
+//                                }
+//                            });
+//
+//                            categoryCleaningAdapter.setTelPhoneListener(new CategoryCleaningAdapter.TelPhoneListener() {
+//                                @Override
+//                                public void onTelPhone(int position) {
+//                                    tell(orderCleaningEntities.getCleaningDatas().get(position).getPhone());
+//                                }
+//                            });
+//
+//                            if( categoryCleaningAdapter.getPage() < orderCleaningEntities.getCount()){
+//                                orderManageList.setCanAddMore(true);
+//                            }else {
+//                                orderManageList.setCanAddMore(false);
+//                            }
+//                        }else {
+//                            setLoadingStatus(LoadingStatus.EMPTY);
+//                            categoryCleaningAdapter = new CategoryCleaningAdapter(context, new ArrayList<OrderCleaningEntities.CleaningData>());
+//                            orderManageList.setAdapter(categoryCleaningAdapter);
+//                            orderManageList.setCanAddMore(false);
+//                        }
                     }else {
-                        final OrderSendEntities orderSendEntities = Parsers.getOrderSendEntities(data);
-                        if(orderSendEntities != null && orderSendEntities.getSendDatas() != null &&
-                                orderSendEntities.getSendDatas().size() > 0){
-                            setLoadingStatus(LoadingStatus.GONE);
-                            orderManageList.setVisibility(View.VISIBLE);
-                            categorySendAdapter = new CategorySendAdapter(context,orderSendEntities.getSendDatas());
-                            categorySendAdapter.setCountNum(orderSendEntities.getDataCount());
-                            orderManageList.setAdapter(categorySendAdapter);
-                            categorySendAdapter.setPositionListener(new CategorySendAdapter.PositionListener() {
-                                @Override
-                                public void onPositionClick(final int position) {
-                                    final String id = orderSendEntities.getSendDatas().get(position).getId();
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                    builder.setTitle("提示");
-                                    builder.setMessage("是否确认配送成功？");
-                                    builder.setNegativeButton("取消", null);
-                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                            params.put("token",UserCenter.getToken(context));
-                                            params.put("id", id);
-                                            requestHttpData(Constants.Urls.URL_POST_SEND_ORDER,REQUEST_CODE_ORDER_SEND, FProtocol.HttpMethod.POST,params);
-
-                                        }
-                                    });
-                                    AlertDialog alertDialog = builder.create();
-                                    alertDialog.show();
-                                }
-                            });
-
-                            categorySendAdapter.setGotoDetailListener(new CategorySendAdapter.GotoDetailListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    Intent intent = new Intent(context,OrderDetailActivity.class);
-                                    intent.putExtra("id",orderSendEntities.getSendDatas().get(position).getId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            categorySendAdapter.setSendShowMoreListener(new CategorySendAdapter.SendShowMoreListener() {
-                                @Override
-                                public void onClick(int position, ImageView iv, TextView tv) {
-                                    OrderSendEntities.SendData sendData = orderSendEntities.getSendDatas().get(position);
-                                    if (sendData.isOpen){
-
-                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
-                                        tv.setText("隐藏更多选项");
-                                    }else{
-                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
-                                        tv.setText("查看更多");
-                                    }
-                                    categorySendAdapter.notifyDataSetChanged();
-                                }
-                            });
-
-                            categorySendAdapter.setTelPhoneListener(new CategorySendAdapter.TelPhoneListener() {
-                                @Override
-                                public void onTelPhone(int position) {
-                                    tell(orderSendEntities.getSendDatas().get(position).getPhone());
-                                }
-                            });
-
-
-                            if( categorySendAdapter.getPage() < orderSendEntities.getCount()){
-                                orderManageList.setCanAddMore(true);
-                            }else {
-                                orderManageList.setCanAddMore(false);
-                            }
-                        }else {
-                            setLoadingStatus(LoadingStatus.EMPTY);
-                            categorySendAdapter = new CategorySendAdapter(context, new ArrayList<OrderSendEntities.SendData>());
-                            orderManageList.setAdapter(categorySendAdapter);
-                            orderManageList.setCanAddMore(false);
-                        }
+//                        final OrderSendEntities orderSendEntities = Parsers.getOrderSendEntities(data);
+//                        if(orderSendEntities != null && orderSendEntities.getSendDatas() != null &&
+//                                orderSendEntities.getSendDatas().size() > 0){
+//                            setLoadingStatus(LoadingStatus.GONE);
+//                            orderManageList.setVisibility(View.VISIBLE);
+//                            categorySendAdapter = new CategorySendAdapter(context,orderSendEntities.getSendDatas());
+//                            categorySendAdapter.setCountNum(orderSendEntities.getDataCount());
+//                            orderManageList.setAdapter(categorySendAdapter);
+//                            categorySendAdapter.setPositionListener(new CategorySendAdapter.PositionListener() {
+//                                @Override
+//                                public void onPositionClick(final int position) {
+//                                    final String id = orderSendEntities.getSendDatas().get(position).getId();
+//                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                                    builder.setTitle("提示");
+//                                    builder.setMessage("是否确认配送成功？");
+//                                    builder.setNegativeButton("取消", null);
+//                                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                                            params.put("token",UserCenter.getToken(context));
+//                                            params.put("id", id);
+//                                            requestHttpData(Constants.Urls.URL_POST_SEND_ORDER,REQUEST_CODE_ORDER_SEND, FProtocol.HttpMethod.POST,params);
+//
+//                                        }
+//                                    });
+//                                    AlertDialog alertDialog = builder.create();
+//                                    alertDialog.show();
+//                                }
+//                            });
+//
+//                            categorySendAdapter.setGotoDetailListener(new CategorySendAdapter.GotoDetailListener() {
+//                                @Override
+//                                public void onClick(int position) {
+//                                    Intent intent = new Intent(context,OrderDetailActivity.class);
+//                                    intent.putExtra("id",orderSendEntities.getSendDatas().get(position).getId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            categorySendAdapter.setSendShowMoreListener(new CategorySendAdapter.SendShowMoreListener() {
+//                                @Override
+//                                public void onClick(int position, ImageView iv, TextView tv) {
+//                                    OrderSendEntities.SendData sendData = orderSendEntities.getSendDatas().get(position);
+//                                    if (sendData.isOpen){
+//
+//                                        iv.setBackgroundResource(R.drawable.ic_up_arrow);
+//                                        tv.setText("隐藏更多选项");
+//                                    }else{
+//                                        iv.setBackgroundResource(R.drawable.ic_down_arrow);
+//                                        tv.setText("查看更多");
+//                                    }
+//                                    categorySendAdapter.notifyDataSetChanged();
+//                                }
+//                            });
+//
+//                            categorySendAdapter.setTelPhoneListener(new CategorySendAdapter.TelPhoneListener() {
+//                                @Override
+//                                public void onTelPhone(int position) {
+//                                    tell(orderSendEntities.getSendDatas().get(position).getPhone());
+//                                }
+//                            });
+//
+//
+//                            if( categorySendAdapter.getPage() < orderSendEntities.getCount()){
+//                                orderManageList.setCanAddMore(true);
+//                            }else {
+//                                orderManageList.setCanAddMore(false);
+//                            }
+//                        }else {
+//                            setLoadingStatus(LoadingStatus.EMPTY);
+//                            categorySendAdapter = new CategorySendAdapter(context, new ArrayList<OrderSendEntities.SendData>());
+//                            orderManageList.setAdapter(categorySendAdapter);
+//                            orderManageList.setCanAddMore(false);
+//                        }
                     }
 
+                    break;
                 }else {
                     setLoadingStatus(LoadingStatus.EMPTY);
                 }
-                break;
             case REQUEST_CODE_ORDER_CONFRIM:
                 Entity entity = Parsers.getEntity(data);
                 if(entity.getRetcode() == 0 ){
@@ -555,28 +548,28 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
 //                }
                 break;
             case REQUEST_CODE_CLEANING_MORE:
-                orderManageList.onRefreshComplete();
-                if(data != null){
-                    OrderCleaningEntities orderCleaningEntities = Parsers.getOrderCleaningEntities(data);
-                    categoryCleaningAdapter.addDatas(orderCleaningEntities.getCleaningDatas());
-                    if( categoryCleaningAdapter.getPage() < orderCleaningEntities.getCount()){
-                        orderManageList.setCanAddMore(true);
-                    }else {
-                        orderManageList.setCanAddMore(false);
-                    }
-                }
+//                orderManageList.onRefreshComplete();
+//                if(data != null){
+//                    OrderCleaningEntities orderCleaningEntities = Parsers.getOrderCleaningEntities(data);
+//                    categoryCleaningAdapter.addDatas(orderCleaningEntities.getCleaningDatas());
+//                    if( categoryCleaningAdapter.getPage() < orderCleaningEntities.getCount()){
+//                        orderManageList.setCanAddMore(true);
+//                    }else {
+//                        orderManageList.setCanAddMore(false);
+//                    }
+//                }
                 break;
             case REQUEST_CODE_SEND_ORDER_MORE:
-                orderManageList.onRefreshComplete();
-                if(data != null){
-                    OrderSendEntities orderSendEntities = Parsers.getOrderSendEntities(data);
-                    categorySendAdapter.addDatas(orderSendEntities.getSendDatas());
-                    if( categorySendAdapter.getPage() < orderSendEntities.getCount()){
-                        orderManageList.setCanAddMore(true);
-                    }else {
-                        orderManageList.setCanAddMore(false);
-                    }
-                }
+//                orderManageList.onRefreshComplete();
+//                if(data != null){
+//                    OrderSendEntities orderSendEntities = Parsers.getOrderSendEntities(data);
+//                    categorySendAdapter.addDatas(orderSendEntities.getSendDatas());
+//                    if( categorySendAdapter.getPage() < orderSendEntities.getCount()){
+//                        orderManageList.setCanAddMore(true);
+//                    }else {
+//                        orderManageList.setCanAddMore(false);
+//                    }
+//                }
                 break;
             case REQUEST_CODE_ORDER_SEND:
                 if(data != null){

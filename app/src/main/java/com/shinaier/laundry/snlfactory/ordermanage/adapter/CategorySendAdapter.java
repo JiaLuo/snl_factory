@@ -1,7 +1,6 @@
 package com.shinaier.laundry.snlfactory.ordermanage.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,15 +16,13 @@ import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.GONE;
-
 /**
  * Created by 张家洛 on 2017/2/28.
  */
 
-public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendData> {
+public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.OrderSendResult> {
     private Context context;
-    private List<OrderSendEntities.SendData> mDatas;
+    private List<OrderSendEntities.OrderSendResult> mDatas;
     private RelativeLayout rlOrderSendShowMore;
     private TextView sendShowSurplus;
     private WrapHeightListView orderSendListMore;
@@ -69,7 +66,7 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
         this.gotoDetailListener = gotoDetailListener;
     }
 
-    public CategorySendAdapter(Context context, List<OrderSendEntities.SendData> mDatas) {
+    public CategorySendAdapter(Context context, List<OrderSendEntities.OrderSendResult> mDatas) {
         super(context, mDatas);
         this.context = context;
         this.mDatas = mDatas;
@@ -86,7 +83,7 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        OrderSendEntities.SendData item = getItem(position);
+        OrderSendEntities.OrderSendResult item = getItem(position);
         TextView orderSendNumber = ViewHolder.get(convertView,R.id.order_send_number);
         orderSendListMore = ViewHolder.get(convertView, R.id.order_send_list_more);
         rlOrderSendShowMore = ViewHolder.get(convertView, R.id.rl_order_send_show_more);
@@ -98,12 +95,12 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
         TextView takeOrderMaintainSendNum = ViewHolder.get(convertView,R.id.take_order_maintain_send_num);
         TextView takeOrderFavourableSendNum = ViewHolder.get(convertView,R.id.take_order_favourable_send_num);
         TextView sendTotalNum = ViewHolder.get(convertView,R.id.send_total_num);
-        TextView sendChineseTotalFirst = ViewHolder.get(convertView,R.id.send_chinese_total_first);
-        TextView sendChineseTotalNum = ViewHolder.get(convertView,R.id.send_chinese_total_num);
-        TextView sendChineseTotalSecond = ViewHolder.get(convertView,R.id.send_chinese_total_second);
+//        TextView sendChineseTotalFirst = ViewHolder.get(convertView,R.id.send_chinese_total_first);
+//        TextView sendChineseTotalNum = ViewHolder.get(convertView,R.id.send_chinese_total_num);
+//        TextView sendChineseTotalSecond = ViewHolder.get(convertView,R.id.send_chinese_total_second);
         TextView sendOutOfPocket = ViewHolder.get(convertView,R.id.send_out_of_pocket);
-        TextView sendBespeakTime = ViewHolder.get(convertView,R.id.send_bespeak_time);
-        TextView sendBespeakTimeDetail = ViewHolder.get(convertView,R.id.send_bespeak_time_detail);
+//        TextView sendBespeakTime = ViewHolder.get(convertView,R.id.send_bespeak_time);
+//        TextView sendBespeakTimeDetail = ViewHolder.get(convertView,R.id.send_bespeak_time_detail);
         TextView sendOrderName = ViewHolder.get(convertView,R.id.send_order_name);
         TextView sendPhoneNum = ViewHolder.get(convertView,R.id.send_phone_num);
         TextView sendAddress = ViewHolder.get(convertView,R.id.send_address);
@@ -116,24 +113,26 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
 
         if(item != null ){
             orderSendNumber.setText("订单号：" + item.getOrdersn());
-            List<OrderSendEntities.SendData.SendItem> sendItems = item.getSendItems();
+            List<OrderSendEntities.OrderSendResult.OrderSendItems> sendItems = item.getItemses();
             initInnerList(sendItems,position);
 
-            if(item.getSendItems() != null){
-                sendBespeakTime.setVisibility(View.GONE);
-                sendBespeakTimeDetail.setVisibility(View.GONE);
-            }else {
-                sendBespeakTimeDetail.setVisibility(View.VISIBLE);
-                sendBespeakTime.setVisibility(View.VISIBLE);
-                sendBespeakTimeDetail.setText(item.getTime());
-            }
+//            if(item.getSendItems() != null){
+//                sendBespeakTime.setVisibility(View.GONE);
+//                sendBespeakTimeDetail.setVisibility(View.GONE);
+//            }else {
+//                sendBespeakTimeDetail.setVisibility(View.VISIBLE);
+//                sendBespeakTime.setVisibility(View.VISIBLE);
+//                sendBespeakTimeDetail.setText(item.getTime());
+//            }
 
-            sendOrderName.setText(item.getName());
-            sendPhoneNum.setText(item.getPhone());
-            sendAddress.setText(item.getAdr());
-            sendNowTime.setText("时间：" + item.getCreateTime());
+            sendOrderName.setText(item.getuName());
+            sendPhoneNum.setText(item.getuMobile());
+            sendAddress.setText(item.getuAddress());
+            sendNowTime.setText("时间：" + item.getoTime());
             sendCancel.setVisibility(View.GONE);
-            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+
+//            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+
             sendContactStore.setText("送达完成");
             sendContactStore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -153,35 +152,12 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
                 }
             });
 
-            orderSendFreightNum.setText("￥" + item.getFreight());
-            orderSendSpecialCraftworkNum.setText("￥" + item.getSpecial());
-            takeOrderMaintainSendNum.setText("￥" + item.getHedging());
-            if(item.getCouponPrice() == null){
-                takeOrderFavourableSendNum.setText("￥0.00");
-            }else {
-                takeOrderFavourableSendNum.setText("￥" + item.getCouponPrice());
-            }
-            sendTotalNum.setText(item.getSum());
-
-            if(item.getPayState() == 1){
-                sendChineseTotalFirst.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                sendChineseTotalNum.setText("￥" +item.getAmount() + "，");
-                sendChineseTotalNum.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                sendChineseTotalSecond.setVisibility(View.VISIBLE);
-                sendOutOfPocket.setVisibility(View.VISIBLE);
-                if(item.getPayAmount() != null){
-                    sendOutOfPocket.setVisibility(View.VISIBLE);
-                    sendOutOfPocket.setText("￥" + item.getPayAmount());
-                }else {
-                    sendOutOfPocket.setVisibility(GONE);
-                }
-            }else {
-                sendChineseTotalFirst.getPaint().setFlags(0);
-                sendChineseTotalNum.setText("￥" +item.getAmount() );
-                sendChineseTotalNum.getPaint().setFlags(0);
-                sendChineseTotalSecond.setVisibility(GONE);
-                sendOutOfPocket.setVisibility(GONE);
-            }
+            orderSendFreightNum.setText("￥" + item.getFreightPrice());
+            orderSendSpecialCraftworkNum.setText("￥" + item.getCraftPrice());
+            takeOrderMaintainSendNum.setText("￥" + item.getKeepPrice());
+            takeOrderFavourableSendNum.setText("￥" + item.getReducePrice());
+            sendTotalNum.setText(String.valueOf(sendItems.size()));
+            sendOutOfPocket.setText("￥" + item.getPayAmount());
 
             llSendItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -194,7 +170,7 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
         }
     }
 
-    private void initInnerList(List<OrderSendEntities.SendData.SendItem> sendItems, final int position) {
+    private void initInnerList(List<OrderSendEntities.OrderSendResult.OrderSendItems> sendItems, final int position) {
         if(sendItems != null){
             if (sendItems.size() <= 2){
                 rlOrderSendShowMore.setVisibility(View.GONE);
@@ -235,7 +211,7 @@ public class CategorySendAdapter extends BaseAdapterNew<OrderSendEntities.SendDa
             });
             rlSendPriceItem.setVisibility(View.VISIBLE);
         }else {
-            List<OrderSendEntities.SendData.SendItem> item1 = new ArrayList<>();
+            List<OrderSendEntities.OrderSendResult.OrderSendItems> item1 = new ArrayList<>();
             CategorySendInnerAdapter categorySendInnerAdapter = new CategorySendInnerAdapter(context,item1);
             orderSendListMore.setAdapter(categorySendInnerAdapter);
 

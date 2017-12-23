@@ -15,15 +15,15 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/28.
  */
 
-public class CategoryCleaningInnerAdapter extends BaseAdapterNew<OrderCleaningEntities.CleaningData.CleaningItem> {
+public class CategoryCleaningInnerAdapter extends BaseAdapterNew<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> {
     private int type = 0;
-    private List<OrderCleaningEntities.CleaningData.CleaningItem> mDatas;
+    private List<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> mDatas;
 
     public void setType(int type){
         this.type = type;
     }
 
-    public CategoryCleaningInnerAdapter(Context context, List<OrderCleaningEntities.CleaningData.CleaningItem> mDatas) {
+    public CategoryCleaningInnerAdapter(Context context, List<OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems> mDatas) {
         super(context, mDatas);
         this.mDatas = mDatas;
     }
@@ -48,18 +48,18 @@ public class CategoryCleaningInnerAdapter extends BaseAdapterNew<OrderCleaningEn
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OrderCleaningEntities.CleaningData.CleaningItem item = getItem(position);
+        OrderCleaningEntities.OrderCleaningResult.OrderCleaningItems item = getItem(position);
         TextView cleaningClothesName = ViewHolder.get(convertView,R.id.cleaning_clothes_name);
         TextView cleaningClothesNum = ViewHolder.get(convertView,R.id.cleaning_clothes_num);
         TextView cleaningClothesPrice = ViewHolder.get(convertView,R.id.cleaning_clothes_price);
         if(item != null){
-            cleaningClothesName.setText(item.getgName());
-            if (item.getPutNumber() != null){
-                cleaningClothesNum.setText("x" + item.getPutNumber());
+            cleaningClothesName.setText(item.getItemName());
+            if (item.getPutSn() != null){
+                cleaningClothesNum.setText("x" + item.getPutSn());
             }else {
                 cleaningClothesNum.setText("");
             }
-            cleaningClothesPrice.setText("￥" + item.getPrice());
+            cleaningClothesPrice.setText("￥" + item.getItemPrice());
         }
     }
 }

@@ -15,15 +15,15 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/28.
  */
 
-public class CategorySendInnerAdapter extends BaseAdapterNew<OrderSendEntities.SendData.SendItem> {
+public class CategorySendInnerAdapter extends BaseAdapterNew<OrderSendEntities.OrderSendResult.OrderSendItems> {
     private int type = 0;
-    private List<OrderSendEntities.SendData.SendItem> mDatas;
+    private List<OrderSendEntities.OrderSendResult.OrderSendItems> mDatas;
 
     public void setType(int type){
         this.type = type;
     }
 
-    public CategorySendInnerAdapter(Context context, List<OrderSendEntities.SendData.SendItem> mDatas) {
+    public CategorySendInnerAdapter(Context context, List<OrderSendEntities.OrderSendResult.OrderSendItems> mDatas) {
         super(context, mDatas);
         this.mDatas = mDatas;
     }
@@ -48,18 +48,18 @@ public class CategorySendInnerAdapter extends BaseAdapterNew<OrderSendEntities.S
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OrderSendEntities.SendData.SendItem item = getItem(position);
+        OrderSendEntities.OrderSendResult.OrderSendItems item = getItem(position);
         TextView sendClothesName = ViewHolder.get(convertView,R.id.send_clothes_name);
         TextView sendClothesNum = ViewHolder.get(convertView,R.id.send_clothes_num);
         TextView sendClothesPrice = ViewHolder.get(convertView,R.id.send_clothes_price);
         if(item != null){
-            sendClothesName.setText(item.getgName());
-            if (item.getPutNumber() != null){
-                sendClothesNum.setText(item.getPutNumber());
+            sendClothesName.setText(item.getItemName());
+            if (item.getPutSn() != null){
+                sendClothesNum.setText(item.getPutSn());
             }else {
                 sendClothesNum.setText("");
             }
-            sendClothesPrice.setText("￥" + item.getPrice());
+            sendClothesPrice.setText("￥" + item.getItemPrice());
         }
     }
 }
