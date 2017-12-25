@@ -46,7 +46,6 @@ public class OrderManageFragment extends BaseFragment {
     private RadioButton orderManageWillCleaning;
     private RadioButton orderManageWillSend;
     private RadioGroup orderManageCategory;
-    private ScrollIndicatorView orderManageType;
 
     @Nullable
     @Override
@@ -58,7 +57,7 @@ public class OrderManageFragment extends BaseFragment {
     }
 
     private void initView() {
-        orderManageType = view.findViewById(R.id.order_manage_type);
+        ScrollIndicatorView orderManageType = view.findViewById(R.id.order_manage_type);
         ViewPager vpOrderManage = view.findViewById(R.id.vp_order_manage);
 
         ColorBar colorBar = new ColorBar(context, ContextCompat.getColor(context, R.color.base_color), 6,

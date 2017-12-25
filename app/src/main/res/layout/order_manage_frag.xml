@@ -8,8 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_size">
         <TextView
-            android:text="设置"
-            android:id="@+id/toolbar_title"
+            android:text="订单处理"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"

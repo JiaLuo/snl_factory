@@ -87,8 +87,18 @@ public class OrderCleaningEntities {
         private String uMobile;
         @SerializedName("items")
         private List<OrderCleaningItems> itemses;
+        @SerializedName("checked")
+        private String checked;
 
         public boolean isOpen = false;
+
+        public String getChecked() {
+            return checked;
+        }
+
+        public void setChecked(String checked) {
+            this.checked = checked;
+        }
 
         public String getId() {
             return id;

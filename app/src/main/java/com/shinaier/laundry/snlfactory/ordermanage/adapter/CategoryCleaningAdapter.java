@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
+import com.common.utils.DeviceUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleaningEntities;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
@@ -132,19 +133,18 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
 
 //            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
 
-            // TODO: 2017/12/22 需要后台一个参数来判断按钮是否置灰
 
-//            if (item.getThrough().equals("1")){
-//                cleaningContactStore.setBackgroundResource(R.drawable.login);
-//                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-//                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-//                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-//            }else {
-//                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
-//                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-//                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3),
-//                        DeviceUtil.dp_to_px(context,5), DeviceUtil.dp_to_px(context,3));
-//            }
+            if (item.getChecked().equals("0")){//是否可以检查完成:1-是;然否
+                cleaningContactStore.setBackgroundResource(R.drawable.login);
+                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+            }else {
+                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
+                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+            }
             cleaningContactStore.setText("清洗完成");
             cleaningContactStore.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -307,8 +307,8 @@
             <TextView
                 android:id="@+id/send_contact_store"
                 android:textColor="@color/white"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/login"
