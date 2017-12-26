@@ -7,9 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.common.widget.FootLoadingListView
+            android:id="@+id/order_category_list"
             android:divider="#f7f7f7"
             android:dividerHeight="10dp"
-            android:id="@+id/order_manage_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"/>

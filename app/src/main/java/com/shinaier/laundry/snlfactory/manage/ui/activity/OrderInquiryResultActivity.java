@@ -14,9 +14,9 @@ import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
-import com.shinaier.laundry.snlfactory.manage.adapter.InquiryCategoryAdapter;
+import com.shinaier.laundry.snlfactory.manage.adapter.OrderCategoryAdapter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.OrderInquiryEntities;
+import com.shinaier.laundry.snlfactory.network.entity.OrderSearchEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.ClearEditText;
@@ -42,8 +42,10 @@ public class OrderInquiryResultActivity extends ToolBarActivity implements View.
     private ImageView leftButton;
 
     private String orderNum;
-    private OrderInquiryEntities orderInquiryEntities;
-    private InquiryCategoryAdapter inquiryCategoryAdapter;
+    private boolean isOnline;
+    private OrderSearchEntity orderSearchEntity;
+    private OrderCategoryAdapter orderCategoryAdapter;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,25 @@ public class OrderInquiryResultActivity extends ToolBarActivity implements View.
         ViewInjectUtils.inject(this);
         Intent intent = getIntent();
         orderNum = intent.getStringExtra("orderNum");
-        loadData(orderNum);
+        isOnline = intent.getBooleanExtra("is_online", false);
+        date = intent.getStringExtra("date");
+        loadData(orderNum,isOnline);
         initView();
     }
 
-    private void loadData(String args) {
+    private void loadData(String args,boolean isOnline) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("condition",args);
-        requestHttpData(Constants.Urls.URL_POST_INQUIRY_RESULT,REQUEST_CODE_INQUIRY_RESULT, FProtocol.HttpMethod.POST,params);
+        params.put("number",args);
+        if (isOnline){
+            params.put("is_online","1");
+        }else {
+            params.put("is_online","0");
+        }
+
+        params.put("limit","100");
+        params.put("date",date);
+        requestHttpData(Constants.Urls.URL_POST_ORDER_SEARCH,REQUEST_CODE_INQUIRY_RESULT, FProtocol.HttpMethod.POST,params);
     }
 
     private void initView() {
@@ -73,7 +85,7 @@ public class OrderInquiryResultActivity extends ToolBarActivity implements View.
         inquiryResultList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                loadData(orderNum);
+                loadData(orderNum,isOnline);
             }
 
             @Override
@@ -90,45 +102,45 @@ public class OrderInquiryResultActivity extends ToolBarActivity implements View.
             case REQUEST_CODE_INQUIRY_RESULT:
                 inquiryResultList.onRefreshComplete();
                 if(data != null){
-                    orderInquiryEntities = Parsers.getOrderInquiryEntities(data);
-                    if(orderInquiryEntities != null && orderInquiryEntities.getDataList() != null &&
-                            orderInquiryEntities.getDataList().size() > 0){
+                    orderSearchEntity = Parsers.getOrderSearchEntity(data);
+                    if(orderSearchEntity != null && orderSearchEntity.getResults() != null &&
+                            orderSearchEntity.getResults().size() > 0){
                         setLoadingStatus(LoadingStatus.GONE);
-                        inquiryCategoryAdapter = new InquiryCategoryAdapter(this, orderInquiryEntities.getDataList());
-                        inquiryResultList.setAdapter(inquiryCategoryAdapter);
-                        inquiryCategoryAdapter.setPositionListener(new InquiryCategoryAdapter.PositionListener() {
+                        orderCategoryAdapter = new OrderCategoryAdapter(this, orderSearchEntity.getResults());
+                        inquiryResultList.setAdapter(orderCategoryAdapter);
+                        orderCategoryAdapter.setPositionListener(new OrderCategoryAdapter.PositionListener() {
                             @Override
                             public void onPositionClick(int position) {
                                 Intent intent = new Intent(OrderInquiryResultActivity.this,OrderDetailActivity.class);
-                                intent.putExtra("id", orderInquiryEntities.getDataList().get(position).getId());
+                                intent.putExtra("id", orderSearchEntity.getResults().get(position).getId());
                                 startActivity(intent);
                             }
                         });
 
-                        inquiryCategoryAdapter.setShowMoreClickListener(new InquiryCategoryAdapter.ShowMoreClickListener() {
+                        orderCategoryAdapter.setShowMoreClickListener(new OrderCategoryAdapter.ShowMoreClickListener() {
                             @Override
                             public void onClick(int position, ImageView iv, TextView tv) {
-                                OrderInquiryEntities.Data data1 = orderInquiryEntities.getDataList().get(position);
-                                if (data1.isOpen){
+                                OrderSearchEntity.OrderSearchResult orderSearchResult = orderSearchEntity.getResults().get(position);
+                                if (orderSearchResult.isOpen){
                                     iv.setBackgroundResource(R.drawable.ic_up_arrow);
                                     tv.setText("隐藏更多选项");
                                 }else{
                                     iv.setBackgroundResource(R.drawable.ic_down_arrow);
                                     tv.setText("查看更多");
                                 }
-                                inquiryCategoryAdapter.notifyDataSetChanged();
+                                orderCategoryAdapter.notifyDataSetChanged();
                             }
                         });
                     }else {
                         setLoadingStatus(LoadingStatus.EMPTY);
-                        inquiryCategoryAdapter = new InquiryCategoryAdapter(this, new ArrayList<OrderInquiryEntities.Data>());
-                        inquiryResultList.setAdapter(inquiryCategoryAdapter);
+                        orderCategoryAdapter = new OrderCategoryAdapter(this, new ArrayList<OrderSearchEntity.OrderSearchResult>());
+                        inquiryResultList.setAdapter(orderCategoryAdapter);
                         inquiryResultList.setCanAddMore(false);
                     }
                 }else {
                     setLoadingStatus(LoadingStatus.EMPTY);
-                    inquiryCategoryAdapter = new InquiryCategoryAdapter(this, new ArrayList<OrderInquiryEntities.Data>());
-                    inquiryResultList.setAdapter(inquiryCategoryAdapter);
+                    orderCategoryAdapter = new OrderCategoryAdapter(this, new ArrayList<OrderSearchEntity.OrderSearchResult>());
+                    inquiryResultList.setAdapter(orderCategoryAdapter);
                     inquiryResultList.setCanAddMore(false);
                 }
                 break;
@@ -141,11 +153,11 @@ public class OrderInquiryResultActivity extends ToolBarActivity implements View.
             case R.id.btn_start_search:
                 String orderResult = editSearchResult.getText().toString();
                 setLoadingStatus(LoadingStatus.LOADING);
-                loadData(orderResult);
+                loadData(orderResult,isOnline);
                 break;
             case R.id.loading_layout:
                 setLoadingStatus(LoadingStatus.LOADING);
-                loadData(orderNum);
+                loadData(orderNum,isOnline);
                 break;
             case R.id.left_button:
                 finish();

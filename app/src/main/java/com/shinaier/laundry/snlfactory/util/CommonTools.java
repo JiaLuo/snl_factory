@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -386,5 +387,15 @@ public class CommonTools {
 		}
 
 		return bitmap;
+	}
+
+	/**
+	 * 格式化金额
+	 * @param money 要格式化的金额
+	 * @return
+	 */
+	public static String formatMoney(double money){
+		DecimalFormat df = new DecimalFormat("###0.00");
+		return df.format(money);
 	}
 }

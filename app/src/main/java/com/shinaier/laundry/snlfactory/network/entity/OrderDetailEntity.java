@@ -1,8 +1,5 @@
 package com.shinaier.laundry.snlfactory.network.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,260 +9,85 @@ import java.util.List;
  */
 
 public class OrderDetailEntity {
-    @SerializedName("adr")
-    private String adr;
-    @SerializedName("adresinfo")
-    private String adresinfo;
-    @SerializedName("amount")
-    private String amount;
-    @SerializedName("content")
-    private String content;
-    @SerializedName("coupon_price")
-    private String couponPrice;
-    @SerializedName("create_time")
-    private String createTime;
-    @SerializedName("freight")
-    private String freight;
-    @SerializedName("hedging")
-    private String hedging;
-    @SerializedName("id")
-    private String id;
-    @SerializedName("item")
-    private List<OrderDetailItem> orderDetailItemList;
-    @SerializedName("item_sum")
-    private String itemSum;
-    @SerializedName("name")
-    private String name;
-    @SerializedName("ordersn")
-    private String ordersn;
-    @SerializedName("pay_amount")
-    private String payAmount;
-    @SerializedName("phone")
-    private String phone;
-    @SerializedName("pic_total")
-    private String picTotal;
-    @SerializedName("special")
-    private String special;
-    @SerializedName("state")
-    private int state;
-    @SerializedName("sum")
-    private String sum;
-    @SerializedName("time")
-    private String time;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OrderDetailResult detailResult;
 
-    public String getAdr() {
-        return adr;
+    public int getCode() {
+        return code;
     }
 
-    public void setAdr(String adr) {
-        this.adr = adr;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getAdresinfo() {
-        return adresinfo;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setAdresinfo(String adresinfo) {
-        this.adresinfo = adresinfo;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getAmount() {
-        return amount;
+    public OrderDetailResult getDetailResult() {
+        return detailResult;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setDetailResult(OrderDetailResult detailResult) {
+        this.detailResult = detailResult;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getCouponPrice() {
-        return couponPrice;
-    }
-
-    public void setCouponPrice(String couponPrice) {
-        this.couponPrice = couponPrice;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getFreight() {
-        return freight;
-    }
-
-    public void setFreight(String freight) {
-        this.freight = freight;
-    }
-
-    public String getHedging() {
-        return hedging;
-    }
-
-    public void setHedging(String hedging) {
-        this.hedging = hedging;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<OrderDetailItem> getOrderDetailItemList() {
-        return orderDetailItemList;
-    }
-
-    public void setOrderDetailItemList(List<OrderDetailItem> orderDetailItemList) {
-        this.orderDetailItemList = orderDetailItemList;
-    }
-
-    public String getItemSum() {
-        return itemSum;
-    }
-
-    public void setItemSum(String itemSum) {
-        this.itemSum = itemSum;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOrdersn() {
-        return ordersn;
-    }
-
-    public void setOrdersn(String ordersn) {
-        this.ordersn = ordersn;
-    }
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPicTotal() {
-        return picTotal;
-    }
-
-    public void setPicTotal(String picTotal) {
-        this.picTotal = picTotal;
-    }
-
-    public String getSpecial() {
-        return special;
-    }
-
-    public void setSpecial(String special) {
-        this.special = special;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public String getSum() {
-        return sum;
-    }
-
-    public void setSum(String sum) {
-        this.sum = sum;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public static class OrderDetailItem{
-        @SerializedName("color")
-        private String color;
-        @SerializedName("g_name")
-        private String gName;
-        @SerializedName("hedging")
-        private double hedging;
+    public class OrderDetailResult{
         @SerializedName("id")
         private String id;
-        @SerializedName("img")
-        private List<Img> imgs;
-        @SerializedName("img_count")
-        private String imgCount;
-        @SerializedName("item_note")
-        private String itemNote;
-        @SerializedName("number")
-        private String number;
-        @SerializedName("price")
-        private String price;
-        @SerializedName("special")
-        private String special;
-        @SerializedName("special_comment")
-        private String specialComment;
-        @SerializedName("type")
-        private String type;
-        @SerializedName("url")
-        private String url;
+        @SerializedName("ordersn")
+        private String orderSn;
+        @SerializedName("is_online")
+        private String isOnline; // 1 是线上订单 2 是线下订单
+        @SerializedName("amount")
+        private String amount;
+        @SerializedName("pay_amount")
+        private String payAmount;
+        @SerializedName("freight_price")
+        private String freightPrice;
+        @SerializedName("reduce_price")
+        private String reducePrice;
+        @SerializedName("freight_free")
+        private String freightFree;
+        @SerializedName("pay_state") // 0 是未支付 1 已支付
+        private String payState;
+        @SerializedName("otime")
+        private String oTime;
+        @SerializedName("ostatus")
+        private String oStatus;
+        @SerializedName("item_count")
+        private String itemCount;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("uaddress")
+        private String uAddress;
+        @SerializedName("uremark")
+        private String uRemark;
+        @SerializedName("time")
+        private String time;
+        @SerializedName("is_company") // 线下订单 特有的字段     是否为企业会员:1-是;0-否
+        private String isCompany;
 
-
-
-        public String getColor() {
-            return color;
+        public String getIsCompany() {
+            return isCompany;
         }
 
-        public void setColor(String color) {
-            this.color = color;
+        public void setIsCompany(String isCompany) {
+            this.isCompany = isCompany;
         }
 
-        public String getgName() {
-            return gName;
-        }
-
-        public void setgName(String gName) {
-            this.gName = gName;
-        }
-
-        public double getHedging() {
-            return hedging;
-        }
-
-        public void setHedging(double hedging) {
-            this.hedging = hedging;
-        }
+        @SerializedName("items")
+        private List<OrderDetailItems> orderDetailItemses;
 
         public String getId() {
             return id;
@@ -275,114 +97,312 @@ public class OrderDetailEntity {
             this.id = id;
         }
 
-        public List<Img> getImgs() {
-            return imgs;
+        public String getOrderSn() {
+            return orderSn;
         }
 
-        public void setImgs(List<Img> imgs) {
-            this.imgs = imgs;
+        public void setOrderSn(String orderSn) {
+            this.orderSn = orderSn;
         }
 
-        public String getImgCount() {
-            return imgCount;
+        public String getIsOnline() {
+            return isOnline;
         }
 
-        public void setImgCount(String imgCount) {
-            this.imgCount = imgCount;
+        public void setIsOnline(String isOnline) {
+            this.isOnline = isOnline;
         }
 
-        public String getItemNote() {
-            return itemNote;
+        public String getAmount() {
+            return amount;
         }
 
-        public void setItemNote(String itemNote) {
-            this.itemNote = itemNote;
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
 
-        public String getNumber() {
-            return number;
+        public String getPayAmount() {
+            return payAmount;
         }
 
-        public void setNumber(String number) {
-            this.number = number;
+        public void setPayAmount(String payAmount) {
+            this.payAmount = payAmount;
         }
 
-        public String getPrice() {
-            return price;
+        public String getFreightPrice() {
+            return freightPrice;
         }
 
-        public void setPrice(String price) {
-            this.price = price;
+        public void setFreightPrice(String freightPrice) {
+            this.freightPrice = freightPrice;
         }
 
-        public String getSpecial() {
-            return special;
+        public String getReducePrice() {
+            return reducePrice;
         }
 
-        public void setSpecial(String special) {
-            this.special = special;
+        public void setReducePrice(String reducePrice) {
+            this.reducePrice = reducePrice;
         }
 
-        public String getSpecialComment() {
-            return specialComment;
+        public String getFreightFree() {
+            return freightFree;
         }
 
-        public void setSpecialComment(String specialComment) {
-            this.specialComment = specialComment;
+        public void setFreightFree(String freightFree) {
+            this.freightFree = freightFree;
         }
 
-        public String getType() {
-            return type;
+        public String getPayState() {
+            return payState;
         }
 
-        public void setType(String type) {
-            this.type = type;
+        public void setPayState(String payState) {
+            this.payState = payState;
         }
 
-        public String getUrl() {
-            return url;
+        public String getoTime() {
+            return oTime;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
+        public void setoTime(String oTime) {
+            this.oTime = oTime;
         }
 
-        public static class Img implements Parcelable {
-            @SerializedName("img")
-            private String img;
+        public String getoStatus() {
+            return oStatus;
+        }
 
-            protected Img(Parcel in) {
-                img = in.readString();
+        public void setoStatus(String oStatus) {
+            this.oStatus = oStatus;
+        }
+
+        public String getItemCount() {
+            return itemCount;
+        }
+
+        public void setItemCount(String itemCount) {
+            this.itemCount = itemCount;
+        }
+
+        public String getuName() {
+            return uName;
+        }
+
+        public void setuName(String uName) {
+            this.uName = uName;
+        }
+
+        public String getuMobile() {
+            return uMobile;
+        }
+
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public String getuAddress() {
+            return uAddress;
+        }
+
+        public void setuAddress(String uAddress) {
+            this.uAddress = uAddress;
+        }
+
+        public String getuRemark() {
+            return uRemark;
+        }
+
+        public void setuRemark(String uRemark) {
+            this.uRemark = uRemark;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+
+        public List<OrderDetailItems> getOrderDetailItemses() {
+            return orderDetailItemses;
+        }
+
+        public void setOrderDetailItemses(List<OrderDetailItems> orderDetailItemses) {
+            this.orderDetailItemses = orderDetailItemses;
+        }
+
+        public class OrderDetailItems{
+            @SerializedName("id")
+            private String id;
+            @SerializedName("item_name")
+            private String itemName;
+            @SerializedName("item_price")
+            private String itemPrice;
+            @SerializedName("keep_price")
+            private double keepPrice;
+            @SerializedName("craft_price")
+            private String craftPrice;
+            @SerializedName("item_real_price")
+            private String itemRealPrice;
+            @SerializedName("has_discount")
+            private String hasDiscount;
+            @SerializedName("item_discount")
+            private String itemDiscount;
+            @SerializedName("color")
+            private String color;
+            @SerializedName("problem")
+            private String problem;
+            @SerializedName("forecast")
+            private String forecast;
+            @SerializedName("take_time")
+            private String takeTime;
+            @SerializedName("craft_des")
+            private String craftDes;
+            @SerializedName("clean_sn")
+            private String cleanSn;
+            @SerializedName("put_sn")
+            private String putSn;
+            @SerializedName("image")
+            private String image;
+            @SerializedName("item_images")
+            private List<String> itemImages;
+
+            public String getId() {
+                return id;
             }
 
-            public static final Creator<Img> CREATOR = new Creator<Img>() {
-                @Override
-                public Img createFromParcel(Parcel in) {
-                    return new Img(in);
-                }
-
-                @Override
-                public Img[] newArray(int size) {
-                    return new Img[size];
-                }
-            };
-
-            public String getImg() {
-                return img;
+            public void setId(String id) {
+                this.id = id;
             }
 
-            public void setImg(String img) {
-                this.img = img;
+            public String getItemName() {
+                return itemName;
             }
 
-            @Override
-            public int describeContents() {
-                return 0;
+            public void setItemName(String itemName) {
+                this.itemName = itemName;
             }
 
-            @Override
-            public void writeToParcel(Parcel parcel, int i) {
-                parcel.writeString(img);
+            public String getItemPrice() {
+                return itemPrice;
+            }
+
+            public void setItemPrice(String itemPrice) {
+                this.itemPrice = itemPrice;
+            }
+
+            public double getKeepPrice() {
+                return keepPrice;
+            }
+
+            public void setKeepPrice(double keepPrice) {
+                this.keepPrice = keepPrice;
+            }
+
+            public String getCraftPrice() {
+                return craftPrice;
+            }
+
+            public void setCraftPrice(String craftPrice) {
+                this.craftPrice = craftPrice;
+            }
+
+            public String getItemRealPrice() {
+                return itemRealPrice;
+            }
+
+            public void setItemRealPrice(String itemRealPrice) {
+                this.itemRealPrice = itemRealPrice;
+            }
+
+            public String getHasDiscount() {
+                return hasDiscount;
+            }
+
+            public void setHasDiscount(String hasDiscount) {
+                this.hasDiscount = hasDiscount;
+            }
+
+            public String getItemDiscount() {
+                return itemDiscount;
+            }
+
+            public void setItemDiscount(String itemDiscount) {
+                this.itemDiscount = itemDiscount;
+            }
+
+            public String getColor() {
+                return color;
+            }
+
+            public void setColor(String color) {
+                this.color = color;
+            }
+
+            public String getProblem() {
+                return problem;
+            }
+
+            public void setProblem(String problem) {
+                this.problem = problem;
+            }
+
+            public String getForecast() {
+                return forecast;
+            }
+
+            public void setForecast(String forecast) {
+                this.forecast = forecast;
+            }
+
+            public String getTakeTime() {
+                return takeTime;
+            }
+
+            public void setTakeTime(String takeTime) {
+                this.takeTime = takeTime;
+            }
+
+            public String getCraftDes() {
+                return craftDes;
+            }
+
+            public void setCraftDes(String craftDes) {
+                this.craftDes = craftDes;
+            }
+
+            public String getCleanSn() {
+                return cleanSn;
+            }
+
+            public void setCleanSn(String cleanSn) {
+                this.cleanSn = cleanSn;
+            }
+
+            public String getPutSn() {
+                return putSn;
+            }
+
+            public void setPutSn(String putSn) {
+                this.putSn = putSn;
+            }
+
+            public String getImage() {
+                return image;
+            }
+
+            public void setImage(String image) {
+                this.image = image;
+            }
+
+            public List<String> getItemImages() {
+                return itemImages;
+            }
+
+            public void setItemImages(List<String> itemImages) {
+                this.itemImages = itemImages;
             }
         }
     }

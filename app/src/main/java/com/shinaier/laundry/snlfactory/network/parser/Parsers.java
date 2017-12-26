@@ -44,6 +44,7 @@ import com.shinaier.laundry.snlfactory.network.entity.OrderDetailEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderDisposeEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderInquiryEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderPrintEntity;
+import com.shinaier.laundry.snlfactory.network.entity.OrderSearchEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderSendEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderTakeOrderEntities;
 import com.shinaier.laundry.snlfactory.network.entity.PhotoVerifyCodeEntity;
@@ -450,16 +451,17 @@ public class Parsers {
      * @return
      */
     public static OrderDetailEntity getOrderDetailEntity(String data){
-        OrderDetailEntity orderDetailEntity = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            orderDetailEntity = gson.fromJson(data1,new TypeToken<OrderDetailEntity>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return orderDetailEntity;
+//        OrderDetailEntity orderDetailEntity = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            orderDetailEntity = gson.fromJson(data1,new TypeToken<OrderDetailEntity>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return orderDetailEntity;
+        return gson.fromJson(data,new TypeToken<OrderDetailEntity>(){}.getType());
     }
 
     /**
@@ -742,5 +744,14 @@ public class Parsers {
      */
     public static MerchantCardInfoEntity getMerchantCardInfoEntity(String data){
         return gson.fromJson(data,new TypeToken<MerchantCardInfoEntity>(){}.getType());
+    }
+
+    /**
+     * 订单查询
+     * @param data
+     * @return
+     */
+    public static OrderSearchEntity getOrderSearchEntity(String data){
+        return gson.fromJson(data,new TypeToken<OrderSearchEntity>(){}.getType());
     }
 }

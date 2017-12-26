@@ -84,7 +84,7 @@ public class OrderCategoryFragment extends BaseFragment implements View.OnClickL
         initLoadingView(this,view);
         setLoadingStatus(LoadingStatus.LOADING);
         mImgLoadingRetry.setOnClickListener(this);
-        orderManageList = (FootLoadingListView) view.findViewById(R.id.order_manage_list);
+//        orderManageList = (FootLoadingListView) view.findViewById(R.id.order_manage_list);
         orderManageList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

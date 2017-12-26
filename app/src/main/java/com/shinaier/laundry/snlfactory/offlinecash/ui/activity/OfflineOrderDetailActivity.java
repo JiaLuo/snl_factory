@@ -1,6 +1,5 @@
 package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,11 +15,9 @@ import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineOrderDetailEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineOrderDetailAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.BigImageActivity;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
 
@@ -113,11 +110,11 @@ public class OfflineOrderDetailActivity extends ToolBarActivity implements View.
                             offlineOrderDetailAdapter.getPhotoListener(new OfflineOrderDetailAdapter.CheckPhotoListener() {
                                 @Override
                                 public void onClick(int position, int photoPosition) {
-                                    ArrayList<String> imgs = (ArrayList<String>) offlineOrderDetailEntity.getDatas().getItems().get(position).getImgs();
-                                    Intent intent = new Intent(OfflineOrderDetailActivity.this,BigImageActivity.class);
-                                    intent.putExtra("imagePosition",photoPosition);
-                                    intent.putStringArrayListExtra("imagePath",imgs);
-                                    startActivity(intent);
+//                                    ArrayList<String> imgs = (ArrayList<String>) offlineOrderDetailEntity.getDatas().getItems().get(position).getImgs();
+//                                    Intent intent = new Intent(OfflineOrderDetailActivity.this,BigImageActivity.class);
+//                                    intent.putExtra("imagePosition",photoPosition);
+//                                    intent.putStringArrayListExtra("imagePath",imgs);
+//                                    startActivity(intent);
                                 }
                             });
 

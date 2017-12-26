@@ -31,7 +31,7 @@ import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageEmployeeActivity
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageFinanceActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.MessageNoticeActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.OperateAnalysisActivity;
-import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderInquiryActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderSearchActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.UserEvaluateActivity;
 import com.shinaier.laundry.snlfactory.manage.view.SwitchView;
 import com.shinaier.laundry.snlfactory.network.Constants;
@@ -251,7 +251,8 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.ll_order_inquiry:
                 //订单查询
-                startActivity(new Intent(context,OrderInquiryActivity.class));
+//                startActivity(new Intent(context,OrderInquiryActivity.class));
+                startActivity(new Intent(context,OrderSearchActivity.class));
                 break;
             case R.id.ll_make_cash_coupon:
                 //制作代金券

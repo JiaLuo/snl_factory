@@ -8,8 +8,6 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.OrderDetailEntity;
 
 import java.util.List;
 
@@ -19,9 +17,9 @@ import java.util.List;
  * Created by 张家洛 on 2016/12/16.
  */
 
-public class OrderDetailGridAdapter extends BaseAdapterNew<OrderDetailEntity.OrderDetailItem.Img> {
+public class OrderDetailGridAdapter extends BaseAdapterNew<String> {
 
-    public OrderDetailGridAdapter(Context context, List<OrderDetailEntity.OrderDetailItem.Img> mDatas) {
+    public OrderDetailGridAdapter(Context context, List<String> mDatas) {
         super(context, mDatas);
     }
 
@@ -32,12 +30,12 @@ public class OrderDetailGridAdapter extends BaseAdapterNew<OrderDetailEntity.Ord
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OrderDetailEntity.OrderDetailItem.Img item = getItem(position);
+        String item = getItem(position);
         if(item != null){
             SimpleDraweeView orderDetailGridImg = ViewHolder.get(convertView,R.id.order_detail_grid_img);
-            String img = item.getImg();
-            String imgPath = Constants.Urls.URL_BASE_DOMAIN + img;
-            orderDetailGridImg.setImageURI(Uri.parse(imgPath));
+//            String img = item.getImg();
+//            String imgPath = Constants.Urls.URL_BASE_DOMAIN + img;
+            orderDetailGridImg.setImageURI(Uri.parse(item));
         }
     }
 }

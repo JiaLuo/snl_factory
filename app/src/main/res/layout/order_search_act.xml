@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/order_search_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/online_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="52dp"
+            android:background="@drawable/my_order_list_selector"
+            android:button="@null"
+            android:checked="true"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:textSize="17sp"
+            android:text="线上订单"
+            android:textColor="@color/base_color"/>
+
+        <RadioButton
+            android:id="@+id/offline_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="52dp"
+            android:background="@drawable/my_order_list_selector"
+            android:button="@null"
+            android:paddingBottom="13dp"
+            android:paddingTop="13dp"
+            android:text="线下订单"
+            android:textSize="17sp"
+            android:textColor="@color/black_text"/>
+    </RadioGroup>
+    <com.shinaier.laundry.snlfactory.view.NoScrollViewPager
+        android:id="@+id/vp_order_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1px"/>
+</LinearLayout>

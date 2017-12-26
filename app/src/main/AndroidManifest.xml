@@ -123,10 +123,6 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".ordermanage.ui.activity.BigImageActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
-                  android:screenOrientation="portrait"
-            />
         <activity android:name=".ordermanage.ui.activity.ColorSettingActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
@@ -273,6 +269,9 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
         <activity android:name=".ordermanage.ui.activity.CleanedAssessmentActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".manage.ui.activity.OrderSearchActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
 
