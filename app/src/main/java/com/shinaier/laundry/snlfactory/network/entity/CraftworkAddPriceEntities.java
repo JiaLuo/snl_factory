@@ -1,5 +1,8 @@
 package com.shinaier.laundry.snlfactory.network.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -9,217 +12,376 @@ import java.util.List;
  */
 
 public class CraftworkAddPriceEntities {
-    @SerializedName("amount")
-    private String amount;
-    @SerializedName("freight")
-    private String freight;
-    @SerializedName("fuwu")
-    private String fuwu;
-    @SerializedName("list")
-    private List<AddPriceItem> priceItemList;
-    @SerializedName("total")
-    private String total;
-    @SerializedName("total_num")
-    private String totalNum;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private CraftworkAddPriceResult result;
 
-    public String getAmount() {
-        return amount;
+    public int getCode() {
+        return code;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getFreight() {
-        return freight;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setFreight(String freight) {
-        this.freight = freight;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getFuwu() {
-        return fuwu;
+    public CraftworkAddPriceResult getResult() {
+        return result;
     }
 
-    public void setFuwu(String fuwu) {
-        this.fuwu = fuwu;
+    public void setResult(CraftworkAddPriceResult result) {
+        this.result = result;
     }
 
-    public List<AddPriceItem> getPriceItemList() {
-        return priceItemList;
-    }
+    public static class CraftworkAddPriceResult implements Parcelable {
+        @SerializedName("amount")
+        private String amount;
+        @SerializedName("freight_price")
+        private String freightPrice;
+        @SerializedName("craft_price")
+        private String craftPrice;
+        @SerializedName("keep_price")
+        private String keepPrice;
+        @SerializedName("is_online")
+        private String isOnline;
+        @SerializedName("total_amount")
+        private String totalAmount;
+        @SerializedName("item_count")
+        private String itemCount;
+        @SerializedName("items")
+        private List<CraftworkAddPriceItems> itemses;
 
-    public void setPriceItemList(List<AddPriceItem> priceItemList) {
-        this.priceItemList = priceItemList;
-    }
-
-    public String getTotal() {
-        return total;
-    }
-
-    public void setTotal(String total) {
-        this.total = total;
-    }
-
-    public String getTotalNum() {
-        return totalNum;
-    }
-
-    public void setTotalNum(String totalNum) {
-        this.totalNum = totalNum;
-    }
-
-    public class AddPriceItem{
-        @SerializedName("color")
-        private String color;
-        @SerializedName("create_time")
-        private String createTime;
-        @SerializedName("hedging")
-        private double hedging;
-        @SerializedName("id")
-        private String id;
-        @SerializedName("item_note")
-        private String itemNote;
-        @SerializedName("item_title")
-        private String itemTitle;
-        @SerializedName("itemid")
-        private String itemId;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("number")
-        private String number;
-        @SerializedName("orderid")
-        private String orderId;
-        @SerializedName("price")
-        private String price;
-        @SerializedName("special")
-        private String special;
-        @SerializedName("special_comment")
-        private String specialComment;
-        @SerializedName("type")
-        private String type;
-        @SerializedName("url")
-        private String url;
-
-        public String getUrl() {
-            return url;
+        protected CraftworkAddPriceResult(Parcel in) {
+            amount = in.readString();
+            freightPrice = in.readString();
+            craftPrice = in.readString();
+            keepPrice = in.readString();
+            isOnline = in.readString();
+            totalAmount = in.readString();
+            itemCount = in.readString();
+            itemses = in.createTypedArrayList(CraftworkAddPriceItems.CREATOR);
         }
 
-        public void setUrl(String url) {
-            this.url = url;
+        public static final Creator<CraftworkAddPriceResult> CREATOR = new Creator<CraftworkAddPriceResult>() {
+            @Override
+            public CraftworkAddPriceResult createFromParcel(Parcel in) {
+                return new CraftworkAddPriceResult(in);
+            }
+
+            @Override
+            public CraftworkAddPriceResult[] newArray(int size) {
+                return new CraftworkAddPriceResult[size];
+            }
+        };
+
+        public String getAmount() {
+            return amount;
         }
 
-        public String getColor() {
-            return color;
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
 
-        public void setColor(String color) {
-            this.color = color;
+        public String getFreightPrice() {
+            return freightPrice;
         }
 
-        public String getCreateTime() {
-            return createTime;
+        public void setFreightPrice(String freightPrice) {
+            this.freightPrice = freightPrice;
         }
 
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
+        public String getCraftPrice() {
+            return craftPrice;
         }
 
-        public double getHedging() {
-            return hedging;
+        public void setCraftPrice(String craftPrice) {
+            this.craftPrice = craftPrice;
         }
 
-        public void setHedging(double hedging) {
-            this.hedging = hedging;
+        public String getKeepPrice() {
+            return keepPrice;
         }
 
-        public String getId() {
-            return id;
+        public void setKeepPrice(String keepPrice) {
+            this.keepPrice = keepPrice;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public String getIsOnline() {
+            return isOnline;
         }
 
-        public String getItemNote() {
-            return itemNote;
+        public void setIsOnline(String isOnline) {
+            this.isOnline = isOnline;
         }
 
-        public void setItemNote(String itemNote) {
-            this.itemNote = itemNote;
+        public String getTotalAmount() {
+            return totalAmount;
         }
 
-        public String getItemTitle() {
-            return itemTitle;
+        public void setTotalAmount(String totalAmount) {
+            this.totalAmount = totalAmount;
         }
 
-        public void setItemTitle(String itemTitle) {
-            this.itemTitle = itemTitle;
+        public String getItemCount() {
+            return itemCount;
         }
 
-        public String getItemId() {
-            return itemId;
+        public void setItemCount(String itemCount) {
+            this.itemCount = itemCount;
         }
 
-        public void setItemId(String itemId) {
-            this.itemId = itemId;
+        public List<CraftworkAddPriceItems> getItemses() {
+            return itemses;
         }
 
-        public String getName() {
-            return name;
+        public void setItemses(List<CraftworkAddPriceItems> itemses) {
+            this.itemses = itemses;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
-        public String getNumber() {
-            return number;
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(amount);
+            dest.writeString(freightPrice);
+            dest.writeString(craftPrice);
+            dest.writeString(keepPrice);
+            dest.writeString(isOnline);
+            dest.writeString(totalAmount);
+            dest.writeString(itemCount);
+            dest.writeTypedList(itemses);
         }
 
-        public void setNumber(String number) {
-            this.number = number;
-        }
+        public static class CraftworkAddPriceItems implements Parcelable {
+            @SerializedName("id")
+            private String id;
+            @SerializedName("item_name")
+            private String itemName;
+            @SerializedName("item_price")
+            private String itemPrice;
+            @SerializedName("keep_price")
+            private double keepPrice;
+            @SerializedName("craft_price")
+            private String craftPrice;
+            @SerializedName("item_real_price")
+            private String itemRealPrice;
+            @SerializedName("has_discount")
+            private String hasDiscount;
+            @SerializedName("item_discount")
+            private String itemDiscount;
+            @SerializedName("color")
+            private String color;
+            @SerializedName("problem")
+            private String problem;
+            @SerializedName("forecast")
+            private String forecast;
+            @SerializedName("take_time")
+            private String takeTime;
+            @SerializedName("craft_des")
+            private String craftDes;
+            @SerializedName("clean_sn")
+            private String cleanSn;
+            @SerializedName("put_sn")
+            private String putSn;
+            @SerializedName("image")
+            private String image;
 
-        public String getOrderId() {
-            return orderId;
-        }
+            protected CraftworkAddPriceItems(Parcel in) {
+                id = in.readString();
+                itemName = in.readString();
+                itemPrice = in.readString();
+                keepPrice = in.readDouble();
+                craftPrice = in.readString();
+                itemRealPrice = in.readString();
+                hasDiscount = in.readString();
+                itemDiscount = in.readString();
+                color = in.readString();
+                problem = in.readString();
+                forecast = in.readString();
+                takeTime = in.readString();
+                craftDes = in.readString();
+                cleanSn = in.readString();
+                putSn = in.readString();
+                image = in.readString();
+            }
 
-        public void setOrderId(String orderId) {
-            this.orderId = orderId;
-        }
+            public static final Creator<CraftworkAddPriceItems> CREATOR = new Creator<CraftworkAddPriceItems>() {
+                @Override
+                public CraftworkAddPriceItems createFromParcel(Parcel in) {
+                    return new CraftworkAddPriceItems(in);
+                }
 
-        public String getPrice() {
-            return price;
-        }
+                @Override
+                public CraftworkAddPriceItems[] newArray(int size) {
+                    return new CraftworkAddPriceItems[size];
+                }
+            };
 
-        public void setPrice(String price) {
-            this.price = price;
-        }
+            public String getId() {
+                return id;
+            }
 
-        public String getSpecial() {
-            return special;
-        }
+            public void setId(String id) {
+                this.id = id;
+            }
 
-        public void setSpecial(String special) {
-            this.special = special;
-        }
+            public String getItemName() {
+                return itemName;
+            }
 
-        public String getSpecialComment() {
-            return specialComment;
-        }
+            public void setItemName(String itemName) {
+                this.itemName = itemName;
+            }
 
-        public void setSpecialComment(String specialComment) {
-            this.specialComment = specialComment;
-        }
+            public String getItemPrice() {
+                return itemPrice;
+            }
 
-        public String getType() {
-            return type;
-        }
+            public void setItemPrice(String itemPrice) {
+                this.itemPrice = itemPrice;
+            }
 
-        public void setType(String type) {
-            this.type = type;
+            public double getKeepPrice() {
+                return keepPrice;
+            }
+
+            public void setKeepPrice(double keepPrice) {
+                this.keepPrice = keepPrice;
+            }
+
+            public String getCraftPrice() {
+                return craftPrice;
+            }
+
+            public void setCraftPrice(String craftPrice) {
+                this.craftPrice = craftPrice;
+            }
+
+            public String getItemRealPrice() {
+                return itemRealPrice;
+            }
+
+            public void setItemRealPrice(String itemRealPrice) {
+                this.itemRealPrice = itemRealPrice;
+            }
+
+            public String getHasDiscount() {
+                return hasDiscount;
+            }
+
+            public void setHasDiscount(String hasDiscount) {
+                this.hasDiscount = hasDiscount;
+            }
+
+            public String getItemDiscount() {
+                return itemDiscount;
+            }
+
+            public void setItemDiscount(String itemDiscount) {
+                this.itemDiscount = itemDiscount;
+            }
+
+            public String getColor() {
+                return color;
+            }
+
+            public void setColor(String color) {
+                this.color = color;
+            }
+
+            public String getProblem() {
+                return problem;
+            }
+
+            public void setProblem(String problem) {
+                this.problem = problem;
+            }
+
+            public String getForecast() {
+                return forecast;
+            }
+
+            public void setForecast(String forecast) {
+                this.forecast = forecast;
+            }
+
+            public String getTakeTime() {
+                return takeTime;
+            }
+
+            public void setTakeTime(String takeTime) {
+                this.takeTime = takeTime;
+            }
+
+            public String getCraftDes() {
+                return craftDes;
+            }
+
+            public void setCraftDes(String craftDes) {
+                this.craftDes = craftDes;
+            }
+
+            public String getCleanSn() {
+                return cleanSn;
+            }
+
+            public void setCleanSn(String cleanSn) {
+                this.cleanSn = cleanSn;
+            }
+
+            public String getPutSn() {
+                return putSn;
+            }
+
+            public void setPutSn(String putSn) {
+                this.putSn = putSn;
+            }
+
+            public String getImage() {
+                return image;
+            }
+
+            public void setImage(String image) {
+                this.image = image;
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(id);
+                dest.writeString(itemName);
+                dest.writeString(itemPrice);
+                dest.writeDouble(keepPrice);
+                dest.writeString(craftPrice);
+                dest.writeString(itemRealPrice);
+                dest.writeString(hasDiscount);
+                dest.writeString(itemDiscount);
+                dest.writeString(color);
+                dest.writeString(problem);
+                dest.writeString(forecast);
+                dest.writeString(takeTime);
+                dest.writeString(craftDes);
+                dest.writeString(cleanSn);
+                dest.writeString(putSn);
+                dest.writeString(image);
+            }
         }
     }
 }

@@ -3,13 +3,10 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
@@ -25,8 +22,6 @@ import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.MemberInfoActivity;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CraftworkAddPriceAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.view.EditPriceDialog;
-import com.shinaier.laundry.snlfactory.ordermanage.view.ReviseMaintainValueDialog;
 import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
@@ -43,14 +38,13 @@ import java.util.regex.Pattern;
 
 public class CraftworkAddPriceActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_CRAFTWORK_PLUS_PRICE = 0x1;
-    private static final int REQUEST_CODE_REVISE_CRAFTWORK_PRICE = 0x2;
     private static final int REQUEST_CODE_CONFIRM_CONSIGEE = 0x3;
-    private static final int REQUEST_CODE_MAINTAIN_VALUE = 0x5;
     public static final int EXTRA_FROM = 0x4;
     public static final int REQUEST_CODE_EDIT_ITEM = 0x6;
+    private static final int EDIT_PRICE_CODE = 0x7;
 
-    @ViewInject(R.id.craftwork_plus_list)
-    private WrapHeightListView craftworkPlusList;
+    @ViewInject(R.id.editor_price_list)
+    private WrapHeightListView editorPriceList;
     @ViewInject(R.id.clothes_total_num)
     private TextView clothesTotalNum;
     @ViewInject(R.id.clothes_total_price)
@@ -65,67 +59,17 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     private TextView confirmConsignee;
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
-    @ViewInject(R.id.ll_craftwork_edit)
-    private LinearLayout llCraftworkEdit;
+    //    @ViewInject(R.id.ll_craftwork_edit)
+//    private LinearLayout llCraftworkEdit;
     @ViewInject(R.id.craftwork_total_num)
     private TextView craftworkTotalNum;
 
     private String id;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 1:
-                    Bundle data = msg.getData();
-                    String price = data.getString("price");
-                    String remarks = data.getString("remarks");
-                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                    params.put("token", UserCenter.getToken(CraftworkAddPriceActivity.this));
-                    params.put("id",itemId);
-                    if (!TextUtils.isEmpty(price)){
-                        if (!TextUtils.isEmpty(remarks)){
-                            params.put("special",price);
-                            params.put("special_comment",remarks);
-                        }else {
-                            ToastUtil.shortShow(CraftworkAddPriceActivity.this,"请输入加价备注");
-                            return;
-                        }
-                    }else {
-                        ToastUtil.shortShow(CraftworkAddPriceActivity.this,"请输入价格");
-                        return;
-                    }
-                    requestHttpData(Constants.Urls.URL_POST_REVISE_CRAFTWORK_PRICE,REQUEST_CODE_REVISE_CRAFTWORK_PRICE,
-                            FProtocol.HttpMethod.POST,params);
-                    break;
-                case 2:
-                    String reviseMaintainValue= (String) msg.obj;
-                    if (!TextUtils.isEmpty(reviseMaintainValue)){
-                        if(isInteger(reviseMaintainValue)){
-                            double reviseMaintainMoney = Double.valueOf(reviseMaintainValue);
-                            double i = reviseMaintainMoney / 200;
-                            IdentityHashMap<String,String> maintainValue = new IdentityHashMap<>();
-                            maintainValue.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
-                            maintainValue.put("id",maintainId);
-                            maintainValue.put("hedging", String.valueOf(i));
-                            requestHttpData(Constants.Urls.URL_POST_REVISE_MAINTAIN_VALUE,REQUEST_CODE_MAINTAIN_VALUE,
-                                    FProtocol.HttpMethod.POST,maintainValue);
-                        }else {
-                            ToastUtil.shortShow(CraftworkAddPriceActivity.this,"只能输入整数");
-                        }
-                    }else {
-                        ToastUtil.shortShow(CraftworkAddPriceActivity.this,"请输入保值金额");
-                    }
-                    break;
-            }
-        }
-    };
     private String itemId;
-    private EditPriceDialog priceDialog;
     private CraftworkAddPriceEntities craftworkAddPriceEntities;
     private String maintainId;
-    private ReviseMaintainValueDialog maintainValueDialog;
     private int extraFrom;
+    private String isOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +89,7 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("id",id);
+        params.put("oid",id);
         requestHttpData(Constants.Urls.URL_POST_CRAFTWORK_PLUS_PRICE,REQUEST_CODE_CRAFTWORK_PLUS_PRICE, FProtocol.HttpMethod.POST,params);
     }
 
@@ -154,8 +98,20 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
         initLoadingView(this);
         setLoadingStatus(LoadingStatus.LOADING);
         leftButton.setOnClickListener(this);
-        llCraftworkEdit.setOnClickListener(this);
+//        llCraftworkEdit.setOnClickListener(this);
         confirmConsignee.setOnClickListener(this);
+        editorPriceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CraftworkAddPriceEntities.CraftworkAddPriceResult.CraftworkAddPriceItems craftworkAddPriceItems =
+                        craftworkAddPriceEntities.getResult().getItemses().get(i);
+                Intent intent = new Intent(CraftworkAddPriceActivity.this,EditorPriceActivity.class);
+                intent.putExtra("is_online",isOnline);
+                intent.putExtra("position",i);
+                intent.putExtra("craftwork_add_price_items",craftworkAddPriceItems);
+                startActivityForResult(intent,EDIT_PRICE_CODE);
+            }
+        });
     }
 
     @Override
@@ -165,85 +121,50 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
             case REQUEST_CODE_CRAFTWORK_PLUS_PRICE:
                 if(data != null){
                     craftworkAddPriceEntities = Parsers.getCraftworkAddPriceEntities(data);
-                    if(craftworkAddPriceEntities != null ){
-                        setLoadingStatus(LoadingStatus.GONE);
-                        clothesTotalNum.setText(craftworkAddPriceEntities.getTotalNum());
-                        clothesTotalPrice.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getAmount())));
-                        if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
-                            clothesFreight.setVisibility(View.GONE);
-                            clothesFreightInfo.setVisibility(View.GONE);
+                        if(craftworkAddPriceEntities != null ){
+                            setLoadingStatus(LoadingStatus.GONE);
+                            clothesTotalNum.setText(craftworkAddPriceEntities.getResult().getItemCount());
+                            clothesTotalPrice.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getResult().getAmount())));
+                            isOnline = craftworkAddPriceEntities.getResult().getIsOnline();
+                            if (isOnline.equals("0")){ //判断线上订单还是线下订单，服务费显示与不显示 1 为线上 然 则线下
+                                clothesFreight.setVisibility(View.GONE);
+                                clothesFreightInfo.setVisibility(View.GONE);
+                            }else {
+                                clothesFreight.setVisibility(View.VISIBLE);
+                                clothesFreightInfo.setVisibility(View.VISIBLE);
+                                clothesFreightInfo.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getResult().getFreightPrice())));
+                            }
+                            totalPrice.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getResult().getTotalAmount())));
+                            craftworkTotalNum.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getResult().getTotalAmount())));
+
+                            CraftworkAddPriceAdapter craftworkAddPriceAdapter = new CraftworkAddPriceAdapter(this, craftworkAddPriceEntities.getResult().getItemses(),
+                                    craftworkAddPriceEntities.getResult().getIsOnline());
+                            editorPriceList.setAdapter(craftworkAddPriceAdapter);
+
                         }else {
-                            clothesFreight.setVisibility(View.VISIBLE);
-                            clothesFreightInfo.setVisibility(View.VISIBLE);
-                            clothesFreightInfo.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getFreight())));
+                            setLoadingStatus(LoadingStatus.EMPTY);
                         }
-                        totalPrice.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getTotal())));
-                        craftworkTotalNum.setText("￥" + formatMoney(Double.parseDouble(craftworkAddPriceEntities.getTotal())));
-
-                        CraftworkAddPriceAdapter craftworkAddPriceAdapter = new CraftworkAddPriceAdapter(this, craftworkAddPriceEntities.getPriceItemList());
-                        craftworkPlusList.setAdapter(craftworkAddPriceAdapter);
-
-                        craftworkAddPriceAdapter.setPositionListener(new CraftworkAddPriceAdapter.PositionListener() {
-                            @Override
-                            public void onClick(int position) {
-                                itemId = craftworkAddPriceEntities.getPriceItemList().get(position).getId();
-                                priceDialog = new EditPriceDialog(CraftworkAddPriceActivity.this, R.style.timerDialog,handler);
-                                priceDialog.setView();
-                                priceDialog.show();
-                            }
-                        });
-
-                        craftworkAddPriceAdapter.setMaintainReviseListener(new CraftworkAddPriceAdapter.MaintainReviseListener() {
-                            @Override
-                            public void onMaintainRevise(int position) {
-                                maintainId = craftworkAddPriceEntities.getPriceItemList().get(position).getId();
-                                maintainValueDialog = new ReviseMaintainValueDialog(CraftworkAddPriceActivity.this
-                                        , R.style.timerDialog,handler);
-                                maintainValueDialog.setView();
-                                maintainValueDialog.show();
-                            }
-                        });
-                    }else {
-                        setLoadingStatus(LoadingStatus.EMPTY);
-                    }
                 }
-                break;
-            case REQUEST_CODE_REVISE_CRAFTWORK_PRICE:
-                loadData();
-                priceDialog.dismiss();
                 break;
             case REQUEST_CODE_CONFIRM_CONSIGEE:
                 if(data != null){
                     Entity entity = Parsers.getEntity(data);
                     if(entity.getRetcode() == 0){
-//                        if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
-//                            Intent intent = new Intent(CraftworkAddPriceActivity.this, CheckClothesActivity.class);
-//                            intent.putExtra("id",id);
-//                            intent.putExtra("extraFrom",extraFrom);
-//                            startActivity(intent);
-//                        }else {
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                            builder.setTitle("提示");
-//                            builder.setMessage("是否确认收件？");
-//                            builder.setNegativeButton("取消",null);
-//                            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                        ExitManager.instance.exitItemActivity();
-//                                }
-//                            });
-//                            AlertDialog alertDialog = builder.create();
-//                            alertDialog.show();
-//                        }
-                        ExitManager.instance.exitItemActivity();
+                        if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
+                            Intent intent = new Intent(CraftworkAddPriceActivity.this, CheckClothesActivity.class);
+                            intent.putExtra("id",id);
+                            intent.putExtra("extraFrom",extraFrom);
+                            startActivity(intent);
+                        }else {
+                            ExitManager.instance.exitItemActivity();
+                        }
+
+                        //收件流程的所有页面finish。暂时注释。
+//                        ExitManager.instance.exitItemActivity();
                     }else {
                         ToastUtil.shortShow(this,entity.getStatus());
                     }
                 }
-                break;
-            case REQUEST_CODE_MAINTAIN_VALUE:
-                loadData();
-                maintainValueDialog.dismiss();
                 break;
         }
     }
@@ -252,35 +173,24 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.confirm_consignee:
-//                IdentityHashMap<String,String> params = new IdentityHashMap<>();
-//                params.put("token",UserCenter.getToken(this));
-//                params.put("id",id);
-//                requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
-//                        FProtocol.HttpMethod.POST,params);
-                if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
-                    Intent intent = new Intent(CraftworkAddPriceActivity.this, CheckClothesActivity.class);
-                    intent.putExtra("id",id);
-                    intent.putExtra("extraFrom",extraFrom);
-                    startActivity(intent);
-                }else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("提示");
-                    builder.setMessage("是否确认收件？");
-                    builder.setNegativeButton("取消",null);
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-//                                        ExitManager.instance.exitItemActivity();
-                            IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                            params.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
-                            params.put("id",id);
-                            requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
-                                        FProtocol.HttpMethod.POST,params);
-                        }
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }
+               AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("提示");
+                builder.setMessage("是否确认收件？");
+                builder.setNegativeButton("取消",null);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        ExitManager.instance.exitItemActivity();
+                        IdentityHashMap<String,String> params = new IdentityHashMap<>();
+                        params.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
+                        params.put("oid",id);
+                        requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
+                                FProtocol.HttpMethod.POST,params);
+
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
 
                 break;
             case R.id.left_button:
@@ -290,12 +200,13 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
                     ExitManager.instance.exitItemActivity();
                 }
                 break;
-            case R.id.ll_craftwork_edit:
-                Intent intent = new Intent(this,AddProjectActivity.class);
-                intent.putExtra("orderId",id);
-                intent.putExtra("extraFrom",EXTRA_FROM);
-                startActivityForResult(intent,REQUEST_CODE_EDIT_ITEM);
-                break;
+            //暂时不要编辑功能
+//            case R.id.ll_craftwork_edit:
+//                Intent intent = new Intent(this,AddProjectActivity.class);
+//                intent.putExtra("orderId",id);
+//                intent.putExtra("extraFrom",EXTRA_FROM);
+//                startActivityForResult(intent,REQUEST_CODE_EDIT_ITEM);
+//                break;
             case R.id.loading_layout:
                 setLoadingStatus(LoadingStatus.LOADING);
                 loadData();
@@ -347,7 +258,18 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
             case REQUEST_CODE_EDIT_ITEM:
                 if (resultCode == RESULT_OK){
                     if (data != null){
+                        //添加项目传过来的已经选择项目的信息集合
+//                        selectEntity = data.getParcelableArrayListExtra("select_entity");
+//                        loadData();
+                    }
+                }
+                break;
+            case EDIT_PRICE_CODE:
+                if (resultCode == RESULT_OK){
+                    if (data != null){
+                        setLoadingStatus(LoadingStatus.LOADING);
                         loadData();
+
                     }
                 }
                 break;

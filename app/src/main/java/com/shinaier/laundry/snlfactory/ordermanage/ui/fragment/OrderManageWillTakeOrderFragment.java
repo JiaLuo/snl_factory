@@ -22,7 +22,9 @@ import com.shinaier.laundry.snlfactory.network.entity.OrderTakeOrderEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryTakeOrderAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CancelOrderActivity;
+import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CraftworkAddPriceActivity;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
 
@@ -109,6 +111,12 @@ public class OrderManageWillTakeOrderFragment extends BaseFragment implements Vi
                                     @Override
                                     public void confirmOnClick(int position) {
                                         // TODO: 2017/12/18 添加项目
+                                        // TODO: 2017/12/26 因为添加项目的页面没有，先调试检查衣物的页面 好了再调试
+
+                                        Intent intent = new Intent(context,CraftworkAddPriceActivity.class);
+                                        intent.putExtra("id","84");
+//                                        intent.putExtra("is_online",true);
+                                        startActivity(intent);
                                     }
 
                                     @Override
@@ -124,6 +132,10 @@ public class OrderManageWillTakeOrderFragment extends BaseFragment implements Vi
                                         startActivity(intent);
                                     }
                                 });
+                            }else {
+                                setLoadingStatus(LoadingStatus.EMPTY);
+                                categoryTakeOrderAdapter = new CategoryTakeOrderAdapter(context, new ArrayList<OrderTakeOrderEntities.OrderTakeOrderResult>());
+                                orderManageWillTakeOrderList.setAdapter(categoryTakeOrderAdapter);
                             }
                         }else {
                             ToastUtil.shortShow(context, orderTakeOrderEntities.getMsg());

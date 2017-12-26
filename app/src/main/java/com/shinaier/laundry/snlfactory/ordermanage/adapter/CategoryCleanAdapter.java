@@ -34,7 +34,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Orde
     private PositionListener listener;
     private GotoDetailListener gotoDetailListener;
     private TelPhoneListener telPhoneListener;
-    private String countNum;
+    private int countNum;
 
     public interface TelPhoneListener{
         void onTelPhone(int position);
@@ -75,7 +75,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Orde
         this.mDatas = mDatas;
     }
 
-    public void setCountNum(String countNum){
+    public void setCountNum(int countNum){
         this.countNum = countNum;
     }
 
@@ -118,7 +118,7 @@ public class CategoryCleanAdapter extends BaseAdapterNew<OrderCleanEntities.Orde
             takeOrderPhoneNum.setText(item.getuMobile());
             takeOrderAddress.setText(item.getuAddress());
             takeOrderNowTime.setText("时间：" + item.getoTime());
-//            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
+            employeeLineNum.setText(String.valueOf(countNum - position));
             takeOrderCancel.setText("检查衣物");
             takeOrderContactStore.setText("检查完成");
 

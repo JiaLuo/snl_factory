@@ -58,6 +58,7 @@ import com.shinaier.laundry.snlfactory.network.entity.StatisticsNoPayEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.TakeClothesEntity;
+import com.shinaier.laundry.snlfactory.network.entity.TakeTimeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UpdataEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UploadAddPhotoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UserEntity;
@@ -404,16 +405,17 @@ public class Parsers {
      * @return
      */
     public static CraftworkAddPriceEntities getCraftworkAddPriceEntities(String data){
-        CraftworkAddPriceEntities craftworkAddPriceEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            craftworkAddPriceEntities = gson.fromJson(data1,new TypeToken<CraftworkAddPriceEntities>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return craftworkAddPriceEntities;
+//        CraftworkAddPriceEntities craftworkAddPriceEntities = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            craftworkAddPriceEntities = gson.fromJson(data1,new TypeToken<CraftworkAddPriceEntities>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return craftworkAddPriceEntities;
+        return  gson.fromJson(data,new TypeToken<CraftworkAddPriceEntities>(){}.getType());
     }
 
     /**
@@ -753,5 +755,14 @@ public class Parsers {
      */
     public static OrderSearchEntity getOrderSearchEntity(String data){
         return gson.fromJson(data,new TypeToken<OrderSearchEntity>(){}.getType());
+    }
+
+    /**
+     * 获取修改取衣时间
+     * @param data
+     * @return
+     */
+    public static List<TakeTimeEntity> getTakeTimeEntity(String data){
+        return gson.fromJson(data,new TypeToken<List<TakeTimeEntity>>(){}.getType());
     }
 }

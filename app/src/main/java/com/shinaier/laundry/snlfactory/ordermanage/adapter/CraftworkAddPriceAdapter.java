@@ -10,7 +10,6 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.CraftworkAddPriceEntities;
 
 import java.text.DecimalFormat;
@@ -20,28 +19,14 @@ import java.util.List;
  * Created by 张家洛 on 2017/3/1.
  */
 
-public class CraftworkAddPriceAdapter extends BaseAdapterNew<CraftworkAddPriceEntities.AddPriceItem> {
-    private PositionListener listener;
+public class CraftworkAddPriceAdapter extends BaseAdapterNew<CraftworkAddPriceEntities.CraftworkAddPriceResult.CraftworkAddPriceItems> {
     private Context context;
-    private MaintainReviseListener maintainReviseListener;
-    public interface MaintainReviseListener{
-        void onMaintainRevise(int position);
-    }
-    public void setMaintainReviseListener(MaintainReviseListener maintainReviseListener){
-        this.maintainReviseListener = maintainReviseListener;
-    }
+    private String isOnline;
 
-    public interface PositionListener{
-        void onClick(int position);
-    }
-
-    public void setPositionListener(PositionListener listener){
-        this.listener = listener;
-    }
-
-    public CraftworkAddPriceAdapter(Context context, List<CraftworkAddPriceEntities.AddPriceItem> mDatas) {
+    public CraftworkAddPriceAdapter(Context context, List<CraftworkAddPriceEntities.CraftworkAddPriceResult.CraftworkAddPriceItems> mDatas,String isOnline) {
         super(context, mDatas);
         this.context = context;
+        this.isOnline = isOnline;
     }
 
     @Override
@@ -51,54 +36,44 @@ public class CraftworkAddPriceAdapter extends BaseAdapterNew<CraftworkAddPriceEn
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        CraftworkAddPriceEntities.AddPriceItem item = getItem(position);
-        SimpleDraweeView ivClothesImg = ViewHolder.get(convertView,R.id.iv_clothes_img);
-        TextView addPriceClothesName = ViewHolder.get(convertView,R.id.add_price_clothes_name);
-        TextView addPriceClothesPrice = ViewHolder.get(convertView,R.id.add_price_clothes_price);
-        TextView addPriceRemarks = ViewHolder.get(convertView,R.id.add_price_remarks);
-        TextView addPriceClothesNum = ViewHolder.get(convertView,R.id.add_price_clothes_num);
-        TextView addPriceReviseRemark = ViewHolder.get(convertView,R.id.add_price_revise_remark);
-        TextView addPriceCraftwork = ViewHolder.get(convertView,R.id.add_price_craftwork);
-        TextView maintainValueCleanNum = ViewHolder.get(convertView,R.id.maintain_value_clean_num);//保值清洗费
-        TextView maintainValueReviseRemark = ViewHolder.get(convertView,R.id.maintain_value_revise_remark);//保值金额修改按钮
-        TextView maintainValue = ViewHolder.get(convertView,R.id.maintain_value);//保值金额
+        CraftworkAddPriceEntities.CraftworkAddPriceResult.CraftworkAddPriceItems item = getItem(position);
+        SimpleDraweeView ivClothesImg = ViewHolder.get(convertView,R.id.iv_clothes_img); //
+        TextView tvClothesName = ViewHolder.get(convertView,R.id.tv_clothes_name);
+        TextView tvClothesPrice = ViewHolder.get(convertView,R.id.tv_clothes_price);
+        TextView clothesNumber = ViewHolder.get(convertView,R.id.clothes_number);
+        TextView tvTechnologyPrice = ViewHolder.get(convertView,R.id.tv_technology_price);
+        TextView editorMaintainValue = ViewHolder.get(convertView,R.id.editor_maintain_value);
+        TextView maintainValueCleanNum = ViewHolder.get(convertView,R.id.maintain_value_clean_num);
+        TextView tvTakeClothesTime = ViewHolder.get(convertView,R.id.tv_take_clothes_time);
+        TextView tvRemarks = ViewHolder.get(convertView,R.id.tv_remarks);
 
         if(item != null){
-            if (item.getUrl() == null){
+            if (item.getImage() == null){
                 ivClothesImg.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.not_available_img));
             }else {
-                String imgPath = Constants.Urls.URL_BASE_DOMAIN + item.getUrl();
-                Uri uri = Uri.parse(imgPath);
-                ivClothesImg.setImageURI(uri);
+                ivClothesImg.setImageURI(Uri.parse(item.getImage()));
             }
-            addPriceClothesName.setText(item.getName());
-            addPriceClothesPrice.setText("￥" + item.getPrice());
-            if (TextUtils.isEmpty(item.getSpecialComment())){
-                addPriceRemarks.setText("暂无备注");
+            tvClothesName.setText(item.getItemName());
+            tvClothesPrice.setText("￥" + item.getItemPrice());
+            if (item.getCleanSn() != null){
+                clothesNumber.setText("衣物编码：" + item.getCleanSn());
             }else {
-                addPriceRemarks.setText("备注：" + item.getSpecialComment());
+                clothesNumber.setText("衣物编码：********");
             }
-            addPriceClothesNum.setText("数量：x" + item.getNumber());
-            addPriceCraftwork.setText("特殊工艺加价：￥" + item.getSpecial());
-            addPriceReviseRemark.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
-                        listener.onClick(position);
-                    }
-                }
-            });
-
-            maintainValueCleanNum.setText("保值清洗费: ￥" + formatMoney(item.getHedging()));
-            maintainValue.setText("保值金额:￥" + formatMoney(item.getHedging() * 200));
-            maintainValueReviseRemark.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(maintainReviseListener != null){
-                        maintainReviseListener.onMaintainRevise(position);
-                    }
-                }
-            });
+            if (isOnline.equals("1")){ // isline 参数 1 是线上 2 是线下
+                tvTakeClothesTime.setVisibility(View.GONE);
+            }else {
+                tvTakeClothesTime.setVisibility(View.VISIBLE);
+                tvTakeClothesTime.setText(item.getTakeTime());
+            }
+            if (TextUtils.isEmpty(item.getCraftDes())){
+                tvRemarks.setText("备注：暂无备注");
+            }else {
+                tvRemarks.setText("备注：" + item.getCraftDes());
+            }
+            tvTechnologyPrice.setText("特殊工艺加价：￥" + item.getCraftPrice());
+            maintainValueCleanNum.setText("保值清洗费: ￥" + formatMoney(item.getKeepPrice()));
+            editorMaintainValue.setText("保值金额:￥" + formatMoney(item.getKeepPrice() * 200));
         }
     }
 

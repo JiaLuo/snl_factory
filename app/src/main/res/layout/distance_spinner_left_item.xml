@@ -8,11 +8,11 @@
               android:gravity="center">
 
     <!--android:textColor="@color/list_text_select_color" -->
-    <!--<View-->
-    <!--android:id="@+id/left_view"-->
-    <!--android:background="@color/base_color"-->
-    <!--android:layout_width="1dp"-->
-    <!--android:layout_height="match_parent"/>-->
+    <View
+        android:id="@+id/left_view"
+        android:background="@color/base_color"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"/>
     <TextView
         android:id="@+id/tv"
         android:textColor="#2e323b"
@@ -22,9 +22,9 @@
         android:gravity="center"
         android:text="全部"
         android:textSize="13sp" />
-    <!--<View-->
-    <!--android:id="@+id/right_view"-->
-    <!--android:background="@color/base_color"-->
-    <!--android:layout_width="1dp"-->
-    <!--android:layout_height="match_parent"/>-->
+    <View
+        android:id="@+id/right_view"
+        android:background="@color/base_color"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"/>
 </LinearLayout>

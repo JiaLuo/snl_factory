@@ -274,6 +274,9 @@
         <activity android:name=".manage.ui.activity.OrderSearchActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait" />
+        <activity android:name=".ordermanage.ui.activity.EditorPriceActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait" />
 
         <service
             android:name=".service.JobSchedulerService"

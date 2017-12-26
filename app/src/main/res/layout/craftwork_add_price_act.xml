@@ -3,27 +3,13 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <!--<include layout="@layout/load_data_status_view"/>-->
+    <include layout="@layout/load_data_status_view"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:background="#fff9ec"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="32dp">
-            <TextView
-                android:textColor="@color/red"
-                android:text="如有损坏按保值金额进行赔偿"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
         <ScrollView
-            android:layout_marginTop="32dp"
+            android:id="@+id/sc_editor_price"
             android:layout_marginBottom="44dp"
-            android:id="@+id/sv_add_price"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
@@ -31,10 +17,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.shinaier.laundry.snlfactory.view.WrapHeightListView
+                    android:id="@+id/editor_price_list"
                     android:layout_marginLeft="11dp"
                     android:layout_marginRight="11dp"
-                    android:divider="@null"
-                    android:id="@+id/craftwork_plus_list"
+                    android:dividerHeight="1px"
+                    android:divider="#e5e5e5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="none"/>
@@ -129,7 +116,7 @@
             android:layout_height="44dp">
             <RelativeLayout
                 android:background="@color/white"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <TextView
@@ -152,19 +139,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
-            <LinearLayout
-                android:id="@+id/ll_craftwork_edit"
-                android:gravity="center"
-                android:background="@color/base_color"
-                android:layout_weight="0.6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:src="@drawable/craftwork_edit"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
             <View
                 android:background="@color/white"
                 android:layout_width="1dp"
@@ -173,7 +147,7 @@
                 android:id="@+id/confirm_consignee"
                 android:gravity="center"
                 android:background="@color/base_color"
-                android:layout_weight="1.4"
+                android:layout_weight="1"
                 android:drawablePadding="8dp"
                 android:text="确认收件"
                 android:textSize="18sp"
@@ -187,6 +161,4 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
     </RelativeLayout>
-
-
 </LinearLayout>
