@@ -46,16 +46,16 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
     private TextView customLastTime;
     @ViewInject(R.id.not_take_order)
     private WrapHeightListView notTakeOrder;
-    @ViewInject(R.id.member_num)
-    private TextView memberNum;
+//    @ViewInject(R.id.member_num)
+//    private TextView memberNum;
     @ViewInject(R.id.member_category)
     private TextView memberCategory;
     @ViewInject(R.id.member_balance)
     private TextView memberBalance;
     @ViewInject(R.id.rl_take_clothes_bt)
     private RelativeLayout rlTakeClothesBt;
-    @ViewInject(R.id.vip_member_num)
-    private TextView vipMemberNum;
+//    @ViewInject(R.id.vip_member_num)
+//    private TextView vipMemberNum;
     @ViewInject(R.id.vip_member_category)
     private TextView vipMemberCategory;
     @ViewInject(R.id.vip_member_balance)
@@ -71,8 +71,7 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.collect_clothes_act);
         ViewInjectUtils.inject(this);
-        initLoadingView(this);
-        setLoadingStatus(LoadingStatus.LOADING);
+
         ExitManager.instance.addOfflineCollectActivity(this);
         Intent intent = getIntent();
         phoneNum = intent.getStringExtra("phone_num");
@@ -89,7 +88,8 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
 
     private void initView() {
         setCenterTitle("客户信息");
-
+        initLoadingView(this);
+        setLoadingStatus(LoadingStatus.LOADING);
         dialog = new CommonDialog(this);
         rlTakeClothesBt.setOnClickListener(this);
         leftButton.setOnClickListener(this);
@@ -116,7 +116,7 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
     private void takeOrderData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("uid",offlineCustomInfoEntity.getDatas().getId());
+//        params.put("uid",offlineCustomInfoEntity.getDatas().getId());
         requestHttpData(Constants.Urls.URL_POST_BUILD_ORDER,REQUEST_CODE_BUILD_ORDER, FProtocol.HttpMethod.POST,params);
     }
 
@@ -149,70 +149,68 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
                 if (data != null){
                     offlineCustomInfoEntity = Parsers.getOfflineCustomInfoEntity(data);
                     if (offlineCustomInfoEntity != null){
-                        if (offlineCustomInfoEntity.getRetcode() == 0){
-                            if (offlineCustomInfoEntity.getDatas() != null){
+                        if (offlineCustomInfoEntity.getCode() == 0){
+                            if (offlineCustomInfoEntity.getResult() != null){
                                 setLoadingStatus(LoadingStatus.GONE);
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getUserName())){
-                                        customName.setText("客户姓名：" + offlineCustomInfoEntity.getDatas().getUserName());
-                                    }
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getMobile())){
-                                        customPhone.setText("手机号：" + offlineCustomInfoEntity.getDatas().getMobile());
-                                    }
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getJoinTime())){
-                                        customLastTime.setText("上次到店：" + offlineCustomInfoEntity.getDatas().getJoinTime());
-                                    }
-                                    if(offlineCustomInfoEntity.getDatas().getOrders() != null && offlineCustomInfoEntity.getDatas().getOrders().size() > 0){
-                                        notTakeOrder.setVisibility(View.VISIBLE);
-                                        NoTakeOrderAdapter noTakeOrderAdapter = new NoTakeOrderAdapter(this,offlineCustomInfoEntity.getDatas().getOrders());
-                                        notTakeOrder.setAdapter(noTakeOrderAdapter);
+                                if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getuName())){
+                                    customName.setText("客户姓名：" + offlineCustomInfoEntity.getResult().getuName());
+                                }
+                                if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getuMobile())){
+                                    customPhone.setText("手机号：" + offlineCustomInfoEntity.getResult().getuMobile());
+                                }
+                                if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getLastTime())){
+                                    customLastTime.setText("上次到店：" + offlineCustomInfoEntity.getResult().getLastTime());
+                                }
+                                if(offlineCustomInfoEntity.getResult().getOrders() != null && offlineCustomInfoEntity.getResult().getOrders().size() > 0){
+                                    notTakeOrder.setVisibility(View.VISIBLE);
+                                    NoTakeOrderAdapter noTakeOrderAdapter = new NoTakeOrderAdapter(this,offlineCustomInfoEntity.getResult().getOrders());
+                                    notTakeOrder.setAdapter(noTakeOrderAdapter);
+                                }else {
+                                    notTakeOrder.setVisibility(View.GONE);
+                                }
+//                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getMerchantCard().get)){
+//                                        vipMemberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getCardNumber());
+//                                    }else {
+//                                        vipMemberNum.setText("会员卡号：");
+//                                    }
+                                if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getMerchantCard().getcName())){
+                                    vipMemberCategory.setText("会员类型：" + offlineCustomInfoEntity.getResult().getMerchantCard().getcName());
+                                }else {
+                                    vipMemberCategory.setText("会员类型：");
+                                }
+                                if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getMerchantCard().getcBalance())){
+                                    vipMemberBalance.setText("会员卡余额：￥" + offlineCustomInfoEntity.getResult().getMerchantCard().getcBalance());
+                                }else {
+                                    vipMemberBalance.setText("会员卡余额：￥0.00");
+                                }
+
+                                if (offlineCustomInfoEntity.getResult().getPlatformCard() != null){
+                                    // TODO: 2017/12/26 不知道显示不显示卡号
+//                                        if (offlineCustomInfoEntity.getResult().getPlatformCard().get() != null){
+//                                            memberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getPlatformCard().getCardNumber());
+//                                        }else {
+//                                            memberNum.setText("会员卡号：");
+//                                        }
+                                    if (offlineCustomInfoEntity.getResult().getPlatformCard().getcName() != null){
+//                                            if (offlineCustomInfoEntity.getResult().getPlatformCard().getcName().equals("1")){
+                                        memberCategory.setText("会员类型：" + offlineCustomInfoEntity.getResult().getPlatformCard().getcName());
+//                                            }else if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardType().equals("2")){
+//                                                memberCategory.setText("会员类型：钻石会员");
                                     }else {
-                                        notTakeOrder.setVisibility(View.GONE);
-                                    }
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getCardNumber())){
-                                        vipMemberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getCardNumber());
-                                    }else {
-                                        vipMemberNum.setText("会员卡号：");
-                                    }
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getCardName())){
-                                        vipMemberCategory.setText("会员类型：" +offlineCustomInfoEntity.getDatas().getCardName());
-                                    }else {
-                                        vipMemberCategory.setText("会员类型：");
-                                    }
-                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getDatas().getBalance())){
-                                        vipMemberBalance.setText("会员卡余额：￥" + offlineCustomInfoEntity.getDatas().getBalance());
-                                    }else {
-                                        vipMemberBalance.setText("会员卡余额：￥0.00");
+                                        memberCategory.setText("会员类型：");
                                     }
 
-                                    if (offlineCustomInfoEntity.getDatas().getPlatformCard() != null){
-                                        if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardNumber() != null){
-                                            memberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getPlatformCard().getCardNumber());
-                                        }else {
-                                            memberNum.setText("会员卡号：");
-                                        }
-                                        if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardType() != null){
-                                            if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardType().equals("1")){
-                                                memberCategory.setText("会员类型：金牌会员");
-                                            }else if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardType().equals("2")){
-                                                memberCategory.setText("会员类型：钻石会员");
-                                            }else {
-                                                memberCategory.setText("会员类型：");
-                                            }
-                                        }else {
-                                            memberCategory.setText("会员类型：");
-                                        }
-
-                                        if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardSum() != null){
-                                            memberBalance.setText("会员卡余额：￥" + offlineCustomInfoEntity.getDatas().getPlatformCard().getCardSum());
-                                        }else {
-                                            memberBalance.setText("会员卡余额：" );
-                                        }
+                                    if (offlineCustomInfoEntity.getResult().getPlatformCard().getcBalance() != null){
+                                        memberBalance.setText("会员卡余额：￥" + offlineCustomInfoEntity.getResult().getPlatformCard().getcBalance());
+                                    }else {
+                                        memberBalance.setText("会员卡余额：" );
                                     }
+                                }
                             }else {
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
                         }else {
-                            ToastUtil.shortShow(this, offlineCustomInfoEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineCustomInfoEntity.getMsg());
                         }
                     }else {
                         setLoadingStatus(LoadingStatus.EMPTY);

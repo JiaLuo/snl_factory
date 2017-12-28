@@ -23,8 +23,10 @@ import com.shinaier.laundry.snlfactory.network.entity.ManageCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceDetailEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceEntities;
 import com.shinaier.laundry.snlfactory.network.entity.MerchantCardInfoEntity;
+import com.shinaier.laundry.snlfactory.network.entity.MerchantCardListEntities;
 import com.shinaier.laundry.snlfactory.network.entity.MessageNoticeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
+import com.shinaier.laundry.snlfactory.network.entity.OfflineChangeMemberInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineCustomInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineHangOnEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineHomeEntity;
@@ -764,5 +766,23 @@ public class Parsers {
      */
     public static List<TakeTimeEntity> getTakeTimeEntity(String data){
         return gson.fromJson(data,new TypeToken<List<TakeTimeEntity>>(){}.getType());
+    }
+
+    /**
+     * 修改会员信息
+     * @param data
+     * @return
+     */
+    public static OfflineChangeMemberInfoEntity getOfflineChangeMemberInfoEntity(String data){
+        return gson.fromJson(data,new TypeToken<OfflineChangeMemberInfoEntity>(){}.getType());
+    }
+
+    /**
+     * 新增会员 的商户卡列表
+     * @param data
+     * @return
+     */
+    public static MerchantCardListEntities getMerchantCardListEntities(String data){
+        return gson.fromJson(data,new TypeToken<MerchantCardListEntities>(){}.getType());
     }
 }

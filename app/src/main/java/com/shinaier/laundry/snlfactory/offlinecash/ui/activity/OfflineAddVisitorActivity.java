@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -16,11 +17,12 @@ import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberNumEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.view.OnDateSetListener;
 import com.shinaier.laundry.snlfactory.offlinecash.view.TimePickerDialog;
+import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectActivity;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
@@ -72,7 +74,7 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
         setContentView(R.layout.offline_add_visitor_act);
         ViewInjectUtils.inject(this);
         phoneNum = getIntent().getStringExtra("phone_num");
-        loadMemberNum();
+//        loadMemberNum();
         initView();
     }
 
@@ -94,7 +96,7 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
         tvMemberBirth.setOnClickListener(this);
 
         mDialogYearMonthDay = new TimePickerDialog.Builder()
-//                .setType(Type.YEAR_MONTH_DAY)
+                .setType(Type.YEAR_MONTH_DAY)
 //                .setThemeColor(context.getResources().getColor(R.color.white))
                 .setCallBack(this)
                 .build();
@@ -121,19 +123,28 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
                 break;
             case REQUEST_CODE_ADD_MEMBER:
                 if (data != null){
-                    OfflineAddVisitorEntity offlineAddVisitorEntity = Parsers.getOfflineAddVisitorEntity(data);
-
-                    if (offlineAddVisitorEntity != null){
-                        if (offlineAddVisitorEntity.getRetcode() == 0){
-                            if (offlineAddVisitorEntity.getDatas() != null){
-                                String user = offlineAddVisitorEntity.getDatas().getUser();
-                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                params.put("token", UserCenter.getToken(this));
-                                params.put("uid",user);
-                                requestHttpData(Constants.Urls.URL_POST_BUILD_ORDER,REQUEST_CODE_BUILD_ORDER, FProtocol.HttpMethod.POST,params);
-                            }
+                    // TODO: 2017/12/27 先注释，添加项目页面完成之后 再看这块儿的逻辑
+//                    OfflineAddVisitorEntity offlineAddVisitorEntity = Parsers.getOfflineAddVisitorEntity(data);
+//
+//                    if (offlineAddVisitorEntity != null){
+//                        if (offlineAddVisitorEntity.getRetcode() == 0){
+//                            if (offlineAddVisitorEntity.getDatas() != null){
+//                                String user = offlineAddVisitorEntity.getDatas().getUser();
+//                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                                params.put("token", UserCenter.getToken(this));
+//                                params.put("uid",user);
+//                                requestHttpData(Constants.Urls.URL_POST_BUILD_ORDER,REQUEST_CODE_BUILD_ORDER, FProtocol.HttpMethod.POST,params);
+//                            }
+//                        }else {
+//                            ToastUtil.shortShow(this,offlineAddVisitorEntity.getStatus());
+//                        }
+//                    }
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null) {
+                        if (entity.getRetcode() == 0){
+                            LogUtil.e("zhang","进入添加项目页面 ");
                         }else {
-                            ToastUtil.shortShow(this,offlineAddVisitorEntity.getStatus());
+                            ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }
                 }
@@ -171,7 +182,7 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
                 if (!TextUtils.isEmpty(inputMemberName)){
                     IdentityHashMap<String,String> params = new IdentityHashMap<>();
                     params.put("token",UserCenter.getToken(this));
-                    params.put("ucode",ucode);
+//                    params.put("ucode",ucode);
                     params.put("uname",inputMemberName);
                     if (isMan){
                         params.put("sex","1");
@@ -180,12 +191,13 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
                     }else {
                         params.put("sex","2");
                     }
-                    params.put("mobile",phoneNum);
+                    params.put("umobile",phoneNum);
                     if (isClickTime){
                         params.put("birthday",memberBirth);
                     }else {
                         params.put("birthday","1980-01-01");
                     }
+                    params.put("reg_from","2"); //2-android,3-IOS,4-pc;
                     requestHttpData(Constants.Urls.URL_POST_ADD_MEMBER,REQUEST_CODE_ADD_MEMBER, FProtocol.HttpMethod.POST,params);
                 }else {
                     ToastUtil.shortShow(this,"请输入名字");
@@ -226,7 +238,7 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         memberBirth = getDateToString(millseconds);
-
+        tvMemberBirth.setText(memberBirth);
     }
 
     public String getDateToString(long time) {

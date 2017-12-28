@@ -17,12 +17,12 @@
             android:background="@color/white"
             android:orientation="horizontal"
             android:layout_width="285dp"
-            android:layout_height="201dp">
+            android:layout_height="155dp">
             <TextView
                 android:id="@+id/tv_phone_change"
                 android:layout_marginTop="21dp"
                 android:layout_centerHorizontal="true"
-                android:text="手机号变更"
+                android:text="验证手机号"
                 android:textColor="@color/black_text"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
@@ -66,17 +66,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
                 <LinearLayout
-                    android:id="@+id/ll_phone_order_num"
                     android:gravity="center"
                     android:background="@drawable/check_clothes_img_lin_bg"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <EditText
-                        android:id="@+id/ed_phone_order_num"
+                        android:id="@+id/ed_input_verify_num"
                         android:textSize="14sp"
-                        android:maxLength="18"
-                        android:lines="1"
+                        android:maxLength="4"
                         android:inputType="phone"
                         android:background="@null"
                         android:textCursorDrawable="@null"
@@ -84,6 +82,7 @@
                         android:layout_height="match_parent"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/gain_verify_code"
                     android:gravity="center"
                     android:text="获取验证码"
                     android:textColor="#398de3"
@@ -92,39 +91,39 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
             </LinearLayout>
-            <LinearLayout
-                android:layout_below="@id/ll_input_verify_num"
-                android:layout_marginTop="14dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="32dp">
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="手机号："
-                    android:layout_width="0dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_text"
-                    android:layout_height="match_parent"/>
-                <LinearLayout
-                    android:id="@+id/ll_new_phone_num"
-                    android:gravity="center"
-                    android:background="@drawable/check_clothes_img_lin_bg"
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:id="@+id/et_new_phone_num"
-                        android:textSize="14sp"
-                        android:maxLength="18"
-                        android:lines="1"
-                        android:inputType="phone"
-                        android:background="@null"
-                        android:textCursorDrawable="@null"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </LinearLayout>
-            </LinearLayout>
+            <!--<LinearLayout-->
+            <!--android:layout_below="@id/ll_input_verify_num"-->
+            <!--android:layout_marginTop="14dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="32dp">-->
+            <!--<TextView-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="手机号："-->
+            <!--android:layout_width="0dp"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="@color/black_text"-->
+            <!--android:layout_height="match_parent"/>-->
+            <!--<LinearLayout-->
+            <!--android:id="@+id/ll_new_phone_num"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/check_clothes_img_lin_bg"-->
+            <!--android:layout_weight="2"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<EditText-->
+            <!--android:id="@+id/et_new_phone_num"-->
+            <!--android:textSize="14sp"-->
+            <!--android:maxLength="18"-->
+            <!--android:lines="1"-->
+            <!--android:inputType="phone"-->
+            <!--android:background="@null"-->
+            <!--android:textCursorDrawable="@null"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+            <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
         </RelativeLayout>
         <View
             android:background="#cccccc"

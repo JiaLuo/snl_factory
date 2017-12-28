@@ -38,6 +38,8 @@
             android:id="@+id/ed_input_member_name"
             android:background="@drawable/check_clothes_img_lin_bg"
             android:layout_alignParentRight="true"
+            android:gravity="right|center"
+            android:paddingRight="8dp"
             android:textSize="14sp"
             android:textColor="#666666"
             android:layout_width="182dp"

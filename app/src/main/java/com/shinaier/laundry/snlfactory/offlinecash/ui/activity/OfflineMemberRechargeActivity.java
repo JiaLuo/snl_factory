@@ -19,9 +19,9 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberRechargeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.PrintRechargeEntity;
-import com.shinaier.laundry.snlfactory.network.entity.RechargeSuccessEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.entities.PrintEntity;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
@@ -81,7 +81,7 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
     @ViewInject(R.id.ed_give_money)
     private TextView edGiveMoney;
 
-    private String userId;
+    private String memberNum;
     private boolean isAliPay,isWxPay,isCashPay = false;
     private String rechargeMoney;
     private String giveMoney;
@@ -119,21 +119,23 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
         }
     };
 
+    private OfflineMemberRechargeEntity offlineMemberRechargeEntity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_member_recharge_act);
         ViewInjectUtils.inject(this);
-        userId = getIntent().getStringExtra("user_id");
-        loadData(userId);
+        memberNum = getIntent().getStringExtra("member_num");
+        loadData(memberNum);
         initView();
     }
 
-    private void loadData(String userId) {
+    private void loadData(String memberNum) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("member_id",userId);
-        requestHttpData(Constants.Urls.URL_POST_OFFLINE_VIP_RECHARGE,REQUEST_CODE_OFFLINE_VIP_RECHARGE, FProtocol.HttpMethod.POST,params);
+        params.put("umobile",memberNum);
+        requestHttpData(Constants.Urls.URL_POST_MEMBER_RECHARGE_INFO,REQUEST_CODE_OFFLINE_VIP_RECHARGE, FProtocol.HttpMethod.POST,params);
 
     }
 
@@ -155,33 +157,38 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
         switch (requestCode){
             case REQUEST_CODE_OFFLINE_VIP_RECHARGE:
                 if (data != null){
-                    OfflineMemberRechargeEntity offlineMemberRechargeEntity = Parsers.getOfflineMemberRechargeEntity(data);
+                    offlineMemberRechargeEntity = Parsers.getOfflineMemberRechargeEntity(data);
                     if (offlineMemberRechargeEntity != null){
-                        if (offlineMemberRechargeEntity.getRetcode() == 0){
-                            if (offlineMemberRechargeEntity.getData() != null){
-                                if (offlineMemberRechargeEntity.getData().getMember() != null){
-                                    setLoadingStatus(LoadingStatus.GONE);
-                                    setMemberInfo(offlineMemberRechargeEntity);
-                                }else {
-                                    setLoadingStatus(LoadingStatus.EMPTY);
-                                }
+                        if (offlineMemberRechargeEntity.getCode() == 0){
+                            if (offlineMemberRechargeEntity.getResult() != null){
+                                setLoadingStatus(LoadingStatus.GONE);
+                                setMemberInfo(offlineMemberRechargeEntity.getResult());
+
                             }
                         }else {
-                            ToastUtil.shortShow(this,offlineMemberRechargeEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineMemberRechargeEntity.getMsg());
                         }
                     }
                 }
                 break;
             case REQUEST_CODE_RECHARGE_MERCHANT_CARD:
                 if (data != null){
-                    RechargeSuccessEntity rechargeSuccessEntity = Parsers.getRechargeSuccessEntity(data);
-                    if (rechargeSuccessEntity != null){
-                        if (rechargeSuccessEntity.getRetcode() == 0){
-                            dialog.setContent("加载中");
-                            dialog.show();
-                            memberRecharge(rechargeSuccessEntity.getDatas().getRechargeId());
+//                    RechargeSuccessEntity rechargeSuccessEntity = Parsers.getRechargeSuccessEntity(data);
+//                    if (rechargeSuccessEntity != null){
+//                        if (rechargeSuccessEntity.getRetcode() == 0){
+//                            dialog.setContent("加载中");
+//                            dialog.show();
+//                            memberRecharge(rechargeSuccessEntity.getDatas().getRechargeId());
+//                        }else {
+//                            ToastUtil.shortShow(this,rechargeSuccessEntity.getStatus());
+//                        }
+//                    }
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+
                         }else {
-                            ToastUtil.shortShow(this,rechargeSuccessEntity.getStatus());
+                            ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }
                 }
@@ -260,28 +267,28 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
         requestHttpData(Constants.Urls.URL_POST_RECHARGE_PRINT,REQUEST_CODE_RECHARGE_PRINT, FProtocol.HttpMethod.POST,params);
     }
 
-    private void setMemberInfo(OfflineMemberRechargeEntity offlineMemberRechargeEntity) {
-        memberNumInfo.setText(offlineMemberRechargeEntity.getData().getMember().getUcode());
-        memberNameInfo.setText(offlineMemberRechargeEntity.getData().getMember().getUserName());
-        memberTypeInfo.setText(offlineMemberRechargeEntity.getData().getMember().getCardName());
-        memberMobileInfo.setText(offlineMemberRechargeEntity.getData().getMember().getMobileNumber());
-        memberBalanceInfo.setText("￥" + offlineMemberRechargeEntity.getData().getMember().getBalance());
+    private void setMemberInfo(OfflineMemberRechargeEntity.OfflineMemberRechargeResult rechargeResult) {
+//        memberNumInfo.setText(offlineMemberRechargeEntity.getData().getMember().getUcode());
+        memberNameInfo.setText(rechargeResult.getuName());
+        memberTypeInfo.setText(rechargeResult.getcName());
+        memberMobileInfo.setText(rechargeResult.getuMobile());
+        memberBalanceInfo.setText("￥" + rechargeResult.getcBalance());
 
-        int price = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getPrice();
-        int discount = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getDiscount();
-        String cardName = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getCardName();
+//        int price = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getPrice();
+//        int discount = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getDiscount();
+//        String cardName = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(0).getCardName();
 
-        int goldPrice = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(1).getPrice();
-        int goldDiscount = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(1).getDiscount();
-        String goldCardName = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(1).getCardName();
+        double goldPrice = rechargeResult.getCardses().get(0).getPrice();
+        double goldDiscount =  rechargeResult.getCardses().get(0).getDiscount();
+        String goldCardName =  rechargeResult.getCardses().get(0).getCardName();
 
-        int diamondPrice = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(2).getPrice();
-        int diamondDiscount = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(2).getDiscount();
-        String diamondCardName = offlineMemberRechargeEntity.getData().getMerchantCardsRules().get(2).getCardName();
+        double diamondPrice =  rechargeResult.getCardses().get(1).getPrice();
+        double diamondDiscount =  rechargeResult.getCardses().get(1).getDiscount();
+        String diamondCardName =  rechargeResult.getCardses().get(1).getCardName();
 
-        String oneLine = "充值金额≥" + price + "且<" + diamondPrice + "元，可升级为黄金会员，享受" +goldDiscount +"折优惠；";
-        String twoLine = "充值金额≥" + diamondPrice + ",可升级为钻石会员，享受" + diamondDiscount + "折优惠；";
-        CommonTools.StringInterceptionChangeRed(tvOneMemberRechargePrompt,oneLine,"≥" + price + "且<" + diamondPrice + "","" +goldDiscount +"折");
+        String oneLine = "充值金额≥" + goldPrice + "且<" + diamondPrice + "元，可升级为" + goldCardName + "，享受" +goldDiscount +"折优惠；";
+        String twoLine = "充值金额≥" + diamondPrice + ",可升级为 " + diamondCardName + "，享受" + diamondDiscount + "折优惠；";
+        CommonTools.StringInterceptionChangeRed(tvOneMemberRechargePrompt,oneLine,"≥" + goldPrice + "且<" + diamondPrice + "","" +goldDiscount +"折");
         CommonTools.StringInterceptionChangeRed(tvTwoMemberRechargePrompt,twoLine,"≥" + diamondPrice + "","" + diamondDiscount + "折");
         tvThreeMemberRechargePrompt.setText("如果已经是钻石会员，无论充值多少，仍享受当前优惠");
 
@@ -360,7 +367,7 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
                 }
                 break;
             case R.id.loading_layout:
-                loadData(userId);
+                loadData(memberNum);
                 setLoadingStatus(LoadingStatus.LOADING);
                 break;
         }
@@ -397,23 +404,23 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
     private void confirmRecharge(String payCode) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        String memberType = memberTypeInfo.getText().toString();
-        params.put("card_name",memberType);
-        params.put("balance",rechargeMoney);
-        params.put("uid",userId);
-        if (!TextUtils.isEmpty(payCode)){
+        params.put("uid",offlineMemberRechargeEntity.getResult().getId());
+        params.put("amount",rechargeMoney);
+        params.put("give",giveMoney);
+//        String memberType = memberTypeInfo.getText().toString();
+//        params.put("card_name",memberType);
+//        params.put("type","1");
+        if (isCashPay){
+            params.put("gateway","CASH");
+            params.put("auth_code","0");
+        }else if (isWxPay){
+            params.put("gateway","WechatPay_Pos");
+            params.put("auth_code",payCode);
+        }else {
+            params.put("gateway","Alipay_AopF2F");
             params.put("auth_code",payCode);
         }
-        params.put("type","1");
-        params.put("give",giveMoney);
-        if (isCashPay){
-            params.put("pay_type","CASH");
-        }else if (isWxPay){
-            params.put("pay_type","WECHAT");
-        }else {
-            params.put("pay_type","ALI");
-        }
-        requestHttpData(Constants.Urls.URL_POST_BUY_MERCHANT_CARD,REQUEST_CODE_RECHARGE_MERCHANT_CARD, FProtocol.HttpMethod.POST,params);
+        requestHttpData(Constants.Urls.URL_POST_MEMBER_RECHARGE_SUBMIT,REQUEST_CODE_RECHARGE_MERCHANT_CARD, FProtocol.HttpMethod.POST,params);
     }
 
 }

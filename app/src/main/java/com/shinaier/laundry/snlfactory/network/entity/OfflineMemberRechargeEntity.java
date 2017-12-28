@@ -9,119 +9,116 @@ import java.util.List;
  */
 
 public class OfflineMemberRechargeEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineMemberRechargeData data;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineMemberRechargeResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineMemberRechargeData getData() {
-        return data;
+    public OfflineMemberRechargeResult getResult() {
+        return result;
     }
 
-    public void setData(OfflineMemberRechargeData data) {
-        this.data = data;
+    public void setResult(OfflineMemberRechargeResult result) {
+        this.result = result;
     }
 
-    public class OfflineMemberRechargeData{
-        @SerializedName("member")
-        private OfflineMember member;
-        @SerializedName("merchantCardsRule")
-        private List<MerchantCardsRule> merchantCardsRules;
+    public class OfflineMemberRechargeResult{
+        @SerializedName("id")
+        private String id;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("cname")
+        private String cName;
+        @SerializedName("cbalance")
+        private String cBalance;
+        @SerializedName("cards")
+        private List<OfflineMemberRechargeCards> cardses;
 
-        public OfflineMember getMember() {
-            return member;
+        public String getId() {
+            return id;
         }
 
-        public void setMember(OfflineMember member) {
-            this.member = member;
+        public void setId(String id) {
+            this.id = id;
         }
 
-        public List<MerchantCardsRule> getMerchantCardsRules() {
-            return merchantCardsRules;
+        public String getuName() {
+            return uName;
         }
 
-        public void setMerchantCardsRules(List<MerchantCardsRule> merchantCardsRules) {
-            this.merchantCardsRules = merchantCardsRules;
+        public void setuName(String uName) {
+            this.uName = uName;
         }
 
-        public class OfflineMember{
-            @SerializedName("ucode")
-            private String ucode;
-            @SerializedName("mobile_number")
-            private String mobileNumber;
-            @SerializedName("username")
-            private String userName;
-            @SerializedName("card_name")
-            private String cardName;
-            @SerializedName("balance")
-            private String balance;
-
-            public String getUcode() {
-                return ucode;
-            }
-
-            public void setUcode(String ucode) {
-                this.ucode = ucode;
-            }
-
-            public String getMobileNumber() {
-                return mobileNumber;
-            }
-
-            public void setMobileNumber(String mobileNumber) {
-                this.mobileNumber = mobileNumber;
-            }
-
-            public String getUserName() {
-                return userName;
-            }
-
-            public void setUserName(String userName) {
-                this.userName = userName;
-            }
-
-            public String getCardName() {
-                return cardName;
-            }
-
-            public void setCardName(String cardName) {
-                this.cardName = cardName;
-            }
-
-            public String getBalance() {
-                return balance;
-            }
-
-            public void setBalance(String balance) {
-                this.balance = balance;
-            }
+        public String getuMobile() {
+            return uMobile;
         }
 
-        public class MerchantCardsRule{
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public String getcName() {
+            return cName;
+        }
+
+        public void setcName(String cName) {
+            this.cName = cName;
+        }
+
+        public String getcBalance() {
+            return cBalance;
+        }
+
+        public void setcBalance(String cBalance) {
+            this.cBalance = cBalance;
+        }
+
+        public List<OfflineMemberRechargeCards> getCardses() {
+            return cardses;
+        }
+
+        public void setCardses(List<OfflineMemberRechargeCards> cardses) {
+            this.cardses = cardses;
+        }
+
+        public class OfflineMemberRechargeCards{
+            @SerializedName("id")
+            private String id;
             @SerializedName("card_name")
             private String cardName;
             @SerializedName("discount")
-            private int discount;
+            private double discount;
             @SerializedName("price")
-            private int price;
+            private double price;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
 
             public String getCardName() {
                 return cardName;
@@ -131,19 +128,19 @@ public class OfflineMemberRechargeEntity {
                 this.cardName = cardName;
             }
 
-            public int getDiscount() {
+            public double getDiscount() {
                 return discount;
             }
 
-            public void setDiscount(int discount) {
+            public void setDiscount(double discount) {
                 this.discount = discount;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
         }

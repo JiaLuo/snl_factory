@@ -106,15 +106,15 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         leftButton.setOnClickListener(this);
         ivChangedPhoneNum.setOnClickListener(this);
         ivChangedDiscountNum.setOnClickListener(this);
-        if (memberType == OfflineMemberManageActivity.PERSONAL_MEMBER){
-            memberDetailName.setText("姓名：");
-            rlPersonalSex.setVisibility(View.VISIBLE);
-            memberDetailMemberBirth.setText("会员生日：");
-        }else {
-            memberDetailName.setText("如家酒店：");
-            rlPersonalSex.setVisibility(View.GONE);
-            memberDetailMemberBirth.setText("会员折扣：");
-        }
+//        if (memberType == OfflineMemberManageActivity.PERSONAL_MEMBER){
+//            memberDetailName.setText("姓名：");
+//            rlPersonalSex.setVisibility(View.VISIBLE);
+//            memberDetailMemberBirth.setText("会员生日：");
+//        }else {
+//            memberDetailName.setText("如家酒店：");
+//            rlPersonalSex.setVisibility(View.GONE);
+//            memberDetailMemberBirth.setText("会员折扣：");
+//        }
     }
 
     @Override

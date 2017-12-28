@@ -23,31 +23,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-            <RelativeLayout
-                android:layout_margin="17dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="卡号："
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_member_num"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:text="SNL12345"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
+            <!--<RelativeLayout-->
+            <!--android:layout_margin="17dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--<TextView-->
+            <!--android:text="卡号："-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="#666666"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+            <!--<TextView-->
+            <!--android:id="@+id/tv_member_num"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="#666666"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+            <!--</RelativeLayout>-->
             <RelativeLayout
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/member_name"
                     android:layout_centerVertical="true"
                     android:text="姓名："
                     android:textSize="14sp"
@@ -65,6 +65,7 @@
                     android:layout_height="36dp"/>
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_member_sex"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:layout_width="match_parent"
@@ -101,7 +102,7 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="44dp">
                 <TextView
                     android:layout_centerVertical="true"
                     android:text="手机号："
@@ -112,13 +113,14 @@
                 <TextView
                     android:id="@+id/tv_member_mobile"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:textSize="14sp"
-                    android:text="15711215800"
                     android:textColor="#666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_member_birth"
                 android:layout_marginTop="17dp"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
@@ -143,11 +145,97 @@
                     android:layout_height="36dp"/>
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rl_member_discount"
+                android:visibility="gone"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:text="折扣："
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <RelativeLayout
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/check_clothes_img_lin_bg"
+                    android:layout_width="182dp"
+                    android:layout_height="36dp">
+                    <TextView
+                        android:id="@+id/tv_discount"
+                        android:text="折"
+                        android:textColor="@color/black_text"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+                        android:id="@+id/ed_input_discout_num"
+                        android:layout_toLeftOf="@id/tv_discount"
+                        android:layout_marginRight="4dp"
+                        android:background="@null"
+                        android:gravity="right|center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLength="11"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:layout_width="182dp"
+                        android:layout_height="36dp"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_member_recharge_money"
+                android:visibility="gone"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:text="充值金额："
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <RelativeLayout
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/check_clothes_img_lin_bg"
+                    android:layout_width="182dp"
+                    android:layout_height="36dp">
+                    <TextView
+                        android:id="@+id/tv_money"
+                        android:text="元"
+                        android:textColor="@color/black_text"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+                        android:id="@+id/ed_input_money_num"
+                        android:layout_toLeftOf="@id/tv_money"
+                        android:layout_marginRight="4dp"
+                        android:background="@null"
+                        android:gravity="right|center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLength="11"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:layout_width="182dp"
+                        android:layout_height="36dp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_margin="17dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_centerVertical="true"
                     android:text="会员地址："
                     android:textSize="14sp"
                     android:textColor="#666666"
@@ -172,7 +260,6 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_centerVertical="true"
                     android:text="备注："
                     android:textSize="14sp"
                     android:textColor="#666666"
@@ -190,6 +277,7 @@
                     android:layout_height="73dp"/>
             </RelativeLayout>
             <LinearLayout
+                android:id="@+id/ll_member_recharge_type"
                 android:background="#f5f5f5"
                 android:layout_width="match_parent"
                 android:layout_height="38dp">
@@ -202,6 +290,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_member_recharge_normal"
                 android:layout_marginTop="17dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -242,6 +331,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_member_recharge_gold"
                 android:layout_marginTop="17dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -282,6 +372,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_member_recharge_diamonds"
                 android:layout_marginTop="17dp"
                 android:layout_marginBottom="17dp"
                 android:orientation="horizontal"
