@@ -17,45 +17,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/member_detail_num"
-                    android:text="卡号："
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/member_detail_num_info"
-                    android:text=""
-                    android:layout_marginLeft="117dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_marginTop="17dp"
-                android:layout_marginLeft="16dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
                     android:id="@+id/member_detail_name"
-                    android:text="姓名："
+                    android:text="姓        名："
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_name_info"
+                    android:layout_toRightOf="@id/member_detail_name"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/rl_personal_sex"
+                android:id="@+id/rl_member_info_sex"
                 android:layout_marginTop="17dp"
                 android:layout_marginLeft="16dp"
                 android:orientation="horizontal"
@@ -63,15 +42,16 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/member_detail_sex"
-                    android:text="性别："
+                    android:text="性        别："
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_sex_info"
+                    android:layout_toRightOf="@id/member_detail_sex"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
@@ -92,8 +72,9 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_member_type_info"
+                    android:layout_toRightOf="@id/member_detail_member_type"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
@@ -107,24 +88,18 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/member_detail_mobile"
-                    android:text="手机号："
+                    android:text="手  机  号："
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_mobile_info"
+                    android:layout_toRightOf="@id/member_detail_mobile"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <ImageView
-                    android:id="@+id/iv_changed_phone_num"
-                    android:background="@drawable/info_changed_img"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -143,10 +118,35 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_member_balance_info"
+                    android:layout_toRightOf="@id/member_detail_member_balance"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_member_detail_member_discount"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/member_detail_member_discount"
+                    android:text="会员折扣："
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/member_detail_member_discount_info"
+                    android:layout_toRightOf="@id/member_detail_member_discount"
+                    android:text=""
+                    android:layout_marginLeft="10dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -165,18 +165,11 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_member_birth_info"
+                    android:layout_toRightOf="@id/member_detail_member_birth"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <ImageView
-                    android:id="@+id/iv_changed_discount_num"
-                    android:visibility="gone"
-                    android:background="@drawable/info_changed_img"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -195,8 +188,9 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_deal_time_info"
+                    android:layout_toRightOf="@id/member_detail_deal_time"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
@@ -218,8 +212,9 @@
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_member_add_info"
+                    android:layout_toRightOf="@id/member_detail_member_add"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
@@ -235,15 +230,16 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/member_detail_member_remark"
-                    android:text="备注："
+                    android:text="备        注："
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/member_detail_member_remark_info"
+                    android:layout_toRightOf="@id/member_detail_member_remark"
                     android:text=""
-                    android:layout_marginLeft="117dp"
+                    android:layout_marginLeft="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/black_text"
                     android:layout_width="wrap_content"
@@ -263,12 +259,12 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <!--<com.common.widget.FootLoadingListView-->
-                <!--android:id="@+id/offline_member_balance_list"-->
-                <!--android:divider="@color/base_bg"-->
-                <!--android:dividerHeight="1dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:scrollbars="none"/>-->
+            <!--android:id="@+id/offline_member_balance_list"-->
+            <!--android:divider="@color/base_bg"-->
+            <!--android:dividerHeight="1dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scrollbars="none"/>-->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

@@ -16,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/7/28.
  */
 
-public class OfflineMemberBalanceInfoAdapter extends BaseAdapterNew<OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailRecord> {
-    public OfflineMemberBalanceInfoAdapter(Context context, List<OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailRecord> mDatas) {
+public class OfflineMemberBalanceInfoAdapter extends BaseAdapterNew<OfflineMemberDetailEntity.OfflineMemberDetailResult.OfflineMemberDetailRecord> {
+    public OfflineMemberBalanceInfoAdapter(Context context, List<OfflineMemberDetailEntity.OfflineMemberDetailResult.OfflineMemberDetailRecord> mDatas) {
         super(context, mDatas);
     }
 
@@ -28,7 +28,7 @@ public class OfflineMemberBalanceInfoAdapter extends BaseAdapterNew<OfflineMembe
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailRecord item = getItem(position);
+        OfflineMemberDetailEntity.OfflineMemberDetailResult.OfflineMemberDetailRecord item = getItem(position);
         TextView tvBalanceType = ViewHolder.get(convertView,R.id.tv_balance_type);
         TextView tvBalanceTime = ViewHolder.get(convertView,R.id.tv_balance_time);
         TextView tvBalanceMoney = ViewHolder.get(convertView,R.id.tv_balance_money);
@@ -41,7 +41,7 @@ public class OfflineMemberBalanceInfoAdapter extends BaseAdapterNew<OfflineMembe
                 tvBalanceType.setText("会员充值");
                 tvBalanceMoney.setText("￥" + item.getAmount() + "+" + item.getGive());
             }
-            tvBalanceTime.setText(item.getUpdateTime());
+            tvBalanceTime.setText(item.getLogTime());
         }
     }
 }

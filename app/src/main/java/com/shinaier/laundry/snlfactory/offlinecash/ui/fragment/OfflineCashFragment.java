@@ -338,7 +338,7 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(context));
         params.put("number",number);
-        requestHttpData(Constants.Urls.URL_POST_IS_MEMBER,REQUEST_CODE_IS_MEMBER, FProtocol.HttpMethod.POST,params);
+        requestHttpData(Constants.Urls.URL_POST_CUSTOM_INFO,REQUEST_CODE_IS_MEMBER, FProtocol.HttpMethod.POST,params);
     }
 
     private void takeOrderData(String number) {
@@ -422,14 +422,14 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
                 if (data != null){
                     Entity entity = Parsers.getEntity(data);
                     if (entity != null){
-                        if (entity.getRetcode() == 75){ //code 等于75说明是已存在的会员
+                        if (entity.getRetcode() == 0){ //code 等于75说明是已存在的会员
                             //有会员存在
                             Intent intent = new Intent(context,MemberInfoActivity.class);
                             intent.putExtra("phone_num",number);
                             startActivity(intent);
                             collectClothesDialog.dismiss();
                             dialog.dismiss();
-                        }else if (entity.getRetcode() == 0){ //code 等于0说明是不存在的会员
+                        }else if (entity.getRetcode() == 1000){ //code 等于0说明是不存在的会员
                             //会员不存在 新增散客
                             if (CommonTools.checkPhoneNumber(context,true,number)){
                                 Intent intent = new Intent(context,OfflineAddVisitorActivity.class);

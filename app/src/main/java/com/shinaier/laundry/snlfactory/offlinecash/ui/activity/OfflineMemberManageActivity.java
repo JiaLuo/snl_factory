@@ -227,7 +227,7 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                 });
                 break;
             case R.id.offline_member_consume:
-
+                //会员充值
                 View memberRechargeView = View.inflate(this, R.layout.collect_clothes_view,null);
                 ImageView memberRechargeViewScan = (ImageView) memberRechargeView.findViewById(R.id.iv_scan);
                 TextView memberRechargeViewInputNum = (TextView) memberRechargeView.findViewById(R.id.tv_input_num);
@@ -321,19 +321,24 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
      */
     private void existMember(int searchMember, String memberNum) {
         int code = 0;
+        String url = "";
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(OfflineMemberManageActivity.this));
         params.put("number", memberNum);
         if (searchMember == 1){  // 点击会员管理的搜索图标
             code = REQUEST_CODE_SEARCH_MEMBER;
+            url = Constants.Urls.URL_POST_CUSTOM_INFO;
         }else if (searchMember == 2){ //新增会员按钮
             code = REQUEST_CODE_ADD_MEMBER;
+            url = Constants.Urls.URL_POST_IS_MEMBER;
         }else if (searchMember == 3){
             code = REQUEST_CODE_MEMBER_INFO_CHANGE;
+            url = Constants.Urls.URL_POST_CUSTOM_INFO;
         }else if (searchMember == 4){
             code = REQUEST_CODE_MEMBER_RECHARGE;
+            url = Constants.Urls.URL_POST_CUSTOM_INFO;
         }
-        requestHttpData(Constants.Urls.URL_POST_IS_MEMBER,code, FProtocol.HttpMethod.POST,params);
+        requestHttpData(url,code, FProtocol.HttpMethod.POST,params);
     }
 
     @Override
@@ -389,7 +394,7 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                     if (dialog.isShowing()){
                         dialog.dismiss();
                     }
-                    if (entity.getRetcode() == 75){
+                    if (entity.getRetcode() == 0){
                         Intent intent = new Intent(this,OfflineChangeMemberInfoActivity.class);
                         intent.putExtra("member_number",memberNum);
                         startActivity(intent);
@@ -408,7 +413,7 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                         dialog.dismiss();
                     }
                     if (entity != null){
-                        if (entity.getRetcode() == 75){
+                        if (entity.getRetcode() == 0){
                             if (collectClothesDialog != null){
                                 if (collectClothesDialog.isShowing()){
                                     collectClothesDialog.dismiss();
@@ -450,6 +455,29 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                         ToastUtil.shortShow(this,"此用户已是本店会员，不用重复添加");
                     }else {
                         ToastUtil.shortShow(this,entity.getStatus());
+                    }
+                }
+                break;
+            case REQUEST_CODE_SEARCH_MEMBER:
+                if(data != null){
+                    Entity entity1 = Parsers.getEntity(data);
+
+                    if (dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    if (entity1 != null){
+                        if (entity1.getRetcode() == 0){
+                            // 说明会员存在，正常进入会员详情
+                            Intent intent = new Intent(this,OfflineMemberDetailActivity.class);
+                            intent.putExtra("member_number",memberNum);
+                            startActivity(intent);
+                            if (collectClothesDialog.isShowing()){
+                                collectClothesDialog.dismiss();
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,"此用户不是是本店会员，请先添加会员");
+
+                        }
                     }
                 }
                 break;

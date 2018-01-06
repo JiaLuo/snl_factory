@@ -17,8 +17,6 @@ import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberDetailEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineMemberBalanceInfoAdapter;
-import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
-import com.shinaier.laundry.snlfactory.util.TimeUtils;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
@@ -36,8 +34,6 @@ import java.util.List;
 public class OfflineMemberDetailActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_MEMBER_DETAIL = 0x1;
 
-    @ViewInject(R.id.member_detail_num_info)
-    private TextView memberDetailNumInfo;
     @ViewInject(R.id.member_detail_name_info)
     private TextView memberDetailNameInfo;
     @ViewInject(R.id.member_detail_sex_info)
@@ -62,18 +58,17 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
     private ImageView leftButton;
     @ViewInject(R.id.member_detail_name)
     private TextView memberDetailName;
-    @ViewInject(R.id.rl_personal_sex)
-    private RelativeLayout rlPersonalSex;
-    @ViewInject(R.id.iv_changed_phone_num)
-    private ImageView ivChangedPhoneNum;
-    @ViewInject(R.id.iv_changed_discount_num)
-    private ImageView ivChangedDiscountNum;
+    @ViewInject(R.id.rl_member_info_sex)
+    private RelativeLayout rlMemberInfoSex;
     @ViewInject(R.id.member_detail_member_birth)
     private TextView memberDetailMemberBirth;
+    @ViewInject(R.id.rl_member_detail_member_discount)
+    private RelativeLayout rlMemberDetailMemberDiscount;
+    @ViewInject(R.id.member_detail_member_discount_info)
+    private TextView memberDetailMemberDiscountInfo;
 
 
     private CommonDialog dialog;
-    private int memberType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +77,6 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         ViewInjectUtils.inject(this);
         //从会员管理页面传递下来用户输入的会员卡或者手机号
         String memberNumber = getIntent().getStringExtra("member_number");
-        //从会员管理页面传递下来的 判断是个人会员还是企业会员
-        memberType = getIntent().getIntExtra("member_type",0);
         initView();
         loadData(memberNumber);
     }
@@ -91,7 +84,7 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
     private void loadData(String memberNumber) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("number", memberNumber);
+        params.put("umobile", memberNumber);
         requestHttpData(Constants.Urls.URL_POST_OFFLINE_MEMBER_DETAIL,REQUEST_CODE_MEMBER_DETAIL,
                 FProtocol.HttpMethod.POST,params);
     }
@@ -104,17 +97,6 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         dialog.show();
         setLoadingStatus(LoadingStatus.LOADING);
         leftButton.setOnClickListener(this);
-        ivChangedPhoneNum.setOnClickListener(this);
-        ivChangedDiscountNum.setOnClickListener(this);
-//        if (memberType == OfflineMemberManageActivity.PERSONAL_MEMBER){
-//            memberDetailName.setText("姓名：");
-//            rlPersonalSex.setVisibility(View.VISIBLE);
-//            memberDetailMemberBirth.setText("会员生日：");
-//        }else {
-//            memberDetailName.setText("如家酒店：");
-//            rlPersonalSex.setVisibility(View.GONE);
-//            memberDetailMemberBirth.setText("会员折扣：");
-//        }
     }
 
     @Override
@@ -125,17 +107,17 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
                 if(data != null){
                     OfflineMemberDetailEntity offlineMemberDetailEntity = Parsers.getOfflineMemberDetailEntity(data);
                     if(offlineMemberDetailEntity != null){
-                        if(offlineMemberDetailEntity.getRetcode() == 0){
-                            if(offlineMemberDetailEntity.getDetailDatas() != null
-                                    && offlineMemberDetailEntity.getDetailDatas().getUser() != null){
-                                setMemberInfo(offlineMemberDetailEntity.getDetailDatas().getUser()); //设置会员信息
-                                setMemberBalanceList(offlineMemberDetailEntity.getDetailDatas().getRecord());
+                        if(offlineMemberDetailEntity.getCode() == 0){
+                            if (offlineMemberDetailEntity.getResult() != null){
+
+                                setMemberInfo(offlineMemberDetailEntity.getResult()); //设置会员信息
+                                setMemberBalanceList(offlineMemberDetailEntity.getResult().getRecord());
                                 if (dialog.isShowing()){
                                     dialog.dismiss();
                                 }
                             }
                         }else {
-                            ToastUtil.shortShow(this,offlineMemberDetailEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineMemberDetailEntity.getMsg());
                         }
                     }
                 }
@@ -143,7 +125,7 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         }
     }
 
-    private void setMemberBalanceList(List<OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailRecord> record) {
+    private void setMemberBalanceList(List<OfflineMemberDetailEntity.OfflineMemberDetailResult.OfflineMemberDetailRecord> record) {
         if (record != null && record.size() > 0){
             setLoadingStatus(LoadingStatus.GONE);
             OfflineMemberBalanceInfoAdapter offlineMemberBalanceInfoAdapter = new OfflineMemberBalanceInfoAdapter(this,record);
@@ -151,41 +133,80 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         }else {
             setLoadingStatus(LoadingStatus.EMPTY);
             OfflineMemberBalanceInfoAdapter offlineMemberBalanceInfoAdapter = new OfflineMemberBalanceInfoAdapter(this,
-                    new ArrayList<OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailRecord>());
+                    new ArrayList<OfflineMemberDetailEntity.OfflineMemberDetailResult.OfflineMemberDetailRecord>());
             offlineMemberBalanceList.setAdapter(offlineMemberBalanceInfoAdapter);
         }
     }
 
     //设置会员信息
-    private void setMemberInfo(OfflineMemberDetailEntity.OfflineMemberDetailDatas.OfflineMemberDetailUser user) {
-        memberDetailNumInfo.setText(user.getUcode());
-        memberDetailNameInfo.setText(user.getUserName());
-        if (user.getSex() != null){
-            if(user.getSex().equals("1")){
-                memberDetailSexInfo.setText("男");
+    private void setMemberInfo(OfflineMemberDetailEntity.OfflineMemberDetailResult result) {
+
+        if (result.getIsCompany().equals("0")){ //是否为企业会员:1-是，0-否
+            memberDetailName.setText("姓        名：");
+            rlMemberInfoSex.setVisibility(View.VISIBLE);
+            rlMemberDetailMemberDiscount.setVisibility(View.VISIBLE);
+            if (result.getcDiscount().equals("10.0") || result.getcDiscount().equals("0.0")){
+                memberDetailMemberDiscountInfo.setText("无折扣");
+            }else {
+                memberDetailMemberDiscountInfo.setText(result.getcDiscount());
+            }
+            memberDetailMemberBirth.setText("会员生日：");
+            if (result.getBirthday().equals("0")){
+                memberDetailMemberBirthInfo.setText("1980-01-01");
+            }else {
+                memberDetailMemberBirthInfo.setText(result.getBirthday());
+            }
+            if (result.getSex() != null){
+                if(result.getSex().equals("1")){
+                    memberDetailSexInfo.setText("男");
+                }else {
+                    memberDetailSexInfo.setText("女");
+                }
             }else {
                 memberDetailSexInfo.setText("女");
             }
-        }else {
-            memberDetailSexInfo.setText("女");
+        }else if (result.getIsCompany().equals("1")){
+            memberDetailName.setText("企业名称：");
+            rlMemberInfoSex.setVisibility(View.GONE);
+            rlMemberDetailMemberDiscount.setVisibility(View.GONE);
+            memberDetailMemberBirth.setText("会员折扣：");
+            memberDetailMemberBirthInfo.setText(result.getcDiscount());
+        }else { //散客
+            memberDetailName.setText("姓        名：");
+            rlMemberInfoSex.setVisibility(View.VISIBLE);
+            rlMemberDetailMemberDiscount.setVisibility(View.VISIBLE);
+            memberDetailMemberDiscountInfo.setText("无折扣");
+            memberDetailMemberBirth.setText("会员生日：");
+            if (result.getBirthday().equals("0")){
+                memberDetailMemberBirthInfo.setText("1980-01-01");
+            }else {
+                memberDetailMemberBirthInfo.setText(result.getBirthday());
+            }
+            if (result.getSex() != null){
+                if(result.getSex().equals("1")){
+                    memberDetailSexInfo.setText("男");
+                }else {
+                    memberDetailSexInfo.setText("女");
+                }
+            }else {
+                memberDetailSexInfo.setText("女");
+            }
         }
-        memberDetailMemberTypeInfo.setText(user.getCardName());
-        memberDetailMobileInfo.setText(user.getMobileNumber());
-        memberDetailMemberBalanceInfo.setText("￥" + user.getBalance());
-        if (user.getBirthday().equals("0")){
-            memberDetailMemberBirthInfo.setText("1980-01-01");
-        }else {
-            memberDetailMemberBirthInfo.setText(user.getBirthday());
-        }
-        memberDetailDealTimeInfo.setText(TimeUtils.formatTime(user.getRegisterTime()));
-        if(user.getAddress() != null && !TextUtils.isEmpty(user.getAddress())){
-            memberDetailMemberAddInfo.setText(user.getAddress());
+        memberDetailNameInfo.setText(result.getuName());
+
+        memberDetailMemberTypeInfo.setText(result.getcName());
+        memberDetailMobileInfo.setText(result.getuMobile());
+        memberDetailMemberBalanceInfo.setText("￥" + result.getcBalance());
+
+        memberDetailDealTimeInfo.setText(result.getcTime());
+        if(result.getAddr() != null && !TextUtils.isEmpty(result.getAddr())){
+            memberDetailMemberAddInfo.setText(result.getAddr());
         }else {
             memberDetailMemberAddInfo.setText("");
         }
 
-        if(user.getRemark() != null && !TextUtils.isEmpty(user.getRemark())){
-            memberDetailMemberRemarkInfo.setText(user.getRemark());
+        if(result.getRemark() != null && !TextUtils.isEmpty(result.getRemark())){
+            memberDetailMemberRemarkInfo.setText(result.getRemark());
         }else {
             memberDetailMemberRemarkInfo.setText("");
         }
@@ -196,14 +217,6 @@ public class OfflineMemberDetailActivity extends ToolBarActivity implements View
         switch (v.getId()){
             case R.id.left_button:
                 finish();
-                break;
-            case R.id.iv_changed_phone_num://修改手机号
-                View changedPhone = View.inflate(this,R.layout.changed_phone_view,null);
-                CollectClothesDialog editPhoneNum = new CollectClothesDialog(this, R.style.DialogTheme,changedPhone);
-                editPhoneNum.show();
-                break;
-            case R.id.iv_changed_discount_num://修改会员折扣 个人不修改会员折扣做隐藏处理
-//                View changedPhone = View.inflate(this,R.layout.changed_discount_view,null);
                 break;
         }
     }

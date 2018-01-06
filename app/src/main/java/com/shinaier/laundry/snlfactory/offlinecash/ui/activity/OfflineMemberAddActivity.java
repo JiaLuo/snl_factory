@@ -333,6 +333,16 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
                     setLoadingStatus(LoadingStatus.EMPTY);
                 }
                 break;
+            case REQUEST_CODE_ADD_MEMBER_PERSONAL:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity.getRetcode() == 0){
+                        // TODO: 2018/1/6 缺少打印接口
+                    }else {
+                        ToastUtil.shortShow(this,entity.getStatus());
+                    }
+                }
+                break;
         }
     }
 
@@ -558,7 +568,7 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
         params.put("reg_from","2");
         if (isCashPay){
             params.put("gateway","CASH");
-            params.put("auth_code","0");
+            params.put("auth_code","1");
         }else if (isWxPay){
             params.put("gateway","WechatPay_Pos");
             params.put("auth_code",payCode);

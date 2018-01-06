@@ -186,7 +186,7 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
                     Entity entity = Parsers.getEntity(data);
                     if (entity != null){
                         if (entity.getRetcode() == 0){
-
+                            // TODO: 2018/1/6  缺少打印订单接口
                         }else {
                             ToastUtil.shortShow(this,entity.getStatus());
                         }
@@ -349,21 +349,20 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
             case R.id.confirm_pay:
                 rechargeMoney = edRechargeMoney.getText().toString();
                 giveMoney = edGiveMoney.getText().toString();
-                if (isCashPay){
-                    dialog.setContent("加载中");
-                    dialog.show();
-                    confirmRecharge("");
-                }else {
-
-                    if (!TextUtils.isEmpty(rechargeMoney)){
-                        if (isCashPay || isWxPay || isAliPay){
+                if (!TextUtils.isEmpty(rechargeMoney)){
+                    if (isCashPay){
+                        dialog.setContent("加载中");
+                        dialog.show();
+                        confirmRecharge("");
+                    }else {
+                        if (isWxPay || isAliPay){
                             startActivityForResult(new Intent(this,ScanActivity.class), RECHARGESCANSUCCESS);
                         }else {
                             ToastUtil.shortShow(this,"请选择支付方式");
                         }
-                    }else {
-                        ToastUtil.shortShow(this,"请输入充值金额");
                     }
+                }else {
+                    ToastUtil.shortShow(this,"请输入充值金额");
                 }
                 break;
             case R.id.loading_layout:
@@ -406,13 +405,14 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
         params.put("token", UserCenter.getToken(this));
         params.put("uid",offlineMemberRechargeEntity.getResult().getId());
         params.put("amount",rechargeMoney);
-        params.put("give",giveMoney);
-//        String memberType = memberTypeInfo.getText().toString();
-//        params.put("card_name",memberType);
-//        params.put("type","1");
+        if (!TextUtils.isEmpty(giveMoney)){
+            params.put("give",giveMoney);
+        }else {
+            params.put("give","0");
+        }
         if (isCashPay){
             params.put("gateway","CASH");
-            params.put("auth_code","0");
+            params.put("auth_code","1");
         }else if (isWxPay){
             params.put("gateway","WechatPay_Pos");
             params.put("auth_code",payCode);

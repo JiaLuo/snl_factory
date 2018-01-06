@@ -9,49 +9,149 @@ import java.util.List;
  */
 
 public class OfflineMemberDetailEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineMemberDetailDatas detailDatas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineMemberDetailResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineMemberDetailDatas getDetailDatas() {
-        return detailDatas;
+    public OfflineMemberDetailResult getResult() {
+        return result;
     }
 
-    public void setDetailDatas(OfflineMemberDetailDatas detailDatas) {
-        this.detailDatas = detailDatas;
+    public void setResult(OfflineMemberDetailResult result) {
+        this.result = result;
     }
 
-    public class OfflineMemberDetailDatas{
-        @SerializedName("user")
-        private OfflineMemberDetailUser user;
-        @SerializedName("record")
+    public class OfflineMemberDetailResult{
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("sex")
+        private String sex;
+        @SerializedName("cname")
+        private String cName;
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("cbalance")
+        private String cBalance;
+        @SerializedName("birthday")
+        private String birthday;
+        @SerializedName("ctime")
+        private String cTime;
+        @SerializedName("addr")
+        private String addr;
+        @SerializedName("remark")
+        private String remark;
+        @SerializedName("is_company")
+        private String isCompany;
+        @SerializedName("cdiscount")
+        private String cDiscount;
+        @SerializedName("recode")
         private List<OfflineMemberDetailRecord> record;
 
-        public OfflineMemberDetailUser getUser() {
-            return user;
+        public String getcDiscount() {
+            return cDiscount;
         }
 
-        public void setUser(OfflineMemberDetailUser user) {
-            this.user = user;
+        public void setcDiscount(String cDiscount) {
+            this.cDiscount = cDiscount;
+        }
+
+        public String getuName() {
+            return uName;
+        }
+
+        public void setuName(String uName) {
+            this.uName = uName;
+        }
+
+        public String getSex() {
+            return sex;
+        }
+
+        public void setSex(String sex) {
+            this.sex = sex;
+        }
+
+        public String getcName() {
+            return cName;
+        }
+
+        public void setcName(String cName) {
+            this.cName = cName;
+        }
+
+        public String getuMobile() {
+            return uMobile;
+        }
+
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public String getcBalance() {
+            return cBalance;
+        }
+
+        public void setcBalance(String cBalance) {
+            this.cBalance = cBalance;
+        }
+
+        public String getBirthday() {
+            return birthday;
+        }
+
+        public void setBirthday(String birthday) {
+            this.birthday = birthday;
+        }
+
+        public String getcTime() {
+            return cTime;
+        }
+
+        public void setcTime(String cTime) {
+            this.cTime = cTime;
+        }
+
+        public String getAddr() {
+            return addr;
+        }
+
+        public void setAddr(String addr) {
+            this.addr = addr;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public String getIsCompany() {
+            return isCompany;
+        }
+
+        public void setIsCompany(String isCompany) {
+            this.isCompany = isCompany;
         }
 
         public List<OfflineMemberDetailRecord> getRecord() {
@@ -62,166 +162,16 @@ public class OfflineMemberDetailEntity {
             this.record = record;
         }
 
-        public class OfflineMemberDetailUser{
-            @SerializedName("id")
-            private String id;
-            @SerializedName("username")
-            private String userName;
-            @SerializedName("sex")
-            private String sex;
-            @SerializedName("ucode")
-            private String ucode;
-            @SerializedName("card_name")
-            private String cardName;
-            @SerializedName("mobile_number")
-            private String mobileNumber;
-            @SerializedName("balance")
-            private String balance;
-            @SerializedName("birthday")
-            private String birthday;
-            @SerializedName("register_time")
-            private String registerTime;
-            @SerializedName("address")
-            private String address;
-            @SerializedName("remark")
-            private String remark;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getUserName() {
-                return userName;
-            }
-
-            public void setUserName(String userName) {
-                this.userName = userName;
-            }
-
-            public String getSex() {
-                return sex;
-            }
-
-            public void setSex(String sex) {
-                this.sex = sex;
-            }
-
-            public String getUcode() {
-                return ucode;
-            }
-
-            public void setUcode(String ucode) {
-                this.ucode = ucode;
-            }
-
-            public String getCardName() {
-                return cardName;
-            }
-
-            public void setCardName(String cardName) {
-                this.cardName = cardName;
-            }
-
-            public String getMobileNumber() {
-                return mobileNumber;
-            }
-
-            public void setMobileNumber(String mobileNumber) {
-                this.mobileNumber = mobileNumber;
-            }
-
-            public String getBalance() {
-                return balance;
-            }
-
-            public void setBalance(String balance) {
-                this.balance = balance;
-            }
-
-            public String getBirthday() {
-                return birthday;
-            }
-
-            public void setBirthday(String birthday) {
-                this.birthday = birthday;
-            }
-
-            public String getRegisterTime() {
-                return registerTime;
-            }
-
-            public void setRegisterTime(String registerTime) {
-                this.registerTime = registerTime;
-            }
-
-            public String getAddress() {
-                return address;
-            }
-
-            public void setAddress(String address) {
-                this.address = address;
-            }
-
-            public String getRemark() {
-                return remark;
-            }
-
-            public void setRemark(String remark) {
-                this.remark = remark;
-            }
-        }
 
         public class OfflineMemberDetailRecord{
-            @SerializedName("id")
-            private String id;
-            @SerializedName("mid")
-            private String mid;
-            @SerializedName("uid")
-            private String uid;
-            @SerializedName("type") //0 是消费 1 是充值
-            private String type;
             @SerializedName("amount")
             private String amount;
             @SerializedName("give")
             private String give;
-            @SerializedName("update_time")
-            private String updateTime;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getMid() {
-                return mid;
-            }
-
-            public void setMid(String mid) {
-                this.mid = mid;
-            }
-
-            public String getUid() {
-                return uid;
-            }
-
-            public void setUid(String uid) {
-                this.uid = uid;
-            }
-
-            public String getType() {
-                return type;
-            }
-
-            public void setType(String type) {
-                this.type = type;
-            }
+            @SerializedName("type") //0 是消费 1 是充值
+            private String type;
+            @SerializedName("log_time")
+            private String logTime;
 
             public String getAmount() {
                 return amount;
@@ -239,12 +189,20 @@ public class OfflineMemberDetailEntity {
                 this.give = give;
             }
 
-            public String getUpdateTime() {
-                return updateTime;
+            public String getType() {
+                return type;
             }
 
-            public void setUpdateTime(String updateTime) {
-                this.updateTime = updateTime;
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            public String getLogTime() {
+                return logTime;
+            }
+
+            public void setLogTime(String logTime) {
+                this.logTime = logTime;
             }
         }
     }
