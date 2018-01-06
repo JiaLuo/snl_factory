@@ -104,11 +104,11 @@ public class FeedbackActivity extends ToolBarActivity implements View.OnClickLis
             case REQUEST_CODE_FEEDBACK:
                 if(data != null){
                     Entity entity = Parsers.getEntity(data);
-                    if(entity.getRetcode() == 1){
-                        ToastUtil.shortShow(this,entity.getStatus());
-                    }else if(entity.getRetcode() == 0){
+                    if(entity.getRetcode() == 0){
                         ToastUtil.shortShow(this,"反馈成功");
                         finish();
+                    }else {
+                        ToastUtil.shortShow(this,entity.getStatus());
                     }
                 }
                 break;

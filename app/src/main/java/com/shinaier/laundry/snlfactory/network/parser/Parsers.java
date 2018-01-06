@@ -111,17 +111,18 @@ public class Parsers {
      * @param data
      * @return
      */
-    public static ManageFinanceEntities getManageFinanceEntities(String data){
-        ManageFinanceEntities manageFinanceEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            manageFinanceEntities = gson.fromJson(data1,new TypeToken<ManageFinanceEntities>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return manageFinanceEntities;
+        public static ManageFinanceEntities getManageFinanceEntities(String data){
+//        ManageFinanceEntities manageFinanceEntities = null;
+//        try {
+//            JSONObject jsonObject = new JSONObject(data);
+//            String data1 = jsonObject.optString("data");
+//            manageFinanceEntities = gson.fromJson(data1,new TypeToken<ManageFinanceEntities>(){}.getType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return manageFinanceEntities;
+        return gson.fromJson(data,new TypeToken<ManageFinanceEntities>(){}.getType());
     }
 
     /**

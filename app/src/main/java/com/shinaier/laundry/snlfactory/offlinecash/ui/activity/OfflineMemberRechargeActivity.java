@@ -50,8 +50,8 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
     private static final int IS_SUCCESS = 0x8;
     private static final int IS_FAIL = 0x9;
 
-    @ViewInject(R.id.member_num_info)
-    private TextView memberNumInfo;
+//    @ViewInject(R.id.member_num_info)
+//    private TextView memberNumInfo;
     @ViewInject(R.id.member_name_info)
     private TextView memberNameInfo;
     @ViewInject(R.id.member_type_info)

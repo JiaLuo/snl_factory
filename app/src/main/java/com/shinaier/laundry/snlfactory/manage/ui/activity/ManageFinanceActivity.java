@@ -34,8 +34,8 @@ import java.util.List;
 
 public class ManageFinanceActivity extends ToolBarActivity {
     private static final int REQUEST_CODE_BASE = 0x5;
-    public static final int INCOME = 1;
-    public static final int WITHDRAW = 3;
+    public static final String INCOME = "income";
+    public static final String WITHDRAW = "expend";
 
     @ViewInject(R.id.account_balance)
     private TextView accountBalance;
@@ -81,7 +81,7 @@ public class ManageFinanceActivity extends ToolBarActivity {
             }
         });
         ManageFinanceFragment manageFinanceFragment1 = new ManageFinanceFragment();
-        manageFinanceFragment1.setArgs(this);
+        manageFinanceFragment1.setArgs(this,"");
         ManageFinanceFragment manageFinanceFragment2 = new ManageFinanceFragment();
         manageFinanceFragment2.setArgs(this,INCOME);
         ManageFinanceFragment manageFinanceFragment3 = new ManageFinanceFragment();
@@ -151,14 +151,11 @@ public class ManageFinanceActivity extends ToolBarActivity {
             case REQUEST_CODE_BASE:
                 if(data != null){
                     ManageFinanceEntities manageFinanceEntities = Parsers.getManageFinanceEntities(data);
-                    accountBalance.setText("￥" + manageFinanceEntities.getRemainder());
-                    String fromBank = manageFinanceEntities.getFromBank();
-                    String cardNumber = manageFinanceEntities.getCardNumber();
+                    accountBalance.setText("￥" + manageFinanceEntities.getResult().getBalance());
+                    String fromBank = manageFinanceEntities.getResult().getBank();
+                    String cardNumber = manageFinanceEntities.getResult().getAccount();
                     String newStrings = fromBank + cardNumber;
-//                    CharSequence charSequence = Html.fromHtml(manageFinanceEntities.getNoticeInfo());
-//                    storeFinanceDetail.setText(charSequence);
                     String info = "账户余额结算周期为T+7，平台将通过银行打款结算至"  + newStrings +"账户，每个账期内余额结款最低1000元起，不满1000元将累计至下一个账期结算。";
-//                    CommonTools.StringInterceptionChangeRed(tvTwoMemberRechargePrompt,twoLine,"≥" + diamondPrice + "","" + diamondDiscount + "折");
                     CommonTools.StringInterceptionChangeGreen(this,storeFinanceDetail,info, newStrings + "","");
                 }
                 break;
