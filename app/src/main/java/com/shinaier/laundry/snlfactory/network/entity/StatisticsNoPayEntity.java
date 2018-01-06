@@ -9,122 +9,109 @@ import java.util.List;
  */
 
 public class StatisticsNoPayEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private StatisticsData data;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<StatisticsResult> result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public StatisticsData getData() {
-        return data;
+    public List<StatisticsResult> getResult() {
+        return result;
     }
 
-    public void setData(StatisticsData data) {
-        this.data = data;
+    public void setResult(List<StatisticsResult> result) {
+        this.result = result;
     }
 
-    public class StatisticsData{
-        @SerializedName("page_count")
-        private int pageCount;
-        @SerializedName("orders")
-        private List<StatisticsOrders> orders;
+    public class StatisticsResult{
+        @SerializedName("date")
+        private String date;
+        @SerializedName("list")
+        private List<StatisticsInnerOrders> innerOrders;
 
-        public int getPageCount() {
-            return pageCount;
+        public String getDate() {
+            return date;
         }
 
-        public void setPageCount(int pageCount) {
-            this.pageCount = pageCount;
+        public void setDate(String date) {
+            this.date = date;
         }
 
-        public List<StatisticsOrders> getOrders() {
-            return orders;
+        public List<StatisticsInnerOrders> getInnerOrders() {
+            return innerOrders;
         }
 
-        public void setOrders(List<StatisticsOrders> orders) {
-            this.orders = orders;
+        public void setInnerOrders(List<StatisticsInnerOrders> innerOrders) {
+            this.innerOrders = innerOrders;
         }
 
-        public class StatisticsOrders{
-            @SerializedName("date")
-            private String date;
-            @SerializedName("orders")
-            private List<StatisticsInnerOrders> innerOrders;
+        public class StatisticsInnerOrders{
+            @SerializedName("id")
+            private String id;
+            @SerializedName("uname")
+            private String uName;
+            @SerializedName("pay_amount")
+            private String amount;
+            @SerializedName("ordersn")
+            private String ordersn;
+            @SerializedName("otime")
+            private String oTime;
 
-            public String getDate() {
-                return date;
+            public String getId() {
+                return id;
             }
 
-            public void setDate(String date) {
-                this.date = date;
+            public void setId(String id) {
+                this.id = id;
             }
 
-            public List<StatisticsInnerOrders> getInnerOrders() {
-                return innerOrders;
+            public String getuName() {
+                return uName;
             }
 
-            public void setInnerOrders(List<StatisticsInnerOrders> innerOrders) {
-                this.innerOrders = innerOrders;
+            public void setuName(String uName) {
+                this.uName = uName;
             }
 
-            public class StatisticsInnerOrders{
-                @SerializedName("id")
-                private String id;
-                @SerializedName("ordersn")
-                private String ordersn;
-                @SerializedName("amount")
-                private String amount;
-                @SerializedName("create_time")
-                private String createTime;
+            public String getAmount() {
+                return amount;
+            }
 
-                public String getId() {
-                    return id;
-                }
+            public void setAmount(String amount) {
+                this.amount = amount;
+            }
 
-                public void setId(String id) {
-                    this.id = id;
-                }
+            public String getOrdersn() {
+                return ordersn;
+            }
 
-                public String getOrdersn() {
-                    return ordersn;
-                }
+            public void setOrdersn(String ordersn) {
+                this.ordersn = ordersn;
+            }
 
-                public void setOrdersn(String ordersn) {
-                    this.ordersn = ordersn;
-                }
+            public String getoTime() {
+                return oTime;
+            }
 
-                public String getAmount() {
-                    return amount;
-                }
-
-                public void setAmount(String amount) {
-                    this.amount = amount;
-                }
-
-                public String getCreateTime() {
-                    return createTime;
-                }
-
-                public void setCreateTime(String createTime) {
-                    this.createTime = createTime;
-                }
+            public void setoTime(String oTime) {
+                this.oTime = oTime;
             }
         }
     }

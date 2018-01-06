@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.StatisticsFragment;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.fragment.StatisticsFragment;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
+package com.shinaier.laundry.snlfactory.offlinecash.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +20,17 @@ import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderDetailActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsIncomeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsNoPayEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.StatisticsIncomeAdapter;
+import com.shinaier.laundry.snlfactory.offlinecash.adapter.StatisticsNoDoneAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.StatisticsNoPayAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.view.OnDateSetListener;
 import com.shinaier.laundry.snlfactory.offlinecash.view.TimePickerDialog;
+import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,8 +86,8 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
         int code = 0;
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(context));
-        params.put("start_time",startTime);
-        params.put("end_time",endTime);
+        params.put("start",startTime);
+        params.put("end",endTime);
         params.put("limit","10");
         if(status == 1){
             path = Constants.Urls.URL_POST_INCOME_STATISTICS;
@@ -97,22 +100,10 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
             }
         }else if(status == 2){
             path = Constants.Urls.URL_POST_NO_PAY_STATISTICS;
-            if (isMore){
-                params.put("page",statisticsNoPayAdapter.getPage() + 1 + "");
-                code = REQUEST_CODE_NO_PAY_STATISTICS_MORE;
-            }else {
-                params.put("page","1");
-                code = REQUEST_CODE_NO_PAY_STATISTICS;
-            }
+            code = REQUEST_CODE_NO_PAY_STATISTICS;
         }else if(status == 3){
             path = Constants.Urls.URL_POST_NO_DONE_STATISTICS;
-            if (isMore){
-                params.put("page",statisticsNoPayAdapter1.getPage() + 1 + "");
-                code = REQUEST_CODE_NO_DONE_STATISTICS_MORE;
-            }else {
-                params.put("page","1");
-                code = REQUEST_CODE_NO_DONE_STATISTICS;
-            }
+            code = REQUEST_CODE_NO_DONE_STATISTICS;
         }
         requestHttpData(path,code, FProtocol.HttpMethod.POST,params);
     }
@@ -142,7 +133,7 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
 
 
         mDialogYearMonthDay = new TimePickerDialog.Builder()
-//                .setType(Type.YEAR_MONTH_DAY)
+                .setType(Type.YEAR_MONTH_DAY)
 //                .setThemeColor(context.getResources().getColor(R.color.white))
                 .setCallBack(this)
                 .build();
@@ -183,31 +174,33 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                     StatisticsIncomeEntity statisticsIncomeEntity = Parsers.getStatisticsIncomeEntity(data);
                     statisticsList.onRefreshComplete();
                     if(statisticsIncomeEntity != null){
-                        if(statisticsIncomeEntity.getRetcode() == 0){
-                            if (statisticsIncomeEntity.getDatas() != null){
-                                if(statisticsIncomeEntity.getDatas().getRecords() != null &&
-                                        statisticsIncomeEntity.getDatas().getRecords().size() > 0){
-                                    if (statisticsIncomeEntity.getDatas().getTotalAmount() != null &&
-                                            !TextUtils.isEmpty(statisticsIncomeEntity.getDatas().getTotalAmount())){
-                                        totalIncome.setText("￥" + statisticsIncomeEntity.getDatas().getTotalAmount());
-                                    }
+                        if(statisticsIncomeEntity.getCode() == 0){
+                            if (statisticsIncomeEntity.getResult() != null){
+                                if (statisticsIncomeEntity.getResult().getSum() != null &&
+                                        !TextUtils.isEmpty(statisticsIncomeEntity.getResult().getSum())){
+                                    totalIncome.setText("￥" + statisticsIncomeEntity.getResult().getSum());
+                                }else {
+                                    totalIncome.setText("￥0.00");
+                                }
+                                if(statisticsIncomeEntity.getResult().getRecords() != null &&
+                                        statisticsIncomeEntity.getResult().getRecords().size() > 0){
                                     setLoadingStatus(LoadingStatus.GONE);
                                     statisticsList.setVisibility(View.VISIBLE);
                                     statisticsIncomeAdapter = new StatisticsIncomeAdapter(context,
-                                            statisticsIncomeEntity.getDatas().getRecords());
+                                            statisticsIncomeEntity.getResult().getRecords());
                                     statisticsList.setAdapter(statisticsIncomeAdapter);
-                                    if( statisticsIncomeAdapter.getPage() < statisticsIncomeEntity.getDatas().getPageCount()){
+                                    if( statisticsIncomeAdapter.getPage() < statisticsIncomeEntity.getResult().getPageCount()){
                                         statisticsList.setCanAddMore(true);
                                     }else {
                                         statisticsList.setCanAddMore(false);
                                     }
                                 }else {
-                                    if (statisticsIncomeEntity.getDatas().getTotalAmount() == null){
+                                    if (statisticsIncomeEntity.getResult().getSum() == null){
                                         totalIncome.setText("￥0.00");
                                     }
                                     statisticsList.setVisibility(View.GONE);
                                     setLoadingStatus(LoadingStatus.EMPTY);
-                                    statisticsIncomeAdapter = new StatisticsIncomeAdapter(context, new ArrayList<StatisticsIncomeEntity.StatisticsIncomeDatas.StatisticsIncomeRecord>());
+                                    statisticsIncomeAdapter = new StatisticsIncomeAdapter(context, new ArrayList<StatisticsIncomeEntity.StatisticsIncomeResult.StatisticsIncomeRecord>());
                                     statisticsList.setAdapter(statisticsIncomeAdapter);
                                     statisticsList.setCanAddMore(false);
                                 }
@@ -216,7 +209,7 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
                         }else {
-                            ToastUtil.shortShow(context,statisticsIncomeEntity.getStatus());
+                            ToastUtil.shortShow(context,statisticsIncomeEntity.getMsg());
                         }
                     }else {
                         statisticsList.setVisibility(View.GONE);
@@ -232,34 +225,29 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                     final StatisticsNoPayEntity statisticsNoPayEntity = Parsers.getStatisticsNoPayEntity(data);
                     statisticsList.onRefreshComplete();
                     if (statisticsNoPayEntity != null){
-                        if (statisticsNoPayEntity.getRetcode() == 0){
-                            if(statisticsNoPayEntity.getData() != null){
-                                if(statisticsNoPayEntity.getData().getOrders() != null && statisticsNoPayEntity.getData().getOrders()
+                        if (statisticsNoPayEntity.getCode() == 0){
+                            if(statisticsNoPayEntity.getResult() != null){
+                                StatisticsNoPayAdapter statisticsNoPayAdapter;
+                                if(statisticsNoPayEntity.getResult() != null && statisticsNoPayEntity.getResult()
                                         .size() > 0){
                                     statisticsList.setVisibility(View.VISIBLE);
                                     setLoadingStatus(LoadingStatus.GONE);
-                                    statisticsNoPayAdapter = new StatisticsNoPayAdapter(context,statisticsNoPayEntity.getData()
-                                    .getOrders());
+                                    statisticsNoPayAdapter = new StatisticsNoPayAdapter(context,statisticsNoPayEntity.getResult());
                                     statisticsList.setAdapter(statisticsNoPayAdapter);
-                                    if( statisticsNoPayAdapter.getPage() < statisticsNoPayEntity.getData().getPageCount()){
-                                        statisticsList.setCanAddMore(true);
-                                    }else {
-                                        statisticsList.setCanAddMore(false);
-                                    }
 
                                     statisticsNoPayAdapter.setPositionListener(new StatisticsNoPayAdapter.PositionListener() {
                                         @Override
                                         public void onClick(int position, int innerPosition) {
-                                            Intent intent = new Intent(context,OfflineOrderDetailActivity.class);
-                                            intent.putExtra("order_id",statisticsNoPayEntity.getData().getOrders().get(position).getInnerOrders()
-                                            .get(innerPosition).getId());
+                                            Intent intent = new Intent(context,OrderDetailActivity.class);
+                                            intent.putExtra("id",statisticsNoPayEntity.getResult().get(position).getInnerOrders()
+                                                    .get(innerPosition).getId());
                                             startActivity(intent);
                                         }
                                     });
                                 }else {
                                     statisticsList.setVisibility(View.GONE);
                                     setLoadingStatus(LoadingStatus.EMPTY);
-                                    statisticsNoPayAdapter = new StatisticsNoPayAdapter(context,new ArrayList<StatisticsNoPayEntity.StatisticsData.StatisticsOrders>());
+                                    statisticsNoPayAdapter = new StatisticsNoPayAdapter(context,new ArrayList<StatisticsNoPayEntity.StatisticsResult>());
                                     statisticsList.setAdapter(statisticsNoPayAdapter);
                                     statisticsList.setCanAddMore(false);
                                 }
@@ -268,7 +256,7 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
                         }else {
-                            ToastUtil.shortShow(context,statisticsNoPayEntity.getStatus());
+                            ToastUtil.shortShow(context,statisticsNoPayEntity.getMsg());
                         }
                     }else {
                         statisticsList.setVisibility(View.GONE);
@@ -284,25 +272,20 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                     final StatisticsNoPayEntity statisticsNoPayEntity = Parsers.getStatisticsNoPayEntity(data);
                     statisticsList.onRefreshComplete();
                     if (statisticsNoPayEntity != null){
-                        if (statisticsNoPayEntity.getRetcode() == 0){
-                            if(statisticsNoPayEntity.getData() != null){
-                                if(statisticsNoPayEntity.getData().getOrders() != null && statisticsNoPayEntity.getData().getOrders()
+                        if (statisticsNoPayEntity.getCode() == 0){
+                            if(statisticsNoPayEntity.getResult() != null){
+                                StatisticsNoDoneAdapter statisticsNoDoneAdapter;
+                                if(statisticsNoPayEntity.getResult() != null && statisticsNoPayEntity.getResult()
                                         .size() > 0){
                                     statisticsList.setVisibility(View.VISIBLE);
                                     setLoadingStatus(LoadingStatus.GONE);
-                                    statisticsNoPayAdapter1 = new StatisticsNoPayAdapter(context,statisticsNoPayEntity.getData()
-                                            .getOrders());
-                                    statisticsList.setAdapter(statisticsNoPayAdapter1);
-                                    if( statisticsNoPayAdapter1.getPage() < statisticsNoPayEntity.getData().getPageCount()){
-                                        statisticsList.setCanAddMore(true);
-                                    }else {
-                                        statisticsList.setCanAddMore(false);
-                                    }
-                                    statisticsNoPayAdapter1.setPositionListener(new StatisticsNoPayAdapter.PositionListener() {
+                                    statisticsNoDoneAdapter = new StatisticsNoDoneAdapter(context,statisticsNoPayEntity.getResult());
+                                    statisticsList.setAdapter(statisticsNoDoneAdapter);
+                                    statisticsNoDoneAdapter.setPositionListener(new StatisticsNoDoneAdapter.PositionListener() {
                                         @Override
                                         public void onClick(int position, int innerPosition) {
-                                            Intent intent = new Intent(context,OfflineOrderDetailActivity.class);
-                                            intent.putExtra("order_id",statisticsNoPayEntity.getData().getOrders().get(position).getInnerOrders()
+                                            Intent intent = new Intent(context,OrderDetailActivity.class);
+                                            intent.putExtra("id",statisticsNoPayEntity.getResult().get(position).getInnerOrders()
                                                     .get(innerPosition).getId());
                                             startActivity(intent);
                                         }
@@ -310,8 +293,8 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                                 }else {
                                     statisticsList.setVisibility(View.GONE);
                                     setLoadingStatus(LoadingStatus.EMPTY);
-                                    statisticsNoPayAdapter1 = new StatisticsNoPayAdapter(context,new ArrayList<StatisticsNoPayEntity.StatisticsData.StatisticsOrders>());
-                                    statisticsList.setAdapter(statisticsNoPayAdapter1);
+                                    statisticsNoDoneAdapter = new StatisticsNoDoneAdapter(context,new ArrayList<StatisticsNoPayEntity.StatisticsResult>());
+                                    statisticsList.setAdapter(statisticsNoDoneAdapter);
                                     statisticsList.setCanAddMore(false);
                                 }
                             }else {
@@ -319,7 +302,7 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
                         }else {
-                            ToastUtil.shortShow(context,statisticsNoPayEntity.getStatus());
+                            ToastUtil.shortShow(context,statisticsNoPayEntity.getMsg());
                         }
                     }else {
                         statisticsList.setVisibility(View.GONE);
@@ -334,32 +317,8 @@ public class StatisticsFragment extends BaseFragment implements View.OnClickList
                 statisticsList.onRefreshComplete();
                 if(data != null){
                     StatisticsIncomeEntity statisticsIncomeEntity = Parsers.getStatisticsIncomeEntity(data);
-                    statisticsIncomeAdapter.addDatas(statisticsIncomeEntity.getDatas().getRecords());
-                    if( statisticsIncomeAdapter.getPage() < statisticsIncomeEntity.getDatas().getPageCount()){
-                        statisticsList.setCanAddMore(true);
-                    }else {
-                        statisticsList.setCanAddMore(false);
-                    }
-                }
-                break;
-            case REQUEST_CODE_NO_PAY_STATISTICS_MORE:
-                statisticsList.onRefreshComplete();
-                if(data != null){
-                    StatisticsNoPayEntity statisticsNoPayEntity = Parsers.getStatisticsNoPayEntity(data);
-                    statisticsNoPayAdapter.addDatas(statisticsNoPayEntity.getData().getOrders());
-                    if( statisticsNoPayAdapter.getPage() < statisticsNoPayEntity.getData().getPageCount()){
-                        statisticsList.setCanAddMore(true);
-                    }else {
-                        statisticsList.setCanAddMore(false);
-                    }
-                }
-                break;
-            case REQUEST_CODE_NO_DONE_STATISTICS_MORE:
-                statisticsList.onRefreshComplete();
-                if(data != null){
-                    StatisticsNoPayEntity statisticsNoPayEntity = Parsers.getStatisticsNoPayEntity(data);
-                    statisticsNoPayAdapter1.addDatas(statisticsNoPayEntity.getData().getOrders());
-                    if( statisticsNoPayAdapter1.getPage() < statisticsNoPayEntity.getData().getPageCount()){
+                    statisticsIncomeAdapter.addDatas(statisticsIncomeEntity.getResult().getRecords());
+                    if( statisticsIncomeAdapter.getPage() < statisticsIncomeEntity.getResult().getPageCount()){
                         statisticsList.setCanAddMore(true);
                     }else {
                         statisticsList.setCanAddMore(false);

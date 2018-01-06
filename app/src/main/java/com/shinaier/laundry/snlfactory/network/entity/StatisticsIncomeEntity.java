@@ -9,69 +9,51 @@ import java.util.List;
  */
 
 public class StatisticsIncomeEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private StatisticsIncomeDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private StatisticsIncomeResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public StatisticsIncomeDatas getDatas() {
-        return datas;
+    public StatisticsIncomeResult getResult() {
+        return result;
     }
 
-    public void setDatas(StatisticsIncomeDatas datas) {
-        this.datas = datas;
+    public void setResult(StatisticsIncomeResult result) {
+        this.result = result;
     }
 
-    public class StatisticsIncomeDatas{
-        @SerializedName("total_amount")
-        private String totalAmount;
-        @SerializedName("record")
-        private List<StatisticsIncomeRecord> records;
-        @SerializedName("record_count")
-        private int recordCount;
+    public class StatisticsIncomeResult{
+        @SerializedName("sum")
+        private String sum;
         @SerializedName("page_count")
         private int pageCount;
+        @SerializedName("record")
+        private List<StatisticsIncomeRecord> records;
 
-        public String getTotalAmount() {
-            return totalAmount;
+        public String getSum() {
+            return sum;
         }
 
-        public void setTotalAmount(String totalAmount) {
-            this.totalAmount = totalAmount;
-        }
-
-        public List<StatisticsIncomeRecord> getRecords() {
-            return records;
-        }
-
-        public void setRecords(List<StatisticsIncomeRecord> records) {
-            this.records = records;
-        }
-
-        public int getRecordCount() {
-            return recordCount;
-        }
-
-        public void setRecordCount(int recordCount) {
-            this.recordCount = recordCount;
+        public void setSum(String sum) {
+            this.sum = sum;
         }
 
         public int getPageCount() {
@@ -82,41 +64,31 @@ public class StatisticsIncomeEntity {
             this.pageCount = pageCount;
         }
 
+        public List<StatisticsIncomeRecord> getRecords() {
+            return records;
+        }
+
+        public void setRecords(List<StatisticsIncomeRecord> records) {
+            this.records = records;
+        }
+
         public class StatisticsIncomeRecord{
-            @SerializedName("id")
-            private String id;
-            @SerializedName("mid")
-            private String mid;
             @SerializedName("cash")
             private String cash;
-            @SerializedName("platform_card")
-            private String platformCard;
-            @SerializedName("merchant_card")
-            private String merchantCard;
+            @SerializedName("platform")
+            private String platform;
+            @SerializedName("merchant")
+            private String merchant;
             @SerializedName("wechat")
             private String wechat;
             @SerializedName("alipay")
             private String alipay;
+            @SerializedName("real_total")
+            private String realTotal;
             @SerializedName("total")
             private String total;
-            @SerializedName("now_date")
-            private String nowDate;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getMid() {
-                return mid;
-            }
-
-            public void setMid(String mid) {
-                this.mid = mid;
-            }
+            @SerializedName("eftime")
+            private String eftime;
 
             public String getCash() {
                 return cash;
@@ -126,20 +98,20 @@ public class StatisticsIncomeEntity {
                 this.cash = cash;
             }
 
-            public String getPlatformCard() {
-                return platformCard;
+            public String getPlatform() {
+                return platform;
             }
 
-            public void setPlatformCard(String platformCard) {
-                this.platformCard = platformCard;
+            public void setPlatform(String platform) {
+                this.platform = platform;
             }
 
-            public String getMerchantCard() {
-                return merchantCard;
+            public String getMerchant() {
+                return merchant;
             }
 
-            public void setMerchantCard(String merchantCard) {
-                this.merchantCard = merchantCard;
+            public void setMerchant(String merchant) {
+                this.merchant = merchant;
             }
 
             public String getWechat() {
@@ -158,6 +130,14 @@ public class StatisticsIncomeEntity {
                 this.alipay = alipay;
             }
 
+            public String getRealTotal() {
+                return realTotal;
+            }
+
+            public void setRealTotal(String realTotal) {
+                this.realTotal = realTotal;
+            }
+
             public String getTotal() {
                 return total;
             }
@@ -166,14 +146,13 @@ public class StatisticsIncomeEntity {
                 this.total = total;
             }
 
-            public String getNowDate() {
-                return nowDate;
+            public String getEftime() {
+                return eftime;
             }
 
-            public void setNowDate(String nowDate) {
-                this.nowDate = nowDate;
+            public void setEftime(String eftime) {
+                this.eftime = eftime;
             }
         }
     }
-
 }

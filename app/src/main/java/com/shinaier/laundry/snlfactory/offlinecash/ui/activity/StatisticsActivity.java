@@ -12,6 +12,7 @@ import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.StatisticsAdapter;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.fragment.StatisticsFragment;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
 import java.util.ArrayList;

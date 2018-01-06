@@ -17,7 +17,7 @@ import java.util.List;
  * Created by 张家洛 on 2017/8/1.
  */
 
-public class StatisticsNoPayInnerAdapter extends BaseAdapterNew<StatisticsNoPayEntity.StatisticsResult.StatisticsInnerOrders> {
+public class StatisticsNoDoneInnerAdapter extends BaseAdapterNew<StatisticsNoPayEntity.StatisticsResult.StatisticsInnerOrders> {
     public interface InnerPositionListener{
         void onInnerClick(int position);
     }
@@ -25,24 +25,26 @@ public class StatisticsNoPayInnerAdapter extends BaseAdapterNew<StatisticsNoPayE
     public void setInnerPositionListener(InnerPositionListener listener){
         this.listener = listener;
     }
-    public StatisticsNoPayInnerAdapter(Context context, List<StatisticsNoPayEntity.StatisticsResult.StatisticsInnerOrders> mDatas) {
+    public StatisticsNoDoneInnerAdapter(Context context, List<StatisticsNoPayEntity.StatisticsResult.StatisticsInnerOrders> mDatas) {
         super(context, mDatas);
     }
 
     @Override
     protected int getResourceId(int Position) {
-        return R.layout.statistics_no_pay_inner_item;
+        return R.layout.statistics_no_done_inner_item;
     }
 
     @Override
     protected void setViewData(View convertView, final int position) {
         StatisticsNoPayEntity.StatisticsResult.StatisticsInnerOrders item = getItem(position);
-        TextView statisticsItemPayMode = ViewHolder.get(convertView,R.id.statistics_item_pay_mode);
+        TextView statisticsNoPayUserName = ViewHolder.get(convertView,R.id.statistics_no_pay_user_name);
+        TextView statisticsNoPayOrderNum = ViewHolder.get(convertView,R.id.statistics_no_pay_order_num);
         TextView statisticsItemMoney = ViewHolder.get(convertView,R.id.statistics_item_money);
         LinearLayout llStatisticsNoPayInner = ViewHolder.get(convertView,R.id.ll_statistics_no_pay_inner);
 
         if (item != null){
-            statisticsItemPayMode.setText("订单号：" + item.getOrdersn());
+            statisticsNoPayOrderNum.setText("订单号:" + item.getOrdersn());
+            statisticsNoPayUserName.setText("客户名称:" + item.getuName());
             if (item.getAmount() != null){
                 statisticsItemMoney.setText("￥" + item.getAmount());
             }else {

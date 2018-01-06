@@ -16,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/8/25.
  */
 
-public class StatisticsIncomeAdapter extends BaseAdapterNew<StatisticsIncomeEntity.StatisticsIncomeDatas.StatisticsIncomeRecord> {
-    public StatisticsIncomeAdapter(Context context, List<StatisticsIncomeEntity.StatisticsIncomeDatas.StatisticsIncomeRecord> mDatas) {
+public class StatisticsIncomeAdapter extends BaseAdapterNew<StatisticsIncomeEntity.StatisticsIncomeResult.StatisticsIncomeRecord> {
+    public StatisticsIncomeAdapter(Context context, List<StatisticsIncomeEntity.StatisticsIncomeResult.StatisticsIncomeRecord> mDatas) {
         super(context, mDatas);
     }
 
@@ -28,21 +28,25 @@ public class StatisticsIncomeAdapter extends BaseAdapterNew<StatisticsIncomeEnti
 
     @Override
     protected void setViewData(View convertView, int position) {
-        StatisticsIncomeEntity.StatisticsIncomeDatas.StatisticsIncomeRecord item = getItem(position);
+        StatisticsIncomeEntity.StatisticsIncomeResult.StatisticsIncomeRecord item = getItem(position);
         TextView statisticsItemHead = ViewHolder.get(convertView,R.id.statistics_item_head);
         TextView statisticsItemMoneyPlatform = ViewHolder.get(convertView,R.id.statistics_item_money_platform);
         TextView statisticsItemMoneyWxpay = ViewHolder.get(convertView,R.id.statistics_item_money_wxpay);
         TextView statisticsItemMoneyAlipay = ViewHolder.get(convertView,R.id.statistics_item_money_alipay);
         TextView statisticsItemMoneyMerchant = ViewHolder.get(convertView,R.id.statistics_item_money_merchant);
         TextView statisticsItemMoneyCash = ViewHolder.get(convertView,R.id.statistics_item_money_cash);
+        TextView statisticsItemBusinessVolume = ViewHolder.get(convertView,R.id.statistics_item_business_volume);
+        TextView statisticsItemActualIncome = ViewHolder.get(convertView,R.id.statistics_item_actual_income);
 
         if (item != null){
-            statisticsItemHead.setText(item.getNowDate());
-            statisticsItemMoneyPlatform.setText("￥" + item.getPlatformCard());
+            statisticsItemHead.setText(item.getEftime());
+            statisticsItemMoneyPlatform.setText("￥" + item.getPlatform());
             statisticsItemMoneyWxpay.setText("￥" + item.getWechat());
             statisticsItemMoneyAlipay.setText("￥" + item.getAlipay());
-            statisticsItemMoneyMerchant.setText("￥" + item.getMerchantCard());
+            statisticsItemMoneyMerchant.setText("￥" + item.getMerchant());
             statisticsItemMoneyCash.setText("￥" + item.getCash());
+            statisticsItemBusinessVolume.setText("￥" + item.getTotal());
+            statisticsItemActualIncome.setText("￥" + item.getRealTotal());
         }
     }
 }
