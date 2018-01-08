@@ -93,7 +93,7 @@ public class OfflineMemberBalanceActivity extends ToolBarActivity implements Vie
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(OfflineMemberBalanceActivity.this,OfflineMemberDetailActivity.class);
-                intent.putExtra("member_number",offlineMemberBalanceEntity.getDatas().getMemberLists().get(position).getMobile());
+                intent.putExtra("member_number",offlineMemberBalanceEntity.getResult().getMemberLists().get(position).getuMobile());
                 startActivity(intent);
             }
         });
@@ -107,13 +107,13 @@ public class OfflineMemberBalanceActivity extends ToolBarActivity implements Vie
                 if(data != null){
                     offlineMemberBalanceEntity = Parsers.getOfflineMemberBalanceEntity(data);
                     if(offlineMemberBalanceEntity != null){
-                        if(offlineMemberBalanceEntity.getRetcode() == 0){
-                            if(offlineMemberBalanceEntity.getDatas() != null){
+                        if(offlineMemberBalanceEntity.getCode() == 0){
+                            if(offlineMemberBalanceEntity.getResult() != null){
                                 //设置会员余额数据
                                 setMemberBalanceData(offlineMemberBalanceEntity);
                             }
                         }else {
-                            ToastUtil.shortShow(this, offlineMemberBalanceEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineMemberBalanceEntity.getMsg());
                         }
                     }
                 }
@@ -122,8 +122,8 @@ public class OfflineMemberBalanceActivity extends ToolBarActivity implements Vie
                 offlineMemberBalanceList.onRefreshComplete();
                 if(data != null){
                     OfflineMemberBalanceEntity offlineMemberBalanceEntity = Parsers.getOfflineMemberBalanceEntity(data);
-                    offlineMemberBalanceAdapter.addDatas(offlineMemberBalanceEntity.getDatas().getMemberLists());
-                    if( offlineMemberBalanceAdapter.getPage() < offlineMemberBalanceEntity.getDatas().getPageCount()){
+                    offlineMemberBalanceAdapter.addDatas(offlineMemberBalanceEntity.getResult().getMemberLists());
+                    if( offlineMemberBalanceAdapter.getPage() < offlineMemberBalanceEntity.getResult().getPageCount()){
                         offlineMemberBalanceList.setCanAddMore(true);
                     }else {
                         offlineMemberBalanceList.setCanAddMore(false);
@@ -139,36 +139,37 @@ public class OfflineMemberBalanceActivity extends ToolBarActivity implements Vie
      */
     private void setMemberBalanceData(OfflineMemberBalanceEntity offlineMemberBalanceEntity) {
         //累计会员数
-        if (offlineMemberBalanceEntity.getDatas().getMemberCount() != null &&
-                !TextUtils.isEmpty(offlineMemberBalanceEntity.getDatas().getMemberCount())){
-            tvTotalMemberNum.setText(offlineMemberBalanceEntity.getDatas().getMemberCount()); //累计会员数
+        if (offlineMemberBalanceEntity.getResult().getCount() != null &&
+                !TextUtils.isEmpty(offlineMemberBalanceEntity.getResult().getCount())){
+            tvTotalMemberNum.setText(offlineMemberBalanceEntity.getResult().getCount()); //累计会员数
         }else {
             tvTotalMemberNum.setText("0");
         }
 
-        if (offlineMemberBalanceEntity.getDatas().getMemberTotalBalance() != null &&
-                !TextUtils.isEmpty(offlineMemberBalanceEntity.getDatas().getMemberTotalBalance())){
-            tvTotalMemberBalanceNum.setText(offlineMemberBalanceEntity.getDatas().getMemberTotalBalance()); // 累计会员余额
+        if (offlineMemberBalanceEntity.getResult().getSum() != null &&
+                !TextUtils.isEmpty(offlineMemberBalanceEntity.getResult().getSum())){
+            tvTotalMemberBalanceNum.setText(offlineMemberBalanceEntity.getResult().getSum()); // 累计会员余额
         }else {
             tvTotalMemberBalanceNum.setText("￥0.00");
         }
 
         offlineMemberBalanceList.onRefreshComplete();
         //设置余额明细
-        if(offlineMemberBalanceEntity.getDatas().getMemberLists() != null &&
-                offlineMemberBalanceEntity.getDatas().getMemberLists().size() > 0){
+        if(offlineMemberBalanceEntity.getResult().getMemberLists() != null &&
+                offlineMemberBalanceEntity.getResult().getMemberLists().size() > 0){
             setLoadingStatus(LoadingStatus.GONE);
-            offlineMemberBalanceAdapter = new OfflineMemberBalanceAdapter(this,offlineMemberBalanceEntity.getDatas().getMemberLists());
+            offlineMemberBalanceAdapter = new OfflineMemberBalanceAdapter(this,offlineMemberBalanceEntity.getResult().getMemberLists());
             offlineMemberBalanceList.setAdapter(offlineMemberBalanceAdapter);
 
-            if( offlineMemberBalanceAdapter.getPage() < offlineMemberBalanceEntity.getDatas().getPageCount()){
+            if( offlineMemberBalanceAdapter.getPage() < offlineMemberBalanceEntity.getResult().getPageCount()){
                 offlineMemberBalanceList.setCanAddMore(true);
             }else {
                 offlineMemberBalanceList.setCanAddMore(false);
             }
         }else {
             setLoadingStatus(LoadingStatus.EMPTY);
-            OfflineMemberBalanceAdapter offlineMemberBalanceAdapter = new OfflineMemberBalanceAdapter(this,new ArrayList<OfflineMemberBalanceEntity.OfflineMemberBalanceDatas.MemberList>());
+            OfflineMemberBalanceAdapter offlineMemberBalanceAdapter = new OfflineMemberBalanceAdapter(this,new ArrayList<OfflineMemberBalanceEntity.OfflineMemberBalanceResult
+                    .OfflineMemberBalanceRecord>());
             offlineMemberBalanceList.setAdapter(offlineMemberBalanceAdapter);
         }
     }

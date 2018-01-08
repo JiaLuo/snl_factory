@@ -9,46 +9,70 @@ import java.util.List;
  */
 
 public class OfflineMemberBalanceEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineMemberBalanceDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineMemberBalanceResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineMemberBalanceDatas getDatas() {
-        return datas;
+    public OfflineMemberBalanceResult getResult() {
+        return result;
     }
 
-    public void setDatas(OfflineMemberBalanceDatas datas) {
-        this.datas = datas;
+    public void setResult(OfflineMemberBalanceResult result) {
+        this.result = result;
     }
 
-    public class OfflineMemberBalanceDatas{
-        @SerializedName("member_count")
-        private String memberCount;
-        @SerializedName("member_total_balance")
-        private String memberTotalBalance;
-        @SerializedName("member_list")
-        private List<MemberList> memberLists;
+    public class OfflineMemberBalanceResult{
+        @SerializedName("count")
+        private String count;
+        @SerializedName("sum")
+        private String sum;
+        @SerializedName("record")
+        private List<OfflineMemberBalanceRecord> memberLists;
         @SerializedName("page_count")
         private int pageCount;
+
+        public String getCount() {
+            return count;
+        }
+
+        public void setCount(String count) {
+            this.count = count;
+        }
+
+        public String getSum() {
+            return sum;
+        }
+
+        public void setSum(String sum) {
+            this.sum = sum;
+        }
+
+        public List<OfflineMemberBalanceRecord> getMemberLists() {
+            return memberLists;
+        }
+
+        public void setMemberLists(List<OfflineMemberBalanceRecord> memberLists) {
+            this.memberLists = memberLists;
+        }
 
         public int getPageCount() {
             return pageCount;
@@ -58,90 +82,56 @@ public class OfflineMemberBalanceEntity {
             this.pageCount = pageCount;
         }
 
-        public String getMemberCount() {
-            return memberCount;
-        }
+        public class OfflineMemberBalanceRecord{
+            @SerializedName("umobile")
+            private String uMobile;
+            @SerializedName("uname")
+            private String uName;
+            @SerializedName("cname")
+            private String cName;
+            @SerializedName("cbalance")
+            private String cBalance;
+            @SerializedName("ctime")
+            private String cTime;
 
-        public void setMemberCount(String memberCount) {
-            this.memberCount = memberCount;
-        }
-
-        public String getMemberTotalBalance() {
-            return memberTotalBalance;
-        }
-
-        public void setMemberTotalBalance(String memberTotalBalance) {
-            this.memberTotalBalance = memberTotalBalance;
-        }
-
-        public List<MemberList> getMemberLists() {
-            return memberLists;
-        }
-
-        public void setMemberLists(List<MemberList> memberLists) {
-            this.memberLists = memberLists;
-        }
-
-        public class MemberList{
-            @SerializedName("ucode")
-            private String ucode;
-            @SerializedName("username")
-            private String userName;
-            @SerializedName("mobile")
-            private String mobile;
-            @SerializedName("balance")
-            private String balance;
-            @SerializedName("card_name")
-            private String cardName;
-            @SerializedName("register_time")
-            private String registerTime;
-
-            public String getUcode() {
-                return ucode;
+            public String getuMobile() {
+                return uMobile;
             }
 
-            public void setUcode(String ucode) {
-                this.ucode = ucode;
+            public void setuMobile(String uMobile) {
+                this.uMobile = uMobile;
             }
 
-            public String getUserName() {
-                return userName;
+            public String getuName() {
+                return uName;
             }
 
-            public void setUserName(String userName) {
-                this.userName = userName;
+            public void setuName(String uName) {
+                this.uName = uName;
             }
 
-            public String getMobile() {
-                return mobile;
+            public String getcName() {
+                return cName;
             }
 
-            public void setMobile(String mobile) {
-                this.mobile = mobile;
+            public void setcName(String cName) {
+                this.cName = cName;
             }
 
-            public String getBalance() {
-                return balance;
+            public String getcBalance() {
+                return cBalance;
             }
 
-            public void setBalance(String balance) {
-                this.balance = balance;
+            public void setcBalance(String cBalance) {
+                this.cBalance = cBalance;
             }
 
-            public String getCardName() {
-                return cardName;
+            public String getcTime() {
+                return cTime;
             }
 
-            public void setCardName(String cardName) {
-                this.cardName = cardName;
-            }
-
-            public String getRegisterTime() {
-                return registerTime;
-            }
-
-            public void setRegisterTime(String registerTime) {
-                this.registerTime = registerTime;
+            public void setcTime(String cTime) {
+                this.cTime = cTime;
             }
         }
     }

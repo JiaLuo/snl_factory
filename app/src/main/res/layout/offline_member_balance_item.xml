@@ -22,24 +22,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <TextView
-                    android:id="@+id/tv_member_num"
-                    android:text="会员卡号："
-                    android:textColor="#999999"
-                    android:textSize="13sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_member_num_info"
-                    android:layout_toRightOf="@id/tv_member_num"
-                    android:text="SNL12345"
-                    android:textColor="#5c5c5c"
-                    android:textSize="13sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
                     android:id="@+id/tv_member_name"
                     android:text="姓名："
-                    android:layout_below="@id/tv_member_num"
                     android:layout_marginTop="12dp"
                     android:textColor="#999999"
                     android:textSize="13sp"

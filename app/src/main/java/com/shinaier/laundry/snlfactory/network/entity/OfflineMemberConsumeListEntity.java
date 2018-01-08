@@ -9,61 +9,81 @@ import java.util.List;
  */
 
 public class OfflineMemberConsumeListEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineMemberConsumeDatas datas;
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": {
+     "sum": “225.00",           消费总额
+     "count": “1",                   累计单数
+     "record": [                         记录列表
+     {
+     "ordersn": “171214104439844389",        订单号
+     "umobile": “18745729547",                    手机号
+     "pay_amount": “225.00",                    支付金额
+     "pay_time": “2017.12.21"                  支付时间
+     }
+     ],
+     "page_count": 1                                          总页数
+     }
+     }
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineMemberConsumeResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineMemberConsumeDatas getDatas() {
-        return datas;
+    public OfflineMemberConsumeResult getResult() {
+        return result;
     }
 
-    public void setDatas(OfflineMemberConsumeDatas datas) {
-        this.datas = datas;
+    public void setResult(OfflineMemberConsumeResult result) {
+        this.result = result;
     }
 
-    public class OfflineMemberConsumeDatas{
-        @SerializedName("order_count")
-        private String orderCount;
-        @SerializedName("order_total_amount")
-        private String orderTotalAmount;
+    public class OfflineMemberConsumeResult{
+        @SerializedName("count")
+        private String count;
+        @SerializedName("sum")
+        private String sum;
         @SerializedName("record")
         private List<OfflineMemberConsumeRecord> consumeRecord;
         @SerializedName("page_count")
         private int pageCount;
 
-        public String getOrderCount() {
-            return orderCount;
+        public String getCount() {
+            return count;
         }
 
-        public void setOrderCount(String orderCount) {
-            this.orderCount = orderCount;
+        public void setCount(String count) {
+            this.count = count;
         }
 
-        public String getOrderTotalAmount() {
-            return orderTotalAmount;
+        public String getSum() {
+            return sum;
         }
 
-        public void setOrderTotalAmount(String orderTotalAmount) {
-            this.orderTotalAmount = orderTotalAmount;
+        public void setSum(String sum) {
+            this.sum = sum;
         }
 
         public List<OfflineMemberConsumeRecord> getConsumeRecord() {
@@ -83,32 +103,14 @@ public class OfflineMemberConsumeListEntity {
         }
 
         public class OfflineMemberConsumeRecord{
-            @SerializedName("id")
-            private String id;
-            @SerializedName("ucode")
-            private String ucode;
             @SerializedName("ordersn")
             private String ordersn;
+            @SerializedName("umobile")
+            private String uMobile;
             @SerializedName("pay_amount")
             private String payAmount;
-            @SerializedName("create_time")
-            private String createTime;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getUcode() {
-                return ucode;
-            }
-
-            public void setUcode(String ucode) {
-                this.ucode = ucode;
-            }
+            @SerializedName("pay_time")
+            private String payTime;
 
             public String getOrdersn() {
                 return ordersn;
@@ -116,6 +118,14 @@ public class OfflineMemberConsumeListEntity {
 
             public void setOrdersn(String ordersn) {
                 this.ordersn = ordersn;
+            }
+
+            public String getuMobile() {
+                return uMobile;
+            }
+
+            public void setuMobile(String uMobile) {
+                this.uMobile = uMobile;
             }
 
             public String getPayAmount() {
@@ -126,14 +136,13 @@ public class OfflineMemberConsumeListEntity {
                 this.payAmount = payAmount;
             }
 
-            public String getCreateTime() {
-                return createTime;
+            public String getPayTime() {
+                return payTime;
             }
 
-            public void setCreateTime(String createTime) {
-                this.createTime = createTime;
+            public void setPayTime(String payTime) {
+                this.payTime = payTime;
             }
         }
-
     }
 }

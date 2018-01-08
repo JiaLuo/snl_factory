@@ -16,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/7/28.
  */
 
-public class OfflineMemberConsumeAdapter extends BaseAdapterNew<OfflineMemberConsumeListEntity.OfflineMemberConsumeDatas.OfflineMemberConsumeRecord> {
-    public OfflineMemberConsumeAdapter(Context context, List<OfflineMemberConsumeListEntity.OfflineMemberConsumeDatas.OfflineMemberConsumeRecord> mDatas) {
+public class OfflineMemberConsumeAdapter extends BaseAdapterNew<OfflineMemberConsumeListEntity.OfflineMemberConsumeResult.OfflineMemberConsumeRecord> {
+    public OfflineMemberConsumeAdapter(Context context, List<OfflineMemberConsumeListEntity.OfflineMemberConsumeResult.OfflineMemberConsumeRecord> mDatas) {
         super(context, mDatas);
     }
 
@@ -28,21 +28,21 @@ public class OfflineMemberConsumeAdapter extends BaseAdapterNew<OfflineMemberCon
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OfflineMemberConsumeListEntity.OfflineMemberConsumeDatas.OfflineMemberConsumeRecord item = getItem(position);
+        OfflineMemberConsumeListEntity.OfflineMemberConsumeResult.OfflineMemberConsumeRecord item = getItem(position);
         TextView tvMemberNum = ViewHolder.get(convertView,R.id.tv_member_num);
         TextView tvDealNum = ViewHolder.get(convertView,R.id.tv_deal_num);
         TextView tvDealMoney = ViewHolder.get(convertView,R.id.tv_deal_money);
         TextView tvDealTime = ViewHolder.get(convertView,R.id.tv_deal_time);
 
         if (item != null){
-            if (item.getUcode() != null){
-                tvMemberNum.setText("会员卡号：" + item.getUcode());
+            if (item.getuMobile() != null){
+                tvMemberNum.setText("手机号：" + item.getuMobile());
             }else {
-                tvMemberNum.setText("会员卡号：");
+                tvMemberNum.setText("手机号：");
             }
             tvDealNum.setText("交易单号：" +item.getOrdersn());
             tvDealMoney.setText("￥" + item.getPayAmount());
-            tvDealTime.setText(item.getCreateTime());
+            tvDealTime.setText(item.getPayTime());
         }
     }
 }

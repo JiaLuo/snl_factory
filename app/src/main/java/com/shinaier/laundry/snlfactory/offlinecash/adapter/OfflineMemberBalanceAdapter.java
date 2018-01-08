@@ -8,7 +8,6 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberBalanceEntity;
-import com.shinaier.laundry.snlfactory.util.TimeUtils;
 
 import java.util.List;
 
@@ -17,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/7/28.
  */
 
-public class OfflineMemberBalanceAdapter extends BaseAdapterNew<OfflineMemberBalanceEntity.OfflineMemberBalanceDatas.MemberList> {
-    public OfflineMemberBalanceAdapter(Context context, List<OfflineMemberBalanceEntity.OfflineMemberBalanceDatas.MemberList> mDatas) {
+public class OfflineMemberBalanceAdapter extends BaseAdapterNew<OfflineMemberBalanceEntity.OfflineMemberBalanceResult.OfflineMemberBalanceRecord> {
+    public OfflineMemberBalanceAdapter(Context context, List<OfflineMemberBalanceEntity.OfflineMemberBalanceResult.OfflineMemberBalanceRecord> mDatas) {
         super(context, mDatas);
     }
 
@@ -29,8 +28,8 @@ public class OfflineMemberBalanceAdapter extends BaseAdapterNew<OfflineMemberBal
 
     @Override
     protected void setViewData(View convertView, int position) {
-        OfflineMemberBalanceEntity.OfflineMemberBalanceDatas.MemberList item = getItem(position);
-        TextView tvMemberNumInfo = ViewHolder.get(convertView,R.id.tv_member_num_info);
+        OfflineMemberBalanceEntity.OfflineMemberBalanceResult.OfflineMemberBalanceRecord item = getItem(position);
+//        TextView tvMemberNumInfo = ViewHolder.get(convertView,R.id.tv_member_num_info);
         TextView tvMemberNameInfo = ViewHolder.get(convertView,R.id.tv_member_name_info);
         TextView tvMemberPhoneInfo = ViewHolder.get(convertView,R.id.tv_member_phone_info);
         TextView tvMemberBalance = ViewHolder.get(convertView,R.id.tv_member_balance);
@@ -38,12 +37,10 @@ public class OfflineMemberBalanceAdapter extends BaseAdapterNew<OfflineMemberBal
         TextView tvMemberDealTime = ViewHolder.get(convertView,R.id.tv_member_deal_time);
 
         if (item != null){
-            tvMemberNumInfo.setText(item.getUcode());
-            tvMemberNameInfo.setText(item.getUserName());
-            tvMemberPhoneInfo.setText(item.getMobile());
-            tvMemberBalance.setText("￥" + item.getBalance());
-            tvMemberBalanceType.setText(item.getCardName());
-            tvMemberDealTime.setText("办理时间：" + TimeUtils.formatTime(item.getRegisterTime()));
+            tvMemberPhoneInfo.setText(item.getuMobile());
+            tvMemberBalance.setText("￥" + item.getcBalance());
+            tvMemberBalanceType.setText(item.getcName());
+            tvMemberDealTime.setText("办理时间：" + item.getcTime());
         }
     }
 }

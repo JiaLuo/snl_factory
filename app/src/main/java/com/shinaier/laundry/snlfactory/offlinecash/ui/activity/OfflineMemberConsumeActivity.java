@@ -23,6 +23,7 @@ import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineMemberConsumeA
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineMemberRechargeAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.view.OnDateSetListener;
 import com.shinaier.laundry.snlfactory.offlinecash.view.TimePickerDialog;
+import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
 
@@ -93,33 +94,36 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         initView();
     }
 
-    private void loadData(String startTime, String endTime, boolean isMore) {
-            int code = 0;
-            IdentityHashMap<String,String> params = new IdentityHashMap<>();
-            params.put("token", UserCenter.getToken(this));
-            params.put("start_time",startTime);
-            params.put("end_time",endTime);
-            if (extraFrom == OfflineMemberManageActivity.CONSUME){
-                params.put("type","1");
-                if (isMore){
-                    params.put("page",offlineMemberConsumeAdapter.getPage() + 1 + "");
-                    code = REQUEST_CODE_OFFLINE_MEMBER_CONSUME_LIST_MORE;
-                }else {
-                    params.put("page","1");
-                    code = REQUEST_CODE_OFFLINE_MEMBER_CONSUME_LIST;
-                }
+    private void loadData(String startTime,String endTime,boolean isMore) {
+        int code = 0;
+        String url = "";
+        IdentityHashMap<String,String> params = new IdentityHashMap<>();
+        params.put("token",UserCenter.getToken(this));
+        params.put("start",startTime);
+        params.put("end",endTime);
+        if (extraFrom == OfflineMemberManageActivity.CONSUME){
+            params.put("type","1");
+            if (isMore){
+                params.put("page",offlineMemberConsumeAdapter.getPage() + 1 + "");
+                code = REQUEST_CODE_OFFLINE_MEMBER_CONSUME_LIST_MORE;
             }else {
-                if (isMore){
-                    params.put("page",offlineMemberRechargeAdapter.getPage() + 1 + "");
-                    code = REQUEST_CODE_OFFLINE_MEMBER_RECHARGE_LIST_MORE;
-                }else {
-                    params.put("page","1");
-                    code = REQUEST_CODE_OFFLINE_MEMBER_RECHARGE_LIST;
-                }
-             }
-            params.put("limit","10");
+                params.put("page","1");
+                code = REQUEST_CODE_OFFLINE_MEMBER_CONSUME_LIST;
+            }
+            url = Constants.Urls.URL_POST_CONSUME_LIST;
+        }else {
+            if (isMore){
+                params.put("page",offlineMemberRechargeAdapter.getPage() + 1 + "");
+                code = REQUEST_CODE_OFFLINE_MEMBER_RECHARGE_LIST_MORE;
+            }else {
+                params.put("page","1");
+                code = REQUEST_CODE_OFFLINE_MEMBER_RECHARGE_LIST;
+            }
+            url = Constants.Urls.URL_POST_RECHARGE_LIST;
+        }
+        params.put("limit","10");
 
-        requestHttpData(Constants.Urls.URL_POST_OFFLINE_MEMBER_LIST,code,
+        requestHttpData(url,code,
                 FProtocol.HttpMethod.POST,params);
     }
 
@@ -132,6 +136,7 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         tvEndTime.setOnClickListener(this);
         leftButton.setOnClickListener(this);
         mDialogYearMonthDay = new TimePickerDialog.Builder()
+                .setType(Type.YEAR_MONTH_DAY)
                 .setCallBack(this)
                 .build();
 
@@ -214,15 +219,15 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         switch (requestCode){
             case REQUEST_CODE_OFFLINE_MEMBER_CONSUME_LIST:
                 if(data != null){
-                   OfflineMemberConsumeListEntity offlineMemberConsumeListEntity = Parsers.getOfflineMemberConsumeEntity(data);
+                    OfflineMemberConsumeListEntity offlineMemberConsumeListEntity = Parsers.getOfflineMemberConsumeEntity(data);
                     if (offlineMemberConsumeListEntity != null){
-                        if (offlineMemberConsumeListEntity.getRetcode() == 0){
-                            if (offlineMemberConsumeListEntity.getDatas() != null){
+                        if (offlineMemberConsumeListEntity.getCode() == 0){
+                            if (offlineMemberConsumeListEntity.getResult() != null){
                                 //设置消费报表
                                 setConsumeData(offlineMemberConsumeListEntity);
                             }
                         }else {
-                            ToastUtil.shortShow(this, offlineMemberConsumeListEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineMemberConsumeListEntity.getMsg());
                         }
                     }
                 }
@@ -231,13 +236,13 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
                 if (data != null){
                     OfflineMemberRechargeListEntity offlineMemberRechargeListEntity = Parsers.getOfflineMemberRechargeListEntity(data);
                     if (offlineMemberRechargeListEntity != null){
-                        if (offlineMemberRechargeListEntity.getRetcode() == 0){
-                            if (offlineMemberRechargeListEntity.getDatas() != null){
+                        if (offlineMemberRechargeListEntity.getCode() == 0){
+                            if (offlineMemberRechargeListEntity.getResult() != null){
                                 //设置充值报表
                                 setRechargeData(offlineMemberRechargeListEntity);
                             }
                         }else {
-                            ToastUtil.shortShow(this, offlineMemberRechargeListEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineMemberRechargeListEntity.getMsg());
                         }
                     }
                 }
@@ -246,8 +251,8 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
                 offlineMemberConsumeList.onRefreshComplete();
                 if(data != null){
                     OfflineMemberConsumeListEntity offlineMemberConsumeListEntity = Parsers.getOfflineMemberConsumeEntity(data);
-                    offlineMemberConsumeAdapter.addDatas(offlineMemberConsumeListEntity.getDatas().getConsumeRecord());
-                    if( offlineMemberConsumeAdapter.getPage() < offlineMemberConsumeListEntity.getDatas().getPageCount()){
+                    offlineMemberConsumeAdapter.addDatas(offlineMemberConsumeListEntity.getResult().getConsumeRecord());
+                    if( offlineMemberConsumeAdapter.getPage() < offlineMemberConsumeListEntity.getResult().getPageCount()){
                         offlineMemberConsumeList.setCanAddMore(true);
                     }else {
                         offlineMemberConsumeList.setCanAddMore(false);
@@ -258,8 +263,8 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
                 offlineMemberConsumeList.onRefreshComplete();
                 if(data != null){
                     OfflineMemberRechargeListEntity offlineMemberRechargeListEntity = Parsers.getOfflineMemberRechargeListEntity(data);
-                    offlineMemberRechargeAdapter.addDatas(offlineMemberRechargeListEntity.getDatas().getRechargeRecords());
-                    if( offlineMemberRechargeAdapter.getPage() < offlineMemberRechargeListEntity.getDatas().getPageCount()){
+                    offlineMemberRechargeAdapter.addDatas(offlineMemberRechargeListEntity.getResult().getRechargeRecords());
+                    if( offlineMemberRechargeAdapter.getPage() < offlineMemberRechargeListEntity.getResult().getPageCount()){
                         offlineMemberConsumeList.setCanAddMore(true);
                     }else {
                         offlineMemberConsumeList.setCanAddMore(false);
@@ -271,16 +276,17 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
 
     private void setRechargeData(OfflineMemberRechargeListEntity offlineMemberRechargeListEntity) {
         //设置充值金额
-        if (offlineMemberRechargeListEntity.getDatas().getRechargedTotal() != null &&
-                !offlineMemberRechargeListEntity.getDatas().getRechargedTotal().equals("0")){
-            tvTotalOrderInfo.setText("￥" + offlineMemberRechargeListEntity.getDatas().getRechargedTotal());
+        if (offlineMemberRechargeListEntity.getResult().getRecharge() != null &&
+                !offlineMemberRechargeListEntity.getResult().getRecharge().equals("0")){
+            tvTotalOrderInfo.setText("￥" + offlineMemberRechargeListEntity.getResult().getRecharge());
         }else {
             tvTotalOrderInfo.setText("￥0.00");
         }
 
         //设置赠送金额
-        if (offlineMemberRechargeListEntity.getDatas().getGivenTotal() != null){
-            tvTotalOrderMoney.setText("￥" + offlineMemberRechargeListEntity.getDatas().getGivenTotal());
+        if (offlineMemberRechargeListEntity.getResult().getGive() != null && !offlineMemberRechargeListEntity
+                .getResult().getGive().equals("0")){
+            tvTotalOrderMoney.setText("￥" + offlineMemberRechargeListEntity.getResult().getGive());
         }else {
             tvTotalOrderMoney.setText("￥0.00");
         }
@@ -290,15 +296,15 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         }
         offlineMemberConsumeList.onRefreshComplete();
         //充值明细
-        if (offlineMemberRechargeListEntity.getDatas().getRechargeRecords() != null &&
-                offlineMemberRechargeListEntity.getDatas().getRechargeRecords().size() > 0){
+        if (offlineMemberRechargeListEntity.getResult().getRechargeRecords() != null &&
+                offlineMemberRechargeListEntity.getResult().getRechargeRecords().size() > 0){
             setLoadingStatus(LoadingStatus.GONE);
 
 
             offlineMemberRechargeAdapter = new OfflineMemberRechargeAdapter(this,
-                    offlineMemberRechargeListEntity.getDatas().getRechargeRecords());
+                    offlineMemberRechargeListEntity.getResult().getRechargeRecords());
             offlineMemberConsumeList.setAdapter(offlineMemberRechargeAdapter);
-            if( offlineMemberRechargeAdapter.getPage() < offlineMemberRechargeListEntity.getDatas().getPageCount()){
+            if( offlineMemberRechargeAdapter.getPage() < offlineMemberRechargeListEntity.getResult().getPageCount()){
                 offlineMemberConsumeList.setCanAddMore(true);
             }else {
                 offlineMemberConsumeList.setCanAddMore(false);
@@ -306,7 +312,7 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         }else {
             setLoadingStatus(LoadingStatus.EMPTY);
             OfflineMemberRechargeAdapter offlineMemberRechargeAdapter = new OfflineMemberRechargeAdapter(this,
-                    new ArrayList<OfflineMemberRechargeListEntity.OfflineMemberRechargeDatas.OfflineMemberRechargeRecord>());
+                    new ArrayList<OfflineMemberRechargeListEntity.OfflineMemberRechargeResult.OfflineMemberRechargeRecord>());
             offlineMemberConsumeList.setAdapter(offlineMemberRechargeAdapter);
         }
     }
@@ -317,16 +323,16 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
      */
     private void setConsumeData(OfflineMemberConsumeListEntity offlineMemberConsumeListEntity) {
         //设置订单数
-        if (offlineMemberConsumeListEntity.getDatas().getOrderCount() != null &&
-                !offlineMemberConsumeListEntity.getDatas().getOrderCount().equals("0")){
-            tvTotalOrderInfo.setText(offlineMemberConsumeListEntity.getDatas().getOrderCount());
+        if (offlineMemberConsumeListEntity.getResult().getCount() != null){
+            tvTotalOrderInfo.setText(offlineMemberConsumeListEntity.getResult().getCount());
         }else {
             tvTotalOrderInfo.setText("0");
         }
 
         //设置订单金额
-        if (offlineMemberConsumeListEntity.getDatas().getOrderTotalAmount() != null){
-            tvTotalOrderMoney.setText("￥" + offlineMemberConsumeListEntity.getDatas().getOrderTotalAmount());
+        if (offlineMemberConsumeListEntity.getResult().getSum() != null && !offlineMemberConsumeListEntity.getResult()
+                .getSum().equals("0")){
+            tvTotalOrderMoney.setText("￥" + offlineMemberConsumeListEntity.getResult().getSum());
         }else {
             tvTotalOrderMoney.setText("￥0.00");
         }
@@ -336,16 +342,16 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         }
         offlineMemberConsumeList.onRefreshComplete();
         //消费明细
-        if (offlineMemberConsumeListEntity.getDatas().getConsumeRecord() != null &&
-                offlineMemberConsumeListEntity.getDatas().getConsumeRecord().size() > 0){
+        if (offlineMemberConsumeListEntity.getResult().getConsumeRecord() != null &&
+                offlineMemberConsumeListEntity.getResult().getConsumeRecord().size() > 0){
             setLoadingStatus(LoadingStatus.GONE);
 
 
             offlineMemberConsumeAdapter = new OfflineMemberConsumeAdapter(this,
-                    offlineMemberConsumeListEntity.getDatas().getConsumeRecord());
+                    offlineMemberConsumeListEntity.getResult().getConsumeRecord());
             offlineMemberConsumeList.setAdapter(offlineMemberConsumeAdapter);
 
-            if( offlineMemberConsumeAdapter.getPage() < offlineMemberConsumeListEntity.getDatas().getPageCount()){
+            if( offlineMemberConsumeAdapter.getPage() < offlineMemberConsumeListEntity.getResult().getPageCount()){
                 offlineMemberConsumeList.setCanAddMore(true);
             }else {
                 offlineMemberConsumeList.setCanAddMore(false);
@@ -353,7 +359,7 @@ public class OfflineMemberConsumeActivity extends ToolBarActivity implements Vie
         }else {
             setLoadingStatus(LoadingStatus.EMPTY);
             OfflineMemberConsumeAdapter offlineMemberConsumeAdapter = new OfflineMemberConsumeAdapter(this,
-                    new ArrayList<OfflineMemberConsumeListEntity.OfflineMemberConsumeDatas.OfflineMemberConsumeRecord>());
+                    new ArrayList<OfflineMemberConsumeListEntity.OfflineMemberConsumeResult.OfflineMemberConsumeRecord>());
             offlineMemberConsumeList.setAdapter(offlineMemberConsumeAdapter);
         }
     }

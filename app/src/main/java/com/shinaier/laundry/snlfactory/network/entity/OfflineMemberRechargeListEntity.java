@@ -9,72 +9,46 @@ import java.util.List;
  */
 
 public class OfflineMemberRechargeListEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineMemberRechargeDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineMemberRechargeResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineMemberRechargeDatas getDatas() {
-        return datas;
+    public OfflineMemberRechargeResult getResult() {
+        return result;
     }
 
-    public void setDatas(OfflineMemberRechargeDatas datas) {
-        this.datas = datas;
+    public void setResult(OfflineMemberRechargeResult result) {
+        this.result = result;
     }
 
-    public class OfflineMemberRechargeDatas{
-        @SerializedName("recharged_total")
-        private String rechargedTotal;
-        @SerializedName("given_total")
-        private String givenTotal;
+    public class OfflineMemberRechargeResult{
         @SerializedName("record")
         private List<OfflineMemberRechargeRecord> rechargeRecords;
+        @SerializedName("recharge")
+        private String recharge;
+        @SerializedName("give")
+        private String give;
         @SerializedName("page_count")
         private int pageCount;
-        @SerializedName("recharged_count")
-        private int rechargedCount;
-
-        public int getRechargedCount() {
-            return rechargedCount;
-        }
-
-        public void setRechargedCount(int rechargedCount) {
-            this.rechargedCount = rechargedCount;
-        }
-
-        public String getRechargedTotal() {
-            return rechargedTotal;
-        }
-
-        public void setRechargedTotal(String rechargedTotal) {
-            this.rechargedTotal = rechargedTotal;
-        }
-
-        public String getGivenTotal() {
-            return givenTotal;
-        }
-
-        public void setGivenTotal(String givenTotal) {
-            this.givenTotal = givenTotal;
-        }
 
         public List<OfflineMemberRechargeRecord> getRechargeRecords() {
             return rechargeRecords;
@@ -82,6 +56,22 @@ public class OfflineMemberRechargeListEntity {
 
         public void setRechargeRecords(List<OfflineMemberRechargeRecord> rechargeRecords) {
             this.rechargeRecords = rechargeRecords;
+        }
+
+        public String getRecharge() {
+            return recharge;
+        }
+
+        public void setRecharge(String recharge) {
+            this.recharge = recharge;
+        }
+
+        public String getGive() {
+            return give;
+        }
+
+        public void setGive(String give) {
+            this.give = give;
         }
 
         public int getPageCount() {
@@ -94,29 +84,29 @@ public class OfflineMemberRechargeListEntity {
 
         public class OfflineMemberRechargeRecord{
 
-            @SerializedName("ucode")
-            private String ucode;
-            @SerializedName("recharge_amount")
-            private String rechargeAmount;
+            @SerializedName("umobile")
+            private String uMobile;
+            @SerializedName("amount")
+            private String amount;
             @SerializedName("give")
             private String give;
-            @SerializedName("recharge_time")
-            private String rechargeTime;
+            @SerializedName("log_time")
+            private String logTime;
 
-            public String getUcode() {
-                return ucode;
+            public String getuMobile() {
+                return uMobile;
             }
 
-            public void setUcode(String ucode) {
-                this.ucode = ucode;
+            public void setuMobile(String uMobile) {
+                this.uMobile = uMobile;
             }
 
-            public String getRechargeAmount() {
-                return rechargeAmount;
+            public String getAmount() {
+                return amount;
             }
 
-            public void setRechargeAmount(String rechargeAmount) {
-                this.rechargeAmount = rechargeAmount;
+            public void setAmount(String amount) {
+                this.amount = amount;
             }
 
             public String getGive() {
@@ -127,12 +117,12 @@ public class OfflineMemberRechargeListEntity {
                 this.give = give;
             }
 
-            public String getRechargeTime() {
-                return rechargeTime;
+            public String getLogTime() {
+                return logTime;
             }
 
-            public void setRechargeTime(String rechargeTime) {
-                this.rechargeTime = rechargeTime;
+            public void setLogTime(String logTime) {
+                this.logTime = logTime;
             }
         }
 
