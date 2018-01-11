@@ -281,6 +281,10 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
+        <activity android:name=".ordermanage.ui.activity.AddProjectsActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
 
         <service
             android:name=".service.JobSchedulerService"

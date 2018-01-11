@@ -23,27 +23,24 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.CashConponEntity;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineOrderPayEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderPrintEntity;
-import com.shinaier.laundry.snlfactory.network.entity.PlatformPaySuccessEntity;
-import com.shinaier.laundry.snlfactory.network.entity.VerifyCodeEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.entities.PrintEntity;
+import com.shinaier.laundry.snlfactory.offlinecash.view.FreePayConfirmDialog;
 import com.shinaier.laundry.snlfactory.offlinecash.view.PlatformPayDialog;
+import com.shinaier.laundry.snlfactory.offlinecash.view.SpecialPayConfirmDialog;
 import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
 import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 
 /**
@@ -52,11 +49,15 @@ import java.util.regex.PatternSyntaxException;
 
 public class OrderPayActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_OFFLINE_ORDER_PAY_DETAIL = 0x1;
-    private static final int REQUEST_CODE_SEND_CODE = 0x2;
     private static final int REQUEST_CODE_OFFLINE_ORDER_PAY = 0x3;
     public static final int ORDERPAY = 0x4;
     public static final int FROM_ORDER_PAY_ACT = 0x5;
     private static final int REQUEST_CODE_ORDER_PRINT = 0x6;
+    public static final int REQUEST_CODE_CASH_CONPON_QRCODE = 0x7;
+    private static final int REQUEST_CODE_CASH_CONPON_INFO = 0x8;
+    private static final int WXPAY_CODE = 0x9;
+    private static final int ALIPAY_CODE = 0x10;
+    private static final int REQUEST_CODE_SPECIAL_PAY_SMS = 0x12;
 
     @ViewInject(R.id.cash_pay_selector)
     private ImageView cashPaySelector;
@@ -68,38 +69,20 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private ImageView vipMemberSelector;
     @ViewInject(R.id.platform_member_selector)
     private ImageView platformMemberSelector;
-    @ViewInject(R.id.rl_cash_discount)
-    private RelativeLayout rlCashDiscount;
-    @ViewInject(R.id.rl_wxpay_discount)
-    private RelativeLayout rlWxpayDiscount;
-    @ViewInject(R.id.rl_alipay_discount)
-    private RelativeLayout rlAlipayDiscount;
-    @ViewInject(R.id.nine_cash_discount)
-    private TextView nineCashDiscount;
-    @ViewInject(R.id.eight_cash_discount)
-    private TextView eightCashDiscount;
-    @ViewInject(R.id.seven_cash_discount)
-    private TextView sevenCashDiscount;
+    @ViewInject(R.id.ll_cash_discount)
+    private LinearLayout llCashDiscount;
+    @ViewInject(R.id.ll_wxpay_discount)
+    private LinearLayout llWxpayDiscount;
+    @ViewInject(R.id.ll_alipay_discount)
+    private LinearLayout llAlipayDiscount;
     @ViewInject(R.id.special_cash_discount)
     private TextView specialCashDiscount;
     @ViewInject(R.id.rounding_cash_discount)
     private TextView roundingCashDiscount;
-    @ViewInject(R.id.nine_wxpay_discount)
-    private TextView nineWxpayDiscount;
-    @ViewInject(R.id.eight_wxpay_discount)
-    private TextView eightWxpayDiscount;
-    @ViewInject(R.id.seven_wxpay_discount)
-    private TextView sevenWxpayDiscount;
     @ViewInject(R.id.special_wxpay_discount)
     private TextView specialWxpayDiscount;
     @ViewInject(R.id.rounding_wxpay_discount)
     private TextView roundingWxpayDiscount;
-    @ViewInject(R.id.nine_alipay_discount)
-    private TextView nineAlipayDiscount;
-    @ViewInject(R.id.eight_alipay_discount)
-    private TextView eightAlipayDiscount;
-    @ViewInject(R.id.seven_alipay_discount)
-    private TextView sevenAlipayDiscount;
     @ViewInject(R.id.special_alipay_discount)
     private TextView specialAlipayDiscount;
     @ViewInject(R.id.rounding_alipay_discount)
@@ -126,90 +109,146 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private TextView rebatesBalancePlatformPay;
     @ViewInject(R.id.confirm_pay)
     private TextView confirmPay;
-
-
-    private CountDownTimer countDownTimer;
+    @ViewInject(R.id.rl_cash_coupon_info)
+    private RelativeLayout rlCashCouponInfo;
+    @ViewInject(R.id.tv_cash_coupon_value)
+    private TextView tvCashCouponValue;
+    @ViewInject(R.id.free_clean_discount)
+    private TextView freeCleanDiscount;
+    @ViewInject(R.id.rl_platform_member)
+    private RelativeLayout rlPlatformMember; //平台会员卡
+    @ViewInject(R.id.tv_vip_member_balance)
+    private TextView tvVipMemberBalance;
 
     private CollectClothesDialog collectClothesDialog;
-//    private double ordernum = 124;
-    private double brandDiscountNum;
-    private double netReceipts;
-    private OfflineOrderPayEntity offlineOrderPayEntity;
-    private double totalAmount;
-    private double discountValue;
-    private double cardSum;
-    private double afterDiscount;
-    private TextView tvSendCode;
-    private CommonDialog dialog;
-    private String verifyCodeEntityData;
-    private String orderId;
-    private PrintEntity printEntity = new PrintEntity();
 
+    private CommonDialog dialog;
+    private String orderId;
+    private  PrintEntity printEntity = new PrintEntity();
     private Handler handler = new Handler(){
 
-        private String inputCode;
+
+        private CountDownTimer countDownTimer;
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case 1:
-                    countDownTimer = (CountDownTimer) msg.obj;
-                    countDownTimer.start();
-                    sendCode(offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getMobileNumber());
-                    break;
                 case 2:
                     platformPayDialog.dismiss();
                     platformMemberSelector.setSelected(false);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-                    break;
-                case 3:
-                    inputCode = (String)msg.obj;
-                    if (!TextUtils.isEmpty(inputCode)){
-                        if (MD5(inputCode).equals(verifyCodeEntityData)){
-//                            orderPay(formatMoney(totalAmount));
-                            confirmOrderPay("",formatMoney(totalAmount));
-                        }else {
-                            ToastUtil.shortShow(OrderPayActivity.this,"请填写正确的验证码");
-                        }
-                    }else {
-                        ToastUtil.shortShow(OrderPayActivity.this,"请填写验证码");
-                    }
+                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
                     break;
                 case 4:
                     merchantPayDialog.dismiss();
                     vipMemberSelector.setSelected(false);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
                     break;
                 case 5:
+                    //会员卡支付发送验证码接口
                     countDownTimer = (CountDownTimer) msg.obj;
                     countDownTimer.start();
-                    sendCode(offlineOrderPayEntity.getDatas().getOfflineOrderPayMerchantCard().getMobileNumber());
+                    IdentityHashMap<String,String> parmas = new IdentityHashMap<>();
+                    parmas.put("token",UserCenter.getToken(OrderPayActivity.this));
+                    if (vipMemberSelector.isSelected()){
+                        parmas.put("type","merchant");
+                    }else {
+                        parmas.put("type","platform");
+                    }
+                    parmas.put("uid",userId);
+                    requestHttpData(Constants.Urls.URL_POST_MEMBER_CARD_PAY,REQUEST_CODE_SPECIAL_PAY_SMS,
+                            FProtocol.HttpMethod.POST,parmas);
+
                     break;
                 case 6:
                     inputCode = (String)msg.obj;
                     if (!TextUtils.isEmpty(inputCode)){
-                        if (MD5(inputCode).equals(verifyCodeEntityData)){
-//                            orderPay(formatMoney(totalAmount - afterDiscount));
-                            confirmOrderPay("",formatMoney(totalAmount - afterDiscount));
+                        confirmOrderPay("");
+                    }else {
+                        ToastUtil.shortShow(OrderPayActivity.this,"请填写验证码");
+                    }
+                    break;
+                case 7:
+
+                    //特殊折扣发送验证码 验证店长手机号
+                    countDownTimer = (CountDownTimer) msg.obj;
+                    countDownTimer.start();
+                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
+                    params.put("token",UserCenter.getToken(OrderPayActivity.this));
+                    requestHttpData(Constants.Urls.URL_POST_SPECIAL_PAY_SMS,REQUEST_CODE_SPECIAL_PAY_SMS, FProtocol.HttpMethod.POST,params);
+                    break;
+                case 8:
+                    inputCode = (String)msg.obj;
+                    if (!TextUtils.isEmpty(inputCode)){
+                        if (specialWxpayDiscount.isSelected()){
+                            startActivityForResult(new Intent(OrderPayActivity.this,ScanActivity.class),
+                                    WXPAY_CODE);
+                        }else if (specialAlipayDiscount.isSelected()){
+                            startActivityForResult(new Intent(OrderPayActivity.this,ScanActivity.class),
+                                    ALIPAY_CODE);
                         }else {
-                            ToastUtil.shortShow(OrderPayActivity.this,"请填写正确的验证码");
+                            confirmOrderPay("");
                         }
                     }else {
                         ToastUtil.shortShow(OrderPayActivity.this,"请填写验证码");
                     }
+                    break;
+                case 9:
+                    //免洗发送验证码 验证店长手机号
+                    countDownTimer = (CountDownTimer) msg.obj;
+                    countDownTimer.start();
+                    IdentityHashMap<String,String> freeParams = new IdentityHashMap<>();
+                    freeParams.put("token",UserCenter.getToken(OrderPayActivity.this));
+                    requestHttpData(Constants.Urls.URL_POST_SPECIAL_PAY_SMS,REQUEST_CODE_SPECIAL_PAY_SMS, FProtocol.HttpMethod.POST,freeParams);
+                    break;
+                case 10:
+                    inputCode = (String)msg.obj;
+                    if (!TextUtils.isEmpty(inputCode)){
+                        confirmOrderPay("");
+                    }else {
+                        ToastUtil.shortShow(OrderPayActivity.this,"请填写验证码");
+                    }
+                    break;
+                case 11:
+                    freePayConfirmDialog.dismiss();
+                    freeCleanDiscount.setSelected(false);
+                    rlCashCouponInfo.setOnClickListener(OrderPayActivity.this);
+                    if (isGetCashConpon){
+                        //设置代金券金额
+                        tvCashCouponValue.setText(String.format(OrderPayActivity.this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue)));
+                    }
+                    payModeSelectShowBrandDiscountAndNetReceipts();
                     break;
             }
         }
     };
     private PlatformPayDialog platformPayDialog;
-    private String cardDiscount;
     private PlatformPayDialog merchantPayDialog;
-    private double merchantDiscount;
-    private boolean isClickMerchant,isCLickPlatform = false;
+    private boolean isGetCashConpon = false;
     private int extraFrom;
+    private CollectClothesDialog bindingCashConponView;
+    private String inputCashCouponNum;
+    private double cashCouponValue;
+    private double payAmount;
+    private String inputSpecial;
+    private String inputAlipaySpecial;
+    private double totalAmount;
+
+    private List<Double> doubles = new ArrayList<>();
+
+    private List<OfflineOrderPayEntity.OfflineOrderPayResult.OfflineOrderPayItems> itemses;
+    private double merchantCardDiscount;
+    private String userId;
+    private String userMobile;
+    private double platformCardDiscount;
+    private String masterPhone;
+    private String cashInputSpecial;
+    private String cashCouponSn;
+    private String inputCode;
+    private FreePayConfirmDialog freePayConfirmDialog;
+    private SpecialPayConfirmDialog specialPayConfirmDialog;
+    private double defaultNetReceipts;
+    private double reducePrice;
 
 
     @Override
@@ -233,7 +272,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private void loadData(String orderId) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("order_id",orderId);
+        params.put("oid",orderId);
         requestHttpData(Constants.Urls.URL_POST_OFFLINE_ORDER_PAY_DETAIL,REQUEST_CODE_OFFLINE_ORDER_PAY_DETAIL, FProtocol.HttpMethod.POST,params);
     }
 
@@ -245,143 +284,177 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
         wxPaySelector.setOnClickListener(this);
         aliPaySelector.setOnClickListener(this);
         vipMemberSelector.setOnClickListener(this);
-        nineCashDiscount.setOnClickListener(this);
-        eightCashDiscount.setOnClickListener(this);
-        sevenCashDiscount.setOnClickListener(this);
         specialCashDiscount.setOnClickListener(this);
         roundingCashDiscount.setOnClickListener(this);
-        nineWxpayDiscount.setOnClickListener(this);
-        eightWxpayDiscount.setOnClickListener(this);
-        sevenWxpayDiscount.setOnClickListener(this);
         specialWxpayDiscount.setOnClickListener(this);
         roundingWxpayDiscount.setOnClickListener(this);
-        nineAlipayDiscount.setOnClickListener(this);
-        eightAlipayDiscount.setOnClickListener(this);
-        sevenAlipayDiscount.setOnClickListener(this);
         specialAlipayDiscount.setOnClickListener(this);
         roundingAlipayDiscount.setOnClickListener(this);
         confirmPay.setOnClickListener(this);
+        rlCashCouponInfo.setOnClickListener(this);
+        freeCleanDiscount.setOnClickListener(this);
 
         dialog = new CommonDialog(this);
     }
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_OFFLINE_ORDER_PAY_DETAIL:
                 if (data != null){
-                    offlineOrderPayEntity = Parsers.getOfflineOrderPayEntity(data);
+                    OfflineOrderPayEntity offlineOrderPayEntity = Parsers.getOfflineOrderPayEntity(data);
                     if (offlineOrderPayEntity != null){
-                        if (offlineOrderPayEntity.getRetcode() == 0){
-                            if (offlineOrderPayEntity.getDatas() != null){
-                                if (offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder() != null){
-                                    //设置应收 品项折扣 实收
-                                    totalAmount = offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder().getTotalAmount();
-//                                    totalAmount = 11.20;
-//                                    offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().setCardSum(7.0);
-//                                    offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().setCardExist(0);
-                                    cardSum = offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getCardSum();
-                                    tvOrderSum.setText("￥" + formatMoney(totalAmount));
-                                    tvBrandDiscountNum.setText("￥" + offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder().getReducePrice());
-                                    tvNetReceipts.setText("￥" +  formatMoney(totalAmount));
-                                }
+                        if (offlineOrderPayEntity.getCode() == 0){
+                            if (offlineOrderPayEntity.getResult() != null){
+                                OfflineOrderPayEntity.OfflineOrderPayResult result = offlineOrderPayEntity.getResult();
+                                //获取用户id
+                                userId = result.getuId();
+                                //获取用户电话
+                                userMobile = result.getuMobile();
+                                //获取店长电话
+                                masterPhone = result.getMasterPhone();
+                                //订单优惠之后总价（后台计算过的价格）
+                                payAmount = result.getPayAmount();
+                                //订单实际总价
+                                totalAmount = result.getTotalAmount();
+                                //获取订单里的所有项目集合
+                                itemses = result.getItemses();
+                                //设置应收价格
+                                tvOrderSum.setText(String.format(this.getResources().getString(R.string.show_money_value),
+                                        formatMoney(totalAmount)));
 
-                                if (offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard() != null){
-                                    if (offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getCardExist() == 1){
-                                        cardDiscount = offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getCardDiscount();
-                                        if (cardDiscount.equals("7.0")){
-                                            discountValue = 0.7;
-                                        }else if (cardDiscount.equals("8.0")){
-                                            discountValue = 0.8;
-                                        }else {
-                                            discountValue = 0.0;
-                                        }
-                                        llGoPay.setVisibility(View.GONE);
-                                        platformMemberSelector.setVisibility(View.VISIBLE);
-                                        platformBalanceNum.setText("可用余额：￥" + cardSum);
+                                //默认实收价格
+                                defaultNetReceipts = computeAfterDiscount(itemses, false, 10);
+                                //项目优惠价格
+                                reducePrice = result.getReducePrice();
 
-//                                        platformMemberSelector.setOnClickListener(this);
-                                        llGoPay.setOnClickListener(null);
 
-                                    }else {
-                                        llGoPay.setVisibility(View.VISIBLE);
-                                        platformMemberSelector.setVisibility(View.GONE);
-                                        platformBalanceNum.setText("可用余额：￥0.00");
-//                                        platformMemberSelector.setOnClickListener(null);
-                                        llGoPay.setOnClickListener(this);
-                                    }
-                                }
+                                //默认显示品项折扣和实收价格
+                                showBrandDiscountNumAndNetReceiptsNormal(reducePrice, defaultNetReceipts);
 
-                                if (offlineOrderPayEntity.getDatas().getOfflineOrderPayMerchantCard() != null){
-                                    if (offlineOrderPayEntity.getDatas().getOfflineOrderPayMerchantCard().getCardExist() == 1){ //如果有专店卡
-                                        rlVipMember.setVisibility(View.VISIBLE); //就显示
-                                        vipMemberCardLine.setVisibility(View.VISIBLE);// 专店卡下面的分割线
-                                        vipBalanceNum.setText("可用余额：￥" + offlineOrderPayEntity.getDatas().getOfflineOrderPayMerchantCard().getBalance());
-                                        merchantDiscount = offlineOrderPayEntity.getDatas().getOfflineOrderPayMerchantCard().getDiscount();
-                                    }else {
-                                        rlVipMember.setVisibility(View.GONE); //否则隐藏
-                                        vipMemberCardLine.setVisibility(View.GONE);
-                                    }
-                                }
-                                afterDiscount = totalAmount - totalAmount * discountValue; //品项折扣的钱。
-                                //判断支付金额是否大于卡余额
-                                if (offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getCardExist() == 1){
-                                    LogUtil.e("zhang","cardSum = " + cardSum);
-                                    LogUtil.e("zhang","totalAmount * discountValue  = " + totalAmount * discountValue );
-                                    if (cardSum - (totalAmount * discountValue) > cardSum){
-                                        platformMemberSelector.setOnClickListener(null);
-                                        rebatesBalancePlatformPay.setVisibility(View.VISIBLE);
-                                    }else {
+                                //是否有平台卡的标识
+                                String hasPlatform = result.getHasPlatform();
+
+                                if (hasPlatform.equals("1")){
+                                    //平台卡的折扣
+                                    platformCardDiscount = result.getOfflineOrderPayPlatform().getcDiscount();
+
+                                    //平台卡余额
+                                    double platformCardBalande = result.getOfflineOrderPayPlatform().getcBalance();
+
+                                    platformBalanceNum.setText(String.format(this.getResources().getString(R.string.balance_value),platformCardBalande));
+                                    llGoPay.setVisibility(View.GONE); //购买平台会员卡的按钮隐藏
+                                    platformMemberSelector.setVisibility(View.VISIBLE);
+                                    llGoPay.setOnClickListener(null);
+
+
+                                    //计算平台会员卡折后的价格
+                                    double usePlatformAmount = computeAfterDiscount(itemses, true, platformCardDiscount);
+                                    //判断支付金额是否大于卡余额
+                                    if (platformCardBalande >= usePlatformAmount){
                                         platformMemberSelector.setOnClickListener(this);
                                         rebatesBalancePlatformPay.setVisibility(View.GONE);
+                                        platformMemberSelector.setVisibility(View.VISIBLE);
+                                    }else {
+                                        platformMemberSelector.setOnClickListener(null);
+                                        platformMemberSelector.setVisibility(View.INVISIBLE);
+                                        rebatesBalancePlatformPay.setVisibility(View.VISIBLE);
                                     }
+                                }else {
+                                    llGoPay.setVisibility(View.VISIBLE); //购买平台会员卡的按钮显示
+                                    platformMemberSelector.setVisibility(View.GONE);
+                                    platformBalanceNum.setText(String.format(this.getResources().getString(R.string.balance_value),formatMoney(0.00)));
+                                    llGoPay.setOnClickListener(this);
+                                }
+
+
+
+                                //是否有赚点卡的标识
+                                String hasMerchant = result.getHasMerchant();
+
+                                if (hasMerchant.equals("1")){
+                                    //专店卡的折扣
+                                    merchantCardDiscount = result.getOfflineOrderPayMerchant().getcDiscount();
+                                    //专店卡的余额
+                                    double merchantCardBalance = result.getOfflineOrderPayMerchant().getcBalance();
+                                    vipBalanceNum.setText(String.format(this.getResources().getString(R.string.balance_value),
+                                            merchantCardBalance ));
+
+                                    rlVipMember.setVisibility(View.VISIBLE); //就显示
+                                    vipMemberCardLine.setVisibility(View.VISIBLE);// 专店卡下面的分割线
+
+                                    //计算平台会员卡折后的价格
+
+                                    double useMerchantAmount = computeAfterDiscount(itemses, true, merchantCardDiscount);
+                                    // 如果会员卡余额等于0 就不让点击 选择专店会员卡按钮小时，余额不足 显示
+                                    if (merchantCardBalance >= useMerchantAmount){
+                                        tvVipMemberBalance.setVisibility(View.GONE);
+                                        vipMemberSelector.setVisibility(View.VISIBLE);
+                                    }else {
+                                        tvVipMemberBalance.setVisibility(View.VISIBLE);
+                                        vipMemberSelector.setVisibility(View.INVISIBLE);
+                                    }
+                                }else {
+                                    rlVipMember.setVisibility(View.GONE); //否则隐藏
+                                    vipMemberCardLine.setVisibility(View.GONE);
                                 }
                             }
                         }else {
-                            ToastUtil.shortShow(this, offlineOrderPayEntity.getStatus());
-                        }
-                    }
-                }
-                break;
-            case REQUEST_CODE_SEND_CODE:
-                if (data != null){
-                    VerifyCodeEntity verifyCodeEntity = Parsers.getVerifyCodeEntity(data);
-                    if (verifyCodeEntity != null){
-                        if (verifyCodeEntity.getRetcode() == 0){
-                            if (verifyCodeEntity.getData() != null){
-//                                countDownTimer.start();
-                                verifyCodeEntityData = verifyCodeEntity.getData();
-                            }
-                        }else {
-                            ToastUtil.shortShow(this,verifyCodeEntity.getStatus());
+                            ToastUtil.shortShow(this, offlineOrderPayEntity.getMsg());
                         }
                     }
                 }
                 break;
             case REQUEST_CODE_OFFLINE_ORDER_PAY:
                 if (data != null){
-                    PlatformPaySuccessEntity platformPaySuccessEntity = Parsers.getPlatformPaySuccessEntity(data);
-                    if (platformPaySuccessEntity != null){
-                        if (platformPaySuccessEntity.getRetcode() == 0){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
                             //这里返回要好好检查一下
 //                            finish();
 
-                            // TODO: 2017/8/23  忘了这里价格判断是干嘛的了
+                            //点击特殊折扣后进入这个判断
 //                            if (platformPaySuccessEntity.getDatas().getCode() != null){
 //                                if (platformPaySuccessEntity.getDatas().getCode().equals("success")){
 //                                    orderPrint(orderId);
 //                                }
 //                            }
+
                             if (extraFrom == TakeClothesActivity.FROM_TAKE_CLOTHES){ //如果从取衣界面进来的，不打印
                                 ExitManager.instance.exitOfflineCollectActivity();
                             }else {
+                                if (merchantPayDialog != null){
+                                    if (merchantPayDialog.isShowing()){
+                                        merchantPayDialog.dismiss();
+                                    }
+                                }
+
+                                if (platformPayDialog != null){
+                                    if (platformPayDialog.isShowing()){
+                                        platformPayDialog.dismiss();
+                                    }
+                                }
+
+                                if (freePayConfirmDialog != null){
+                                    if (freePayConfirmDialog.isShowing()){
+                                        freePayConfirmDialog.dismiss();
+                                    }
+                                }
+
+                                if (specialPayConfirmDialog != null){
+                                    if (specialPayConfirmDialog.isShowing()){
+                                        specialPayConfirmDialog.dismiss();
+                                    }
+                                }
                                 orderPrint(orderId);
                             }
-//                            LogUtil.e("zhang","平台会员卡走到这里了。");
-
                         }else {
-                            ToastUtil.shortShow(this,platformPaySuccessEntity.getStatus());
+                            if (dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                            ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }
                 }
@@ -415,15 +488,156 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     }
                 }
                 break;
+            case REQUEST_CODE_CASH_CONPON_INFO:
+                if (data != null){
+                    CashConponEntity cashConponEntity = Parsers.getCashConponEntity(data);
+                    if (cashConponEntity != null){
+                        if (cashConponEntity.getCode() == 0){
+                            if (bindingCashConponView.isShowing()){
+                                bindingCashConponView.dismiss();
+                            }
+                            //专店会员卡 平台会员卡不让使用
+                            vipMemberSelector.setSelected(false);
+                            vipMemberSelector.setOnClickListener(null);
+                            platformMemberSelector.setSelected(false);
+                            platformMemberSelector.setOnClickListener(null);
+                            rlVipMember.setBackgroundColor(this.getResources().getColor(R.color.ccccc));
+                            rlPlatformMember.setBackgroundColor(this.getResources().getColor(R.color.ccccc));
+
+                            //使用了优惠券。
+                            isGetCashConpon = true;
+                            cashCouponValue = cashConponEntity.getValue(); //获取代金券面值
+                            tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),cashCouponValue));//设置显示代金券
+
+                            //代金券金额比订单总额大的情况
+                            if (cashCouponValue >= payAmount){
+                                tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(0.00))); //设置实收显示
+                                tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(payAmount))); //设置品项折扣显示
+                                specialCashDiscount.setOnClickListener(null); //代金券金额比订单总额打的话 现金支付特殊折扣不让点
+                                specialWxpayDiscount.setOnClickListener(null);//代金券金额比订单总额打的话 微信支付特殊折扣不让点
+                                specialAlipayDiscount.setOnClickListener(null);//代金券金额比订单总额打的话 支付宝支付特殊折扣不让点
+                            }else {
+                                tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(defaultNetReceipts - cashCouponValue))); //设置实收显示
+                                tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue + reducePrice))); //设置品项折扣显示
+                                specialCashDiscount.setOnClickListener(this);
+                                specialWxpayDiscount.setOnClickListener(this);
+                                specialAlipayDiscount.setOnClickListener(this);
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,cashConponEntity.getMsg());
+                        }
+                    }
+
+                }
+                break;
+            //特殊折扣发送短信返回码
+            case REQUEST_CODE_SPECIAL_PAY_SMS:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+
+                        }else {
+                            ToastUtil.shortShow(this,entity.getStatus());
+                        }
+                    }
+                }
+                break;
         }
     }
 
+
+    private double computeAfterDiscount(List<OfflineOrderPayEntity.OfflineOrderPayResult.OfflineOrderPayItems> itemses, boolean isDiscount, double cardDiscount) {
+        double sum = 0;
+        for (int i = 0; i < itemses.size(); i++) {
+            //项目是否有折扣标识
+            String hasDiscount = itemses.get(i).getHasDiscount();
+            //项目的折扣
+            double itemDiscount = itemses.get(i).getItemDiscount();
+            //项目实际价格
+            double itemPrice = itemses.get(i).getItemPrice();
+            //项目打折后的价格
+            double itemRealPrice = itemses.get(i).getItemRealPrice();
+            if (hasDiscount.equals("1")){
+                if (isDiscount){
+                    if (itemDiscount > cardDiscount){
+                        double v = itemPrice - discountFunc(itemPrice, cardDiscount);
+                        doubles.add(v);
+                    }else {
+                        double v = itemPrice - discountFunc(itemPrice, itemDiscount);
+                        doubles.add(v);
+                    }
+                } else {
+                    doubles.add(itemRealPrice);
+                }
+            }else {
+                doubles.add(itemPrice);
+            }
+        }
+
+        //添加到集合里的数据做相加操作
+        for (int i = 0; i < doubles.size(); i++) {
+            sum += doubles.get(i);
+        }
+        return sum;
+    }
+
+    /**
+     * 品项折扣和实收默认显示
+     */
+    private void showBrandDiscountNumAndNetReceiptsNormal(double brandDiscount,double netReceipts) {
+        tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),
+                formatMoney(brandDiscount)));  //设置品项折扣
+        tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),
+                formatMoney(netReceipts))); //设置应收显示
+    }
+
+    /**
+     * 显示品项折扣和实收金额 打折钱
+     * @param beforeValue 打折前应收的金额
+     * @param CashCouponValue 代金券金额
+     */
+    private void showBrandDiscountNumAndNetReceiptsBeforeDiscout(double beforeValue,double CashCouponValue) {
+        tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),
+                formatMoney(CashCouponValue))); //设置品项折扣
+        tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),
+                formatMoney(beforeValue)));  //设置实收显示
+    }
+
+    /**
+     * 显示品项折扣和实收金额 打折后
+     *
+     * @param value  打完折但没有使用代金券
+     */
+    private void showBrandDiscountNumAndNetReceiptsAfterDiscout(double value) {
+        tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),
+                formatMoney(payAmount - value + reducePrice))); //设置应收显示
+        tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),
+                formatMoney(value)));
+    }
+
+    /**
+     * 显示品项折扣和实收金额 取整抹零
+     * @param value 打完折的值
+     */
+    private void showBrandDiscountNumAndNetReceiptsRoundingCashDiscount(double value) {
+        tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),
+                formatMoney(payAmount - Math.floor(value) + reducePrice))); //设置应收显示
+        tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),
+                formatMoney(Math.floor(value))));
+    }
+
+
+
+    /**
+     * 设置打印需要的数据
+     * @param orderPrintEntity 打印实体
+     */
     private void setOrderPrint(OrderPrintEntity orderPrintEntity) {
         PrintEntity.PayOrderPrintEntity payOrderPrintEntity = printEntity.new PayOrderPrintEntity();
         PrintEntity.PayOrderPrintEntity.PayOrderPrintInfo payOrderPrintInfo = payOrderPrintEntity.new PayOrderPrintInfo();
         List<PrintEntity.PayOrderPrintEntity.PayOrderPrintItems> payOrderPrintItemses = new ArrayList<>();
         PrintEntity.PayOrderPrintEntity.PayOrderPrintItems payOrderPrintItems = null;
-
 
         payOrderPrintInfo.setOrdersn(orderPrintEntity.getDatas().getInfo().getOrdersn());
         payOrderPrintInfo.setMobile(orderPrintEntity.getDatas().getInfo().getMobile());
@@ -441,6 +655,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
         payOrderPrintInfo.setAmount(orderPrintEntity.getDatas().getInfo().getAmount());
         payOrderPrintInfo.setCardNumber(orderPrintEntity.getDatas().getInfo().getCardNumber());
         payOrderPrintInfo.setCardBalance(orderPrintEntity.getDatas().getInfo().getCardBalance());
+        payOrderPrintInfo.setmName(orderPrintEntity.getDatas().getInfo().getmName());
 
         List<OrderPrintEntity.OrderPrintDatas.OrderPrintItems> items = orderPrintEntity.getDatas().getItems();
         for (int i = 0; i < items.size(); i++) {
@@ -449,6 +664,8 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
             payOrderPrintItems.setName(items.get(i).getName());
             payOrderPrintItems.setPrice(items.get(i).getPrice());
             payOrderPrintItems.setColor(items.get(i).getColor());
+            payOrderPrintItems.setColorText(items.get(i).getColorText());
+            payOrderPrintItems.setNoteText(items.get(i).getNoteText());
             payOrderPrintItemses.add(payOrderPrintItems);
         }
 
@@ -486,234 +703,115 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.vip_member_selector:
-                if(vipMemberSelector.isSelected()){
-                    vipMemberSelector.setSelected(false);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount- 0.00));
-                }else {
-                    if(platformMemberSelector.isSelected() ||cashPaySelector.isSelected() ||wxPaySelector.isSelected() ||aliPaySelector.isSelected()){
-                        platformMemberSelector.setSelected(false);
-                        cashPaySelector.setSelected(false);
-                        wxPaySelector.setSelected(false);
-                        aliPaySelector.setSelected(false);
-                        rlCashDiscount.setVisibility(View.GONE);
-                        rlWxpayDiscount.setVisibility(View.GONE);
-                        rlAlipayDiscount.setVisibility(View.GONE);
-                        anotherSetFalse();
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-                    }
-                    merchantPayDialog = new PlatformPayDialog(this, R.style.DialogTheme,handler,2);
-                    merchantPayDialog.setview();
-                    merchantPayDialog.setCanceledOnTouchOutside(false);
-                    if(!merchantPayDialog.isShowing()){
-                        vipMemberSelector.setSelected(true);
-                        isClickMerchant = true;
-                        isCLickPlatform = false;
-                        merchantPayDialog.show();
-                        //计算折扣
-                        if (merchantDiscount == 10){
-                            afterDiscount = totalAmount - totalAmount * 1;
-                        }else {
-                            afterDiscount = totalAmount - totalAmount * merchantDiscount;
-                        }
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - afterDiscount));
-                    }
+                doubles.clear();
+                rlCashCouponInfo.setOnClickListener(this);
+                if(platformMemberSelector.isSelected() ||cashPaySelector.isSelected() ||wxPaySelector.isSelected() ||aliPaySelector.isSelected()){
+                    platformMemberSelector.setSelected(false);
+                    cashPaySelector.setSelected(false);
+                    wxPaySelector.setSelected(false);
+                    aliPaySelector.setSelected(false);
+                    llCashDiscount.setVisibility(View.GONE);
+                    llWxpayDiscount.setVisibility(View.GONE);
+                    llAlipayDiscount.setVisibility(View.GONE);
+                    anotherSetFalse();
+                }
+                merchantPayDialog = new PlatformPayDialog(this, R.style.DialogTheme,handler,2);
+                merchantPayDialog.setview();
+                merchantPayDialog.setCanceledOnTouchOutside(false);
+                if(!merchantPayDialog.isShowing()){
+                    vipMemberSelector.setSelected(true);
+                    merchantPayDialog.show();
+                    //计算折扣
+                    double afterDiscount = computeAfterDiscount(itemses, true, merchantCardDiscount);
+                    //显示品项折扣和实收的价格
+                    showBrandDiscountNumAndNetReceiptsAfterDiscout(afterDiscount);
                 }
                 break;
             case R.id.platform_member_selector:
-                if(platformMemberSelector.isSelected()){
-                    platformMemberSelector.setSelected(false);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-                }else {
-                    if(vipMemberSelector.isSelected() ||cashPaySelector.isSelected() ||wxPaySelector.isSelected() ||aliPaySelector.isSelected()){
-                        vipMemberSelector.setSelected(false);
-                        cashPaySelector.setSelected(false);
-                        wxPaySelector.setSelected(false);
-                        aliPaySelector.setSelected(false);
-                        rlCashDiscount.setVisibility(View.GONE);
-                        rlWxpayDiscount.setVisibility(View.GONE);
-                        rlAlipayDiscount.setVisibility(View.GONE);
-                        anotherSetFalse();
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-                    }
-                    platformPayDialog = new PlatformPayDialog(this, R.style.DialogTheme,handler,1);
-                    platformPayDialog.setview();
-                    platformPayDialog.setCanceledOnTouchOutside(false);
-                    if(!platformPayDialog.isShowing()){
-                        platformMemberSelector.setSelected(true);
-                        isClickMerchant = false;
-                        isCLickPlatform = true;
-                        platformPayDialog.show();
-                        //计算折扣
-                        afterDiscount = totalAmount - totalAmount * discountValue;
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - afterDiscount));
-                    }
+                doubles.clear();
+                rlCashCouponInfo.setOnClickListener(this);
+                if(vipMemberSelector.isSelected() ||cashPaySelector.isSelected() ||wxPaySelector.isSelected() ||aliPaySelector.isSelected()){
+                    vipMemberSelector.setSelected(false);
+                    cashPaySelector.setSelected(false);
+                    wxPaySelector.setSelected(false);
+                    aliPaySelector.setSelected(false);
+                    llCashDiscount.setVisibility(View.GONE);
+                    llWxpayDiscount.setVisibility(View.GONE);
+                    llAlipayDiscount.setVisibility(View.GONE);
+                    anotherSetFalse();
+                }
+                platformPayDialog = new PlatformPayDialog(this, R.style.DialogTheme,handler,1);
+                platformPayDialog.setview();
+                platformPayDialog.setCanceledOnTouchOutside(false);
+                if(!platformPayDialog.isShowing()){
+                    platformMemberSelector.setSelected(true);
+                    platformPayDialog.show();
+                    //计算折扣
+                    double afterDiscount = computeAfterDiscount(itemses, true, platformCardDiscount);
+                    //显示品项折扣和实收的价格
+                    showBrandDiscountNumAndNetReceiptsAfterDiscout(afterDiscount);
                 }
                 break;
             case R.id.cash_pay_selector:
                 if(cashPaySelector.isSelected()){
                     cashPaySelector.setSelected(false);
-                    rlCashDiscount.setVisibility(View.GONE);
+                    llCashDiscount.setVisibility(View.GONE);
                     anotherSetFalse();
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+                    payModeSelectShowBrandDiscountAndNetReceipts();
                 }else {
                     cashPaySelector.setSelected(true);
-                    rlCashDiscount.setVisibility(View.VISIBLE);
+                    llCashDiscount.setVisibility(View.VISIBLE);
                     if(wxPaySelector.isSelected() || aliPaySelector.isSelected() ||platformMemberSelector.isSelected() ||vipMemberSelector.isSelected()){
                         wxPaySelector.setSelected(false);
-                        rlWxpayDiscount.setVisibility(View.GONE);
+                        llWxpayDiscount.setVisibility(View.GONE);
                         aliPaySelector.setSelected(false);
-                        rlAlipayDiscount.setVisibility(View.GONE);
+                        llAlipayDiscount.setVisibility(View.GONE);
                         platformMemberSelector.setSelected(false);
                         vipMemberSelector.setSelected(false);
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+                        payModeSelectShowBrandDiscountAndNetReceipts();
                     }
                 }
                 break;
             case R.id.wx_pay_selector:
                 if(wxPaySelector.isSelected()){
                     wxPaySelector.setSelected(false);
-                    rlWxpayDiscount.setVisibility(View.GONE);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+                    llWxpayDiscount.setVisibility(View.GONE);
+                    anotherSetFalse();
+                    payModeSelectShowBrandDiscountAndNetReceipts();
                 }else {
                     wxPaySelector.setSelected(true);
-                    rlWxpayDiscount.setVisibility(View.VISIBLE);
-                    if (aliPaySelector.isSelected() || wxPaySelector.isSelected()||platformMemberSelector.isSelected() ||vipMemberSelector.isSelected()){
+                    llWxpayDiscount.setVisibility(View.VISIBLE);
+
+                    if (aliPaySelector.isSelected() || cashPaySelector.isSelected()||platformMemberSelector.isSelected() ||vipMemberSelector.isSelected()){
                         cashPaySelector.setSelected(false);
-                        rlCashDiscount.setVisibility(View.GONE);
+                        llCashDiscount.setVisibility(View.GONE);
                         aliPaySelector.setSelected(false);
-                        rlAlipayDiscount.setVisibility(View.GONE);
+                        llAlipayDiscount.setVisibility(View.GONE);
                         platformMemberSelector.setSelected(false);
                         vipMemberSelector.setSelected(false);
-                        anotherSetFalse();
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+
+                        payModeSelectShowBrandDiscountAndNetReceipts();
                     }
                 }
                 break;
             case R.id.ali_pay_selector:
                 if(aliPaySelector.isSelected()){
                     aliPaySelector.setSelected(false);
-                    rlAlipayDiscount.setVisibility(View.GONE);
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
+                    llAlipayDiscount.setVisibility(View.GONE);
+                    anotherSetFalse();
+                    payModeSelectShowBrandDiscountAndNetReceipts();
                 }else {
                     aliPaySelector.setSelected(true);
-                    rlAlipayDiscount.setVisibility(View.VISIBLE);
+                    llAlipayDiscount.setVisibility(View.VISIBLE);
                     if (cashPaySelector.isSelected() || wxPaySelector.isSelected()||platformMemberSelector.isSelected() ||vipMemberSelector.isSelected()){
                         cashPaySelector.setSelected(false);
-                        rlCashDiscount.setVisibility(View.GONE);
+                        llCashDiscount.setVisibility(View.GONE);
                         wxPaySelector.setSelected(false);
-                        rlWxpayDiscount.setVisibility(View.GONE);
+                        llWxpayDiscount.setVisibility(View.GONE);
                         platformMemberSelector.setSelected(false);
                         vipMemberSelector.setSelected(false);
-                        anotherSetFalse();
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-                    }
-                }
-                break;
-            case R.id.nine_cash_discount:
-                if(nineCashDiscount.isSelected()){
-                    nineCashDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-//                    tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-//                    tvBrandDiscountNum.setText("-￥0.00");
-                }else {
-                    nineCashDiscount.setSelected(true);
-                    //计算折扣
-                     afterDiscount = totalAmount - totalAmount * 0.9;
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
 
-                    if(eightCashDiscount.isSelected() || sevenCashDiscount.isSelected() || specialCashDiscount.isSelected()){
-                        eightCashDiscount.setSelected(false);
-                        sevenCashDiscount.setSelected(false);
-                        specialCashDiscount.setSelected(false);
-                    }
-                }
-                break;
-            case R.id.eight_cash_discount:
-                if(eightCashDiscount.isSelected()){
-                    eightCashDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-//                    tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-//                    tvBrandDiscountNum.setText("-￥0.00");
-                }else {
-                    eightCashDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.8;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-
-                    if(nineCashDiscount.isSelected() || sevenCashDiscount.isSelected() || specialCashDiscount.isSelected()){
-                        nineCashDiscount.setSelected(false);
-                        sevenCashDiscount.setSelected(false);
-                        specialCashDiscount.setSelected(false);
-                    }
-                }
-                break;
-            case R.id.seven_cash_discount:
-                if(sevenCashDiscount.isSelected()){
-                    sevenCashDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    sevenCashDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.7;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-
-                    if(nineCashDiscount.isSelected() || eightCashDiscount.isSelected() || specialCashDiscount.isSelected()){
-                        nineCashDiscount.setSelected(false);
-                        eightCashDiscount.setSelected(false);
-                        specialCashDiscount.setSelected(false);
+                        payModeSelectShowBrandDiscountAndNetReceipts();
                     }
                 }
                 break;
@@ -722,17 +820,13 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     specialCashDiscount.setSelected(false);
                 }else {
                     specialCashDiscount.setSelected(true);
+                    payModeSelectShowBrandDiscountAndNetReceipts();
 
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-
-                    if(nineCashDiscount.isSelected() || eightCashDiscount.isSelected() || sevenCashDiscount.isSelected() ||
-                            roundingCashDiscount.isSelected()){
-                        nineCashDiscount.setSelected(false);
-                        eightCashDiscount.setSelected(false);
-                        sevenCashDiscount.setSelected(false);
+                    if(roundingCashDiscount.isSelected() || freeCleanDiscount.isSelected()){
                         roundingCashDiscount.setSelected(false);
+                        freeCleanDiscount.setSelected(false);
                     }
+
                     View view = View.inflate(this, R.layout.input_special_num,null);
                     final EditText edPhoneOrderNum = (EditText) view.findViewById(R.id.ed_phone_order_num);
                     TextView revisePhoneCancel = (TextView) view.findViewById(R.id.revise_phone_cancel);
@@ -752,12 +846,18 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String inputSpecial = edPhoneOrderNum.getText().toString();
-                            if (!TextUtils.isEmpty(inputSpecial)){
-                                if (Double.parseDouble(inputSpecial) >= 0){
-//                                    LogUtil.e("zhang","StringFilter(inputSpecial) = " + StringFilter(inputSpecial));
-                                    confirmOrderPay("",StringFilter(inputSpecial));
+                            cashInputSpecial = edPhoneOrderNum.getText().toString();
+                            if (!TextUtils.isEmpty(cashInputSpecial)){
+                                if (Double.parseDouble(cashInputSpecial) >= 0){
                                     collectClothesCashDialog.dismiss();
+                                    specialPayConfirmDialog = new SpecialPayConfirmDialog(OrderPayActivity.this, R.style.DialogTheme,
+                                            handler,masterPhone, cashInputSpecial,specialCashDiscount);
+                                    specialPayConfirmDialog.setCanceledOnTouchOutside(false);
+                                    specialPayConfirmDialog.setView();
+                                    specialPayConfirmDialog.show();
+
+
+
                                 }else {
                                     ToastUtil.shortShow(OrderPayActivity.this,"金额不能小于0");
                                 }
@@ -771,131 +871,50 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 }
                 break;
             case R.id.rounding_cash_discount:
-                if(roundingCashDiscount.isSelected()){
+                if (isGetCashConpon){
+                    //设置代金券设置金额数据
+                    tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue)));
+                    //如果代金券金额比支付金额小的话，改变品项折扣 和实收 的金额 反之就默认
+                    if (cashCouponValue < payAmount){
+                        useRoundingCashDiscount(roundingCashDiscount,cashCouponValue);
+                    }else {
+                        useRoundingCashDiscount(roundingCashDiscount,0);
+                    }
+                }else {
+                    useRoundingCashDiscount(roundingCashDiscount,defaultNetReceipts);
+                }
+                if(specialCashDiscount.isSelected() || freeCleanDiscount.isSelected()){
+                    specialCashDiscount.setSelected(false);
+                    freeCleanDiscount.setSelected(false);
+                }
+                break;
+            case R.id.free_clean_discount:
+                freeCleanDiscount.setSelected(true);
+                rlCashCouponInfo.setOnClickListener(null);
+                if(specialCashDiscount.isSelected() || roundingCashDiscount.isSelected()){
+                    specialCashDiscount.setSelected(false);
                     roundingCashDiscount.setSelected(false);
-                    if(nineCashDiscount.isSelected() || eightCashDiscount.isSelected() || sevenCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    roundingCashDiscount.setSelected(true);
-                    if(nineCashDiscount.isSelected() || eightCashDiscount.isSelected() || sevenCashDiscount.isSelected()){
-//                        LogUtil.e("zhang","netReceipts" + netReceipts);
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(netReceipts)));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(totalAmount)));
-                    }
-                    if(specialCashDiscount.isSelected()){
-                        specialCashDiscount.setSelected(false);
-                    }
                 }
-                break;
-            case R.id.nine_wxpay_discount:
-                if(nineWxpayDiscount.isSelected()){
-                    nineWxpayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    nineWxpayDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.9;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingWxpayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
 
-                    if(eightWxpayDiscount.isSelected() || sevenWxpayDiscount.isSelected() || specialWxpayDiscount.isSelected()){
-                        eightWxpayDiscount.setSelected(false);
-                        sevenWxpayDiscount.setSelected(false);
-                        specialWxpayDiscount.setSelected(false);
-                    }
+                if (isGetCashConpon){
+                    //设置代金券金额
+                    tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(0.00)));
                 }
-                break;
-            case R.id.eight_wxpay_discount:
-                if(eightWxpayDiscount.isSelected()){
-                    eightWxpayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    eightWxpayDiscount.setSelected(true);
+                tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(0.00)));
+                tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(totalAmount)));
 
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.8;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingWxpayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-                    if(nineWxpayDiscount.isSelected() || sevenWxpayDiscount.isSelected() || specialWxpayDiscount.isSelected()){
-                        nineWxpayDiscount.setSelected(false);
-                        sevenWxpayDiscount.setSelected(false);
-                        specialWxpayDiscount.setSelected(false);
-                    }
-                }
-                break;
-            case R.id.seven_wxpay_discount:
-                if(sevenWxpayDiscount.isSelected()){
-                    sevenWxpayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    sevenWxpayDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.7;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingWxpayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-                    if(nineWxpayDiscount.isSelected() || eightWxpayDiscount.isSelected() || specialWxpayDiscount.isSelected()){
-                        nineWxpayDiscount.setSelected(false);
-                        eightWxpayDiscount.setSelected(false);
-                        specialWxpayDiscount.setSelected(false);
-                    }
-                }
+                freePayConfirmDialog = new FreePayConfirmDialog(OrderPayActivity.this, R.style.DialogTheme,
+                        handler,masterPhone);
+                freePayConfirmDialog.setCanceledOnTouchOutside(false);
+                freePayConfirmDialog.setView();
+                freePayConfirmDialog.show();
                 break;
             case R.id.special_wxpay_discount:
                 if(specialWxpayDiscount.isSelected()){
                     specialWxpayDiscount.setSelected(false);
                 }else {
                     specialWxpayDiscount.setSelected(true);
-
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-
+                    payModeSelectShowBrandDiscountAndNetReceipts();
 
                     View view = View.inflate(this, R.layout.input_special_num,null);
                     final EditText edPhoneOrderNum = (EditText) view.findViewById(R.id.ed_phone_order_num);
@@ -915,11 +934,17 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String inputSpecial = edPhoneOrderNum.getText().toString();
+                            inputSpecial = edPhoneOrderNum.getText().toString();
                             if (!TextUtils.isEmpty(inputSpecial)){
                                 if (Double.parseDouble(inputSpecial) >= 0){
-                                    confirmOrderPay("",StringFilter(inputSpecial));
                                     collectClothesDialog.dismiss();
+
+                                    specialPayConfirmDialog = new SpecialPayConfirmDialog(OrderPayActivity.this, R.style.DialogTheme,
+                                            handler,masterPhone, inputSpecial,specialWxpayDiscount);
+                                    specialPayConfirmDialog.setCanceledOnTouchOutside(false);
+                                    specialPayConfirmDialog.setView();
+                                    specialPayConfirmDialog.show();
+
                                 }else {
                                     ToastUtil.shortShow(OrderPayActivity.this,"金额不能小于0");
                                 }
@@ -930,132 +955,24 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                         }
                     });
 
-                    if(nineWxpayDiscount.isSelected() || eightWxpayDiscount.isSelected() || sevenWxpayDiscount.isSelected() ||
-                            roundingWxpayDiscount.isSelected()){
-                        nineWxpayDiscount.setSelected(false);
-                        eightWxpayDiscount.setSelected(false);
-                        sevenWxpayDiscount.setSelected(false);
+                    if(roundingWxpayDiscount.isSelected()){
                         roundingWxpayDiscount.setSelected(false);
                     }
                 }
                 break;
             case R.id.rounding_wxpay_discount:
-                if(roundingWxpayDiscount.isSelected()){
-                    roundingWxpayDiscount.setSelected(false);
-                    if(nineWxpayDiscount.isSelected() || eightWxpayDiscount.isSelected() || sevenWxpayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
+                if (isGetCashConpon){
+                    //如果代金券金额比支付金额小的话，改变品项折扣 和实收 的金额 反之就默认
+                    if (cashCouponValue < payAmount){
+                        useRoundingCashDiscount(roundingWxpayDiscount,cashCouponValue);
                     }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
+                        useRoundingCashDiscount(roundingWxpayDiscount,0);
                     }
                 }else {
-                    roundingWxpayDiscount.setSelected(true);
-                    if(nineWxpayDiscount.isSelected() || eightWxpayDiscount.isSelected() || sevenWxpayDiscount.isSelected()){
-//                        LogUtil.e("zhang","netReceipts" + netReceipts);
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(netReceipts)));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(totalAmount)));
-                    }
-                    if(specialWxpayDiscount.isSelected()){
-                        specialWxpayDiscount.setSelected(false);
-                    }
+                    useRoundingCashDiscount(roundingWxpayDiscount,payAmount);
                 }
-                break;
-            case R.id.nine_alipay_discount:
-                if(nineAlipayDiscount.isSelected()){
-                    nineAlipayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    nineAlipayDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.9;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingAlipayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-
-                    if(eightAlipayDiscount.isSelected() || sevenAlipayDiscount.isSelected() || specialAlipayDiscount.isSelected()){
-                        eightAlipayDiscount.setSelected(false);
-                        sevenAlipayDiscount.setSelected(false);
-                        specialAlipayDiscount.setSelected(false);
-                    }
-                }
-                break;
-            case R.id.eight_alipay_discount:
-                if(eightAlipayDiscount.isSelected()){
-                    eightAlipayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    eightAlipayDiscount.setSelected(true);
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.8;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingAlipayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-
-                    if(nineAlipayDiscount.isSelected() || sevenAlipayDiscount.isSelected() || specialAlipayDiscount.isSelected()){
-                        nineAlipayDiscount.setSelected(false);
-                        sevenAlipayDiscount.setSelected(false);
-                        specialAlipayDiscount.setSelected(false);
-                    }
-                }
-                break;
-            case R.id.seven_alipay_discount:
-                if(sevenAlipayDiscount.isSelected()){
-                    sevenAlipayDiscount.setSelected(false);
-                    if (roundingCashDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(totalAmount))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
-                    }
-                }else {
-                    sevenAlipayDiscount.setSelected(true);
-
-                    //计算折扣
-                    afterDiscount = totalAmount - totalAmount * 0.7;
-//                    tvBrandDiscountNum.setText("-￥" + formatMoney(afterDiscount));
-                    netReceipts = totalAmount - afterDiscount;
-                    if(roundingAlipayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + (formatMoney(totalAmount - Math.floor(netReceipts))));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
-                    }
-
-                    if(nineAlipayDiscount.isSelected() || eightAlipayDiscount.isSelected() || specialAlipayDiscount.isSelected()){
-                        nineAlipayDiscount.setSelected(false);
-                        eightAlipayDiscount.setSelected(false);
-                        specialAlipayDiscount.setSelected(false);
-                    }
+                if(specialWxpayDiscount.isSelected()){
+                    specialWxpayDiscount.setSelected(false);
                 }
                 break;
             case R.id.special_alipay_discount:
@@ -1063,21 +980,16 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     specialAlipayDiscount.setSelected(false);
                 }else {
                     specialAlipayDiscount.setSelected(true);
+                    payModeSelectShowBrandDiscountAndNetReceipts();
 
-                    tvBrandDiscountNum.setText("-￥" + formatMoney(0.00));
-                    tvNetReceipts.setText("￥" + formatMoney(totalAmount - 0.00));
-
-                    if(nineAlipayDiscount.isSelected() || eightAlipayDiscount.isSelected() || sevenAlipayDiscount.isSelected() ||
-                            roundingAlipayDiscount.isSelected()){
-                        nineAlipayDiscount.setSelected(false);
-                        eightAlipayDiscount.setSelected(false);
-                        sevenAlipayDiscount.setSelected(false);
+                    if(roundingAlipayDiscount.isSelected()){
                         roundingAlipayDiscount.setSelected(false);
                     }
 
                     View view = View.inflate(this, R.layout.input_special_num,null);
-                    EditText edPhoneOrderNum = (EditText) view.findViewById(R.id.ed_phone_order_num);
+                    final EditText edPhoneOrderNum = (EditText) view.findViewById(R.id.ed_phone_order_num);
                     TextView revisePhoneCancel = (TextView) view.findViewById(R.id.revise_phone_cancel);
+                    TextView revisePhoneConfirm = (TextView) view.findViewById(R.id.revise_phone_confirm);
                     revisePhoneCancel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -1086,41 +998,53 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                         }
                     });
 
+                    revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            inputAlipaySpecial = edPhoneOrderNum.getText().toString();
+                            if (!TextUtils.isEmpty(inputAlipaySpecial)){
+                                if (Double.parseDouble(inputAlipaySpecial) >= 0){
+                                    collectClothesDialog.dismiss();
+                                    collectClothesDialog.dismiss();
+
+                                    specialPayConfirmDialog = new SpecialPayConfirmDialog(OrderPayActivity.this, R.style.DialogTheme,
+                                            handler,masterPhone, inputAlipaySpecial,specialAlipayDiscount);
+                                    specialPayConfirmDialog.setCanceledOnTouchOutside(false);
+                                    specialPayConfirmDialog.setView();
+                                    specialPayConfirmDialog.show();
+                                }else {
+                                    ToastUtil.shortShow(OrderPayActivity.this,"金额不能小于0");
+                                }
+
+                            }else {
+                                ToastUtil.shortShow(OrderPayActivity.this,"请输入金额");
+                            }
+                        }
+                    });
                     collectClothesDialog = new CollectClothesDialog(this, R.style.DialogTheme,view);
                     collectClothesDialog.setCanceledOnTouchOutside(false);
                     collectClothesDialog.show();
                 }
                 break;
             case R.id.rounding_alipay_discount:
-                if(roundingAlipayDiscount.isSelected()){
-                    roundingAlipayDiscount.setSelected(false);
-                    if(nineAlipayDiscount.isSelected() || eightAlipayDiscount.isSelected() || sevenAlipayDiscount.isSelected()){
-                        tvNetReceipts.setText("￥" + formatMoney(netReceipts));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - netReceipts));
+                if (isGetCashConpon){
+                    if (cashCouponValue < payAmount){
+                        useRoundingCashDiscount(roundingAlipayDiscount,cashCouponValue);
                     }else {
-                        tvNetReceipts.setText("￥" + formatMoney(totalAmount));
-                        tvBrandDiscountNum.setText("-￥0.00");
+                        useRoundingCashDiscount(roundingAlipayDiscount,0);
                     }
                 }else {
-                    roundingAlipayDiscount.setSelected(true);
-                    if(nineAlipayDiscount.isSelected() || eightAlipayDiscount.isSelected() || sevenAlipayDiscount.isSelected()){
-//                        LogUtil.e("zhang","netReceipts" + netReceipts);
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(netReceipts)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(netReceipts)));
-                    }else {
-                        tvNetReceipts.setText("￥" + formatMoney(Math.floor(totalAmount)));
-                        tvBrandDiscountNum.setText("-￥" + formatMoney(totalAmount - Math.floor(totalAmount)));
-                    }
-                    if(specialAlipayDiscount.isSelected()){
-                        specialAlipayDiscount.setSelected(false);
-                    }
+                    useRoundingCashDiscount(roundingAlipayDiscount,payAmount);
                 }
+                if(specialAlipayDiscount.isSelected()){
+                    specialAlipayDiscount.setSelected(false);
+                }
+
                 break;
             case R.id.ll_go_pay:
                 Intent intent = new Intent(this,BuyMemberCardActivity.class);
-                intent.putExtra("mobile_num",offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder().getMobileNumber());
-                intent.putExtra("user_id",offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder().getUserid());
-                intent.putExtra("invite_code",offlineOrderPayEntity.getDatas().getOfflineOrderPayOrder().getInviteCode());
+                intent.putExtra("user_id",userId);
+                intent.putExtra("mobile_num",userMobile);
                 startActivity(intent);
                 break;
             case R.id.left_button:
@@ -1133,96 +1057,114 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                         ExitManager.instance.exitOfflineCollectActivity();
                     }
                 });
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
+                builder.setPositiveButton("确定", null);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
                 break;
             case R.id.confirm_pay:
-                if (cashPaySelector.isSelected()){
-                    LogUtil.e("zhang","走到这里了。");
-                    dialog.setContent("加载中");
-                    dialog.show();
-                    cashPayConfirm();
+                if (platformMemberSelector.isSelected() || vipMemberSelector.isSelected() || cashPaySelector.isSelected()
+                        || wxPaySelector.isSelected() || aliPaySelector.isSelected()){
+                    if (cashPaySelector.isSelected()){
 
-                }else if (wxPaySelector.isSelected() || aliPaySelector.isSelected()){
-                    startActivityForResult(new Intent(this,ScanActivity.class), ORDERPAY);
+                        dialog.setContent("加载中");
+                        dialog.show();
+//                        cashPayConfirm();
+                        confirmOrderPay("");
+
+                    }else if (wxPaySelector.isSelected() || aliPaySelector.isSelected()){
+                        startActivityForResult(new Intent(this,ScanActivity.class), ORDERPAY);
+                    }
+                }else {
+                    ToastUtil.shortShow(this,"请选择支付方式");
                 }
 
+                break;
+            case R.id.rl_cash_coupon_info:
+                View cashConponView = View.inflate(this, R.layout.binding_cash_conpon_view,null);
+                final EditText edCashCouponNum = (EditText) cashConponView.findViewById(R.id.ed_cash_coupon_num);
+                ImageView ivScan = (ImageView) cashConponView.findViewById(R.id.iv_scan);
+                TextView cashCouponCancel = (TextView) cashConponView.findViewById(R.id.cash_coupon_cancel);
+                TextView cashCouponConfirm = (TextView) cashConponView.findViewById(R.id.cash_coupon_confirm);
+
+                cashCouponCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bindingCashConponView.dismiss();
+                    }
+                });
+
+                cashCouponConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cashCouponSn = edCashCouponNum.getText().toString();
+                        IdentityHashMap<String,String> params = new IdentityHashMap<>();
+                        params.put("token",UserCenter.getToken(OrderPayActivity.this));
+                        params.put("sn", cashCouponSn);
+                        requestHttpData(Constants.Urls.URL_POST_GET_CASH_CONPON_INFO,
+                                REQUEST_CODE_CASH_CONPON_INFO, FProtocol.HttpMethod.POST,params);
+                    }
+                });
+
+                ivScan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivityForResult(new Intent(OrderPayActivity.this,ScanActivity.class),
+                                REQUEST_CODE_CASH_CONPON_QRCODE);
+                    }
+                });
+                bindingCashConponView = new CollectClothesDialog(this, R.style.DialogTheme,cashConponView);
+                bindingCashConponView.show();
+
+                edCashCouponNum.setText(inputCashCouponNum);
                 break;
         }
     }
 
 
-    private void cashPayConfirm() {
-        String orderPayAmount = tvNetReceipts.getText().toString();
-        String result = orderPayAmount.substring(1,orderPayAmount.length());
-        confirmOrderPay("",result);
+    private void payModeSelectShowBrandDiscountAndNetReceipts() {
+        if (isGetCashConpon){
+            if (cashCouponValue < payAmount){
+                showBrandDiscountNumAndNetReceiptsBeforeDiscout(defaultNetReceipts - cashCouponValue,reducePrice + cashCouponValue);
+            }else {
+                showBrandDiscountNumAndNetReceiptsBeforeDiscout(reducePrice,defaultNetReceipts);
+            }
+        }else {
+            showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
+        }
+    }
+
+    private void useRoundingCashDiscount(TextView roundingDiscount, double useCashConponAfter) {
+
+        if (roundingDiscount.isSelected()){
+            roundingDiscount.setSelected(false);
+            showBrandDiscountNumAndNetReceiptsAfterDiscout(useCashConponAfter);
+
+        }else {
+            roundingDiscount.setSelected(true);
+            showBrandDiscountNumAndNetReceiptsRoundingCashDiscount(useCashConponAfter);
+
+        }
     }
 
 
-    private void sendCode(String mobileNum) {
-        IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("token",UserCenter.getToken(this));
-        params.put("mobile",mobileNum);
-        requestHttpData(Constants.Urls.URL_POST_SEND_CODE,REQUEST_CODE_SEND_CODE, FProtocol.HttpMethod.POST,params);
-    }
 
     /**
      * 把其他所有全置为没有选中
      */
     private void anotherSetFalse() {
-        nineCashDiscount.setSelected(false);
-        eightCashDiscount.setSelected(false);
-        sevenCashDiscount.setSelected(false);
         specialCashDiscount.setSelected(false);
         roundingCashDiscount.setSelected(false);
-        nineWxpayDiscount.setSelected(false);
-        eightWxpayDiscount.setSelected(false);
-        sevenWxpayDiscount.setSelected(false);
         specialWxpayDiscount.setSelected(false);
         roundingWxpayDiscount.setSelected(false);
-        nineAlipayDiscount.setSelected(false);
-        eightAlipayDiscount.setSelected(false);
-        sevenAlipayDiscount.setSelected(false);
         specialAlipayDiscount.setSelected(false);
         roundingAlipayDiscount.setSelected(false);
+        freeCleanDiscount.setSelected(false);
     }
 
-    public String formatMoney(double money){
+    public  String formatMoney(double money){
         DecimalFormat df = new DecimalFormat("###0.00");
         return df.format(money);
-    }
-
-    public static String MD5(String data) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] bytes = md.digest(data.getBytes());
-            return bytesToHexString(bytes);
-        } catch (NoSuchAlgorithmException e) {
-        }
-        return data;
-    }
-
-    private static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder("");
-        if (src == null || src.length <= 0) {
-            return null;
-        }
-        for (int i = 0; i < src.length; i++) {
-            int v = src[i] & 0xFF;
-            String hv = Integer.toHexString(v);
-            if (hv.length() < 2) {
-                stringBuilder.append(0);
-            }
-            stringBuilder.append(hv);
-        }
-        return stringBuilder.toString();
     }
 
     @Override
@@ -1233,65 +1175,112 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 if (resultCode == RESULT_OK){
                     if (data != null){
                         String payCode = data.getStringExtra("pay_code");
-                        dialog.setContent("加载中");
-                        dialog.show();
-
                         String orderPayAmount = tvNetReceipts.getText().toString();
                         String result = orderPayAmount.substring(1,orderPayAmount.length());
+                        dialog.setContent("加载中");
+                        dialog.show();
 //                        confirmOrderPay("",result);
-                        LogUtil.e("zhang","orderPayAmount = " + orderPayAmount);
-                        confirmOrderPay(payCode,"0.01");
-
-
+                        confirmOrderPay(payCode);
+                    }
+                }
+                break;
+            case WXPAY_CODE:
+                if (resultCode == RESULT_OK){
+                    if (data != null){
+                        String payCode = data.getStringExtra("pay_code");
+                        dialog.setContent("加载中");
+                        dialog.show();
+                        confirmOrderPay(payCode);
+                    }
+                }
+                break;
+            case ALIPAY_CODE:
+                if (resultCode == RESULT_OK){
+                    if (data != null){
+                        String payCode = data.getStringExtra("pay_code");
+                        dialog.setContent("加载中");
+                        dialog.show();
+                        confirmOrderPay(payCode);
+                    }
+                }
+                break;
+            case REQUEST_CODE_CASH_CONPON_QRCODE:
+                //扫优惠券码回显
+                if (resultCode == RESULT_OK){
+                    if (data != null){
+                        inputCashCouponNum = data.getStringExtra("pay_code");
                     }
                 }
                 break;
         }
     }
 
-    private void confirmOrderPay(String payCode, String amount) {
+
+    private void confirmOrderPay(String payCode) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
+        LogUtil.e("zhang","pay token = " + UserCenter.getToken(this));
         params.put("token",UserCenter.getToken(this));
-        if (!TextUtils.isEmpty(payCode)){
-            params.put("auth_code",payCode);
-        }
-        params.put("order_id",orderId);
-        params.put("amount",amount);
-        if (platformMemberSelector.isSelected()){
-            params.put("discount",cardDiscount);
-            params.put("type","MEMBER_CARD");
-            params.put("card_id",offlineOrderPayEntity.getDatas().getOfflineOrderPayPlatformCard().getId());
-        }else if (vipMemberSelector.isSelected()){
-            params.put("discount",merchantDiscount + "");
-            params.put("type","MERCHANT_CARD");
-        } else if (nineCashDiscount.isSelected() || nineWxpayDiscount.isSelected() ||
-                nineAlipayDiscount.isSelected()){
-            params.put("discount","9");
-        }else if (eightCashDiscount.isSelected() || eightWxpayDiscount.isSelected()
-                || eightAlipayDiscount.isSelected()){
-            params.put("discount","8");
-        }else if (sevenCashDiscount.isSelected() || sevenWxpayDiscount.isSelected()
-                || sevenAlipayDiscount.isSelected()){
-            params.put("discount","7");
-        }else {
-            params.put("discount","10");
+        //如果使用了优惠券 就传入优惠券号码
+        if (isGetCashConpon){
+            params.put("sn",cashCouponSn);
         }
 
+        params.put("oid",orderId);
         if (cashPaySelector.isSelected()){
-            params.put("type","CASH");
+            //现金支付
+            params.put("gateway","CASH");
+            if (specialCashDiscount.isSelected()){
+                params.put("reduce","special");
+                params.put("sms_code",inputCode);
+                params.put("amount",cashInputSpecial);
+            }else if (roundingCashDiscount.isSelected()){
+                params.put("reduce","floor");
+            }else {
+                params.put("sms_code",inputCode);
+                params.put("reduce","free");
+            }
         }else if (wxPaySelector.isSelected()){
-            params.put("type","WECHAT");
+            //微信支付
+            params.put("gateway","WechatPay_Pos");
+            if (specialWxpayDiscount.isSelected()){
+                params.put("sms_code",inputCode);
+                params.put("reduce","special");
+                params.put("amount",inputSpecial);
+            }else {
+                params.put("reduce","floor");
+            }
         }else if (aliPaySelector.isSelected()){
-            params.put("type","ALI");
+            //支付宝支付
+            params.put("gateway","Alipay_AopF2F");
+            if (specialAlipayDiscount.isSelected()){
+                params.put("reduce","special");
+                params.put("sms_code",inputCode);
+                params.put("amount",inputAlipaySpecial);
+            }else {
+                params.put("reduce","floor");
+            }
+        }else if (platformMemberSelector.isSelected()){
+            params.put("gateway","PLATFORM");
+            params.put("sms_code",inputCode);
+        }else {
+            params.put("gateway","MERCHANT");
+            params.put("sms_code",inputCode);
+        }
+
+        if (!TextUtils.isEmpty(payCode)){
+            //有payCode的情况
+            params.put("auth_code",payCode);
         }
 
         requestHttpData(Constants.Urls.URL_POST_OFFLINE_ORDER_PAY,REQUEST_CODE_OFFLINE_ORDER_PAY, FProtocol.HttpMethod.POST,params);
     }
 
-    public static String StringFilter(String str)throws PatternSyntaxException {
-        String regEx = "[/\\:*?<>|\"\n\t]"; //要过滤掉的字符
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(str);
-        return m.replaceAll("").trim();
+    /**
+     * 计算打折的钱 比如 一张卡打7折 之前10元，方法得出就是 3
+     * @param amount
+     * @param discount
+     */
+    private double discountFunc(double amount, double discount) {
+        return (amount * 100 - Math.floor(amount * 100 / 10 * discount)) / 100;
     }
 }

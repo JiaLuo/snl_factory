@@ -77,30 +77,28 @@ public class EditorPriceActivity extends ToolBarActivity implements View.OnClick
     private LinearLayout llReviseTakeTimeInfo;
     @ViewInject(R.id.iv_edit_price_remark)
     private ImageView ivEditPriceRemark;
-//    @ViewInject(R.id.ll_edit_price_content)
-//    private LinearLayout llEditPriceContent;
-
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-        }
-    };
-
 
     private CheckDistanceSpinnerView checkDistanceSpinnerView;
     private TranslateAnimation animation;
-//    private List<TakeTimeEntity.TakeTimeDatas> datas;
     private View inflate;
-//    private String editTime;
-//    private String itemId;
-    private int position;
     private WindowManager.LayoutParams attributes;
     private List<TakeTimeEntity> takeTimeEntity;
     private CraftworkAddPriceEntities.CraftworkAddPriceResult.CraftworkAddPriceItems craftworkAddPriceItems;
     private String takeTime;
     private String isOnline;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    String text = (String) msg.obj;
+                    etInputTechnologyRemarks.setText(etInputTechnologyRemarks.getText().toString() + text);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +106,7 @@ public class EditorPriceActivity extends ToolBarActivity implements View.OnClick
         setContentView(R.layout.editor_price_two_act);
         inflate = View.inflate(this, R.layout.editor_price_two_act, null);
         ViewInjectUtils.inject(this);
-//        editTime = getIntent().getStringExtra("edit_time");
-//        itemId = getIntent().getStringExtra("item_id");
-//        String cleanSn = getIntent().getStringExtra("clean_sn");
-//        String craftPrice = getIntent().getStringExtra("craft_price");
-//        String craftDes = getIntent().getStringExtra("craft_des");
-//        String keepPrice = getIntent().getStringExtra("keep_price");
         craftworkAddPriceItems = getIntent().getParcelableExtra("craftwork_add_price_items");
-        position = getIntent().getIntExtra("position", 0);
         //判断线上还是线下
         isOnline = getIntent().getStringExtra("is_online");
         takeTime = craftworkAddPriceItems.getTakeTime();
@@ -280,13 +271,6 @@ public class EditorPriceActivity extends ToolBarActivity implements View.OnClick
             case REQUEST_CODE_REVISE_TAKE_TIME:
                 if (data != null){
                     takeTimeEntity = Parsers.getTakeTimeEntity(data);
-//                    if (takeTimeEntity != null){
-//                        if (takeTimeEntity.getRetcode() == 0){
-//                            datas = takeTimeEntity.getDatas();
-//                        }else {
-//                            ToastUtil.shortShow(this,takeTimeEntity.getStates());
-//                        }
-//                    }
                 }
                 break;
             case REQUEST_CODE_EDIT_PRICE:
@@ -295,12 +279,11 @@ public class EditorPriceActivity extends ToolBarActivity implements View.OnClick
                     if (entity != null){
                         if (entity.getRetcode() == 0){
                             Intent intent = new Intent(this,CraftworkAddPriceActivity.class);
-//                            intent.putExtra("entity",craftworkAddPriceEntities.getResult());
-//                            intent.putExtra("craftwork_add_price_items",craftworkAddPriceItems);
-//                            intent.putExtra("position",position);
                             setResult(RESULT_OK,intent);
                             finish();
-                        }else {
+                        }else if (entity.getRetcode() == 1000){
+                            ToastUtil.shortShow(this,"页面没有任何修改");
+                        } else {
                             ToastUtil.shortShow(this,entity.getStatus());
                         }
                     }

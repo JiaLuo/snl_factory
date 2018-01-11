@@ -54,6 +54,42 @@ public class PrintEntity implements Serializable {
             private String price;
             private String putNumber;
             private String name;
+            private String noteText;
+            private String colorText;
+            private String assess;
+            private String assessText;
+
+            public String getNoteText() {
+                return noteText;
+            }
+
+            public void setNoteText(String noteText) {
+                this.noteText = noteText;
+            }
+
+            public String getColorText() {
+                return colorText;
+            }
+
+            public void setColorText(String colorText) {
+                this.colorText = colorText;
+            }
+
+            public String getAssess() {
+                return assess;
+            }
+
+            public void setAssess(String assess) {
+                this.assess = assess;
+            }
+
+            public String getAssessText() {
+                return assessText;
+            }
+
+            public void setAssessText(String assessText) {
+                this.assessText = assessText;
+            }
 
             public String getItemNote() {
                 return itemNote;
@@ -114,6 +150,15 @@ public class PrintEntity implements Serializable {
             private String cardNumber;
             private String cardBalance;
             private String qrcode;
+            private String mName;
+
+            public String getmName() {
+                return mName;
+            }
+
+            public void setmName(String mName) {
+                this.mName = mName;
+            }
 
             public String getOrdersn() {
                 return ordersn;

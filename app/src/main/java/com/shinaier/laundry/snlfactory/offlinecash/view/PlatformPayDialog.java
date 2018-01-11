@@ -30,7 +30,7 @@ public class PlatformPayDialog extends Dialog {
         super(context);
     }
 
-    public PlatformPayDialog(@NonNull Context context, @StyleRes int themeResId, Handler handler, int which) {
+    public PlatformPayDialog(@NonNull Context context, @StyleRes int themeResId,Handler handler,int which) {
         super(context, themeResId);
         this.context = context;
         this.handler = handler;
@@ -54,13 +54,8 @@ public class PlatformPayDialog extends Dialog {
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.obj = countDownTimer;
-                if (which == 1){
-                    msg.what = 1;
-                    handler.sendMessage(msg);
-                }else {
-                    msg.what = 5;
-                    handler.sendMessage(msg);
-                }
+                msg.what = 5;
+                handler.sendMessage(msg);
             }
         });
 
@@ -84,13 +79,8 @@ public class PlatformPayDialog extends Dialog {
                 String inputCode = edPhoneOrderNum.getText().toString();
                 Message msg = new Message();
                 msg.obj = inputCode;
-                if (which == 1){
-                    msg.what = 3;
-                    handler.sendMessage(msg);
-                }else {
-                    msg.what = 6;
-                    handler.sendMessage(msg);
-                }
+                msg.what = 6;
+                handler.sendMessage(msg);
             }
         });
 

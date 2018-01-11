@@ -14,6 +14,43 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rl_cash_coupon_info"
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="代金券"
+                    android:textColor="@color/black_text"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:id="@+id/iv_cash_coupon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/arrow_right_img"/>
+                <TextView
+                    android:id="@+id/tv_cash_coupon_value"
+                    android:text="-￥0.00"
+                    android:layout_toLeftOf="@id/iv_cash_coupon"
+                    android:layout_marginRight="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f5f5f5"/>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -33,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="￥124.00"
+                    android:text="￥0.00"
                     android:textColor="#b3b3b3"/>
             </RelativeLayout>
 
@@ -81,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="￥124.00"
+                    android:text="￥0.00"
                     android:textColor="@color/red"/>
             </RelativeLayout>
 
@@ -101,12 +138,13 @@
             <!--android:divider="@color/white"-->
             <!--android:scrollbars="none"/>-->
             <RelativeLayout
+                android:id="@+id/rl_platform_member"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:layout_marginLeft="12dp">
+                android:layout_height="61dp">
 
                 <ImageView
                     android:id="@+id/iv_platform_member"
+                    android:layout_marginLeft="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -133,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="平台余额：1000"
+                        android:text="平台余额：￥0.00"
                         android:textColor="#999999"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -195,11 +233,11 @@
             <RelativeLayout
                 android:id="@+id/rl_vip_member"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:layout_marginLeft="12dp">
+                android:layout_height="61dp">
 
                 <ImageView
                     android:id="@+id/iv_vip_member"
+                    android:layout_marginLeft="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -226,11 +264,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="专享余额：500.50"
+                        android:text="专享余额：￥0.00"
                         android:textColor="#999999"
                         android:textSize="12sp"/>
                 </LinearLayout>
-
                 <ImageView
                     android:id="@+id/vip_member_selector"
                     android:layout_width="wrap_content"
@@ -239,6 +276,17 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="12dp"
                     android:background="@drawable/mode_of_payment_selector"/>
+                <TextView
+                    android:id="@+id/tv_vip_member_balance"
+                    android:visibility="gone"
+                    android:text="当前余额不足"
+                    android:textColor="@color/red"
+                    android:layout_toLeftOf="@id/vip_member_selector"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <View
@@ -280,8 +328,8 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/mode_of_payment_selector"/>
 
-                <RelativeLayout
-                    android:id="@+id/rl_cash_discount"
+                <LinearLayout
+                    android:id="@+id/ll_cash_discount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/return_cash_balance"
@@ -293,64 +341,38 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/nine_cash_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="九折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/eight_cash_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/nine_cash_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="八折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/seven_cash_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/eight_cash_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="七折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
                         android:id="@+id/special_cash_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/nine_cash_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+                        android:paddingLeft="10dp"
+                        android:layout_gravity="center_vertical"
                         android:text="特殊折扣"
                         android:textColor="@color/black_text"/>
 
                     <TextView
                         android:id="@+id/rounding_cash_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/eight_cash_discount"
-                        android:layout_toRightOf="@id/special_cash_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+                        android:layout_gravity="center_vertical"
                         android:text="取整抹零"
                         android:textColor="@color/black_text"/>
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/free_clean_discount"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/discount_selector"
+                        android:drawablePadding="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="免洗"
+                        android:textColor="@color/black_text"/>
+                </LinearLayout>
             </RelativeLayout>
 
             <View
@@ -391,12 +413,12 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/mode_of_payment_selector"/>
 
-                <RelativeLayout
-                    android:id="@+id/rl_wxpay_discount"
+                <LinearLayout
+                    android:id="@+id/ll_wxpay_discount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_wxpay"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="23dp"
                     android:layout_marginRight="23dp"
                     android:layout_marginTop="12dp"
@@ -404,64 +426,28 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/nine_wxpay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="九折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/eight_wxpay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/nine_wxpay_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="八折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/seven_wxpay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/eight_wxpay_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="七折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
                         android:id="@+id/special_wxpay_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/nine_wxpay_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+                        android:layout_gravity="center_vertical"
                         android:text="特殊折扣"
                         android:textColor="@color/black_text"/>
 
                     <TextView
                         android:id="@+id/rounding_wxpay_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/eight_wxpay_discount"
-                        android:layout_toRightOf="@id/special_wxpay_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+                        android:layout_gravity="center_vertical"
                         android:text="取整抹零"
                         android:textColor="@color/black_text"/>
-                </RelativeLayout>
+                </LinearLayout>
             </RelativeLayout>
 
             <View
@@ -504,77 +490,42 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/mode_of_payment_selector"/>
 
-                <RelativeLayout
-                    android:id="@+id/rl_alipay_discount"
+                <LinearLayout
+                    android:id="@+id/ll_alipay_discount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_alipay"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_marginLeft="23dp"
                     android:layout_marginRight="23dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/discount_bg"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/nine_alipay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="九折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/eight_alipay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/nine_alipay_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="八折"
-                        android:textColor="@color/black_text"/>
-
-                    <TextView
-                        android:id="@+id/seven_alipay_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/eight_alipay_discount"
-                        android:drawableLeft="@drawable/discount_selector"
-                        android:drawablePadding="5dp"
-                        android:padding="20dp"
-                        android:text="七折"
-                        android:textColor="@color/black_text"/>
 
                     <TextView
                         android:id="@+id/special_alipay_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/nine_alipay_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
+                        android:layout_gravity="center_vertical"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
                         android:text="特殊折扣"
                         android:textColor="@color/black_text"/>
 
                     <TextView
                         android:id="@+id/rounding_alipay_discount"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/eight_alipay_discount"
-                        android:layout_toRightOf="@id/special_alipay_discount"
                         android:drawableLeft="@drawable/discount_selector"
                         android:drawablePadding="5dp"
-                        android:paddingBottom="20dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
+                        android:layout_gravity="center_vertical"
                         android:text="取整抹零"
                         android:textColor="@color/black_text"/>
-                </RelativeLayout>
+                </LinearLayout>
             </RelativeLayout>
 
             <View

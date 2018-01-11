@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shinaier.laundry.snlfactory.network.entity.AddCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.AddItemShowEntities;
+import com.shinaier.laundry.snlfactory.network.entity.AddProjectOfflineConfirmEntity;
 import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
 import com.shinaier.laundry.snlfactory.network.entity.BuyPlateformCardEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CancelOrderEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CashBackEntity;
+import com.shinaier.laundry.snlfactory.network.entity.CashConponEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CashCouponCenterEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CashCouponEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
@@ -57,6 +59,7 @@ import com.shinaier.laundry.snlfactory.network.entity.RechargeSuccessEntity;
 import com.shinaier.laundry.snlfactory.network.entity.SettingsEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsIncomeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsNoPayEntity;
+import com.shinaier.laundry.snlfactory.network.entity.StoreDetailEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.TakeClothesEntity;
@@ -785,5 +788,32 @@ public class Parsers {
      */
     public static MerchantCardListEntities getMerchantCardListEntities(String data){
         return gson.fromJson(data,new TypeToken<MerchantCardListEntities>(){}.getType());
+    }
+
+    /**
+     * 添加项目数据
+     * @param data
+     * @return
+     */
+    public static StoreDetailEntity getStoreDetailEntity(String data){
+        return gson.fromJson(data,new TypeToken<StoreDetailEntity>(){}.getType());
+    }
+
+    /**
+     * 线下添加项目确认
+     * @param data
+     * @return
+     */
+    public static AddProjectOfflineConfirmEntity getAddProjectOfflineConfirmEntity(String data){
+        return gson.fromJson(data,new TypeToken<AddProjectOfflineConfirmEntity>(){}.getType());
+    }
+
+    /**
+     * 获取代金券信息
+     * @param data
+     * @return
+     */
+    public static CashConponEntity getCashConponEntity(String data){
+        return gson.fromJson(data,new TypeToken<CashConponEntity>(){}.getType());
     }
 }

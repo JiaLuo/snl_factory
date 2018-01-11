@@ -2,111 +2,207 @@ package com.shinaier.laundry.snlfactory.network.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by 张家洛 on 2017/8/2.
  */
 
 public class OfflineOrderPayEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineOrderPayDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineOrderPayResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineOrderPayDatas getDatas() {
-        return datas;
+    public OfflineOrderPayResult getResult() {
+        return result;
     }
 
-    public void setDatas(OfflineOrderPayDatas datas) {
-        this.datas = datas;
+    public void setResult(OfflineOrderPayResult result) {
+        this.result = result;
     }
 
-    public class OfflineOrderPayDatas{
-        @SerializedName("order")
-        private OfflineOrderPayOrder offlineOrderPayOrder;
-        @SerializedName("platformCard")
-        private OfflineOrderPayPlatformCard offlineOrderPayPlatformCard;
-        @SerializedName("merchantCard")
-        private OfflineOrderPayMerchantCard offlineOrderPayMerchantCard;
+    public class OfflineOrderPayResult{
+        @SerializedName("pay_amount")
+        private double payAmount;
+        @SerializedName("keep_price")
+        private double keepPrice;
+        @SerializedName("freight_price")
+        private String freightPrice;
+        @SerializedName("craft_price")
+        private String craftPrice;
+        @SerializedName("reduce_price")
+        private double reducePrice;
+        @SerializedName("amount")
+        private String amount;
+        @SerializedName("uid")
+        private String uId;
+        @SerializedName("total_amount")
+        private double totalAmount;
+        @SerializedName("platform")
+        private OfflineOrderPayPlatform offlineOrderPayPlatform;
+        @SerializedName("has_platform")
+        private String hasPlatform;
+        @SerializedName("merchant")
+        private OfflineOrderPayMerchant offlineOrderPayMerchant;
+        @SerializedName("has_merchant")
+        private String hasMerchant;
+        @SerializedName("umobile")
+        private String uMobile;
+        @SerializedName("items")
+        private List<OfflineOrderPayItems> itemses;
+        @SerializedName("master_phone")
+        private String masterPhone;
 
-        public OfflineOrderPayOrder getOfflineOrderPayOrder() {
-            return offlineOrderPayOrder;
+        public String getMasterPhone() {
+            return masterPhone;
         }
 
-        public void setOfflineOrderPayOrder(OfflineOrderPayOrder offlineOrderPayOrder) {
-            this.offlineOrderPayOrder = offlineOrderPayOrder;
+        public void setMasterPhone(String masterPhone) {
+            this.masterPhone = masterPhone;
         }
 
-        public OfflineOrderPayPlatformCard getOfflineOrderPayPlatformCard() {
-            return offlineOrderPayPlatformCard;
+        public double getPayAmount() {
+            return payAmount;
         }
 
-        public void setOfflineOrderPayPlatformCard(OfflineOrderPayPlatformCard offlineOrderPayPlatformCard) {
-            this.offlineOrderPayPlatformCard = offlineOrderPayPlatformCard;
+        public void setPayAmount(double payAmount) {
+            this.payAmount = payAmount;
         }
 
-        public OfflineOrderPayMerchantCard getOfflineOrderPayMerchantCard() {
-            return offlineOrderPayMerchantCard;
+        public double getKeepPrice() {
+            return keepPrice;
         }
 
-        public void setOfflineOrderPayMerchantCard(OfflineOrderPayMerchantCard offlineOrderPayMerchantCard) {
-            this.offlineOrderPayMerchantCard = offlineOrderPayMerchantCard;
+        public void setKeepPrice(double keepPrice) {
+            this.keepPrice = keepPrice;
         }
 
-        public class OfflineOrderPayOrder{
+        public String getFreightPrice() {
+            return freightPrice;
+        }
+
+        public void setFreightPrice(String freightPrice) {
+            this.freightPrice = freightPrice;
+        }
+
+        public String getCraftPrice() {
+            return craftPrice;
+        }
+
+        public void setCraftPrice(String craftPrice) {
+            this.craftPrice = craftPrice;
+        }
+
+        public double getReducePrice() {
+            return reducePrice;
+        }
+
+        public void setReducePrice(double reducePrice) {
+            this.reducePrice = reducePrice;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getuId() {
+            return uId;
+        }
+
+        public void setuId(String uId) {
+            this.uId = uId;
+        }
+
+        public double getTotalAmount() {
+            return totalAmount;
+        }
+
+        public void setTotalAmount(double totalAmount) {
+            this.totalAmount = totalAmount;
+        }
+
+        public OfflineOrderPayPlatform getOfflineOrderPayPlatform() {
+            return offlineOrderPayPlatform;
+        }
+
+        public void setOfflineOrderPayPlatform(OfflineOrderPayPlatform offlineOrderPayPlatform) {
+            this.offlineOrderPayPlatform = offlineOrderPayPlatform;
+        }
+
+        public String getHasPlatform() {
+            return hasPlatform;
+        }
+
+        public void setHasPlatform(String hasPlatform) {
+            this.hasPlatform = hasPlatform;
+        }
+
+        public OfflineOrderPayMerchant getOfflineOrderPayMerchant() {
+            return offlineOrderPayMerchant;
+        }
+
+        public void setOfflineOrderPayMerchant(OfflineOrderPayMerchant offlineOrderPayMerchant) {
+            this.offlineOrderPayMerchant = offlineOrderPayMerchant;
+        }
+
+        public String getHasMerchant() {
+            return hasMerchant;
+        }
+
+        public void setHasMerchant(String hasMerchant) {
+            this.hasMerchant = hasMerchant;
+        }
+
+        public String getuMobile() {
+            return uMobile;
+        }
+
+        public void setuMobile(String uMobile) {
+            this.uMobile = uMobile;
+        }
+
+        public List<OfflineOrderPayItems> getItemses() {
+            return itemses;
+        }
+
+        public void setItemses(List<OfflineOrderPayItems> itemses) {
+            this.itemses = itemses;
+        }
+
+        public class OfflineOrderPayItems{
             @SerializedName("id")
             private String id;
-            @SerializedName("userid")
-            private String userid;
-            @SerializedName("amount")
-            private String amount;
-            @SerializedName("pay_state")
-            private String payState;
-            @SerializedName("freight")
-            private String freight;
-            @SerializedName("special")
-            private String special;
-            @SerializedName("reduce_price")
-            private String reducePrice;
-            @SerializedName("total_amount")
-            private double totalAmount; //应收
-            @SerializedName("mobile_number")
-            private String mobileNumber;
-            @SerializedName("invite_code")
-            private String inviteCode;
-
-            public String getInviteCode() {
-                return inviteCode;
-            }
-
-            public void setInviteCode(String inviteCode) {
-                this.inviteCode = inviteCode;
-            }
-
-            public String getMobileNumber() {
-                return mobileNumber;
-            }
-
-            public void setMobileNumber(String mobileNumber) {
-                this.mobileNumber = mobileNumber;
-            }
+            @SerializedName("item_price")
+            private double itemPrice;
+            @SerializedName("item_real_price")
+            private double itemRealPrice;
+            @SerializedName("has_discount")
+            private String hasDiscount;
+            @SerializedName("item_discount")
+            private double itemDiscount;
 
             public String getId() {
                 return id;
@@ -116,176 +212,102 @@ public class OfflineOrderPayEntity {
                 this.id = id;
             }
 
-            public String getUserid() {
-                return userid;
+            public double getItemPrice() {
+                return itemPrice;
             }
 
-            public void setUserid(String userid) {
-                this.userid = userid;
+            public void setItemPrice(double itemPrice) {
+                this.itemPrice = itemPrice;
             }
 
-            public String getAmount() {
-                return amount;
+            public double getItemRealPrice() {
+                return itemRealPrice;
             }
 
-            public void setAmount(String amount) {
-                this.amount = amount;
+            public void setItemRealPrice(double itemRealPrice) {
+                this.itemRealPrice = itemRealPrice;
             }
 
-            public String getPayState() {
-                return payState;
+            public String getHasDiscount() {
+                return hasDiscount;
             }
 
-            public void setPayState(String payState) {
-                this.payState = payState;
+            public void setHasDiscount(String hasDiscount) {
+                this.hasDiscount = hasDiscount;
             }
 
-            public String getFreight() {
-                return freight;
+            public double getItemDiscount() {
+                return itemDiscount;
             }
 
-            public void setFreight(String freight) {
-                this.freight = freight;
-            }
-
-            public String getSpecial() {
-                return special;
-            }
-
-            public void setSpecial(String special) {
-                this.special = special;
-            }
-
-            public String getReducePrice() {
-                return reducePrice;
-            }
-
-            public void setReducePrice(String reducePrice) {
-                this.reducePrice = reducePrice;
-            }
-
-            public double getTotalAmount() {
-                return totalAmount;
-            }
-
-            public void setTotalAmount(double totalAmount) {
-                this.totalAmount = totalAmount;
+            public void setItemDiscount(double itemDiscount) {
+                this.itemDiscount = itemDiscount;
             }
         }
 
-        public class OfflineOrderPayPlatformCard{
-            @SerializedName("id")
-            private String id;
-            @SerializedName("card_sum")
-            private double cardSum;
-            @SerializedName("card_number")
-            private String cardNumber;
-            @SerializedName("card_discount")
-            private String cardDiscount;
-            @SerializedName("card_exist")
-            private int cardExist; //1 存在  0 不存在
-            @SerializedName("mobile_number")
-            private String mobileNumber;
+        public class OfflineOrderPayPlatform{
+            @SerializedName("cdiscount")
+            private double cDiscount;
+            @SerializedName("cbalance")
+            private double cBalance;
+            @SerializedName("cname")
+            private String cName;
 
-            public String getMobileNumber() {
-                return mobileNumber;
+            public double getcDiscount() {
+                return cDiscount;
             }
 
-            public void setMobileNumber(String mobileNumber) {
-                this.mobileNumber = mobileNumber;
+            public void setcDiscount(double cDiscount) {
+                this.cDiscount = cDiscount;
             }
 
-            public String getId() {
-                return id;
+            public double getcBalance() {
+                return cBalance;
             }
 
-            public void setId(String id) {
-                this.id = id;
+            public void setcBalance(double cBalance) {
+                this.cBalance = cBalance;
             }
 
-            public double getCardSum() {
-                return cardSum;
+            public String getcName() {
+                return cName;
             }
 
-            public void setCardSum(double cardSum) {
-                this.cardSum = cardSum;
-            }
-
-            public String getCardNumber() {
-                return cardNumber;
-            }
-
-            public void setCardNumber(String cardNumber) {
-                this.cardNumber = cardNumber;
-            }
-
-            public String getCardDiscount() {
-                return cardDiscount;
-            }
-
-            public void setCardDiscount(String cardDiscount) {
-                this.cardDiscount = cardDiscount;
-            }
-
-            public int getCardExist() {
-                return cardExist;
-            }
-
-            public void setCardExist(int cardExist) {
-                this.cardExist = cardExist;
+            public void setcName(String cName) {
+                this.cName = cName;
             }
         }
 
-        public class OfflineOrderPayMerchantCard{
-            @SerializedName("card_number")
-            private String cardNumber;
-            @SerializedName("balance")
-            private String balance;
-            @SerializedName("discount")
-            private double discount;
-            @SerializedName("card_exist")
-            private int cardExist;
-            @SerializedName("mobile_number")
-            private String mobileNumber;
+        public class OfflineOrderPayMerchant{
+            @SerializedName("cdiscount")
+            private double cDiscount;
+            @SerializedName("cbalance")
+            private double cBalance;
+            @SerializedName("cname")
+            private String cName;
 
-            public String getMobileNumber() {
-                return mobileNumber;
+            public double getcDiscount() {
+                return cDiscount;
             }
 
-            public void setMobileNumber(String mobileNumber) {
-                this.mobileNumber = mobileNumber;
+            public void setcDiscount(double cDiscount) {
+                this.cDiscount = cDiscount;
             }
 
-            public String getCardNumber() {
-                return cardNumber;
+            public double getcBalance() {
+                return cBalance;
             }
 
-            public void setCardNumber(String cardNumber) {
-                this.cardNumber = cardNumber;
+            public void setcBalance(double cBalance) {
+                this.cBalance = cBalance;
             }
 
-            public String getBalance() {
-                return balance;
+            public String getcName() {
+                return cName;
             }
 
-            public void setBalance(String balance) {
-                this.balance = balance;
-            }
-
-            public double getDiscount() {
-                return discount;
-            }
-
-            public void setDiscount(double discount) {
-                this.discount = discount;
-            }
-
-            public int getCardExist() {
-                return cardExist;
-            }
-
-            public void setCardExist(int cardExist) {
-                this.cardExist = cardExist;
+            public void setcName(String cName) {
+                this.cName = cName;
             }
         }
     }

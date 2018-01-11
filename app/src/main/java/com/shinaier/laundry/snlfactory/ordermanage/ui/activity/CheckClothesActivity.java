@@ -1,7 +1,9 @@
 package com.shinaier.laundry.snlfactory.ordermanage.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -238,6 +240,9 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 break;
             case REQUEST_CODE_NOW_PAY:
                 if(data != null){
+                    if (dialog.isShowing()){
+                        dialog.dismiss();
+                    }
                     Entity entity = Parsers.getEntity(data);
                     if(entity != null){
                         if(entity.getRetcode() == 0){
@@ -345,20 +350,31 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 loadData();
                 break;
             case R.id.take_clothes_pay:
-                isCollectPay = true;
-                dialog.setContent("加载中");
-                dialog.show();
-                IdentityHashMap<String,String> CollectPayParams = new IdentityHashMap<>();
-                CollectPayParams.put("token",UserCenter.getToken(this));
-                CollectPayParams.put("order_id",id);
-                requestHttpData(Constants.Urls.URL_POST_NOW_PAY,REQUEST_CODE_NOW_PAY, FProtocol.HttpMethod.POST,CollectPayParams);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("提示");
+                builder.setMessage("是否取衣付款？");
+                builder.setNegativeButton("取消", null);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        isCollectPay = true;
+                        IdentityHashMap<String,String> CollectPayParams = new IdentityHashMap<>();
+                        CollectPayParams.put("token",UserCenter.getToken(CheckClothesActivity.this));
+                        CollectPayParams.put("oid",id);
+                        requestHttpData(Constants.Urls.URL_POST_TAKE_PAY,REQUEST_CODE_NOW_PAY, FProtocol.HttpMethod.POST,CollectPayParams);
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
                 break;
             case R.id.now_pay:
                 isCollectPay = false;
+                dialog.setContent("加载中");
+                dialog.show();
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token",UserCenter.getToken(this));
-                params.put("order_id",id);
-                requestHttpData(Constants.Urls.URL_POST_NOW_PAY,REQUEST_CODE_NOW_PAY, FProtocol.HttpMethod.POST,params);
+                params.put("oid",id);
+                requestHttpData(Constants.Urls.URL_POST_TAKE_PAY,REQUEST_CODE_NOW_PAY, FProtocol.HttpMethod.POST,params);
                 break;
         }
     }

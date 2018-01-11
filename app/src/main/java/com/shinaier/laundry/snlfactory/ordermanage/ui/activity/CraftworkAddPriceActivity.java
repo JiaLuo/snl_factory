@@ -65,11 +65,10 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     private TextView craftworkTotalNum;
 
     private String id;
-    private String itemId;
     private CraftworkAddPriceEntities craftworkAddPriceEntities;
-    private String maintainId;
     private int extraFrom;
     private String isOnline;
+    private boolean isCleanSn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,17 +149,7 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
                 if(data != null){
                     Entity entity = Parsers.getEntity(data);
                     if(entity.getRetcode() == 0){
-                        if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
-                            Intent intent = new Intent(CraftworkAddPriceActivity.this, CheckClothesActivity.class);
-                            intent.putExtra("id",id);
-                            intent.putExtra("extraFrom",extraFrom);
-                            startActivity(intent);
-                        }else {
-                            ExitManager.instance.exitItemActivity();
-                        }
-
-                        //收件流程的所有页面finish。暂时注释。
-//                        ExitManager.instance.exitItemActivity();
+                        ExitManager.instance.exitItemActivity();
                     }else {
                         ToastUtil.shortShow(this,entity.getStatus());
                     }
@@ -173,24 +162,41 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.confirm_consignee:
-               AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("提示");
-                builder.setMessage("是否确认收件？");
-                builder.setNegativeButton("取消",null);
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        ExitManager.instance.exitItemActivity();
-                        IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                        params.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
-                        params.put("oid",id);
-                        requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
-                                FProtocol.HttpMethod.POST,params);
-
+                if (extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
+                    for (int i = 0; i < craftworkAddPriceEntities.getResult().getItemses().size(); i++) {
+                        if (craftworkAddPriceEntities.getResult().getItemses().get(i).getCleanSn() == null){
+                            ToastUtil.shortShow(this,"项目未挂号");
+                            isCleanSn = false;
+                            return;
+                        }
                     }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                    if (!isCleanSn){
+                        Intent intent = new Intent(CraftworkAddPriceActivity.this, CheckClothesActivity.class);
+                        intent.putExtra("id",id);
+                        intent.putExtra("extraFrom",extraFrom);
+                        startActivity(intent);
+                    }
+
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("提示");
+                    builder.setMessage("是否确认收件？");
+                    builder.setNegativeButton("取消",null);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                        ExitManager.instance.exitItemActivity();
+                            IdentityHashMap<String,String> params = new IdentityHashMap<>();
+                            params.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
+                            params.put("oid",id);
+                            requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
+                                    FProtocol.HttpMethod.POST,params);
+
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
 
                 break;
             case R.id.left_button:
@@ -232,10 +238,8 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     @Override
     public void onBackPressed() {
         if(extraFrom == MemberInfoActivity.FROM_MEMBER_INFO_ACT){
-            LogUtil.e("zhang","555555555555555");
             finish();
         }else {
-            LogUtil.e("zhang","66666666666666666");
             ExitManager.instance.exitItemActivity();
 
         }
@@ -255,15 +259,15 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            case REQUEST_CODE_EDIT_ITEM:
-                if (resultCode == RESULT_OK){
-                    if (data != null){
-                        //添加项目传过来的已经选择项目的信息集合
-//                        selectEntity = data.getParcelableArrayListExtra("select_entity");
-//                        loadData();
-                    }
-                }
-                break;
+//            case REQUEST_CODE_EDIT_ITEM:
+//                if (resultCode == RESULT_OK){
+//                    if (data != null){
+//                        //添加项目传过来的已经选择项目的信息集合
+////                        selectEntity = data.getParcelableArrayListExtra("select_entity");
+////                        loadData();
+//                    }
+//                }
+//                break;
             case EDIT_PRICE_CODE:
                 if (resultCode == RESULT_OK){
                     if (data != null){

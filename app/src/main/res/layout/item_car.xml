@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/ripple_bg"
+              android:clickable="true"
+              android:orientation="vertical"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/car_bg"
+                android:layout_width="42dp"
+                android:layout_height="42dp"/>
+            <TextView
+                android:id="@+id/car_name"
+                android:layout_toRightOf="@id/car_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:textColor="#757575"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/car_price"
+                android:layout_toRightOf="@id/car_bg"
+                android:layout_below="@id/car_name"
+                style="@style/tv_price"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/car_discount"
+            android:layout_marginRight="16dp"
+            style="@style/tv_price"/>
+
+        <com.shinaier.laundry.snlfactory.ordermanage.view.AddWidget
+            android:id="@+id/car_addwidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dddddd"/>
+
+</LinearLayout>

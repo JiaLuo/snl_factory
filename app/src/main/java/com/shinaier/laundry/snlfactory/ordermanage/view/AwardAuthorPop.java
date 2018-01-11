@@ -3,6 +3,7 @@ package com.shinaier.laundry.snlfactory.ordermanage.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.common.utils.LogUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.view.FlowLayout;
 
@@ -67,22 +67,14 @@ public class AwardAuthorPop extends PopupWindow {
                 textView.setTextColor(Color.parseColor("#ffffff"));
                 textView.setGravity(Gravity.CENTER);
                 flRemarkContent.addView(textView);
-                final int j = i;
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        for (int k = 0; k < 4; k++) {
-//                            for (int l = 0; l <questionsEntitys.getQuestions().get(k).size() ; l++) {
-//                                if (questionsEntitys.getQuestions().get(k).get(l).getQuestion().equals(outList.get(j))) {
-//                                    questionsEntitys.getQuestions().get(k).get(l).setIscheck(0);
-//                                    adapter.notifyDataSetChanged();
-//
-//                                }
-//                            }
-//                        }
-//                        outList.remove(j);
-//                        initFlow();
-                        LogUtil.e("zhang","textView.getText() = " + textView.getText());
+                        Message msg = new Message();
+                        msg.obj = textView.getText();
+                        msg.what = 1;
+                        handler.sendMessage(msg);
+                        dismiss();
 
                     }
 
@@ -91,37 +83,6 @@ public class AwardAuthorPop extends PopupWindow {
             int padding = 24;
             flRemarkContent.setPadding(padding,padding,padding,padding);
         }
-//        buy_book_name.setText("《" + popEntity.getBookName() + "》");
-//        book_price_num.setText(popEntity.getBookPrice());
-//        user_balance.setText("余额："+popEntity.getInfo() +"芝麻币");
-//        if(popEntity.getExtraFrom() == BookDetailActivity.FROM_BOOK_DETAIL){
-//            now_buy.setText("立即购买");
-//        }else {
-//            now_buy.setText("立即打赏");
-//        }
-//        if(popEntity.getUserBalance() == 0){
-//            rl_now_buy.setVisibility(View.VISIBLE);
-//            rl_balance_insufficient.setVisibility(View.GONE);
-//            rl_now_buy.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Message msg = new Message();
-//                    msg.what = 1;
-//                    handler.sendMessage(msg);
-//                }
-//            });
-//        }else {
-//            rl_now_buy.setVisibility(View.GONE);
-//            rl_balance_insufficient.setVisibility(View.VISIBLE);
-//            rl_balance_insufficient.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Message msg = new Message();
-//                    msg.what = 2;
-//                    handler.sendMessage(msg);
-//                }
-//            });
-//        }
 
         // 取消按钮
         close_view.setOnClickListener(new View.OnClickListener() {

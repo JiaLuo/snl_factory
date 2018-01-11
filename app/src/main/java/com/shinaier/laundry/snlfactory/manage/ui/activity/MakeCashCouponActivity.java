@@ -111,10 +111,10 @@ public class MakeCashCouponActivity extends ToolBarActivity implements View.OnCl
             case R.id.generate_bt:
                 String cashCouponNum = etMakeCashCouponNum.getText().toString();
                 //代金券数量不能超过100个 转换成double类型做判断。
-                double cashNum = Double.parseDouble(cashCouponNum);
+                int cashNum = Integer.parseInt(cashCouponNum);
                 String cashCouponMoney = etCashCouponMoney.getText().toString();
                 if (!TextUtils.isEmpty(cashCouponNum)){
-                    if (cashNum > 101){
+                    if (cashNum < 101){
                         if (!TextUtils.isEmpty(cashCouponMoney)){
                             if (!TextUtils.isEmpty(startTime)){
                                 if (!TextUtils.isEmpty(endTime)){

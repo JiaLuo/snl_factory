@@ -2,6 +2,7 @@ package com.shinaier.laundry.snlfactory.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -9,10 +10,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -20,6 +24,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.common.utils.LogUtil;
@@ -39,6 +44,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
+
+import cn.lightsky.infiniteindicator.ViewUtils;
 
 /**
  * 公共类
@@ -397,5 +404,30 @@ public class CommonTools {
 	public static String formatMoney(double money){
 		DecimalFormat df = new DecimalFormat("###0.00");
 		return df.format(money);
+	}
+
+	public static int sp2px(Context context, float spValue) {
+		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+		return (int) (spValue * fontScale + 0.5f);
+	}
+
+	public static void showClearCar(Context mContext, DialogInterface.OnClickListener onClickListener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		TextView tv = new TextView(mContext);
+		tv.setText("清空购物车?");
+		tv.setTextSize(14);
+		tv.setPadding(ViewUtils.dip2px(mContext, 16), ViewUtils.dip2px(mContext, 16), 0, 0);
+		tv.setTextColor(Color.parseColor("#757575"));
+		AlertDialog alertDialog = builder
+				.setNegativeButton("取消", null)
+				.setCustomTitle(tv)
+				.setPositiveButton("清空", onClickListener)
+				.show();
+		Button nButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+		nButton.setTextColor(ContextCompat.getColor(mContext, R.color.dodgerblue));
+		nButton.setTypeface(Typeface.DEFAULT_BOLD);
+		Button pButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		pButton.setTextColor(ContextCompat.getColor(mContext, R.color.dodgerblue));
+		pButton.setTypeface(Typeface.DEFAULT_BOLD);
 	}
 }

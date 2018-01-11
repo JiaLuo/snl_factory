@@ -22,4 +22,9 @@
     <string name="picker_minute">分</string>
 
     <string name="filter_vcode">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <string name="scroll_behavior">@string/appbar_scrolling_view_behavior</string>
+    <string name="brandDiscount_value">-￥%1$s</string>
+    <string name="show_money_value">￥%1$s</string>
+    <string name="balance_value">可用余额：￥%1$s</string>
 </resources>

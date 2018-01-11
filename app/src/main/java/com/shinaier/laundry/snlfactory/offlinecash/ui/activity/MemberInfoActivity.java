@@ -15,11 +15,10 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineCustomInfoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.NoTakeOrderAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectActivity;
+import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectsActivity;
 import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
@@ -34,7 +33,6 @@ import java.util.IdentityHashMap;
  */
 
 public class MemberInfoActivity extends ToolBarActivity implements View.OnClickListener {
-    private static final int REQUEST_CODE_BUILD_ORDER = 0x1;
     public static final int FROM_MEMBER_INFO_ACT = 0x2;
     private static final int REQUEST_CODE_CUSTOM_INFO = 0x3;
 
@@ -100,9 +98,10 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.rl_take_clothes_bt:
-                dialog.setContent("加载中");
-                dialog.show();
-                takeOrderData();
+                Intent intent = new Intent(this, AddProjectsActivity.class);
+                intent.putExtra("extraFrom",FROM_MEMBER_INFO_ACT);
+                intent.putExtra("user_id",offlineCustomInfoEntity.getResult().getId());
+                startActivity(intent);
                 break;
             case R.id.left_button:
                 finish();
@@ -113,38 +112,10 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
         }
     }
 
-    private void takeOrderData() {
-        IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("token", UserCenter.getToken(this));
-//        params.put("uid",offlineCustomInfoEntity.getDatas().getId());
-        requestHttpData(Constants.Urls.URL_POST_BUILD_ORDER,REQUEST_CODE_BUILD_ORDER, FProtocol.HttpMethod.POST,params);
-    }
-
     @Override
     protected void parseData(int requestCode, String data) {
         super.parseData(requestCode, data);
         switch (requestCode){
-            case REQUEST_CODE_BUILD_ORDER:
-                if(data != null){
-                    BuildOrderEntity buildOrderEntity = Parsers.getBuildOrderEntity(data);
-                    if (dialog.isShowing()){
-                        dialog.dismiss();
-                    }
-                    if (buildOrderEntity != null){
-                        if(buildOrderEntity.getRetcode() == 0){
-                            if(buildOrderEntity.getDatas() != null){
-                                String orderId = buildOrderEntity.getDatas().getOrderId();
-                                Intent intent = new Intent(this, AddProjectActivity.class);
-                                intent.putExtra("extraFrom",FROM_MEMBER_INFO_ACT);
-                                intent.putExtra("orderId", orderId);
-                                startActivity(intent);
-                            }
-                        }else {
-                            ToastUtil.shortShow(this,buildOrderEntity.getStatus());
-                        }
-                    }
-                }
-                break;
             case REQUEST_CODE_CUSTOM_INFO:
                 if (data != null){
                     offlineCustomInfoEntity = Parsers.getOfflineCustomInfoEntity(data);
@@ -168,11 +139,6 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
                                 }else {
                                     notTakeOrder.setVisibility(View.GONE);
                                 }
-//                                    if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getMerchantCard().get)){
-//                                        vipMemberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getCardNumber());
-//                                    }else {
-//                                        vipMemberNum.setText("会员卡号：");
-//                                    }
                                 if(!TextUtils.isEmpty(offlineCustomInfoEntity.getResult().getMerchantCard().getcName())){
                                     vipMemberCategory.setText("会员类型：" + offlineCustomInfoEntity.getResult().getMerchantCard().getcName());
                                 }else {
@@ -185,17 +151,8 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
                                 }
 
                                 if (offlineCustomInfoEntity.getResult().getPlatformCard() != null){
-                                    // TODO: 2017/12/26 不知道显示不显示卡号
-//                                        if (offlineCustomInfoEntity.getResult().getPlatformCard().get() != null){
-//                                            memberNum.setText("会员卡号：" + offlineCustomInfoEntity.getDatas().getPlatformCard().getCardNumber());
-//                                        }else {
-//                                            memberNum.setText("会员卡号：");
-//                                        }
                                     if (offlineCustomInfoEntity.getResult().getPlatformCard().getcName() != null){
-//                                            if (offlineCustomInfoEntity.getResult().getPlatformCard().getcName().equals("1")){
                                         memberCategory.setText("会员类型：" + offlineCustomInfoEntity.getResult().getPlatformCard().getcName());
-//                                            }else if (offlineCustomInfoEntity.getDatas().getPlatformCard().getCardType().equals("2")){
-//                                                memberCategory.setText("会员类型：钻石会员");
                                     }else {
                                         memberCategory.setText("会员类型：");
                                     }

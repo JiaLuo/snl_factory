@@ -2,14 +2,11 @@ package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
-import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -38,12 +35,8 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
     private static final int BUY_CARD_CODE = 0x6;
     private static final int REQUEST_CODE_BUY_CARD = 0x7;
 
-    @ViewInject(R.id.manager_name)
-    private EditText managerName;
     @ViewInject(R.id.tv_phone_num)
     private TextView tvPhoneNum;
-    @ViewInject(R.id.tv_invite_code)
-    private TextView tvInviteCode;
     @ViewInject(R.id.iv_member_gold)
     private ImageView ivMemberGold;
     @ViewInject(R.id.gold_money_num)
@@ -66,13 +59,12 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
     private TextView diamondMember;
     @ViewInject(R.id.diamond_favourable_num)
     private TextView diamondFavourableNum;
+    @ViewInject(R.id.left_button)
+    private ImageView leftButton;
 
     private int witchMember;
     private int witchPayMode;
-    private String goldNum;
-    private String diamondNum;
-    private String name;
-    private List<BuyPlateformCardEntity.BuyPlateformCardDatas> datas;
+    private List<BuyPlateformCardEntity.BuyPlateformCardResult> datas;
     private String userId;
 
     @Override
@@ -83,19 +75,17 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
         Intent intent = getIntent();
         userId = intent.getStringExtra("user_id");
         String mobileNum = intent.getStringExtra("mobile_num");
-        String inviteCode = intent.getStringExtra("invite_code");
-        initView(mobileNum,inviteCode);
+        initView(mobileNum);
         loadData();
     }
 
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("uid",UserCenter.getUid(this));
         requestHttpData(Constants.Urls.URL_POST_GET_PLATFORM_CARD_,REQUEST_CODE_BUY_CARD_ENTITY, FProtocol.HttpMethod.POST,params);
     }
 
-    private void initView(String mobile, String inviteCode) {
+    private void initView(String mobile) {
         setCenterTitle("购买方式");
         initLoadingView(this);
         setLoadingStatus(LoadingStatus.LOADING);
@@ -104,8 +94,8 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
         ivWxpayMode.setOnClickListener(this);
         ivAlipayMode.setOnClickListener(this);
         confirmPay.setOnClickListener(this);
+        leftButton.setOnClickListener(this);
         tvPhoneNum.setText(mobile);
-        tvInviteCode.setText(inviteCode);
     }
 
     @Override
@@ -117,11 +107,11 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
                     setLoadingStatus(LoadingStatus.GONE);
                     BuyPlateformCardEntity buyPlateformCardEntity = Parsers.getBuyPlateformCardEntity(data);
                     if (buyPlateformCardEntity != null){
-                        if (buyPlateformCardEntity.getRetcode() == 0){
-                            datas = buyPlateformCardEntity.getDatas();
+                        if (buyPlateformCardEntity.getCode() == 0){
+                            datas = buyPlateformCardEntity.getResults();
                             setMemberInfo(datas);
                         }else {
-                            ToastUtil.shortShow(this,buyPlateformCardEntity.getStatus());
+                            ToastUtil.shortShow(this,buyPlateformCardEntity.getMsg());
                         }
                     }else {
                         setLoadingStatus(LoadingStatus.EMPTY);
@@ -147,14 +137,14 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
         }
     }
 
-    private void setMemberInfo(List<BuyPlateformCardEntity.BuyPlateformCardDatas> datas) {
-        goldMember.setText(datas.get(0).getCardname());
-        goldFavourableNum.setText("享" + datas.get(0).getCarddiscount() + "折优惠");
-        goldMoneyNum.setText("￥" + datas.get(0).getCardsum());
+    private void setMemberInfo(List<BuyPlateformCardEntity.BuyPlateformCardResult> datas) {
+        goldMember.setText(datas.get(0).getName());
+        goldFavourableNum.setText("享" + datas.get(0).getDiscount() + "折优惠");
+        goldMoneyNum.setText("￥" + datas.get(0).getPrice());
 
-        diamondMember.setText(datas.get(1).getCardname());
-        diamondFavourableNum.setText("享" + datas.get(1).getCarddiscount() + "折优惠");
-        diamondMoneyNum.setText("￥" + datas.get(1).getCardsum());
+        diamondMember.setText(datas.get(1).getName());
+        diamondFavourableNum.setText("享" + datas.get(1).getDiscount() + "折优惠");
+        diamondMoneyNum.setText("￥" + datas.get(1).getPrice());
     }
 
     @Override
@@ -170,7 +160,6 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
                     witchMember = 0;
                 }else {
                     ivMemberGold.setSelected(true);
-                    goldNum = goldMoneyNum.getText().toString();
                     witchMember = GOLD;
                 }
                 break;
@@ -181,7 +170,6 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
                     witchMember = 0;
                 }else {
                     ivMemberDiamond.setSelected(true);
-                    diamondNum = diamondMoneyNum.getText().toString();
                     witchMember = DIAMOND;
                 }
                 break;
@@ -206,35 +194,28 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
                 }
                 break;
             case R.id.confirm_pay:
-                name = managerName.getText().toString();
-                if(!TextUtils.isEmpty(name)){
-                    if (witchMember == GOLD){
-                        if(witchPayMode == WXPAY){
-                            LogUtil.e("zhang","微信支付 = " + name + "," + goldNum);
-                            startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
-                        }else if(witchPayMode == ALIPAY){
-                            LogUtil.e("zhang","支付宝支付 = " + name + "," + goldNum);
-                            startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
-                        }else {
-                            ToastUtil.shortShow(this,"请选择支付方式");
-                        }
-                    }else if(witchMember == DIAMOND){
-                        if(witchPayMode == WXPAY){
-                            LogUtil.e("zhang","微信支付 = " + name + "," + diamondNum);
-                            startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
-                        }else if(witchPayMode == ALIPAY){
-                            LogUtil.e("zhang","支付宝支付 = " + name + "," + diamondNum);
-                            startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
-                        }else {
-                            ToastUtil.shortShow(this,"请选择支付方式");
-                        }
+                if (witchMember == GOLD){
+                    if(witchPayMode == WXPAY){
+                        startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
+                    }else if(witchPayMode == ALIPAY){
+                        startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
                     }else {
-                        ToastUtil.shortShow(this,"请选择会员卡类型");
+                        ToastUtil.shortShow(this,"请选择支付方式");
+                    }
+                }else if(witchMember == DIAMOND){
+                    if(witchPayMode == WXPAY){
+                        startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
+                    }else if(witchPayMode == ALIPAY){
+                        startActivityForResult(new Intent(this,ScanActivity.class), BUY_CARD_CODE);
+                    }else {
+                        ToastUtil.shortShow(this,"请选择支付方式");
                     }
                 }else {
-                    ToastUtil.shortShow(this,"请输入您的姓名");
+                    ToastUtil.shortShow(this,"请选择会员卡类型");
                 }
-
+                break;
+            case R.id.left_button:
+                finish();
                 break;
 
         }
@@ -250,26 +231,19 @@ public class BuyMemberCardActivity extends ToolBarActivity implements View.OnCli
                         String payCode = data.getStringExtra("pay_code");
                         IdentityHashMap<String,String> params = new IdentityHashMap<>();
                         params.put("token",UserCenter.getToken(this));
-                        params.put("user",userId);
-                        if (!TextUtils.isEmpty(name)){
-                            params.put("manager",name);
-                        }
-
+                        params.put("uid",userId);
                         params.put("auth_code",payCode);
                         if (witchMember == GOLD){
-                            params.put("cardType",datas.get(0).getCardtype());
+                            params.put("cid",datas.get(0).getId());
                         }else {
-                            params.put("cardType",datas.get(1).getCardtype());
+                            params.put("cid",datas.get(1).getId());
                         }
 
                         if (witchPayMode == WXPAY){
-                            params.put("payType","WECHAT");
+                            params.put("gateway","WechatPay_Pos");
                         }else {
-                            params.put("payType","ALI");
+                            params.put("gateway","Alipay_AopF2F");
                         }
-
-
-
                         requestHttpData(Constants.Urls.URL_POST_BUY_PLATFORM_CARD,REQUEST_CODE_BUY_CARD, FProtocol.HttpMethod.POST,params);
                     }
                 }

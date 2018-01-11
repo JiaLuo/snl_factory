@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:splitMotionEvents="false">
+
+    <LinearLayout
+        android:id="@+id/scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/scroll_behavior">
+
+        <com.shizhefei.view.indicator.ScrollIndicatorView
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/underline"/>
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:overScrollMode="never"/>
+
+
+    </LinearLayout>
+
+    <include layout="@layout/view_black"/>
+
+    <include layout="@layout/view_carpop"/>
+
+    <include layout="@layout/view_car"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -10,32 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="44dp">
         <TextView
-            android:text="持卡人："
-            android:textColor="@color/black_text"
-            android:layout_marginLeft="12dp"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <EditText
-            android:id="@+id/manager_name"
-            android:background="@null"
-            android:hint="请输入持卡人姓名"
-            android:textColorHint="#cccccc"
-            android:textColor="@color/black_text"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <View
-        android:background="#e0e0e0"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="44dp">
-        <TextView
             android:text="手机号："
             android:textColor="@color/black_text"
             android:layout_marginLeft="12dp"
@@ -44,29 +18,6 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_phone_num"
-            android:textColor="@color/black_text"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <View
-        android:background="#e0e0e0"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="44dp">
-        <TextView
-            android:text="邀请码："
-            android:textColor="@color/black_text"
-            android:layout_marginLeft="12dp"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tv_invite_code"
             android:textColor="@color/black_text"
             android:textSize="15sp"
             android:layout_width="wrap_content"

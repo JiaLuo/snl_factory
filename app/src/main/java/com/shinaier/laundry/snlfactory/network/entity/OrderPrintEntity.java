@@ -71,7 +71,7 @@ public class OrderPrintEntity implements Parcelable {
         dest.writeString(status);
     }
 
-    public static class OrderPrintDatas implements Parcelable {
+    public static class OrderPrintDatas implements Parcelable{
         @SerializedName("orderInfo")
         private OrderPrintInfo info;
         @SerializedName("items")
@@ -117,7 +117,7 @@ public class OrderPrintEntity implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
         }
 
-        public static class OrderPrintItems implements Parcelable {
+        public static class OrderPrintItems implements Parcelable{
             @SerializedName("item_note")
             private String itemNote;
             @SerializedName("color")
@@ -128,6 +128,10 @@ public class OrderPrintEntity implements Parcelable {
             private String putNumber;
             @SerializedName("name")
             private String name;
+            @SerializedName("color_text")
+            private String colorText;
+            @SerializedName("note_text")
+            private String noteText;
 
             protected OrderPrintItems(Parcel in) {
                 itemNote = in.readString();
@@ -135,6 +139,24 @@ public class OrderPrintEntity implements Parcelable {
                 price = in.readString();
                 putNumber = in.readString();
                 name = in.readString();
+                colorText = in.readString();
+                noteText = in.readString();
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(itemNote);
+                dest.writeString(color);
+                dest.writeString(price);
+                dest.writeString(putNumber);
+                dest.writeString(name);
+                dest.writeString(colorText);
+                dest.writeString(noteText);
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
             }
 
             public static final Creator<OrderPrintItems> CREATOR = new Creator<OrderPrintItems>() {
@@ -189,22 +211,24 @@ public class OrderPrintEntity implements Parcelable {
                 this.name = name;
             }
 
-            @Override
-            public int describeContents() {
-                return 0;
+            public String getColorText() {
+                return colorText;
             }
 
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-                dest.writeString(itemNote);
-                dest.writeString(color);
-                dest.writeString(price);
-                dest.writeString(putNumber);
-                dest.writeString(name);
+            public void setColorText(String colorText) {
+                this.colorText = colorText;
+            }
+
+            public String getNoteText() {
+                return noteText;
+            }
+
+            public void setNoteText(String noteText) {
+                this.noteText = noteText;
             }
         }
 
-        public static class OrderPrintInfo implements Parcelable {
+        public static class OrderPrintInfo implements Parcelable{
             @SerializedName("ordersn")
             private String ordersn;
             @SerializedName("mobile")
@@ -239,6 +263,16 @@ public class OrderPrintEntity implements Parcelable {
             private String cardBalance;
             @SerializedName("qrcode")
             private String qrcode;
+            @SerializedName("mname")
+            private String mName;
+
+            public String getmName() {
+                return mName;
+            }
+
+            public void setmName(String mName) {
+                this.mName = mName;
+            }
 
             protected OrderPrintInfo(Parcel in) {
                 ordersn = in.readString();
