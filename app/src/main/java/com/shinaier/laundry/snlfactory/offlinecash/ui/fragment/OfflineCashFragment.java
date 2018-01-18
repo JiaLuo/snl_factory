@@ -15,32 +15,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.MessageNoticeActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineAuthorityEntity;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineCustomInfoEntity;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineHomeEntity;
+import com.shinaier.laundry.snlfactory.network.entity.TakeClothesEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineAuthorityAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.SpacesItemDecoration;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.MemberInfoActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineAddVisitorActivity;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineMemberManageActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.ScanActivity;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.SendLaundryActivity;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.StatisticsActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.TakeClothesActivity;
 import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,13 +45,12 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class OfflineCashFragment extends BaseFragment implements View.OnClickListener {
-    private static final int REQUEST_CODE_CUSTOM_INFO = 0x1;
-    public static final int HANGON = 0X2;
     private static final int REQUEST_CODE_TAKE_CLOTHES_LIST = 0x2;
-    private static final int REQUEST_CODE_OFFLINE_HOME = 0x3;
     private static final int REQUEST_CODE_ORDER_QRCODE = 0x4;
-    public static final int IRONING = 0x6;
+    private static final int REQUEST_CODE_OFFLINE_AUTHORITY = 0x5;
     private static final int REQUEST_CODE_IS_MEMBER = 0x7;
+    public static final int IRONING = 0x6;
+    public static final int DRYING = 0x8;
 
     private Context context;
     private CollectClothesDialog collectClothesDialog;
@@ -64,9 +59,10 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
     private String number;
     // 自定dialog
     private CommonDialog dialog;
-    private OfflineHomeEntity offlineHomeEntity;
 
-    private List<OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities> offlineAuthorities = new ArrayList<>();
+    private RecyclerView offlineAuthority;
+    private OfflineAuthorityEntity offlineAuthorityEntity;
+    private ImageView ivMessageNotice;
 
 
     @Nullable
@@ -79,98 +75,21 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getActivity();
-//        loadData();
-
-        offlineAuthorities.clear();
-        OfflineAuthorityEntity offlineAuthorityEntity = new OfflineAuthorityEntity();
-        OfflineAuthorityEntity.OfflineAuthorityDatas offlineAuthorityDatas = offlineAuthorityEntity.new OfflineAuthorityDatas();
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities1 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities1.setName("收件");
-        offlineAuthorities1.setValue("1");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities2 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities2.setName("入厂");
-        offlineAuthorities2.setValue("2");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities3 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities3.setName("送洗");
-        offlineAuthorities3.setValue("3");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities4 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities4.setName("烘干");
-        offlineAuthorities4.setValue("4");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities5 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities5.setName("熨烫");
-        offlineAuthorities5.setValue("5");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities6 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities6.setName("质检");
-        offlineAuthorities6.setValue("6");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities7 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities7.setName("上挂");
-        offlineAuthorities7.setValue("7");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities8 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities8.setName("出厂");
-        offlineAuthorities8.setValue("8");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities9 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities9.setName("取衣");
-        offlineAuthorities9.setValue("9");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities10 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities10.setName("业务统计");
-        offlineAuthorities10.setValue("10");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities11 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities11.setName("会员管理");
-        offlineAuthorities11.setValue("11");
-        OfflineAuthorityEntity.OfflineAuthorityDatas.OfflineAuthorities offlineAuthorities12 = offlineAuthorityDatas.new OfflineAuthorities();
-        offlineAuthorities12.setName("返流审核");
-        offlineAuthorities12.setValue("12");
-        offlineAuthorities.add(offlineAuthorities1);
-        offlineAuthorities.add(offlineAuthorities2);
-        offlineAuthorities.add(offlineAuthorities3);
-        offlineAuthorities.add(offlineAuthorities4);
-        offlineAuthorities.add(offlineAuthorities5);
-        offlineAuthorities.add(offlineAuthorities6);
-        offlineAuthorities.add(offlineAuthorities7);
-        offlineAuthorities.add(offlineAuthorities8);
-        offlineAuthorities.add(offlineAuthorities9);
-        offlineAuthorities.add(offlineAuthorities10);
-        offlineAuthorities.add(offlineAuthorities11);
-        offlineAuthorities.add(offlineAuthorities12);
-
+        loadData();
         initView(view);
     }
 
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("token", UserCenter.getToken(context));
-        params.put("uid",UserCenter.getUid(context));
-        requestHttpData(Constants.Urls.URL_POST_OFFLINE_HOME,REQUEST_CODE_OFFLINE_HOME, FProtocol.HttpMethod.POST,params);
+        params.put("token",UserCenter.getToken(context));
+        requestHttpData(Constants.Urls.URL_POST_OFFLINE_AUTHORITY,REQUEST_CODE_OFFLINE_AUTHORITY, FProtocol.HttpMethod.POST,params);
     }
 
     private void initView(View view) {
-//        LinearLayout llCollect = view.findViewById(R.id.ll_collect);
-//        LinearLayout llLaundry = view.findViewById(R.id.ll_laundry);
-//        LinearLayout llQualityChecking = view.findViewById(R.id.ll_quality_checking);
-//        LinearLayout llLeaveFactory = view.findViewById(R.id.ll_leave_factory);
-//        LinearLayout llBusinessCount = view.findViewById(R.id.ll_business_count);
-//        LinearLayout llIntoFactory = view.findViewById(R.id.ll_into_factory);
-//        LinearLayout llHangOn = view.findViewById(R.id.ll_hang_on);
-//        LinearLayout llMemberManage = view.findViewById(R.id.ll_member_manage);
-//        LinearLayout llTakeClothes = view.findViewById(R.id.ll_take_clothes);
-//        LinearLayout llDrying = view.findViewById(R.id.ll_drying);
-//        LinearLayout llIroning = view.findViewById(R.id.ll_ironing);
-
-//        llCollect.setOnClickListener(this);
-//        llHangOn.setOnClickListener(this);
-//        llQualityChecking.setOnClickListener(this);
-//        llLeaveFactory.setOnClickListener(this);
-//        llBusinessCount.setOnClickListener(this);
-//        llIntoFactory.setOnClickListener(this);
-//        llMemberManage.setOnClickListener(this);
-//        llLaundry.setOnClickListener(this);
-//        llTakeClothes.setOnClickListener(this);
-//        llDrying.setOnClickListener(this);
-//        llIroning.setOnClickListener(this);
-
-
-        RecyclerView offlineAuthority = (RecyclerView) view.findViewById(R.id.offline_authority);
-        ImageView ivMessageNotice = (ImageView) view.findViewById(R.id.iv_message_notice);
+        initLoadingView(this,view);
+        setLoadingStatus(LoadingStatus.LOADING);
+        offlineAuthority = (RecyclerView) view.findViewById(R.id.offline_authority);
+        ivMessageNotice = (ImageView) view.findViewById(R.id.iv_message_notice);
         ivMessageNotice.setOnClickListener(this);
         //设置layoutManager
         offlineAuthority.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
@@ -178,103 +97,17 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         offlineAuthority.addItemDecoration(decoration);
         dialog = new CommonDialog(context);
-
-        OfflineAuthorityAdapter adapter = new OfflineAuthorityAdapter(context,offlineAuthorities);
-        offlineAuthority.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OfflineAuthorityAdapter.OnRecyclerItemClickListener() {
-            @Override
-            public void onItemClick(TextView textView,int position) {
-                if (offlineAuthorities.get(position).getValue().equals("1")){
-                    //收件
-                    inputNumOrScan(1);
-                }else if (offlineAuthorities.get(position).getValue().equals("3")){
-                    //送洗
-                    startActivity(new Intent(context,SendLaundryActivity.class));
-                }else if (offlineAuthorities.get(position).getValue().equals("5")){
-                    //熨烫
-                    Intent intent = new Intent(context,SendLaundryActivity.class);
-                    intent.putExtra("extra_from",IRONING);
-                    startActivity(intent);
-                }else if (offlineAuthorities.get(position).getValue().equals("7")){
-                    //上挂
-                    Intent intent = new Intent(context,SendLaundryActivity.class);
-                    intent.putExtra("extra_from",HANGON);
-                    startActivity(intent);
-
-                }else if (offlineAuthorities.get(position).getValue().equals("9")){
-                    //取衣
-                    inputNumOrScan(2);
-                }else if (offlineAuthorities.get(position).getValue().equals("10")){
-                    //业务统计
-                    startActivity(new Intent(context,StatisticsActivity.class));
-                }else if (offlineAuthorities.get(position).getValue().equals("11")){
-                    //会员管理
-                    Intent intent = new Intent(context,OfflineMemberManageActivity.class);
-//                    intent.putExtra("m_name",offlineAuthorityEntity.getDatas().getMerchant().getmName());
-//                    intent.putExtra("m_logo",offlineAuthorityEntity.getDatas().getMerchant().getLogo());
-                    startActivity(intent);
-                }
-
-            }
-        });
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-//            case R.id.ll_collect:
-//                //收件
-//                inputNumOrScan(1);
-//                break;
-//            case R.id.ll_hang_on:
-//                //上挂
-//                Intent intent = new Intent(context,SendLaundryActivity.class);
-//                intent.putExtra("extra_from",HANGON);
-//                startActivity(intent);
-//                break;
-//            case R.id.ll_member_manage:
-//                //会员管理
-//                if (offlineHomeEntity != null){
-//                    Intent memberIntent = new Intent(context,OfflineMemberManageActivity.class);
-//                    memberIntent.putExtra("store_logo",offlineHomeEntity.getDatas().getCircleLogo());
-//                    memberIntent.putExtra("store_name",offlineHomeEntity.getDatas().getmName());
-//                    startActivity(memberIntent);
-//                }
-//                break;
-//            case R.id.ll_laundry:
-//                //送洗
-//                startActivity(new Intent(context,SendLaundryActivity.class));
-//                break;
-//            case R.id.ll_take_clothes:
-//                //取衣
-//                inputNumOrScan(2);
-//                break;
-//            case R.id.ll_business_count:
-//                //业务统计
-//                startActivity(new Intent(context,StatisticsActivity.class));
-//                break;
-//            case R.id.ll_into_factory:
-//                //入厂
-//                startActivity(new Intent(context,IntoFactoryActivity.class));
-//                break;
-//            case R.id.ll_quality_checking:
-//                //质检
-//
-//                break;
-//            case R.id.ll_leave_factory:
-//                //出厂
-//                startActivity(new Intent(context,LeaveFactoryActivity.class));
-//                break;
-//            case R.id.ll_drying:
-//                //烘干
-//
-//                break;
-//            case R.id.ll_ironing:
-//                //熨烫
-//
-//                break;
-
+            case R.id.iv_message_notice: //线下收银消息
+                startActivity(new Intent(context, MessageNoticeActivity.class));
+                break;
+            case R.id.loading_img_refresh:
+                loadData();
+                setLoadingStatus(LoadingStatus.LOADING);
         }
     }
 
@@ -315,16 +148,18 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
             public void onClick(View v) {
                 number = edPhoneOrderNum.getText().toString();
                 if(!TextUtils.isEmpty(number)){
-                    if (position == 1){ // 收件
+                    if (CommonTools.checkPhoneNumber(context,false,number)){
+                        if (position == 1){ // 收件
 
-                        dialog.setContent("加载中");
-                        dialog.show();
-                        isMember();
-//                        collectData();
-                    }else if(position == 2){ // 取衣
-                        dialog.setContent("加载中");
-                        dialog.show();
-                        takeOrderData(number); //请求网络判断订单号手机号是否存在
+                            dialog.setContent("加载中");
+                            dialog.show();
+                            //判断是否是会员 用get接口
+                            isMember();
+                        }else if(position == 2){ // 取衣
+                            dialog.setContent("加载中");
+                            dialog.show();
+                            takeOrderData(number); //请求网络判断 输入电话或订单号 有没有订单
+                        }
                     }
                 }else {
                     ToastUtil.shortShow(context,"请输入手机号/会员卡号");
@@ -345,75 +180,131 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token",UserCenter.getToken(context));
         params.put("number",number);
-        params.put("order_exist","1");
         requestHttpData(Constants.Urls.URL_POST_TAKE_CLOTHES_LIST,REQUEST_CODE_TAKE_CLOTHES_LIST, FProtocol.HttpMethod.POST,params);
-    }
-
-    private void collectData() {
-        IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("token", UserCenter.getToken(context));
-        params.put("number",number);
-        requestHttpData(Constants.Urls.URL_POST_CUSTOM_INFO,REQUEST_CODE_CUSTOM_INFO, FProtocol.HttpMethod.POST,params);
     }
 
     @Override
     public void success(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.success(requestCode, data);
         switch (requestCode){
-            case REQUEST_CODE_CUSTOM_INFO:
-                if(data != null){
-                    OfflineCustomInfoEntity offlineCustomInfoEntity = Parsers.getOfflineCustomInfoEntity(data);
-                    if(offlineCustomInfoEntity != null){
-                        if (dialog.isShowing()) {
-                            dialog.dismiss();
-                        }
-                        if(offlineCustomInfoEntity.getCode() == 0){
-                            //有会员存在
-                            Intent intent = new Intent(context,MemberInfoActivity.class);
-                            intent.putExtra("phone_num",number);
-                            startActivity(intent);
-                            collectClothesDialog.dismiss();
-
-                        }else if (offlineCustomInfoEntity.getCode() == 1){
-                            //会员不存在 新增散客
-                            if (CommonTools.checkPhoneNumber(context,true,number)){
-                                Intent intent = new Intent(context,OfflineAddVisitorActivity.class);
-                                intent.putExtra("phone_num",number);
-                                startActivity(intent);
-                                collectClothesDialog.dismiss();
-                            }
-                        }else {
-                            ToastUtil.shortShow(context,offlineCustomInfoEntity.getMsg());
-                        }
-                    }
-                }
-                break;
             case REQUEST_CODE_TAKE_CLOTHES_LIST:
                 if (data != null){
-                    Entity entity = Parsers.getEntity(data);
-                    if (entity != null){
-                        if (dialog.isShowing()) {
-                            dialog.dismiss();
-                        }
-                        if(entity.getRetcode() == 0){
-                            Intent intent = new Intent(context,TakeClothesActivity.class);
-                            intent.putExtra("phoneNum",number);
-                            startActivity(intent); //进入取衣页面
-                            collectClothesDialog.dismiss(); //加载dialog显示
+                    TakeClothesEntity takeClothesEntity = Parsers.getTakeClothesEntity(data);
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    if (takeClothesEntity != null){
+                        if (takeClothesEntity.getCode() == 0){
+                            if (takeClothesEntity.getResult() != null){
+                                int countTotal = takeClothesEntity.getResult().getCountTotal();
+                                if (countTotal == 0){
+                                    ToastUtil.shortShow(context,takeClothesEntity.getMsg());
+                                }else {
+
+                                    Intent intent = new Intent(context,TakeClothesActivity.class);
+                                    intent.putExtra("phoneNum",number);
+                                    startActivity(intent); //进入取衣页面
+                                    collectClothesDialog.dismiss(); //加载dialog显示
+                                }
+                            }
                         }else {
-                            ToastUtil.shortShow(context,entity.getStatus());
+                            ToastUtil.shortShow(context,takeClothesEntity.getMsg());
                         }
                     }
                 }
                 break;
-            case REQUEST_CODE_OFFLINE_HOME:
+            case REQUEST_CODE_OFFLINE_AUTHORITY:
                 if (data != null){
-                    offlineHomeEntity = Parsers.getOfflineHomeEntity(data);
-                    if (offlineHomeEntity != null){
-                        if(offlineHomeEntity.getRetcode() == 0){
+                    offlineAuthorityEntity = Parsers.getOfflineAuthorityEntity(data);
+                    if (offlineAuthorityEntity != null){
+                        if (offlineAuthorityEntity.getCode() == 0){
+                            setLoadingStatus(LoadingStatus.GONE);
+                            if (!offlineAuthorityEntity.getResult().getMessageCount().equals("0")){
+                                ivMessageNotice.setSelected(true);
+                            }else {
+                                ivMessageNotice.setSelected(false);
+                            }
+                            if (offlineAuthorityEntity.getResult() != null && offlineAuthorityEntity.getResult().getMights().size() > 0){
 
+                                OfflineAuthorityAdapter adapter = new OfflineAuthorityAdapter(context, offlineAuthorityEntity.getResult().getMights());
+                                offlineAuthority.setAdapter(adapter);
+                                adapter.setOnItemClickListener(new OfflineAuthorityAdapter.OnRecyclerItemClickListener() {
+                                    @Override
+                                    public void onItemClick(TextView textView,int position) {
+                                        switch (offlineAuthorityEntity.getResult().getMights().get(position).getModule()){
+                                            case "1":
+                                                //收件
+                                                LogUtil.e("zhang","收件");
+                                                inputNumOrScan(1);
+                                                break;
+                                            case "8":
+                                                //清洗
+                                                LogUtil.e("zhang","入厂");
+//                                                startActivity(new Intent(context,OfflineWashActivity.class));
+                                                break;
+                                            case "2":
+                                                LogUtil.e("zhang","清洗");
+                                                break;
+                                            case "50":
+                                                //烘干
+                                                LogUtil.e("zhang","烘干");
+//                                                Intent intent = new Intent(context,OfflineWashingActivity.class);
+//                                                intent.putExtra("extra_from",DRYING);
+//                                                startActivity(intent);
+                                                break;
+                                            case "51":
+                                                //熨烫
+                                                LogUtil.e("zhang","熨烫");
+//                                            Intent intent = new Intent(context,OfflineWashingActivity.class);
+//                                            intent.putExtra("extra_from",IRONING);
+//                                            startActivity(intent);
+                                                break;
+                                            case "52":
+                                                //质检
+                                                LogUtil.e("zhang","质检");
+//                                            startActivity(new Intent(context,OfflineWashingActivity.class));
+                                                break;
+                                            case "3":
+                                                //上挂
+                                                LogUtil.e("zhang","上挂");
+//                                            startActivity(new Intent(context, OfflineHangOnActivity.class));
+                                                break;
+                                            case "9":
+                                                LogUtil.e("zhang","出厂");
+                                                break;
+                                            case "4":
+                                                //取衣
+                                                LogUtil.e("zhang","取衣");
+//                                            inputNumOrScan(2);
+                                                break;
+                                            case "5":
+                                                //业务统计
+                                                LogUtil.e("zhang","业务统计");
+//                                            startActivity(new Intent(context,StatisticsActivity.class));
+                                                break;
+                                            case "6":
+                                                //会员管理
+                                                LogUtil.e("zhang","会员管理");
+//                                            Intent intent = new Intent(context,OfflineMemberManageActivity.class);
+//                                            intent.putExtra("m_name",offlineAuthorityEntity.getResult().getMerName());
+//                                            intent.putExtra("m_logo",offlineAuthorityEntity.getResult().getMerLogo());
+//                                            startActivity(intent);
+                                                break;
+                                            case "7":
+                                                //返流审核
+                                                LogUtil.e("zhang","返流审核");
+//                                            startActivity(new Intent(context,OfflineRefluxActivity.class));
+                                                break;
+                                        }
+                                    }
+                                });
+                            }else {
+                                setLoadingStatus(LoadingStatus.GONE);
+                            }
                         }else {
-                            ToastUtil.shortShow(context, offlineHomeEntity.getStatus());
+                            setLoadingStatus(LoadingStatus.GONE);
+                            ToastUtil.shortShow(context, offlineAuthorityEntity.getMsg());
                         }
                     }
                 }
@@ -422,14 +313,14 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
                 if (data != null){
                     Entity entity = Parsers.getEntity(data);
                     if (entity != null){
-                        if (entity.getRetcode() == 0){ //code 等于75说明是已存在的会员
+                        if (entity.getRetcode() == 0){
                             //有会员存在
                             Intent intent = new Intent(context,MemberInfoActivity.class);
                             intent.putExtra("phone_num",number);
                             startActivity(intent);
                             collectClothesDialog.dismiss();
                             dialog.dismiss();
-                        }else if (entity.getRetcode() == 1000){ //code 等于0说明是不存在的会员
+                        }else if (entity.getRetcode() == 1000){ //code 等于1000说明是不存在的会员
                             //会员不存在 新增散客
                             if (CommonTools.checkPhoneNumber(context,true,number)){
                                 Intent intent = new Intent(context,OfflineAddVisitorActivity.class);

@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -35,7 +34,10 @@ import com.shinaier.laundry.snlfactory.view.linechartview.Utils;
 import com.shinaier.laundry.snlfactory.view.linechartview.XAxis;
 import com.shinaier.laundry.snlfactory.view.linechartview.YAxis;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.IdentityHashMap;
 import java.util.List;
 
@@ -47,6 +49,7 @@ import java.util.List;
 
 public class OperateAnalysisActivity extends ToolBarActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_OPERATE_ANALYSIS = 0x1;
+
     @ViewInject(R.id.analysis_line)
     private LineChart analysisLine;
     @ViewInject(R.id.rl_analysis_time)
@@ -75,16 +78,11 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
     private TextView lastMonthCancelOrder;
     @ViewInject(R.id.amplitude_cancel_order)
     private TextView amplitudeCancelOrder;
-
-
-
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
 
     private int orderByPosition;
     private List<OptionEntity> optionEntities = new ArrayList<>();
-
-
     Line.CallBack_OnEntryClick onEntryClick = new Line.CallBack_OnEntryClick() {
         @Override
         public void onEntry(Line line, Entry entry) { //线的点击事件
@@ -96,7 +94,7 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
     private CheckSpinnerView mCheckSpinnerView;
     private TranslateAnimation animation;
     private int lineNum = 2;//显示几条线
-    private int width;
+    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,23 +107,19 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
 
     private void initView() {
         setCenterTitle("经营分析");
+        Calendar calendar = Calendar.getInstance();
+        long timeInMillis = calendar.getTimeInMillis();
+        analysisTime.setText(getDateToString(timeInMillis));
         rlAnalysisTime.setOnClickListener(this);
         leftButton.setOnClickListener(this);
-        rlAnalysisTime.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                width = rlAnalysisTime.getWidth();
-
-            }
-        });
         mCheckSpinnerView = new CheckSpinnerView(this, new CheckSpinnerView.OnSpinnerItemClickListener() {
 
             @Override
             public void onItemClickListener1(AdapterView<?> parent, View view, int position, long id) {
                 orderByPosition = position;
-                analysisTime.setText(operateAnalysisEntities.getDatas().getDates().get(position));
+                analysisTime.setText(operateAnalysisEntities.getResult().getMonarr().get(position));
                 mCheckSpinnerView.close();
-                loadData(operateAnalysisEntities.getDatas().getDates().get(position));
+                loadData(operateAnalysisEntities.getResult().getMonarr().get(position));
             }
         });
         animation = new TranslateAnimation(0, 0, -(DeviceUtil.getHeight(this)), 0);
@@ -139,8 +133,9 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
         if (!TextUtils.isEmpty(isSelectMonth)){
-            params.put("date",operateAnalysisEntities.getDatas().getDates().get(orderByPosition));
+            params.put("time",isSelectMonth);
         }
+        params.put("type","1");
         requestHttpData(Constants.Urls.URL_POST_OPERATE_ANALYSIS,REQUEST_CODE_OPERATE_ANALYSIS, FProtocol.HttpMethod.POST,params);
     }
 
@@ -152,13 +147,13 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
                 if (data != null){
                     operateAnalysisEntities = Parsers.getOperateAnalysisEntities(data);
                     if (operateAnalysisEntities != null){
-                        if (operateAnalysisEntities.getRetcode() == 0){
+                        if (operateAnalysisEntities.getCode() == 0){
                             setChartData(analysisLine);
 
                             setOtherData();
 
                         }else {
-                            ToastUtil.shortShow(this, operateAnalysisEntities.getStatus());
+                            ToastUtil.shortShow(this, operateAnalysisEntities.getMsg());
                         }
                     }
                 }
@@ -169,38 +164,38 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
     private void setOtherData() {
         //给checkview 设置数据
         OptionEntity optionEntity = null;
-        for (int i = 0; i < operateAnalysisEntities.getDatas().getDates().size(); i++) {
-            String s = operateAnalysisEntities.getDatas().getDates().get(i);
+        for (int i = 0; i < operateAnalysisEntities.getResult().getMonarr().size(); i++) {
+            String s = operateAnalysisEntities.getResult().getMonarr().get(i);
             optionEntity = new OptionEntity();
             optionEntity.setName(s);
             optionEntities.add(optionEntity);
         }
-        String thisMonth = operateAnalysisEntities.getDatas().getSum();
-        String lastMonth = operateAnalysisEntities.getDatas().getPsum();
+        String thisMonth = operateAnalysisEntities.getResult().getNowBusinessTotal();
+        String lastMonth = operateAnalysisEntities.getResult().getBeforeBusinessTotal();
         businessVolumeLastMonth.setText("上月同期营业额:" + lastMonth);
         businessVolumeThisMonth.setText("截止目前营业额:" + thisMonth);
-        thisMonthTotalBusinessVolume.setText(String.valueOf(operateAnalysisEntities.getDatas().getNows().getSum()));
-        thisMonthTotalOrder.setText(String.valueOf(operateAnalysisEntities.getDatas().getNows().getAll()));
-        thisMonthCancelOrder.setText(String.valueOf(operateAnalysisEntities.getDatas().getNows().getCancel()));
-        lastMonthTotalBusinessVolume.setText(String.valueOf(operateAnalysisEntities.getDatas().getPreviouses().getSum()));
-        lastMonthTotalOrder.setText(String.valueOf(operateAnalysisEntities.getDatas().getPreviouses().getAll()));
-        lastMonthCancelOrder.setText(String.valueOf(operateAnalysisEntities.getDatas().getPreviouses().getCancel()));
-        amplitudeBusinessVolume.setText(operateAnalysisEntities.getDatas().getProportions().getSum() + "%");
-        amplitudeTotalOrder.setText(operateAnalysisEntities.getDatas().getProportions().getAll() + "%");
-        amplitudeCancelOrder.setText(operateAnalysisEntities.getDatas().getProportions().getCancel() + "%");
-        if (operateAnalysisEntities.getDatas().getNows().getSum() > operateAnalysisEntities.getDatas().getPreviouses().getSum()){
+        thisMonthTotalBusinessVolume.setText(String.valueOf(operateAnalysisEntities.getResult().getNowInfo().getBusinessTotal()));
+        thisMonthTotalOrder.setText(String.valueOf(operateAnalysisEntities.getResult().getNowInfo().getItemTotal()));
+        thisMonthCancelOrder.setText(String.valueOf(operateAnalysisEntities.getResult().getNowInfo().getCancelItemTotal()));
+        lastMonthTotalBusinessVolume.setText(String.valueOf(operateAnalysisEntities.getResult().getLastInfo().getBusinessTotal()));
+        lastMonthTotalOrder.setText(String.valueOf(operateAnalysisEntities.getResult().getLastInfo().getItemTotal()));
+        lastMonthCancelOrder.setText(String.valueOf(operateAnalysisEntities.getResult().getLastInfo().getCancelItemTotal()));
+        amplitudeBusinessVolume.setText(operateAnalysisEntities.getResult().getIncrease().getBusinessTotal() + "%");
+        amplitudeTotalOrder.setText(operateAnalysisEntities.getResult().getIncrease().getItemTotal() + "%");
+        amplitudeCancelOrder.setText(operateAnalysisEntities.getResult().getIncrease().getCancelItemTotal() + "%");
+        if (operateAnalysisEntities.getResult().getNowInfo().getBusinessTotal() > operateAnalysisEntities.getResult().getLastInfo().getBusinessTotal()){
             amplitudeBusinessVolume.setTextColor(Color.parseColor("#eb381b"));
         }else {
             amplitudeBusinessVolume.setTextColor(Color.parseColor("#09b1b0"));
         }
 
-        if (operateAnalysisEntities.getDatas().getNows().getAll() > operateAnalysisEntities.getDatas().getPreviouses().getAll()){
+        if (operateAnalysisEntities.getResult().getNowInfo().getItemTotal() > operateAnalysisEntities.getResult().getLastInfo().getItemTotal()){
             amplitudeTotalOrder.setTextColor(Color.parseColor("#eb381b"));
         }else{
             amplitudeTotalOrder.setTextColor(Color.parseColor("#09b1b0"));
         }
 
-        if (operateAnalysisEntities.getDatas().getNows().getCancel() > operateAnalysisEntities.getDatas().getPreviouses().getCancel()){
+        if (operateAnalysisEntities.getResult().getNowInfo().getCancelItemTotal() > operateAnalysisEntities.getResult().getLastInfo().getCancelItemTotal()){
             amplitudeCancelOrder.setTextColor(Color.parseColor("#eb381b"));
         }else{
             amplitudeCancelOrder.setTextColor(Color.parseColor("#09b1b0"));
@@ -253,22 +248,28 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
      * @return 曲线的对象
      */
     private Line createLine(int order, int color) {
-
         final Line line = new Line();
         List<Entry> list = new ArrayList<>();
-        for (int i = 0; i < operateAnalysisEntities.getDatas().getDays().size(); i++) {
-            String s = operateAnalysisEntities.getDatas().getDays().get(i);
-            double v = Double.parseDouble(s);
-            String s1 = operateAnalysisEntities.getDatas().getNowSums().get(i); //本月数据
-            double v1 = Double.parseDouble(s1);
-            String s2 = operateAnalysisEntities.getDatas().getPreviousSums().get(i);//上月数据
-            double v2 = Double.parseDouble(s2);
-            if (order == 0){
+        int nowMonthSize = operateAnalysisEntities.getResult().getNowMonths().size();
+        int lastMonthSize = operateAnalysisEntities.getResult().getLastMonthData().size();
+        if (order == 0){
+            for (int i = 0; i < nowMonthSize; i++) {
+                String s = operateAnalysisEntities.getResult().getNowMonths().get(i).getDay();
+                double v = Double.parseDouble(s);
+                String s1 = operateAnalysisEntities.getResult().getNowMonths().get(i).getTotal(); //本月数据
+                double v1 = Double.parseDouble(s1);
                 list.add(new Entry(v, v1));
-            }else {
-                list.add(new Entry(v,v2));
+            }
+        }else {
+            for (int i = 0; i < lastMonthSize; i++) {
+                String s = operateAnalysisEntities.getResult().getLastMonthData().get(i).getDay();
+                double v = Double.parseDouble(s);
+                String s1 = operateAnalysisEntities.getResult().getLastMonthData().get(i).getTotal(); //上月数据
+                double v1 = Double.parseDouble(s1);
+                list.add(new Entry(v, v1));
             }
         }
+
 
         line.setEntries(list);
         line.setDrawLegend(true);//设置启用绘制图例
@@ -291,11 +292,16 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.rl_analysis_time:
-                mCheckSpinnerView.showSpinnerPop(rlAnalysisTime, animation, optionEntities, orderByPosition,width);
+                mCheckSpinnerView.showSpinnerPop(rlAnalysisTime, animation, optionEntities, orderByPosition);
                 break;
             case R.id.left_button:
                 finish();
                 break;
         }
+    }
+
+    public String getDateToString(long time) {
+        Date d = new Date(time);
+        return sf.format(d);
     }
 }

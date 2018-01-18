@@ -16,13 +16,11 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="76dp">
             <ImageView
-                android:id="@+id/loading_img_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/default_logo"/>
             <TextView
                 android:layout_gravity="center"
-                android:id="@+id/loading_txt_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -35,71 +33,42 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:id="@+id/ll_cooperation_store_head"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/base_color"
-                android:layout_width="match_parent"
-                android:layout_height="36dp">
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center_vertical"
-                    android:text="门店编号"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="名称"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
             <ListView
                 android:id="@+id/cooperation_store_list"
-                android:layout_below="@id/ll_cooperation_store_head"
-                android:background="@drawable/check_clothes_img_lin_bg"
-                android:divider="@null"
+                android:divider="@color/comminute_line"
                 android:layout_marginBottom="44dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"/>
-            <LinearLayout
-                android:background="@color/comminute_line"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="44dp">
-                <TextView
-                    android:id="@+id/cooperation_store_edit_bt"
-                    android:layout_marginTop="1dp"
-                    android:gravity="center"
-                    android:text="编辑"
-                    android:textColor="@color/black_text"
-                    android:background="@color/white"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:id="@+id/cooperation_store_add_bt"
-                    android:background="@color/base_color"
-                    android:text="+新增"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
         </RelativeLayout>
+
+        <LinearLayout
+            android:background="@color/comminute_line"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+            <TextView
+                android:id="@+id/cooperation_store_edit_bt"
+                android:layout_marginTop="1dp"
+                android:gravity="center"
+                android:text="编辑"
+                android:textColor="@color/black_text"
+                android:background="@color/white"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/cooperation_store_add_bt"
+                android:background="@color/base_color"
+                android:text="+新增"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

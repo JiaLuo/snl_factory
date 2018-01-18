@@ -197,8 +197,8 @@
             <TextView
                 android:id="@+id/take_clothes_order_cancel"
                 android:textColor="@color/white"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:textSize="12sp"
                 android:background="@drawable/login"
                 android:layout_width="wrap_content"
@@ -206,8 +206,8 @@
             <TextView
                 android:id="@+id/take_clothes_order_pay"
                 android:textColor="@color/white"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_marginLeft="8dp"
                 android:background="@drawable/login"
                 android:textSize="12sp"

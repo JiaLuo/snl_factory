@@ -45,17 +45,17 @@ public class UserEvaluateActivity extends ToolBarActivity implements View.OnClic
                 case 1:
                     String replyContent = (String)msg.obj;
                     IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                    params.put("token", UserCenter.getToken(UserEvaluateActivity.this));
-                    params.put("id",evaluateData.getId());
-                    params.put("mer_content",replyContent);
+                    params.put("token",UserCenter.getToken(UserEvaluateActivity.this));
+                    params.put("commendid",evaluateResult.getId());
+                    params.put("manswer",replyContent);
                     requestHttpData(Constants.Urls.URL_POST_EVALUATE_REPLY,REQUEST_CODE_EVALUATE_REPLY, FProtocol.HttpMethod.POST,params);
                     break;
             }
         }
     };
     private EvaluateEntities evaluateEntities;
-    private EvaluateEntities.Data evaluateData;
     private EvaluateReplyDialog evaluateReplyDialog;
+    private EvaluateEntities.EvaluateResult evaluateResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,19 +88,23 @@ public class UserEvaluateActivity extends ToolBarActivity implements View.OnClic
                     evaluateEntities = Parsers.getEvaluateEntities(data);
                     if(evaluateEntities != null){
                         setLoadingStatus(LoadingStatus.GONE);
-                        if(evaluateEntities.getRetcode() == 0){
-                            UserEvaluateAdapter userEvaluateAdapter = new UserEvaluateAdapter(this, evaluateEntities.getDatas());
-                            publishCommentList.setAdapter(userEvaluateAdapter);
-                            publishCommentList.setCanMoreAndUnReFresh(false);
-                            userEvaluateAdapter.setPositionListener(new UserEvaluateAdapter.PositionListener() {
-                                @Override
-                                public void onClick(int position) {
-                                    evaluateData = evaluateEntities.getDatas().get(position);
-                                    evaluateReplyDialog = new EvaluateReplyDialog(UserEvaluateActivity.this, R.style.timerDialog,handler);
-                                    evaluateReplyDialog.setView();
-                                    evaluateReplyDialog.show();
-                                }
-                            });
+                        if(evaluateEntities.getCode() == 0){
+                            if (evaluateEntities.getResults() != null && evaluateEntities.getResults().size() > 0){
+                                UserEvaluateAdapter userEvaluateAdapter = new UserEvaluateAdapter(this, evaluateEntities.getResults());
+                                publishCommentList.setAdapter(userEvaluateAdapter);
+                                publishCommentList.setCanMoreAndUnReFresh(false);
+                                userEvaluateAdapter.setPositionListener(new UserEvaluateAdapter.PositionListener() {
+                                    @Override
+                                    public void onClick(int position) {
+                                        evaluateResult = evaluateEntities.getResults().get(position);
+                                        evaluateReplyDialog = new EvaluateReplyDialog(UserEvaluateActivity.this, R.style.timerDialog,handler);
+                                        evaluateReplyDialog.setView();
+                                        evaluateReplyDialog.show();
+                                    }
+                                });
+                            }else {
+                                setLoadingStatus(LoadingStatus.EMPTY);
+                            }
                         }
                     }else {
                         setLoadingStatus(LoadingStatus.EMPTY);

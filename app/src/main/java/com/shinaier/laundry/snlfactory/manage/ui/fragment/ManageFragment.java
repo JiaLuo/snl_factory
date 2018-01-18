@@ -65,6 +65,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
     private SwitchView ivStoreSwitch;
     private TextView tvStoreSwitch;
     private TextView storeLocation;
+    private ImageView ivMessageNotice;
 
     @Nullable
     @Override
@@ -88,7 +89,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initView() {
-        ImageView ivMessageNotice =  view.findViewById(R.id.iv_message_notice);
+        ivMessageNotice = view.findViewById(R.id.iv_message_notice);
         storeImg =  view.findViewById(R.id.store_img);
         storeName =  view.findViewById(R.id.store_name);
         ratingBarStore =  view.findViewById(R.id.rating_bar_store);
@@ -97,7 +98,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
         todayOrderNum =  view.findViewById(R.id.today_order_num);
         ivStoreSwitch =  view.findViewById(R.id.iv_store_switch);
         tvStoreSwitch =  view.findViewById(R.id.tv_store_switch);
-        storeLocation = (TextView) view.findViewById(R.id.store_location);
+        storeLocation = view.findViewById(R.id.store_location);
         LinearLayout llManageFinance =  view.findViewById(R.id.ll_manage_finance);
         LinearLayout llCommodityManage =  view.findViewById(R.id.ll_commodity_manage);
         LinearLayout llInviteFriend =  view.findViewById(R.id.ll_invite_friend);
@@ -129,6 +130,11 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                 if(data != null){
                     StoreEntity storeEntity = Parsers.getStoreEntity(data);
                     if (storeEntity != null){
+                        if (!storeEntity.getMessageCount().equals("0")){ //是否有未读消息
+                            ivMessageNotice.setSelected(true);
+                        }else {
+                            ivMessageNotice.setSelected(false);
+                        }
                         if (storeEntity.getCode() == 0){
                             StoreEntity.StoreResult result = storeEntity.getResult();
                             setStoreInfo(result);
@@ -221,7 +227,6 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                 startActivity(new Intent(context,ManageFinanceActivity.class));
                 break;
             case R.id.ll_operate_analysis:
-//                ToastUtil.shortShow(context,"此功能正在开发中敬请期待...");
                 startActivity(new Intent(context,OperateAnalysisActivity.class));
                 break;
             case R.id.ll_commodity_manage:

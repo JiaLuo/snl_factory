@@ -9,233 +9,209 @@ import java.util.List;
  */
 
 public class TakeClothesEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("page_count")
-    private int pageCount;
-    @SerializedName("data")
-    private List<TakeClothesData> data;
-    @SerializedName("count")
-    private int count;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private TakeClothesResult result;
 
-    public int getCount() {
-        return count;
+    public int getCode() {
+        return code;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public int getPageCount() {
-        return pageCount;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setPageCount(int pageCount) {
-        this.pageCount = pageCount;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public int getRetcode() {
-        return retcode;
+    public TakeClothesResult getResult() {
+        return result;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setResult(TakeClothesResult result) {
+        this.result = result;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public class TakeClothesResult{
+        @SerializedName("count_total")
+        private int countTotal;
+        @SerializedName("userinfo")
+        private TakeClothesUserInfo userInfo;
+        @SerializedName("list")
+        private List<TakeClothesList> lists;
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public List<TakeClothesData> getData() {
-        return data;
-    }
-
-    public void setData(List<TakeClothesData> data) {
-        this.data = data;
-    }
-
-    public class TakeClothesData{
-        @SerializedName("id")
-        private String id;
-        @SerializedName("ordersn")
-        private String ordersn;
-        @SerializedName("pay_state") // 0 是未支付 1 支付
-        private String payState;
-        @SerializedName("update_time")
-        private String updateTime;
-        @SerializedName("username")
-        private String userName;
-        @SerializedName("mobile")
-        private String mobile;
-        @SerializedName("items")
-        private List<TakeClothesItems> items;
-        @SerializedName("items_count")
-        private String itemsCount;
-        @SerializedName("special")
-        private String special;
-        @SerializedName("hedging")
-        private String hedging;
-        @SerializedName("total_amount")
-        private String totalAmount;
-
-        public boolean isOpen = false;
-
-        public String getId() {
-            return id;
+        public int getCountTotal() {
+            return countTotal;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setCountTotal(int countTotal) {
+            this.countTotal = countTotal;
         }
 
-        public String getOrdersn() {
-            return ordersn;
+        public TakeClothesUserInfo getUserInfo() {
+            return userInfo;
         }
 
-        public void setOrdersn(String ordersn) {
-            this.ordersn = ordersn;
+        public void setUserInfo(TakeClothesUserInfo userInfo) {
+            this.userInfo = userInfo;
         }
 
-        public String getPayState() {
-            return payState;
+        public List<TakeClothesList> getLists() {
+            return lists;
         }
 
-        public void setPayState(String payState) {
-            this.payState = payState;
+        public void setLists(List<TakeClothesList> lists) {
+            this.lists = lists;
         }
 
-        public String getUpdateTime() {
-            return updateTime;
-        }
+        public class TakeClothesList{
+            @SerializedName("id")
+            private String id;
+            @SerializedName("ordersn")
+            private String ordersn;
+            @SerializedName("pay_amount")
+            private String payAmount;
+            @SerializedName("pay_state")
+            private String payState;
+            @SerializedName("otime")
+            private String oTime;
+            @SerializedName("items")
+            private List<TakeClothesItems> itemses;
+            @SerializedName("count")
+            private int count;
 
-        public void setUpdateTime(String updateTime) {
-            this.updateTime = updateTime;
-        }
+            public boolean isOpen = false;
 
-        public String getUserName() {
-            return userName;
-        }
-
-        public void setUserName(String userName) {
-            this.userName = userName;
-        }
-
-        public String getMobile() {
-            return mobile;
-        }
-
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
-        }
-
-        public List<TakeClothesItems> getItems() {
-            return items;
-        }
-
-        public void setItems(List<TakeClothesItems> items) {
-            this.items = items;
-        }
-
-        public String getItemsCount() {
-            return itemsCount;
-        }
-
-        public void setItemsCount(String itemsCount) {
-            this.itemsCount = itemsCount;
-        }
-
-        public String getSpecial() {
-            return special;
-        }
-
-        public void setSpecial(String special) {
-            this.special = special;
-        }
-
-        public String getHedging() {
-            return hedging;
-        }
-
-        public void setHedging(String hedging) {
-            this.hedging = hedging;
-        }
-
-        public String getTotalAmount() {
-            return totalAmount;
-        }
-
-        public void setTotalAmount(String totalAmount) {
-            this.totalAmount = totalAmount;
-        }
-
-        public class TakeClothesItems{
-            @SerializedName("item_id")
-            private String itemId;
-            @SerializedName("price")
-            private String price;
-            @SerializedName("status")
-            private String status;
-            @SerializedName("put_number")
-            private String putNumber;
-            @SerializedName("name")
-            private String name;
-            @SerializedName("number")
-            private String number;
-
-            public boolean isSelect = false;
-
-            public String getItemId() {
-                return itemId;
+            public String getId() {
+                return id;
             }
 
-            public void setItemId(String itemId) {
-                this.itemId = itemId;
+            public void setId(String id) {
+                this.id = id;
             }
 
-            public String getPrice() {
-                return price;
+            public String getOrdersn() {
+                return ordersn;
             }
 
-            public void setPrice(String price) {
-                this.price = price;
+            public void setOrdersn(String ordersn) {
+                this.ordersn = ordersn;
             }
 
-            public String getStatus() {
-                return status;
+            public String getPayAmount() {
+                return payAmount;
             }
 
-            public void setStatus(String status) {
-                this.status = status;
+            public void setPayAmount(String payAmount) {
+                this.payAmount = payAmount;
             }
 
-            public String getPutNumber() {
-                return putNumber;
+            public String getPayState() {
+                return payState;
             }
 
-            public void setPutNumber(String putNumber) {
-                this.putNumber = putNumber;
+            public void setPayState(String payState) {
+                this.payState = payState;
             }
 
-            public String getName() {
-                return name;
+            public String getoTime() {
+                return oTime;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setoTime(String oTime) {
+                this.oTime = oTime;
             }
 
-            public String getNumber() {
-                return number;
+            public List<TakeClothesItems> getItemses() {
+                return itemses;
             }
 
-            public void setNumber(String number) {
-                this.number = number;
+            public void setItemses(List<TakeClothesItems> itemses) {
+                this.itemses = itemses;
+            }
+
+            public int getCount() {
+                return count;
+            }
+
+            public void setCount(int count) {
+                this.count = count;
+            }
+
+            public class TakeClothesItems{
+                @SerializedName("id")
+                private String id;
+                @SerializedName("item_name")
+                private String itemName;
+                @SerializedName("status")
+                private String status;
+                @SerializedName("put_sn")
+                private String putSn;
+
+                public boolean isSelect = false;
+
+                public String getId() {
+                    return id;
+                }
+
+                public void setId(String id) {
+                    this.id = id;
+                }
+
+                public String getItemName() {
+                    return itemName;
+                }
+
+                public void setItemName(String itemName) {
+                    this.itemName = itemName;
+                }
+
+                public String getStatus() {
+                    return status;
+                }
+
+                public void setStatus(String status) {
+                    this.status = status;
+                }
+
+                public String getPutSn() {
+                    return putSn;
+                }
+
+                public void setPutSn(String putSn) {
+                    this.putSn = putSn;
+                }
+            }
+        }
+
+        public class TakeClothesUserInfo{
+            @SerializedName("uname")
+            private String uName;
+            @SerializedName("umobile")
+            private String uMobile;
+
+            public String getuName() {
+                return uName;
+            }
+
+            public void setuName(String uName) {
+                this.uName = uName;
+            }
+
+            public String getuMobile() {
+                return uMobile;
+            }
+
+            public void setuMobile(String uMobile) {
+                this.uMobile = uMobile;
             }
         }
     }

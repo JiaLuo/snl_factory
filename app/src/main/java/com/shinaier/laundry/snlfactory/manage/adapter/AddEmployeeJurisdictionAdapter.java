@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.manage.entities.AddEmployeeJurisdictionEntity;
+import com.shinaier.laundry.snlfactory.manage.entities.EmployeeAuthorityList;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/10/30.
  */
 
-public class AddEmployeeJurisdictionAdapter extends BaseAdapterNew<AddEmployeeJurisdictionEntity> {
-    public AddEmployeeJurisdictionAdapter(Context context, List<AddEmployeeJurisdictionEntity> mDatas) {
+public class AddEmployeeJurisdictionAdapter extends BaseAdapterNew<EmployeeAuthorityList> {
+    public AddEmployeeJurisdictionAdapter(Context context, List<EmployeeAuthorityList> mDatas) {
         super(context, mDatas);
     }
 
@@ -28,7 +28,7 @@ public class AddEmployeeJurisdictionAdapter extends BaseAdapterNew<AddEmployeeJu
 
     @Override
     protected void setViewData(View convertView, int position) {
-        AddEmployeeJurisdictionEntity item = getItem(position);
+        EmployeeAuthorityList item = getItem(position);
         ImageView ivJurisdictionSelect = ViewHolder.get(convertView,R.id.iv_jurisdiction_select);
         TextView jurisdictionName = ViewHolder.get(convertView,R.id.jurisdiction_name);
         if (item != null){

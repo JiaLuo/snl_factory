@@ -70,9 +70,9 @@ public class CheckSpinnerView {
      * 初始化 PopupWindow
      * @param view
      */
-    private void initPopuWindow(View view,int width) {
+    private void initPopuWindow(View view) {
 		/* 第一个参数弹出显示view 后两个是窗口大小 */
-        mPopupWindow = new PopupWindow(view, width, CommonTools.dp2px(mContext,100));
+        mPopupWindow = new PopupWindow(view, CommonTools.dp2px(mContext,70), CommonTools.dp2px(mContext,100));
 		/* 设置背景显示 */
         mPopupWindow.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.buy_pop_bg));
 //        mPopupWindow.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.cell_white_bg));
@@ -102,7 +102,7 @@ public class CheckSpinnerView {
      * 展示区域选择的对话框
      */
     public void showSpinnerPop(View view, Animation animation, final List<? extends OptionEntity> leftList,
-                               int selectedLeftPos,int layoutWidth) {
+                               int selectedLeftPos) {
         if(mPoupWindowListener != null){
             mPoupWindowListener.poupWindowDismiss(true);
         }
@@ -112,7 +112,7 @@ public class CheckSpinnerView {
         }
         if(mPopupWindow == null){
             view1 = inflater.from(mContext).inflate(R.layout.buy_distance_spinner_view, null);
-            initPopuWindow(view1,layoutWidth);
+            initPopuWindow(view1);
 
             spinnerGap = view1.findViewById(R.id.spinner_gap);
             listView1= (ListView) view1.findViewById(R.id.listView1);

@@ -11,6 +11,7 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.EvaluateEntities;
+import com.shinaier.laundry.snlfactory.util.TimeUtils;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/16.
  */
 
-public class UserEvaluateAdapter extends BaseAdapterNew<EvaluateEntities.Data> {
+public class UserEvaluateAdapter extends BaseAdapterNew<EvaluateEntities.EvaluateResult> {
     private PositionListener listener;
 
     public interface PositionListener{
@@ -30,7 +31,7 @@ public class UserEvaluateAdapter extends BaseAdapterNew<EvaluateEntities.Data> {
         this.listener = listener;
     }
 
-    public UserEvaluateAdapter(Context context, List<EvaluateEntities.Data> mDatas) {
+    public UserEvaluateAdapter(Context context, List<EvaluateEntities.EvaluateResult> mDatas) {
         super(context, mDatas);
     }
 
@@ -41,7 +42,7 @@ public class UserEvaluateAdapter extends BaseAdapterNew<EvaluateEntities.Data> {
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        EvaluateEntities.Data item = getItem(position);
+        EvaluateEntities.EvaluateResult item = getItem(position);
 
         TextView personPhoneNum = ViewHolder.get(convertView,R.id.person_phone_num);
         TextView personEvaluateTime = ViewHolder.get(convertView,R.id.person_evaluate_time);
@@ -53,14 +54,14 @@ public class UserEvaluateAdapter extends BaseAdapterNew<EvaluateEntities.Data> {
         ImageView ivEvaluateBt = ViewHolder.get(convertView,R.id.iv_evaluate_bt);
 
         if(item != null){
-            personPhoneNum.setText(item.getMobile());
-            personEvaluateTime.setText(item.getTime());
-            assessNum.setText(item.getGrade() + "分");
-            ratingBarPublishComment.setRating(Float.parseFloat(item.getGrade()));
-            evaluateContent.setText(item.getUserContent());
-            if(item.getMerContent() != null){
+            personPhoneNum.setText(item.getuName());
+            personEvaluateTime.setText(TimeUtils.formatTime(item.getaTime()));
+            assessNum.setText(item.getLevel() + "分");
+            ratingBarPublishComment.setRating(Float.parseFloat(item.getLevel()));
+            evaluateContent.setText(item.getuComment());
+            if(item.getHasAnswer().equals("1")){
                 llStoreReply.setVisibility(View.VISIBLE);
-                storeReplyContent.setText(item.getMerContent());
+                storeReplyContent.setText(item.getmAnswer());
                 ivEvaluateBt.setVisibility(View.GONE);
             }else {
                 llStoreReply.setVisibility(View.GONE);

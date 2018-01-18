@@ -285,6 +285,11 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
+        <activity android:name=".setting.ui.activity.AddCooperativeStoreActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+
 
         <service
             android:name=".service.JobSchedulerService"

@@ -16,8 +16,8 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/18.
  */
 
-public class CashBackAdapter extends BaseAdapterNew<CashBackEntity.Record> {
-    public CashBackAdapter(Context context, List<CashBackEntity.Record> mDatas) {
+public class CashBackAdapter extends BaseAdapterNew<CashBackEntity.CashBackResult.CashBackList> {
+    public CashBackAdapter(Context context, List<CashBackEntity.CashBackResult.CashBackList> mDatas) {
         super(context, mDatas);
     }
 
@@ -28,15 +28,15 @@ public class CashBackAdapter extends BaseAdapterNew<CashBackEntity.Record> {
 
     @Override
     protected void setViewData(View convertView, int position) {
-        CashBackEntity.Record item = getItem(position);
+        CashBackEntity.CashBackResult.CashBackList item = getItem(position);
         TextView cashBackName = ViewHolder.get(convertView,R.id.cash_back_name);
         TextView cashBackTime = ViewHolder.get(convertView,R.id.cash_back_time);
         TextView cashBackNum = ViewHolder.get(convertView,R.id.cash_back_num);
 
         if(item != null){
-            cashBackName.setText(item.getUsername());
-            cashBackTime.setText(item.getTime());
-            cashBackNum.setText("￥" + item.getReward());
+            cashBackName.setText(item.getuName());
+            cashBackTime.setText(item.getUpdateTime());
+            cashBackNum.setText("￥" + item.getValue());
         }
     }
 }

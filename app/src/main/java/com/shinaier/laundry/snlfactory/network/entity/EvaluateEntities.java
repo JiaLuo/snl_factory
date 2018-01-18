@@ -9,68 +9,56 @@ import java.util.List;
  */
 
 public class EvaluateEntities {
-    @SerializedName("count")
-    private int count;
-    @SerializedName("data")
-    private List<Data> datas;
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<EvaluateResult> results;
 
-    public int getCount() {
-        return count;
+    public int getCode() {
+        return code;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public List<Data> getDatas() {
-        return datas;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setDatas(List<Data> datas) {
-        this.datas = datas;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public int getRetcode() {
-        return retcode;
+    public List<EvaluateResult> getResults() {
+        return results;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setResults(List<EvaluateResult> results) {
+        this.results = results;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public class Data{
-        @SerializedName("grade")
-        private String grade;
+    public class EvaluateResult{
         @SerializedName("id")
         private String id;
-        @SerializedName("mer_content")
-        private String merContent;
-        @SerializedName("mobile")
-        private String mobile;
-        @SerializedName("time")
-        private String time;
-        @SerializedName("user_content")
-        private String userContent;
-
-        public String getGrade() {
-            return grade;
-        }
-
-        public void setGrade(String grade) {
-            this.grade = grade;
-        }
+        @SerializedName("level")
+        private String level;
+        @SerializedName("ucomment")
+        private String uComment;
+        @SerializedName("manswer")
+        private String mAnswer;
+        @SerializedName("has_answer")
+        private String hasAnswer;
+        @SerializedName("ctime")
+        private String cTime;
+        @SerializedName("atime")
+        private String aTime;
+        @SerializedName("uname")
+        private String uName;
+        @SerializedName("header")
+        private String header;
 
         public String getId() {
             return id;
@@ -80,36 +68,68 @@ public class EvaluateEntities {
             this.id = id;
         }
 
-        public String getMerContent() {
-            return merContent;
+        public String getLevel() {
+            return level;
         }
 
-        public void setMerContent(String merContent) {
-            this.merContent = merContent;
+        public void setLevel(String level) {
+            this.level = level;
         }
 
-        public String getMobile() {
-            return mobile;
+        public String getuComment() {
+            return uComment;
         }
 
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
+        public void setuComment(String uComment) {
+            this.uComment = uComment;
         }
 
-        public String getTime() {
-            return time;
+        public String getmAnswer() {
+            return mAnswer;
         }
 
-        public void setTime(String time) {
-            this.time = time;
+        public void setmAnswer(String mAnswer) {
+            this.mAnswer = mAnswer;
         }
 
-        public String getUserContent() {
-            return userContent;
+        public String getHasAnswer() {
+            return hasAnswer;
         }
 
-        public void setUserContent(String userContent) {
-            this.userContent = userContent;
+        public void setHasAnswer(String hasAnswer) {
+            this.hasAnswer = hasAnswer;
+        }
+
+        public String getcTime() {
+            return cTime;
+        }
+
+        public void setcTime(String cTime) {
+            this.cTime = cTime;
+        }
+
+        public String getaTime() {
+            return aTime;
+        }
+
+        public void setaTime(String aTime) {
+            this.aTime = aTime;
+        }
+
+        public String getuName() {
+            return uName;
+        }
+
+        public void setuName(String uName) {
+            this.uName = uName;
+        }
+
+        public String getHeader() {
+            return header;
+        }
+
+        public void setHeader(String header) {
+            this.header = header;
         }
     }
  }

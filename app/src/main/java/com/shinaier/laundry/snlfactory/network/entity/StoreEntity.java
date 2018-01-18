@@ -31,6 +31,16 @@ public class StoreEntity {
     private String msg;
     @SerializedName("result")
     private StoreResult result;
+    @SerializedName("message_count")
+    private String messageCount;
+
+    public String getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(String messageCount) {
+        this.messageCount = messageCount;
+    }
 
     public int getCode() {
         return code;

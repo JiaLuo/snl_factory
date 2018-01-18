@@ -9,225 +9,272 @@ import java.util.List;
  */
 
 public class OperateAnalysisEntities {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OperateAnalysisDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OperateAnalysisResult result;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OperateAnalysisDatas getDatas() {
-        return datas;
+    public OperateAnalysisResult getResult() {
+        return result;
     }
 
-    public void setDatas(OperateAnalysisDatas datas) {
-        this.datas = datas;
+    public void setResult(OperateAnalysisResult result) {
+        this.result = result;
     }
 
-    public class OperateAnalysisDatas{
-        @SerializedName("date")
-        private List<String> dates;
-        @SerializedName("sum")
-        private String sum;
-        @SerializedName("psum")
-        private String psum;
-        @SerializedName("now")
-        private Nows nows;
-        @SerializedName("previous")
-        private Previous previouses;
-        @SerializedName("day")
-        private List<String> days;
-        @SerializedName("now_sum")
-        private List<String> nowSums;
-        @SerializedName("previous_sum")
-        private List<String> previousSums;
-        @SerializedName("proportion")
-        private Proportion proportions;
+    public class OperateAnalysisResult{
+        @SerializedName("time")
+        private String time;
+        @SerializedName("now_info")
+        private OperateAnalysisNowInfo nowInfo;
+        @SerializedName("last_info")
+        private OperateAnalysisLastInfo lastInfo;
+        @SerializedName("increase")
+        private OperateAnalysisIncrease increase;
+        @SerializedName("now_business_total")
+        private String nowBusinessTotal;
+        @SerializedName("before_business_total")
+        private String beforeBusinessTotal;
+        @SerializedName("now_month_data")
+        private List<OperateAnalysisNowMonth> nowMonths;
+        @SerializedName("last_month_data")
+        private List<OperateAnalysisLastMonth> lastMonthData;
+        @SerializedName("monarr")
+        private List<String> monarr;
 
-        public List<String> getPreviousSums() {
-            return previousSums;
+        public String getTime() {
+            return time;
         }
 
-        public void setPreviousSums(List<String> previousSums) {
-            this.previousSums = previousSums;
+        public void setTime(String time) {
+            this.time = time;
         }
 
-        public List<String> getDates() {
-            return dates;
+        public OperateAnalysisNowInfo getNowInfo() {
+            return nowInfo;
         }
 
-        public void setDates(List<String> dates) {
-            this.dates = dates;
+        public void setNowInfo(OperateAnalysisNowInfo nowInfo) {
+            this.nowInfo = nowInfo;
         }
 
-        public String getSum() {
-            return sum;
+        public OperateAnalysisLastInfo getLastInfo() {
+            return lastInfo;
         }
 
-        public void setSum(String sum) {
-            this.sum = sum;
+        public void setLastInfo(OperateAnalysisLastInfo lastInfo) {
+            this.lastInfo = lastInfo;
         }
 
-        public String getPsum() {
-            return psum;
+        public OperateAnalysisIncrease getIncrease() {
+            return increase;
         }
 
-        public void setPsum(String psum) {
-            this.psum = psum;
+        public void setIncrease(OperateAnalysisIncrease increase) {
+            this.increase = increase;
         }
 
-        public Nows getNows() {
-            return nows;
+        public String getNowBusinessTotal() {
+            return nowBusinessTotal;
         }
 
-        public void setNows(Nows nows) {
-            this.nows = nows;
+        public void setNowBusinessTotal(String nowBusinessTotal) {
+            this.nowBusinessTotal = nowBusinessTotal;
         }
 
-        public Previous getPreviouses() {
-            return previouses;
+        public String getBeforeBusinessTotal() {
+            return beforeBusinessTotal;
         }
 
-        public void setPreviouses(Previous previouses) {
-            this.previouses = previouses;
+        public void setBeforeBusinessTotal(String beforeBusinessTotal) {
+            this.beforeBusinessTotal = beforeBusinessTotal;
         }
 
-        public List<String> getDays() {
-            return days;
+        public List<OperateAnalysisNowMonth> getNowMonths() {
+            return nowMonths;
         }
 
-        public void setDays(List<String> days) {
-            this.days = days;
+        public void setNowMonths(List<OperateAnalysisNowMonth> nowMonths) {
+            this.nowMonths = nowMonths;
         }
 
-        public List<String> getNowSums() {
-            return nowSums;
+        public List<OperateAnalysisLastMonth> getLastMonthData() {
+            return lastMonthData;
         }
 
-        public void setNowSums(List<String> nowSums) {
-            this.nowSums = nowSums;
+        public void setLastMonthData(List<OperateAnalysisLastMonth> lastMonthData) {
+            this.lastMonthData = lastMonthData;
         }
 
-        public Proportion getProportions() {
-            return proportions;
+        public List<String> getMonarr() {
+            return monarr;
         }
 
-        public void setProportions(Proportion proportions) {
-            this.proportions = proportions;
+        public void setMonarr(List<String> monarr) {
+            this.monarr = monarr;
         }
 
-        public class Proportion{
-            @SerializedName("sum")
-            private double sum;
-            @SerializedName("all")
-            private double all;
-            @SerializedName("cancel")
-            private double cancel;
+        public class OperateAnalysisLastMonth{
+            @SerializedName("day")
+            private String day;
+            @SerializedName("total")
+            private String total;
 
-            public double getSum() {
-                return sum;
+            public String getDay() {
+                return day;
             }
 
-            public void setSum(double sum) {
-                this.sum = sum;
+            public void setDay(String day) {
+                this.day = day;
             }
 
-            public double getAll() {
-                return all;
+            public String getTotal() {
+                return total;
             }
 
-            public void setAll(double all) {
-                this.all = all;
-            }
-
-            public double getCancel() {
-                return cancel;
-            }
-
-            public void setCancel(double cancel) {
-                this.cancel = cancel;
+            public void setTotal(String total) {
+                this.total = total;
             }
         }
 
-        public class Previous{
-            @SerializedName("sum")
-            private double sum;
-            @SerializedName("all")
-            private double all;
-            @SerializedName("cancel")
-            private double cancel;
+        public class OperateAnalysisNowMonth{
+            @SerializedName("day")
+            private String day;
+            @SerializedName("total")
+            private String total;
 
-            public double getSum() {
-                return sum;
+            public String getDay() {
+                return day;
             }
 
-            public void setSum(double sum) {
-                this.sum = sum;
+            public void setDay(String day) {
+                this.day = day;
             }
 
-            public double getAll() {
-                return all;
+            public String getTotal() {
+                return total;
             }
 
-            public void setAll(double all) {
-                this.all = all;
-            }
-
-            public double getCancel() {
-                return cancel;
-            }
-
-            public void setCancel(double cancel) {
-                this.cancel = cancel;
+            public void setTotal(String total) {
+                this.total = total;
             }
         }
 
-        public class Nows{
-            @SerializedName("sum")
-            private double sum;
-            @SerializedName("all")
-            private double all;
-            @SerializedName("cancel")
-            private double cancel;
 
-            public double getSum() {
-                return sum;
+        public class OperateAnalysisIncrease{
+            @SerializedName("business_total")
+            private String businessTotal;
+            @SerializedName("item_total")
+            private String itemTotal;
+            @SerializedName("cancel_item_total")
+            private String cancelItemTotal;
+
+            public String getBusinessTotal() {
+                return businessTotal;
             }
 
-            public void setSum(double sum) {
-                this.sum = sum;
+            public void setBusinessTotal(String businessTotal) {
+                this.businessTotal = businessTotal;
             }
 
-            public double getAll() {
-                return all;
+            public String getItemTotal() {
+                return itemTotal;
             }
 
-            public void setAll(double all) {
-                this.all = all;
+            public void setItemTotal(String itemTotal) {
+                this.itemTotal = itemTotal;
             }
 
-            public double getCancel() {
-                return cancel;
+            public String getCancelItemTotal() {
+                return cancelItemTotal;
             }
 
-            public void setCancel(double cancel) {
-                this.cancel = cancel;
+            public void setCancelItemTotal(String cancelItemTotal) {
+                this.cancelItemTotal = cancelItemTotal;
+            }
+        }
+
+        public class OperateAnalysisLastInfo{
+            @SerializedName("business_total")
+            private double businessTotal;
+            @SerializedName("item_total")
+            private double itemTotal;
+            @SerializedName("cancel_item_total")
+            private double cancelItemTotal;
+
+            public double getBusinessTotal() {
+                return businessTotal;
+            }
+
+            public void setBusinessTotal(double businessTotal) {
+                this.businessTotal = businessTotal;
+            }
+
+            public double getItemTotal() {
+                return itemTotal;
+            }
+
+            public void setItemTotal(double itemTotal) {
+                this.itemTotal = itemTotal;
+            }
+
+            public double getCancelItemTotal() {
+                return cancelItemTotal;
+            }
+
+            public void setCancelItemTotal(double cancelItemTotal) {
+                this.cancelItemTotal = cancelItemTotal;
+            }
+        }
+
+        public class OperateAnalysisNowInfo{
+            @SerializedName("business_total")
+            private double businessTotal;
+            @SerializedName("item_total")
+            private double itemTotal;
+            @SerializedName("cancel_item_total")
+            private double cancelItemTotal;
+
+            public double getBusinessTotal() {
+                return businessTotal;
+            }
+
+            public void setBusinessTotal(double businessTotal) {
+                this.businessTotal = businessTotal;
+            }
+
+            public double getItemTotal() {
+                return itemTotal;
+            }
+
+            public void setItemTotal(double itemTotal) {
+                this.itemTotal = itemTotal;
+            }
+
+            public double getCancelItemTotal() {
+                return cancelItemTotal;
+            }
+
+            public void setCancelItemTotal(double cancelItemTotal) {
+                this.cancelItemTotal = cancelItemTotal;
             }
         }
     }

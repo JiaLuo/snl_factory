@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.common.widget.FootLoadingListView;
 import com.common.widget.PullToRefreshBase;
@@ -32,7 +33,6 @@ import java.util.IdentityHashMap;
 
 public class CashBackActivity extends ToolBarActivity {
     private static final int REQUEST_CODE_CASH_BACK = 0x1;
-    private static final int REQUEST_CODE_CASH_BACK_MORE = 0x2;
 
     @ViewInject(R.id.cash_back_record_money)
     private TextView cashBackRecordMoney;
@@ -45,15 +45,12 @@ public class CashBackActivity extends ToolBarActivity {
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
 
-    private CashBackEntity cashBackEntity;
-    private CashBackAdapter cashBackAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cash_back_act);
         ViewInjectUtils.inject(this);
-        loadData(false);
+        loadData();
         initView();
     }
 
@@ -67,12 +64,11 @@ public class CashBackActivity extends ToolBarActivity {
         cashBackRecordList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                loadData(false);
+                loadData();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                loadData(true);
             }
         });
         leftButton.setOnClickListener(new View.OnClickListener() {
@@ -83,18 +79,10 @@ public class CashBackActivity extends ToolBarActivity {
         });
     }
 
-    private void loadData(boolean isMore) {
-        int code;
+    private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        if(isMore){
-            params.put("page",cashBackAdapter.getPage() + 1 + "");
-            code = REQUEST_CODE_CASH_BACK_MORE;
-        }else {
-            code = REQUEST_CODE_CASH_BACK;
-        }
-        params.put("limit","10");
-        requestHttpData(Constants.Urls.URL_POST_CASH_BACK,code, FProtocol.HttpMethod.POST,params);
+        requestHttpData(Constants.Urls.URL_POST_CASH_BACK,REQUEST_CODE_CASH_BACK, FProtocol.HttpMethod.POST,params);
     }
 
     @Override
@@ -104,38 +92,31 @@ public class CashBackActivity extends ToolBarActivity {
             case REQUEST_CODE_CASH_BACK:
                 cashBackRecordList.onRefreshComplete();
                 if(data != null){
-                    cashBackEntity = Parsers.getCashBackEntity(data);
-                    setData();
-                    if(cashBackEntity != null && cashBackEntity.getRecord() != null
-                            && cashBackEntity.getRecord().size() > 0){
-                        cashBackAdapter = new CashBackAdapter(this,cashBackEntity.getRecord());
-                        cashBackRecordList.setAdapter(cashBackAdapter);
-                        if(cashBackAdapter.getPage() < cashBackEntity.getCount()){
-                            cashBackRecordList.setCanAddMore(true);
-                        }else {
-                            cashBackRecordList.setCanAddMore(false);
-                        }
-                    }
-                }
-                break;
-            case REQUEST_CODE_CASH_BACK_MORE:
-                cashBackRecordList.setOnRefreshComplete();
-                if(data != null){
                     CashBackEntity cashBackEntity = Parsers.getCashBackEntity(data);
-                    cashBackAdapter.addDatas(cashBackEntity.getRecord());
-                    if(cashBackAdapter.getPage() < cashBackEntity.getCount()){
-                        cashBackRecordList.setCanAddMore(true);
-                    }else {
-                        cashBackRecordList.setCanAddMore(false);
+                    if (cashBackEntity != null){
+                        if (cashBackEntity.getCode() == 0){
+                            if (cashBackEntity.getResult() != null){
+                                CashBackEntity.CashBackResult result = cashBackEntity.getResult();
+                                if (result != null){
+                                    setData(result.getBackBalance(),result.getShareTotal());
+                                    if (result.getLists() != null && result.getLists().size() > 0){
+                                        CashBackAdapter cashBackAdapter = new CashBackAdapter(this,result.getLists());
+                                        cashBackRecordList.setAdapter(cashBackAdapter);
+                                    }
+                                }
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,cashBackEntity.getMsg());
+                        }
                     }
                 }
                 break;
         }
     }
 
-    private void setData() {
-        cashBackRecordMoney.setText(String.valueOf(formatMoney(cashBackEntity.getTotalFee())));
-        cashBackRecordPerson.setText(cashBackEntity.getPersonalNumber());
+    private void setData(double backBalance,String shareTotal) {
+        cashBackRecordMoney.setText(formatMoney(backBalance));
+        cashBackRecordPerson.setText(shareTotal);
     }
 
     public String formatMoney(double money){

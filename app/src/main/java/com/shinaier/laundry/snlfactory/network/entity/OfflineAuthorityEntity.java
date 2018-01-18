@@ -9,117 +9,110 @@ import java.util.List;
  */
 
 public class OfflineAuthorityEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineAuthorityDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private OfflineAuthorityResult result;
 
-    public OfflineAuthorityDatas getDatas() {
-        return datas;
+    public int getCode() {
+        return code;
     }
 
-    public void setDatas(OfflineAuthorityDatas datas) {
-        this.datas = datas;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public int getRetcode() {
-        return retcode;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getStatus() {
-        return status;
+    public OfflineAuthorityResult getResult() {
+        return result;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setResult(OfflineAuthorityResult result) {
+        this.result = result;
     }
 
+    public class OfflineAuthorityResult{
+        @SerializedName("message_count")
+        private String messageCount;
+        @SerializedName("mer_logo")
+        private String merLogo;
+        @SerializedName("mer_name")
+        private String merName;
+        @SerializedName("might")
+        private List<OfflineAuthorityMight> mights;
 
-    public class OfflineAuthorityDatas{
-        @SerializedName("no_read_number")
-        private int noReadNumber;
-        @SerializedName("merchant")
-        private OfflineAuthorityMerchant merchant;
-        @SerializedName("data")
-        private List<OfflineAuthorities> authorities;
-
-        public int getNoReadNumber() {
-            return noReadNumber;
+        public String getMessageCount() {
+            return messageCount;
         }
 
-        public void setNoReadNumber(int noReadNumber) {
-            this.noReadNumber = noReadNumber;
+        public void setMessageCount(String messageCount) {
+            this.messageCount = messageCount;
         }
 
-        public List<OfflineAuthorities> getAuthorities() {
-            return authorities;
+        public String getMerLogo() {
+            return merLogo;
         }
 
-        public void setAuthorities(List<OfflineAuthorities> authorities) {
-            this.authorities = authorities;
+        public void setMerLogo(String merLogo) {
+            this.merLogo = merLogo;
         }
 
-        public OfflineAuthorityMerchant getMerchant() {
-            return merchant;
+        public String getMerName() {
+            return merName;
         }
 
-        public void setMerchant(OfflineAuthorityMerchant merchant) {
-            this.merchant = merchant;
+        public void setMerName(String merName) {
+            this.merName = merName;
         }
 
-
-
-        public class OfflineAuthorities{
-            @SerializedName("value")
-            private String value;
-            @SerializedName("name")
-            private String name;
-
-            public String getValue() {
-                return value;
-            }
-
-            public void setValue(String value) {
-                this.value = value;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
+        public List<OfflineAuthorityMight> getMights() {
+            return mights;
         }
 
-        public class OfflineAuthorityMerchant{
-            @SerializedName("mname")
-            private String mName;
-            @SerializedName("logo")
-            private String logo;
-
-            public String getmName() {
-                return mName;
-            }
-
-            public void setmName(String mName) {
-                this.mName = mName;
-            }
-
-            public String getLogo() {
-                return logo;
-            }
-
-            public void setLogo(String logo) {
-                this.logo = logo;
-            }
+        public void setMights(List<OfflineAuthorityMight> mights) {
+            this.mights = mights;
         }
 
+        public class OfflineAuthorityMight{
+            @SerializedName("module")
+            private String module;
+            @SerializedName("module_name")
+            private String module_name;
+            @SerializedName("state")
+            private String state;
+
+            public String getModule() {
+                return module;
+            }
+
+            public void setModule(String module) {
+                this.module = module;
+            }
+
+            public String getModule_name() {
+                return module_name;
+            }
+
+            public void setModule_name(String module_name) {
+                this.module_name = module_name;
+            }
+
+            public String getState() {
+                return state;
+            }
+
+            public void setState(String state) {
+                this.state = state;
+            }
+        }
     }
 }

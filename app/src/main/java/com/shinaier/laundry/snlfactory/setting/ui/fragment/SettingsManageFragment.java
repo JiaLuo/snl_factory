@@ -48,6 +48,7 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
     private static final int REQUEST_CODE_SETTINGS = 0x1;
     private static final int REQUEST_CODE_UPDATE_VERSION = 0x2;
     private static final int REQUEST_CODE_QUIT_LOGIN = 0x3;
+    public static final int ISCHAIN = 0x4;
 
     private View view;
     private Context context;
@@ -112,6 +113,7 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
         RelativeLayout rlStoreInfo =  view.findViewById(R.id.rl_store_info);
         RelativeLayout rlConnectBluetooth =  view.findViewById(R.id.rl_connect_bluetooth);
         RelativeLayout rlCooperationStore = view.findViewById(R.id.rl_cooperation_store);
+        RelativeLayout rlChainStore = view.findViewById(R.id.rl_chain_store);
 
         rlFeedback.setOnClickListener(this);
         rlRevisePhone.setOnClickListener(this);
@@ -120,6 +122,7 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
         rlStoreInfo.setOnClickListener(this);
         rlConnectBluetooth.setOnClickListener(this);
         rlCooperationStore.setOnClickListener(this);
+        rlChainStore.setOnClickListener(this);
     }
 
     @Override
@@ -174,6 +177,12 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
             case R.id.rl_cooperation_store:
                 //合作门店
                 startActivity(new Intent(context,CooperationStoreActivity.class));
+                break;
+            case R.id.rl_chain_store:
+                //连锁门店
+                Intent intent = new Intent(context,CooperationStoreActivity.class);
+                intent.putExtra("is_chain",ISCHAIN);
+                startActivity(intent);
                 break;
         }
     }

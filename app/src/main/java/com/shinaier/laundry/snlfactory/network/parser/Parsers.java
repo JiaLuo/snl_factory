@@ -2,6 +2,7 @@ package com.shinaier.laundry.snlfactory.network.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shinaier.laundry.snlfactory.manage.entities.AddEmployeeJurisdictionEntity;
 import com.shinaier.laundry.snlfactory.network.entity.AddCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.AddItemShowEntities;
 import com.shinaier.laundry.snlfactory.network.entity.AddProjectOfflineConfirmEntity;
@@ -14,8 +15,10 @@ import com.shinaier.laundry.snlfactory.network.entity.CashCouponCenterEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CashCouponEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ColorSettingSuccessEntities;
+import com.shinaier.laundry.snlfactory.network.entity.CooperativeStoreEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CraftworkAddPriceEntities;
 import com.shinaier.laundry.snlfactory.network.entity.EditCommodityEntity;
+import com.shinaier.laundry.snlfactory.network.entity.EditEmployeeInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.EditItemShowEntities;
 import com.shinaier.laundry.snlfactory.network.entity.EmployeeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
@@ -26,8 +29,10 @@ import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceDetailEntitie
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceEntities;
 import com.shinaier.laundry.snlfactory.network.entity.MerchantCardInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.MerchantCardListEntities;
-import com.shinaier.laundry.snlfactory.network.entity.MessageNoticeEntity;
+import com.shinaier.laundry.snlfactory.network.entity.MessageDetailEntity;
+import com.shinaier.laundry.snlfactory.network.entity.MessageEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
+import com.shinaier.laundry.snlfactory.network.entity.OfflineAuthorityEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineChangeMemberInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineCustomInfoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineHangOnEntity;
@@ -213,21 +218,12 @@ public class Parsers {
     }
 
     /**
-     * 获取消息通知数据
+     * 获取消息列表
      * @param data
      * @return
      */
-    public static List<MessageNoticeEntity> getMessageNoticeEntity(String data){
-        List<MessageNoticeEntity> messageNoticeEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            messageNoticeEntities = gson.fromJson(data1,new TypeToken<List<MessageNoticeEntity>>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return messageNoticeEntities;
+    public static MessageEntity getMessageEntity(String data){
+        return gson.fromJson(data,new TypeToken<MessageEntity>(){}.getType());
     }
 
     /**
@@ -235,17 +231,8 @@ public class Parsers {
      * @param data
      * @return
      */
-    public static List<EmployeeEntity> getEmployeeEntity(String data){
-        List<EmployeeEntity> employeeEntities = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            employeeEntities = gson.fromJson(data1,new TypeToken<List<EmployeeEntity>>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return employeeEntities;
+    public static EmployeeEntity getEmployeeEntity(String data){
+        return gson.fromJson(data,new TypeToken<EmployeeEntity>(){}.getType());
     }
 
     /**
@@ -273,16 +260,7 @@ public class Parsers {
      * @return
      */
     public static CashBackEntity getCashBackEntity(String data){
-        CashBackEntity cashBackEntity = null;
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            String data1 = jsonObject.optString("data");
-            cashBackEntity  = gson.fromJson(data1,new TypeToken<CashBackEntity>(){}.getType());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return cashBackEntity;
+        return gson.fromJson(data,new TypeToken<CashBackEntity>(){}.getType());
     }
 
     /**
@@ -815,5 +793,50 @@ public class Parsers {
      */
     public static CashConponEntity getCashConponEntity(String data){
         return gson.fromJson(data,new TypeToken<CashConponEntity>(){}.getType());
+    }
+
+    /**
+     * 消息详情
+     * @param data
+     * @return
+     */
+    public static MessageDetailEntity getMessageDetailEntity(String data){
+        return gson.fromJson(data,new TypeToken<MessageDetailEntity>(){}.getType());
+    }
+
+    /**
+     * 员工添加权限
+     * @param data
+     * @return
+     */
+    public static AddEmployeeJurisdictionEntity getAddEmployeeJurisdictionEntity(String data){
+        return gson.fromJson(data,new TypeToken<AddEmployeeJurisdictionEntity>(){}.getType());
+    }
+
+    /**
+     * 编辑员工信息
+     * @param data
+     * @return
+     */
+    public static EditEmployeeInfoEntity getEditEmployeeInfoEntity(String data){
+        return gson.fromJson(data,new TypeToken<EditEmployeeInfoEntity>(){}.getType());
+    }
+
+    /**
+     * 获取线下收银权限
+     * @param data
+     * @return
+     */
+    public static OfflineAuthorityEntity getOfflineAuthorityEntity(String data){
+        return gson.fromJson(data,new TypeToken<OfflineAuthorityEntity>(){}.getType());
+    }
+
+    /**
+     * 合作店铺列表
+     * @param data
+     * @return
+     */
+    public static CooperativeStoreEntities getCooperativeStoreEntities(String data){
+        return gson.fromJson(data,new TypeToken<CooperativeStoreEntities>(){}.getType());
     }
 }

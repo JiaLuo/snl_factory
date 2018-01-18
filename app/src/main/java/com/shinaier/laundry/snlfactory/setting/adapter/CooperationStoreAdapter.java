@@ -1,15 +1,16 @@
 package com.shinaier.laundry.snlfactory.setting.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
-import com.shinaier.laundry.snlfactory.setting.entities.CooperationStoreEntity;
+import com.shinaier.laundry.snlfactory.network.entity.CooperativeStoreEntities;
 
 import java.util.List;
 
@@ -17,31 +18,26 @@ import java.util.List;
  * Created by 张家洛 on 2017/10/30.
  */
 
-public class CooperationStoreAdapter extends BaseAdapterNew<CooperationStoreEntity> {
-    private EditStoreListener listener;
-    private boolean isShow = false;
+public class CooperationStoreAdapter extends BaseAdapterNew<CooperativeStoreEntities.CooperativeStoreResults> {
+    private ShowViewListener showViewListener;
+    private boolean isDel;
+    private boolean isAdd;//如果是搜索页面 用到这个adapter 选择按钮就常显示 否则。。。
 
-    public boolean isShow() {
-        return isShow;
+    public interface ShowViewListener {
+        void onSelected(ImageView view, int position);
+    }
+    public void setShowView(ShowViewListener showViewListener){
+        this.showViewListener = showViewListener;
     }
 
-    public void setShow(boolean show) {
-        isShow = show;
-    }
-
-    public interface EditStoreListener{
-        void onClick(int position);
-    }
-    public void setEditStoreListener(EditStoreListener listener){
-        this.listener = listener;
-    }
-
-    public CooperationStoreAdapter(Context context, List<CooperationStoreEntity> mDatas) {
+    public CooperationStoreAdapter(Context context, List<CooperativeStoreEntities.CooperativeStoreResults> mDatas,boolean isAdd) {
         super(context, mDatas);
+        this.isAdd = isAdd;
     }
 
-    public void setIsShow(boolean isShow){
-        this.isShow = isShow;
+    public void isDelete(boolean isDel){
+        this.isDel = isDel;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -51,34 +47,42 @@ public class CooperationStoreAdapter extends BaseAdapterNew<CooperationStoreEnti
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        CooperationStoreEntity item = getItem(position);
-        final ImageView ivItemSelect = ViewHolder.get(convertView,R.id.iv_item_select);
-        TextView tvStoreNum = ViewHolder.get(convertView,R.id.tv_store_num);
-        TextView tvStoreName = ViewHolder.get(convertView,R.id.tv_store_name);
-        LinearLayout llSelectStore = ViewHolder.get(convertView,R.id.ll_select_store);
+        CooperativeStoreEntities.CooperativeStoreResults item = getItem(position);
+
+        final ImageView cooperativeStoreStatus = ViewHolder.get(convertView,R.id.cooperative_store_status);
+        SimpleDraweeView cooperativeStoreImg = ViewHolder.get(convertView,R.id.cooperative_store_img);
+        TextView cooperativeStoreName = ViewHolder.get(convertView,R.id.cooperative_store_name);
+        TextView cooperativeStoreNum = ViewHolder.get(convertView,R.id.cooperative_store_num);
+        TextView cooperativeStorePhone = ViewHolder.get(convertView,R.id.cooperative_store_phone);
+        TextView cooperativeStoreAddress = ViewHolder.get(convertView,R.id.cooperative_store_address);
 
 
-        if (isShow){
-            ivItemSelect.setVisibility(View.VISIBLE);
+        if (isDel || isAdd){
+            cooperativeStoreStatus.setVisibility(View.VISIBLE);
         }else {
-            ivItemSelect.setVisibility(View.GONE);
+            cooperativeStoreStatus.setVisibility(View.GONE);
         }
-        llSelectStore.setOnClickListener(new View.OnClickListener() {
+
+        cooperativeStoreStatus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (listener != null){
-                    listener.onClick(position);
+            public void onClick(View v) {
+                if(showViewListener != null){
+                    showViewListener.onSelected(cooperativeStoreStatus,position);
                 }
             }
         });
 
         if (item != null){
-            tvStoreNum.setText(item.getNum());
-            tvStoreName.setText(item.getName());
-            if(item.isSelect){
-                ivItemSelect.setSelected(true);
+            cooperativeStoreImg.setImageURI(Uri.parse(item.getmLogo()));
+            cooperativeStoreName.setText(item.getmName());
+            cooperativeStoreNum.setText(item.getAcceptId());
+            cooperativeStorePhone.setText(item.getPhoneNumber());
+            cooperativeStoreAddress.setText(item.getmAddress());
+
+            if (item.isSelect){
+                cooperativeStoreStatus.setSelected(true);
             }else {
-                ivItemSelect.setSelected(false);
+                cooperativeStoreStatus.setSelected(false);
             }
         }
     }

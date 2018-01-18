@@ -86,7 +86,7 @@ public class LeaveFactoryActivity extends ToolBarActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.rl_choose_store:
-                mCheckSpinnerView.showSpinnerPop(rlChooseStore, animation, optionEntities, orderByPosition,width);
+//                mCheckSpinnerView.showSpinnerPop(rlChooseStore, animation, optionEntities, orderByPosition,width);
                 break;
         }
     }

@@ -1,7 +1,6 @@
 package com.shinaier.laundry.snlfactory.offlinecash.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,9 +19,9 @@ import java.util.List;
  * Created by 张家洛 on 2017/7/25.
  */
 
-public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClothesData> {
+public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClothesResult.TakeClothesList> {
     private Context context;
-    private List<TakeClothesEntity.TakeClothesData> mDatas;
+    private List<TakeClothesEntity.TakeClothesResult.TakeClothesList> mDatas;
     private RelativeLayout rlTakeClothesOrderShowMore;
     private TextView takeClothesShowSurplus;
     private WrapHeightListView takeClothesOrderListMore;
@@ -32,6 +31,9 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
     private String countNum;
     private PositionListener listener;
     private TelPhoneListener telPhoneListener;
+    private String name;
+    private String mobile;
+
     public interface TelPhoneListener{
         void onTelPhone(int position);
     }
@@ -48,21 +50,23 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
     }
 
     public interface TakeClothesShowMoreListener{
-        void onClick(int position, ImageView iv, TextView tv);
+        void onClick(int position,ImageView iv,TextView tv);
     }
 
     public void setTakeClothesShowMoreListener(TakeClothesShowMoreListener takeClothesShowMoreListener){
         this.takeClothesShowMoreListener = takeClothesShowMoreListener;
     }
 
-    public TakeClothesAdapter(Context context, List<TakeClothesEntity.TakeClothesData> mDatas) {
+    public TakeClothesAdapter(Context context, List<TakeClothesEntity.TakeClothesResult.TakeClothesList> mDatas) {
         super(context, mDatas);
         this.context = context;
         this.mDatas = mDatas;
     }
 
-    public void setCountNum(String countNum){
+    public void setCountNum(String countNum,String name,String mobile){
         this.countNum = countNum;
+        this.name = name;
+        this.mobile = mobile;
     }
 
     @Override
@@ -72,7 +76,8 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        TakeClothesEntity.TakeClothesData item = getItem(position);
+        TakeClothesEntity.TakeClothesResult.TakeClothesList item = getItem(position);
+
         TextView takeClothesOrderNumber = ViewHolder.get(convertView,R.id.take_clothes_order_number);
         TextView takeClothesLineNum = ViewHolder.get(convertView,R.id.take_clothes_line_num);
         takeClothesOrderListMore = ViewHolder.get(convertView, R.id.take_clothes_order_list_more);
@@ -93,24 +98,22 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
             takeClothesOrderNumber.setText("订单号：" + item.getOrdersn());
             takeClothesLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
             //展示各个条目
-            if(item.getItems() != null && item.getItems().size() > 0){
-                initInnerList(item.getItems(),position);
-                takeClothesOrderTotalNum.setText(item.getItemsCount());
-                takeClothesOrderOutOfPocket.setText("￥" + item.getTotalAmount());
+            if(item.getItemses() != null && item.getItemses().size() > 0){
+                initInnerList(item.getItemses(),position);
+                takeClothesOrderTotalNum.setText(item.getCount() + "");
+                takeClothesOrderOutOfPocket.setText("￥" + item.getPayAmount());
             }
-            takeClothesOrderName.setText(item.getUserName());
-            if (item.getMobile() != null && !TextUtils.isEmpty(item.getMobile())){
-                takeClothesOrderPhoneNum.setText(item.getMobile());
-                takeClothesOrderPhoneNum.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (telPhoneListener != null){
-                            telPhoneListener.onTelPhone(position);
-                        }
+            takeClothesOrderName.setText(name);
+            takeClothesOrderPhoneNum.setText(mobile);
+            takeClothesOrderPhoneNum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (telPhoneListener != null){
+                        telPhoneListener.onTelPhone(position);
                     }
-                });
-            }
-            takeClothesOrderNowTime.setText(item.getUpdateTime());
+                }
+            });
+            takeClothesOrderNowTime.setText(item.getoTime());
             if (item.getPayState().equals("0")){
                 takeClothesPayStatus.setText("未支付");
                 takeClothesPayStatus.setTextColor(context.getResources().getColor(R.color.red));
@@ -145,7 +148,7 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
 
     }
 
-    private void initInnerList(List<TakeClothesEntity.TakeClothesData.TakeClothesItems> cleanItems, final int position) {
+    private void initInnerList(List<TakeClothesEntity.TakeClothesResult.TakeClothesList.TakeClothesItems> cleanItems, final int position) {
         if(cleanItems != null){
             if (cleanItems.size() <= 2){
                 rlTakeClothesOrderShowMore.setVisibility(View.GONE);
@@ -186,7 +189,7 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
             });
             rlTakeClothesPriceItem.setVisibility(View.VISIBLE);
         }else {
-            List<TakeClothesEntity.TakeClothesData.TakeClothesItems> item1 = new ArrayList<>();
+            List<TakeClothesEntity.TakeClothesResult.TakeClothesList.TakeClothesItems> item1 = new ArrayList<>();
             final TakeClothesInnerAdapter takeClothesInnerAdapter = new TakeClothesInnerAdapter(context,item1);
             takeClothesOrderListMore.setAdapter(takeClothesInnerAdapter);
 

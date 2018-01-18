@@ -9,107 +9,100 @@ import java.util.List;
  */
 
 public class CashBackEntity {
-    @SerializedName("totalFee")
-    private double totalFee;
-    @SerializedName("personalNumber")
-    private String personalNumber;
-    @SerializedName("count")
-    private int count;
-    @SerializedName("record")
-    private List<Record> record;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private CashBackResult result;
 
-    public double getTotalFee() {
-        return totalFee;
+    public int getCode() {
+        return code;
     }
 
-    public void setTotalFee(double totalFee) {
-        this.totalFee = totalFee;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getPersonalNumber() {
-        return personalNumber;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setPersonalNumber(String personalNumber) {
-        this.personalNumber = personalNumber;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public int getCount() {
-        return count;
+    public CashBackResult getResult() {
+        return result;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setResult(CashBackResult result) {
+        this.result = result;
     }
 
-    public List<Record> getRecord() {
-        return record;
-    }
+    public class CashBackResult{
+        @SerializedName("share_total")
+        private String shareTotal;
+        @SerializedName("back_balance")
+        private double backBalance;
+        @SerializedName("list")
+        private List<CashBackList> lists;
 
-    public void setRecord(List<Record> record) {
-        this.record = record;
-    }
-
-    public class  Record{
-        @SerializedName("id")
-        private String id;
-        @SerializedName("oid")
-        private String oId;
-        @SerializedName("reward")
-        private String reward;
-        @SerializedName("time")
-        private String time;
-        @SerializedName("userid")
-        private String userid;
-        @SerializedName("username")
-        private String username;
-
-        public String getId() {
-            return id;
+        public String getShareTotal() {
+            return shareTotal;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setShareTotal(String shareTotal) {
+            this.shareTotal = shareTotal;
         }
 
-        public String getoId() {
-            return oId;
+        public double getBackBalance() {
+            return backBalance;
         }
 
-        public void setoId(String oId) {
-            this.oId = oId;
+        public void setBackBalance(double backBalance) {
+            this.backBalance = backBalance;
         }
 
-        public String getReward() {
-            return reward;
+        public List<CashBackList> getLists() {
+            return lists;
         }
 
-        public void setReward(String reward) {
-            this.reward = reward;
+        public void setLists(List<CashBackList> lists) {
+            this.lists = lists;
         }
 
-        public String getTime() {
-            return time;
-        }
+        public class CashBackList{
+            @SerializedName("value")
+            private String value;
+            @SerializedName("update_time")
+            private String updateTime;
+            @SerializedName("uname")
+            private String uName;
 
-        public void setTime(String time) {
-            this.time = time;
-        }
+            public String getValue() {
+                return value;
+            }
 
-        public String getUserid() {
-            return userid;
-        }
+            public void setValue(String value) {
+                this.value = value;
+            }
 
-        public void setUserid(String userid) {
-            this.userid = userid;
-        }
+            public String getUpdateTime() {
+                return updateTime;
+            }
 
-        public String getUsername() {
-            return username;
-        }
+            public void setUpdateTime(String updateTime) {
+                this.updateTime = updateTime;
+            }
 
-        public void setUsername(String username) {
-            this.username = username;
+            public String getuName() {
+                return uName;
+            }
+
+            public void setuName(String uName) {
+                this.uName = uName;
+            }
         }
     }
 }

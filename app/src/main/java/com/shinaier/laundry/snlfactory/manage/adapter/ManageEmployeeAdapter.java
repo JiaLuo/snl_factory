@@ -15,7 +15,7 @@ import java.util.List;
  * Created by 张家洛 on 2017/2/16.
  */
 
-public class ManageEmployeeAdapter extends BaseAdapterNew<EmployeeEntity> {
+public class ManageEmployeeAdapter extends BaseAdapterNew<EmployeeEntity.EmployeeResult> {
     private OnEditorListener onEditorListener;
 
     public interface OnEditorListener{
@@ -27,7 +27,7 @@ public class ManageEmployeeAdapter extends BaseAdapterNew<EmployeeEntity> {
         this.onEditorListener = onEditorListener;
     }
 
-    public ManageEmployeeAdapter(Context context, List<EmployeeEntity> mDatas) {
+    public ManageEmployeeAdapter(Context context, List<EmployeeEntity.EmployeeResult> mDatas) {
         super(context, mDatas);
     }
 
@@ -38,7 +38,7 @@ public class ManageEmployeeAdapter extends BaseAdapterNew<EmployeeEntity> {
 
     @Override
     protected void setViewData(View convertView, final int position) {
-        EmployeeEntity item = getItem(position);
+        EmployeeEntity.EmployeeResult item = getItem(position);
         TextView employeeLineNum = ViewHolder.get(convertView,R.id.employee_line_num);
         TextView employeeName = ViewHolder.get(convertView,R.id.employee_name);
         TextView employeePhone = ViewHolder.get(convertView,R.id.employee_phone);
@@ -47,8 +47,8 @@ public class ManageEmployeeAdapter extends BaseAdapterNew<EmployeeEntity> {
 
         if(item != null){
             employeeLineNum.setText(String.valueOf(position + 1));
-            employeeName.setText(item.getNickname());
-            employeePhone.setText(item.getUsername());
+            employeeName.setText(item.getaName());
+            employeePhone.setText(item.getAccount());
         }
 
         employeeEdit.setOnClickListener(new View.OnClickListener() {

@@ -2,9 +2,7 @@ package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,7 +22,6 @@ import com.shinaier.laundry.snlfactory.network.entity.OfflineSendLaundryEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineHangOnAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineSendLaundryAdapter;
-import com.shinaier.laundry.snlfactory.offlinecash.ui.fragment.OfflineCashFragment;
 import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.ClearEditText;
@@ -90,14 +87,14 @@ public class SendLaundryActivity extends ToolBarActivity implements View.OnClick
 
     private void initView() {
         dialog = new CommonDialog(this);
-        if(extraFrom == OfflineCashFragment.HANGON){
-            setCenterTitle("上挂");
-            sendLaundryConfirm.setText("确定");
-            hangOnData(""); //上挂列表获取数据
-        }else {
-            setCenterTitle("送洗");
-            sendLaundryData(""); //送洗列表获取数据
-        }
+//        if(extraFrom == OfflineCashFragment.HANGON){
+//            setCenterTitle("上挂");
+//            sendLaundryConfirm.setText("确定");
+//            hangOnData(""); //上挂列表获取数据
+//        }else {
+//            setCenterTitle("送洗");
+//            sendLaundryData(""); //送洗列表获取数据
+//        }
         sendLaundryConfirm.setOnClickListener(this);
         leftButton.setOnClickListener(this);
         btnStartSearch.setOnClickListener(this);
@@ -114,115 +111,115 @@ public class SendLaundryActivity extends ToolBarActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.send_laundry_confirm:
-                if(extraFrom == OfflineCashFragment.HANGON){
-                    hangOnIds.clear();
-                    final StringBuffer stringBuffer = new StringBuffer();
-                    for (int i = 0; i < offlineHangOnEntity.getDatas().size(); i++) {
-                        if (offlineHangOnEntity.getDatas().get(i).isSelect){
-                            String id = offlineHangOnEntity.getDatas().get(i).getId();
-                            hangOnIds.add(id);
-                        }
-                    }
-
-                    if (hangOnIds.size() > 0){
-                        for (int i = 0; i < hangOnIds.size(); i++) {
-                            if(i == 0){
-                                if(hangOnIds.size() == 1){
-                                    stringBuffer.append("[").append('"').append(hangOnIds.get(i)).append('"').append("]");
-                                }else {
-                                    stringBuffer.append("[").append('"').append(hangOnIds.get(i)).append('"').append(",");
-                                }
-                            }else if(i > 0 && i < hangOnIds.size() -1){
-                                stringBuffer.append('"').append(hangOnIds.get(i)).append('"').append(",");
-                            }else {
-                                stringBuffer.append('"').append(hangOnIds.get(i)).append('"').append("]");
-                            }
-                        }
-
-                        //上挂
-                        View view = View.inflate(this,R.layout.hang_on_view,null);
-                        final EditText edBeginOrderNum = (EditText) view.findViewById(R.id.ed_begin_order_num);
-                        final EditText edEndOrderNum = (EditText) view.findViewById(R.id.ed_end_order_num);
-                        TextView revisePhoneCancel = (TextView) view.findViewById(R.id.revise_phone_cancel);
-                        TextView revisePhoneConfirm = (TextView) view.findViewById(R.id.revise_phone_confirm);
-
-                        collectClothesDialog = new CollectClothesDialog(this, R.style.DialogTheme,view);
-                        collectClothesDialog.show();
-                        revisePhoneCancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                collectClothesDialog.dismiss();
-                            }
-                        });
-
-                        revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String beginInputNum = edBeginOrderNum.getText().toString();
-                                String endInputNum = edEndOrderNum.getText().toString();
-
-                                if (!TextUtils.isEmpty(beginInputNum) && !TextUtils.isEmpty(endInputNum)){
-                                    int begin = Integer.valueOf(beginInputNum);
-                                    int end = Integer.valueOf(endInputNum);
-                                    if (end > begin){ // 结束挂号要比开始挂号大
-                                        dialog.setContent("加载中");
-                                        dialog.show();
-                                        IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
-                                        params.put("token",UserCenter.getToken(SendLaundryActivity.this));
-                                        params.put("json_data",stringBuffer.toString());
-                                        params.put("start","" + begin);
-                                        params.put("end","" + end);
-                                        requestHttpData(Constants.Urls.URL_POST_HANG_ON,REQUEST_CODE_HANG_ON, FProtocol.HttpMethod.POST,params);
-                                    }else {
-                                        ToastUtil.shortShow(SendLaundryActivity.this,"您输入的挂号不正确，请重新输入");
-                                    }
-                                }else {
-                                    ToastUtil.shortShow(SendLaundryActivity.this,"请输入挂号");
-                                }
-                            }
-                        });
-
-                    }else {
-                        ToastUtil.shortShow(this,"请选择上挂项目");
-                        return;
-                    }
-
-                }else {
-                    //送洗
-                    sendLaundryIds.clear();
-                    StringBuffer stringBuffer = new StringBuffer();
-                    for (int i = 0; i < offlineSendLaundryEntity.getDatas().size(); i++) {
-                        if (offlineSendLaundryEntity.getDatas().get(i).isSelect){
-                            String id = offlineSendLaundryEntity.getDatas().get(i).getId();
-                            sendLaundryIds.add(id);
-                        }
-                    }
-
-                    if (sendLaundryIds.size() > 0){
-                        for (int i = 0; i < sendLaundryIds.size(); i++) {
-                            if(i == 0){
-                                if(sendLaundryIds.size() == 1){
-                                    stringBuffer.append("[").append('"').append(sendLaundryIds.get(i)).append('"').append("]");
-                                }else {
-                                    stringBuffer.append("[").append('"').append(sendLaundryIds.get(i)).append('"').append(",");
-                                }
-                            }else if(i > 0 && i < sendLaundryIds.size() -1){
-                                stringBuffer.append('"').append(sendLaundryIds.get(i)).append('"').append(",");
-                            }else {
-                                stringBuffer.append('"').append(sendLaundryIds.get(i)).append('"').append("]");
-                            }
-                        }
-                    }else {
-                        ToastUtil.shortShow(this,"请选择送洗项目");
-                        return;
-                    }
-                    dialog.setContent("加载中");
-                    dialog.show();
-                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                    params.put("token",UserCenter.getToken(this));
-                    params.put("items",stringBuffer.toString());
-                    requestHttpData(Constants.Urls.URL_POST_OFFLINE_SEND_LAUNDRY,REQUEST_CODE_SEND_LAUNDRY, FProtocol.HttpMethod.POST,params);
-                }
+//                if(extraFrom == OfflineCashFragment.HANGON){
+//                    hangOnIds.clear();
+//                    final StringBuffer stringBuffer = new StringBuffer();
+//                    for (int i = 0; i < offlineHangOnEntity.getDatas().size(); i++) {
+//                        if (offlineHangOnEntity.getDatas().get(i).isSelect){
+//                            String id = offlineHangOnEntity.getDatas().get(i).getId();
+//                            hangOnIds.add(id);
+//                        }
+//                    }
+//
+//                    if (hangOnIds.size() > 0){
+//                        for (int i = 0; i < hangOnIds.size(); i++) {
+//                            if(i == 0){
+//                                if(hangOnIds.size() == 1){
+//                                    stringBuffer.append("[").append('"').append(hangOnIds.get(i)).append('"').append("]");
+//                                }else {
+//                                    stringBuffer.append("[").append('"').append(hangOnIds.get(i)).append('"').append(",");
+//                                }
+//                            }else if(i > 0 && i < hangOnIds.size() -1){
+//                                stringBuffer.append('"').append(hangOnIds.get(i)).append('"').append(",");
+//                            }else {
+//                                stringBuffer.append('"').append(hangOnIds.get(i)).append('"').append("]");
+//                            }
+//                        }
+//
+//                        //上挂
+//                        View view = View.inflate(this,R.layout.hang_on_view,null);
+//                        final EditText edBeginOrderNum = (EditText) view.findViewById(R.id.ed_begin_order_num);
+//                        final EditText edEndOrderNum = (EditText) view.findViewById(R.id.ed_end_order_num);
+//                        TextView revisePhoneCancel = (TextView) view.findViewById(R.id.revise_phone_cancel);
+//                        TextView revisePhoneConfirm = (TextView) view.findViewById(R.id.revise_phone_confirm);
+//
+//                        collectClothesDialog = new CollectClothesDialog(this, R.style.DialogTheme,view);
+//                        collectClothesDialog.show();
+//                        revisePhoneCancel.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                collectClothesDialog.dismiss();
+//                            }
+//                        });
+//
+//                        revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                String beginInputNum = edBeginOrderNum.getText().toString();
+//                                String endInputNum = edEndOrderNum.getText().toString();
+//
+//                                if (!TextUtils.isEmpty(beginInputNum) && !TextUtils.isEmpty(endInputNum)){
+//                                    int begin = Integer.valueOf(beginInputNum);
+//                                    int end = Integer.valueOf(endInputNum);
+//                                    if (end > begin){ // 结束挂号要比开始挂号大
+//                                        dialog.setContent("加载中");
+//                                        dialog.show();
+//                                        IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
+//                                        params.put("token",UserCenter.getToken(SendLaundryActivity.this));
+//                                        params.put("json_data",stringBuffer.toString());
+//                                        params.put("start","" + begin);
+//                                        params.put("end","" + end);
+//                                        requestHttpData(Constants.Urls.URL_POST_HANG_ON,REQUEST_CODE_HANG_ON, FProtocol.HttpMethod.POST,params);
+//                                    }else {
+//                                        ToastUtil.shortShow(SendLaundryActivity.this,"您输入的挂号不正确，请重新输入");
+//                                    }
+//                                }else {
+//                                    ToastUtil.shortShow(SendLaundryActivity.this,"请输入挂号");
+//                                }
+//                            }
+//                        });
+//
+//                    }else {
+//                        ToastUtil.shortShow(this,"请选择上挂项目");
+//                        return;
+//                    }
+//
+//                }else {
+//                    //送洗
+//                    sendLaundryIds.clear();
+//                    StringBuffer stringBuffer = new StringBuffer();
+//                    for (int i = 0; i < offlineSendLaundryEntity.getDatas().size(); i++) {
+//                        if (offlineSendLaundryEntity.getDatas().get(i).isSelect){
+//                            String id = offlineSendLaundryEntity.getDatas().get(i).getId();
+//                            sendLaundryIds.add(id);
+//                        }
+//                    }
+//
+//                    if (sendLaundryIds.size() > 0){
+//                        for (int i = 0; i < sendLaundryIds.size(); i++) {
+//                            if(i == 0){
+//                                if(sendLaundryIds.size() == 1){
+//                                    stringBuffer.append("[").append('"').append(sendLaundryIds.get(i)).append('"').append("]");
+//                                }else {
+//                                    stringBuffer.append("[").append('"').append(sendLaundryIds.get(i)).append('"').append(",");
+//                                }
+//                            }else if(i > 0 && i < sendLaundryIds.size() -1){
+//                                stringBuffer.append('"').append(sendLaundryIds.get(i)).append('"').append(",");
+//                            }else {
+//                                stringBuffer.append('"').append(sendLaundryIds.get(i)).append('"').append("]");
+//                            }
+//                        }
+//                    }else {
+//                        ToastUtil.shortShow(this,"请选择送洗项目");
+//                        return;
+//                    }
+//                    dialog.setContent("加载中");
+//                    dialog.show();
+//                    IdentityHashMap<String,String> params = new IdentityHashMap<>();
+//                    params.put("token",UserCenter.getToken(this));
+//                    params.put("items",stringBuffer.toString());
+//                    requestHttpData(Constants.Urls.URL_POST_OFFLINE_SEND_LAUNDRY,REQUEST_CODE_SEND_LAUNDRY, FProtocol.HttpMethod.POST,params);
+//                }
                 break;
             case R.id.left_button:
                 finish();
@@ -231,11 +228,11 @@ public class SendLaundryActivity extends ToolBarActivity implements View.OnClick
                 String inputOrderNum = editSearch.getText().toString();
                 dialog.setContent("搜索中");
                 dialog.show();
-                if (extraFrom == OfflineCashFragment.HANGON){
-                    hangOnData(inputOrderNum);
-                }else {
-                    sendLaundryData(inputOrderNum);
-                }
+//                if (extraFrom == OfflineCashFragment.HANGON){
+//                    hangOnData(inputOrderNum);
+//                }else {
+//                    sendLaundryData(inputOrderNum);
+//                }
                 break;
         }
     }
