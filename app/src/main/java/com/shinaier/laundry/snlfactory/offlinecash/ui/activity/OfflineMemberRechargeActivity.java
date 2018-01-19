@@ -19,9 +19,9 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberRechargeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.PrintRechargeEntity;
+import com.shinaier.laundry.snlfactory.network.entity.UploadAddPhotoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.entities.PrintEntity;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
@@ -173,22 +173,14 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
                 break;
             case REQUEST_CODE_RECHARGE_MERCHANT_CARD:
                 if (data != null){
-//                    RechargeSuccessEntity rechargeSuccessEntity = Parsers.getRechargeSuccessEntity(data);
-//                    if (rechargeSuccessEntity != null){
-//                        if (rechargeSuccessEntity.getRetcode() == 0){
-//                            dialog.setContent("加载中");
-//                            dialog.show();
-//                            memberRecharge(rechargeSuccessEntity.getDatas().getRechargeId());
-//                        }else {
-//                            ToastUtil.shortShow(this,rechargeSuccessEntity.getStatus());
-//                        }
-//                    }
-                    Entity entity = Parsers.getEntity(data);
-                    if (entity != null){
-                        if (entity.getRetcode() == 0){
-                            // TODO: 2018/1/6  缺少打印订单接口
+                    UploadAddPhotoEntity uploadAddPhotoEntity = Parsers.getUploadAddPhotoEntity(data);
+                    if (uploadAddPhotoEntity != null){
+                        if (uploadAddPhotoEntity.getCode() == 0){
+                            dialog.setContent("加载中");
+                            dialog.show();
+                            memberRecharge(uploadAddPhotoEntity.getResult());
                         }else {
-                            ToastUtil.shortShow(this,entity.getStatus());
+                            ToastUtil.shortShow(this,uploadAddPhotoEntity.getMsg());
                         }
                     }
                 }
@@ -197,12 +189,12 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
                 if (data != null){
                     printRechargeEntity = Parsers.getPrintRechargeEntity(data);
                     if (printRechargeEntity != null){
-                        if (printRechargeEntity.getRetcode() == 0){
-                            if (printRechargeEntity.getDatas() != null){
+                        if (printRechargeEntity.getCode() == 0){
+                            if (printRechargeEntity.getResult() != null){
                                 setRechargePrint();
                             }
                         }else {
-                            ToastUtil.shortShow(this, printRechargeEntity.getStatus());
+                            ToastUtil.shortShow(this, printRechargeEntity.getMsg());
                         }
                     }
 
@@ -213,21 +205,19 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
 
     private void setRechargePrint() {
         PrintEntity.RechargePrintEntity rechargePrintEntity = printEntity.new RechargePrintEntity();
-        rechargePrintEntity.setMobile(printRechargeEntity.getDatas().getMobile());
-        rechargePrintEntity.setRechargeAmount(printRechargeEntity.getDatas().getRechargeAmount());
-        rechargePrintEntity.setGive(printRechargeEntity.getDatas().getGive());
-        rechargePrintEntity.setUcode(printRechargeEntity.getDatas().getUcode());
-        rechargePrintEntity.setBalance(printRechargeEntity.getDatas().getBalance());
-        rechargePrintEntity.setAddress(printRechargeEntity.getDatas().getAddress());
-        rechargePrintEntity.setPhone(printRechargeEntity.getDatas().getPhone());
-        rechargePrintEntity.setMid(printRechargeEntity.getDatas().getMid());
-        rechargePrintEntity.setPayType(printRechargeEntity.getDatas().getPayType());
-        rechargePrintEntity.setClerkName(printRechargeEntity.getDatas().getClerkName());
-        rechargePrintEntity.setQrcodeUrl(printRechargeEntity.getDatas().getQrcodeUrl());
-        rechargePrintEntity.setOrderNumber(printRechargeEntity.getDatas().getOrderNumber());
+        rechargePrintEntity.setTradeSn(printRechargeEntity.getResult().getTradeSn());
+        rechargePrintEntity.setUmobile(printRechargeEntity.getResult().getUmobile());
+        rechargePrintEntity.setAmount(printRechargeEntity.getResult().getAmount());
+        rechargePrintEntity.setGive(printRechargeEntity.getResult().getGive());
+        rechargePrintEntity.setMaddress(printRechargeEntity.getResult().getMaddress());
+        rechargePrintEntity.setPhone_number(printRechargeEntity.getResult().getPhoneNumber());
+        rechargePrintEntity.setMid(printRechargeEntity.getResult().getMid());
+        rechargePrintEntity.setMname(printRechargeEntity.getResult().getmName());
+        rechargePrintEntity.setEmployee(printRechargeEntity.getResult().getEmployee());
+        rechargePrintEntity.setGateway(printRechargeEntity.getResult().getGateway());
         printEntity.setRechargePrintEntity(rechargePrintEntity);
 
-        String qrcodeUrl = printRechargeEntity.getDatas().getQrcodeUrl();
+        String qrcodeUrl = printRechargeEntity.getResult().getQrcode();
         asyncGetImage(qrcodeUrl); //从图片链接 byte数组，然后转成bitmap对象
     }
 

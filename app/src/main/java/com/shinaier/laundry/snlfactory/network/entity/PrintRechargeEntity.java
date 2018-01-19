@@ -9,158 +9,159 @@ import com.google.gson.annotations.SerializedName;
  * Created by 张家洛 on 2017/8/19.
  */
 
-public class PrintRechargeEntity implements Parcelable {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private PrintRechargeDatas datas;
+public class PrintRechargeEntity {
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": {
+     "trade_sn": “",                     交易单号
+     "umobile": “18519234689",       用户手机号
+     "amount": “100.00",                充值金额
+     "give": “0.00",                         赠送金额
+     "maddress": "短发短发短发 vv”,       店铺地址
+     "phone_number": “18500000000",          店铺电话
+     "mid": “108",                                   商家ID
+     "employee": “店主",                       员工姓名
+     "qrcode": "http:\/\/xiyi.wzj.dev.shuxier.com\/static\/qrcode.jpg"                  二维码地址
+     }
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private PrintRechargeResult result;
 
-    protected PrintRechargeEntity(Parcel in) {
-        retcode = in.readInt();
-        status = in.readString();
+    public int getCode() {
+        return code;
     }
 
-    public static final Creator<PrintRechargeEntity> CREATOR = new Creator<PrintRechargeEntity>() {
-        @Override
-        public PrintRechargeEntity createFromParcel(Parcel in) {
-            return new PrintRechargeEntity(in);
-        }
-
-        @Override
-        public PrintRechargeEntity[] newArray(int size) {
-            return new PrintRechargeEntity[size];
-        }
-    };
-
-    public int getRetcode() {
-        return retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public String getMsg() {
+        return msg;
     }
 
-    public String getStatus() {
-        return status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public PrintRechargeResult getResult() {
+        return result;
     }
 
-    public PrintRechargeDatas getDatas() {
-        return datas;
+    public void setResult(PrintRechargeResult result) {
+        this.result = result;
     }
 
-    public void setDatas(PrintRechargeDatas datas) {
-        this.datas = datas;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(retcode);
-        dest.writeString(status);
-    }
-
-    public static class PrintRechargeDatas implements Parcelable {
-        @SerializedName("mobile")
-        private String mobile;
-        @SerializedName("recharge_amount")
-        private String rechargeAmount;
+    public static class PrintRechargeResult implements Parcelable{
+        @SerializedName("trade_sn")
+        private String tradeSn;
+        @SerializedName("umobile")
+        private String umobile;
+        @SerializedName("amount")
+        private String amount;
         @SerializedName("give")
         private String give;
-        @SerializedName("ucode")
-        private String ucode;
-        @SerializedName("balance")
-        private String balance;
-        @SerializedName("address")
-        private String address;
-        @SerializedName("phone")
-        private String phone;
+        @SerializedName("maddress")
+        private String maddress;
+        @SerializedName("phone_number")
+        private String phoneNumber;
         @SerializedName("mid")
         private String mid;
-        @SerializedName("pay_type") //支付方式
-        private String payType;
-        @SerializedName("clerkname")
-        private String clerkName;
-        @SerializedName("order_number")
-        private String orderNumber;
+        @SerializedName("mname")
+        private String mName;
+        @SerializedName("employee")
+        private String employee;
         @SerializedName("qrcode")
-        private String qrCode;
-        @SerializedName("qrcodeUrl")
-        private String qrcodeUrl;
+        private String qrcode;
+        @SerializedName("gateway")
+        private String gateway;
+        @SerializedName("cbalance")
+        private String cBalance;
 
-        public String getQrcodeUrl() {
-            return qrcodeUrl;
-        }
-
-        public void setQrcodeUrl(String qrcodeUrl) {
-            this.qrcodeUrl = qrcodeUrl;
-        }
-
-        public String getClerkName() {
-            return clerkName;
-        }
-
-        public void setClerkName(String clerkName) {
-            this.clerkName = clerkName;
-        }
-
-        protected PrintRechargeDatas(Parcel in) {
-            mobile = in.readString();
-            rechargeAmount = in.readString();
+        protected PrintRechargeResult(Parcel in) {
+            tradeSn = in.readString();
+            umobile = in.readString();
+            amount = in.readString();
             give = in.readString();
-            ucode = in.readString();
-            balance = in.readString();
-            address = in.readString();
-            phone = in.readString();
+            maddress = in.readString();
+            phoneNumber = in.readString();
             mid = in.readString();
-            payType = in.readString();
-            orderNumber = in.readString();
-            qrCode = in.readString();
+            mName = in.readString();
+            employee = in.readString();
+            qrcode = in.readString();
+            gateway = in.readString();
+            cBalance = in.readString();
         }
 
-        public static final Creator<PrintRechargeDatas> CREATOR = new Creator<PrintRechargeDatas>() {
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(tradeSn);
+            dest.writeString(umobile);
+            dest.writeString(amount);
+            dest.writeString(give);
+            dest.writeString(maddress);
+            dest.writeString(phoneNumber);
+            dest.writeString(mid);
+            dest.writeString(mName);
+            dest.writeString(employee);
+            dest.writeString(qrcode);
+            dest.writeString(gateway);
+            dest.writeString(cBalance);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<PrintRechargeResult> CREATOR = new Creator<PrintRechargeResult>() {
             @Override
-            public PrintRechargeDatas createFromParcel(Parcel in) {
-                return new PrintRechargeDatas(in);
+            public PrintRechargeResult createFromParcel(Parcel in) {
+                return new PrintRechargeResult(in);
             }
 
             @Override
-            public PrintRechargeDatas[] newArray(int size) {
-                return new PrintRechargeDatas[size];
+            public PrintRechargeResult[] newArray(int size) {
+                return new PrintRechargeResult[size];
             }
         };
 
-        public String getQrCode() {
-            return qrCode;
+        public String getcBalance() {
+            return cBalance;
         }
 
-        public void setQrCode(String qrCode) {
-            this.qrCode = qrCode;
+        public void setcBalance(String cBalance) {
+            this.cBalance = cBalance;
         }
 
-        public String getMobile() {
-            return mobile;
+        public String getTradeSn() {
+            return tradeSn;
         }
 
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
+        public void setTradeSn(String tradeSn) {
+            this.tradeSn = tradeSn;
         }
 
-        public String getRechargeAmount() {
-            return rechargeAmount;
+        public String getUmobile() {
+            return umobile;
         }
 
-        public void setRechargeAmount(String rechargeAmount) {
-            this.rechargeAmount = rechargeAmount;
+        public void setUmobile(String umobile) {
+            this.umobile = umobile;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
 
         public String getGive() {
@@ -171,36 +172,20 @@ public class PrintRechargeEntity implements Parcelable {
             this.give = give;
         }
 
-        public String getUcode() {
-            return ucode;
+        public String getMaddress() {
+            return maddress;
         }
 
-        public void setUcode(String ucode) {
-            this.ucode = ucode;
+        public void setMaddress(String maddress) {
+            this.maddress = maddress;
         }
 
-        public String getBalance() {
-            return balance;
+        public String getPhoneNumber() {
+            return phoneNumber;
         }
 
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
         }
 
         public String getMid() {
@@ -211,40 +196,36 @@ public class PrintRechargeEntity implements Parcelable {
             this.mid = mid;
         }
 
-        public String getPayType() {
-            return payType;
+        public String getmName() {
+            return mName;
         }
 
-        public void setPayType(String payType) {
-            this.payType = payType;
+        public void setmName(String mName) {
+            this.mName = mName;
         }
 
-        public String getOrderNumber() {
-            return orderNumber;
+        public String getEmployee() {
+            return employee;
         }
 
-        public void setOrderNumber(String orderNumber) {
-            this.orderNumber = orderNumber;
+        public void setEmployee(String employee) {
+            this.employee = employee;
         }
 
-        @Override
-        public int describeContents() {
-            return 0;
+        public String getQrcode() {
+            return qrcode;
         }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(mobile);
-            dest.writeString(rechargeAmount);
-            dest.writeString(give);
-            dest.writeString(ucode);
-            dest.writeString(balance);
-            dest.writeString(address);
-            dest.writeString(phone);
-            dest.writeString(mid);
-            dest.writeString(payType);
-            dest.writeString(orderNumber);
-            dest.writeString(qrCode);
+        public void setQrcode(String qrcode) {
+            this.qrcode = qrcode;
+        }
+
+        public String getGateway() {
+            return gateway;
+        }
+
+        public void setGateway(String gateway) {
+            this.gateway = gateway;
         }
     }
 }

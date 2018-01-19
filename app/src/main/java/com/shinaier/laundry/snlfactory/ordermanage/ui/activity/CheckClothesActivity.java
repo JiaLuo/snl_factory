@@ -263,13 +263,11 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                 if (data != null){
                     OrderPrintEntity orderPrintEntity = Parsers.getOrderPrintEntity(data);
                     if (orderPrintEntity != null){
-                        if (orderPrintEntity.getRetcode() == 0){
-                            if (orderPrintEntity.getDatas() != null){
-                                if (orderPrintEntity.getDatas().getInfo() != null &&
-                                        orderPrintEntity.getDatas().getItems() != null &&
-                                        orderPrintEntity.getDatas().getItems().size() > 0){
-
-                                    setOrderPrint(orderPrintEntity);
+                        if (orderPrintEntity.getCode() == 0){
+                            if (orderPrintEntity.getResult() != null){
+                                OrderPrintEntity.OrderPrintResult printResult = orderPrintEntity.getResult();
+                                if (printResult != null){
+                                    setOrderPrint(printResult);
                                     //链接打印机 打印条子
                                     Intent intent = new Intent(this,PrintActivity.class);
                                     intent.putExtra("print_entity",printEntity);
@@ -282,7 +280,7 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
                                 }
                             }
                         }else {
-                            ToastUtil.shortShow(this,orderPrintEntity.getStatus());
+                            ToastUtil.shortShow(this,orderPrintEntity.getMsg());
                         }
                     }
                 }
@@ -290,50 +288,47 @@ public class CheckClothesActivity extends ToolBarActivity implements View.OnClic
         }
     }
 
-    private void setOrderPrint(OrderPrintEntity orderPrintEntity) {
+    private void setOrderPrint(OrderPrintEntity.OrderPrintResult printResult) {
         PrintEntity.PayOrderPrintEntity payOrderPrintEntity = printEntity.new PayOrderPrintEntity();
         PrintEntity.PayOrderPrintEntity.PayOrderPrintInfo payOrderPrintInfo = payOrderPrintEntity.new PayOrderPrintInfo();
-        List<PrintEntity.PayOrderPrintEntity.PayOrderPrintItems> payOrderPrintItemses = new ArrayList<>();
-        PrintEntity.PayOrderPrintEntity.PayOrderPrintItems payOrderPrintItems = null;
+        List<PrintEntity.PayOrderPrintEntity.PayOrderPrintInfo.PayOrderPrintItems> payOrderPrintItemses = new ArrayList<>();
+        PrintEntity.PayOrderPrintEntity.PayOrderPrintInfo.PayOrderPrintItems payOrderPrintItems = null;
 
+        payOrderPrintInfo.setOrdersn(printResult.getOrderSn());
+        payOrderPrintInfo.setUmobile(printResult.getuMobile());
+        payOrderPrintInfo.setAmount(printResult.getAmount());
+        payOrderPrintInfo.setPayAmount(printResult.getPayAmount());
+        payOrderPrintInfo.setReducePrice(printResult.getReducePrice());
+        payOrderPrintInfo.setPayState(printResult.getPayState());
+        payOrderPrintInfo.setPayGateway(printResult.getPayGateway());
+        payOrderPrintInfo.setmAddress(printResult.getmAddress());
+        payOrderPrintInfo.setPhoneNumber(printResult.getPhoneNumber());
+        payOrderPrintInfo.setMid(printResult.getmId());
+        payOrderPrintInfo.setAppend(printResult.getAppend());
+        payOrderPrintInfo.setTotalAmount(printResult.getTotalAmount());
+        payOrderPrintInfo.setcBalance(printResult.getcBalance());
+        payOrderPrintInfo.setCount(printResult.getCount());
+        payOrderPrintInfo.setEmployee(printResult.getEmployee());
+        payOrderPrintInfo.setQrcode(printResult.getQrcode());
+        payOrderPrintInfo.setmName(printResult.getmName());
 
-        payOrderPrintInfo.setOrdersn(orderPrintEntity.getDatas().getInfo().getOrdersn());
-        payOrderPrintInfo.setMobile(orderPrintEntity.getDatas().getInfo().getMobile());
-        payOrderPrintInfo.setPieceNum(orderPrintEntity.getDatas().getInfo().getPieceNum());
-        payOrderPrintInfo.setHedging(orderPrintEntity.getDatas().getInfo().getHedging());
-        payOrderPrintInfo.setPayAmount(orderPrintEntity.getDatas().getInfo().getPayAmount());
-        payOrderPrintInfo.setReducePrice(orderPrintEntity.getDatas().getInfo().getReducePrice());
-        payOrderPrintInfo.setPayChannel(orderPrintEntity.getDatas().getInfo().getPayChannel());
-        payOrderPrintInfo.setUserId(orderPrintEntity.getDatas().getInfo().getUserid());
-        payOrderPrintInfo.setAddress(orderPrintEntity.getDatas().getInfo().getAddress());
-        payOrderPrintInfo.setPhone(orderPrintEntity.getDatas().getInfo().getPhone());
-        payOrderPrintInfo.setMid(orderPrintEntity.getDatas().getInfo().getMid());
-        payOrderPrintInfo.setClerkName(orderPrintEntity.getDatas().getInfo().getClerkName());
-        payOrderPrintInfo.setPayState(orderPrintEntity.getDatas().getInfo().getPayState());
-        payOrderPrintInfo.setAmount(orderPrintEntity.getDatas().getInfo().getAmount());
-        payOrderPrintInfo.setCardNumber(orderPrintEntity.getDatas().getInfo().getCardNumber());
-        payOrderPrintInfo.setCardBalance(orderPrintEntity.getDatas().getInfo().getCardBalance());
-
-        List<OrderPrintEntity.OrderPrintDatas.OrderPrintItems> items = orderPrintEntity.getDatas().getItems();
+        List<OrderPrintEntity.OrderPrintResult.OrderPrintItems> items = printResult.getItems();
         for (int i = 0; i < items.size(); i++) {
-            payOrderPrintItems = payOrderPrintEntity.new PayOrderPrintItems();
-            payOrderPrintItems.setItemNote(items.get(i).getItemNote());
-            payOrderPrintItems.setName(items.get(i).getName());
-            payOrderPrintItems.setPrice(items.get(i).getPrice());
+            payOrderPrintItems = payOrderPrintInfo.new PayOrderPrintItems();
+            payOrderPrintItems.setItemName(items.get(i).getItemName());
             payOrderPrintItems.setColor(items.get(i).getColor());
+            payOrderPrintItems.setItemRealPrice(items.get(i).getItemRealPrice());
+            payOrderPrintItems.setProblem(items.get(i).getProblem());
             payOrderPrintItemses.add(payOrderPrintItems);
         }
-
         printEntity.setPayOrderPrintEntity(payOrderPrintEntity);
         printEntity.getPayOrderPrintEntity().setPayOrderPrintInfo(payOrderPrintInfo);
-        printEntity.getPayOrderPrintEntity().setPayOrderPrintItems(payOrderPrintItemses);
-
+        printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().setItemses(payOrderPrintItemses);
     }
 
     private void orderPrint(String orderId) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("order_id",orderId);
-        params.put("clerk_id", UserCenter.getUid(this));
+        params.put("oid",orderId);
         params.put("token",UserCenter.getToken(this));
         requestHttpData(Constants.Urls.URL_POST_ORDER_PRINT,REQUEST_CODE_ORDER_PRINT, FProtocol.HttpMethod.POST,params);
     }

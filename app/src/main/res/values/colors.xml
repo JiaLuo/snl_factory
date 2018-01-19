@@ -39,4 +39,7 @@
     <color name="divider_gray">#fafafa</color>
     <!-- 亮海蓝色 -->
     <color name="dodgerblue">#1e90ff</color>
+    <color name="txt_gray">#b3b3b3</color>
+    <color name="clothes_warn">#fbf7c7</color>
+    <color name="clothes_early_warn">#fcc5c5</color>
 </resources>

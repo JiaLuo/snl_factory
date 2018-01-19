@@ -1,7 +1,11 @@
 package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -17,17 +21,22 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.MerchantCardListEntities;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
-import com.shinaier.laundry.snlfactory.network.entity.StoreInfoEntity;
+import com.shinaier.laundry.snlfactory.network.entity.PrintRechargeEntity;
+import com.shinaier.laundry.snlfactory.network.entity.UploadAddPhotoEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
+import com.shinaier.laundry.snlfactory.offlinecash.entities.PrintEntity;
 import com.shinaier.laundry.snlfactory.offlinecash.view.OnDateSetListener;
 import com.shinaier.laundry.snlfactory.offlinecash.view.TimePickerDialog;
 import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 import com.shinaier.laundry.snlfactory.view.CommonDialog;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.IdentityHashMap;
@@ -39,10 +48,7 @@ import java.util.IdentityHashMap;
  */
 
 public class OfflineMemberAddActivity extends ToolBarActivity implements View.OnClickListener, OnDateSetListener {
-    private static final int REQUEST_CODE_ADD_MEMBER = 0x2;
-    private static final int REQUEST_CODE_BUY_MERCHANT_CARD = 0x3;
     public static final int SCAN_SUCCESS = 0x5;
-    private static final int REQUEST_CODE_MERCHANT_INFO = 0x6;
     private static final int REQUEST_CODE_RECHARGE_PRINT = 0x7;
 
     private static final int IS_SUCCESS = 0x8;
@@ -50,9 +56,6 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
     private static final int REQUEST_CODE_MERCHANT_CARD_LIST = 0x10;
     private static final int REQUEST_CODE_ADD_MEMBER_PERSONAL = 0x11;
 
-    //卡号暂时不要
-//    @ViewInject(R.id.tv_member_num)
-//    private TextView tvMemberNum;
     @ViewInject(R.id.ed_input_member_name)
     private EditText edInputMemberName;
     @ViewInject(R.id.sex_man)
@@ -125,8 +128,6 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
     private EditText edInputMoneyNum;
 
 
-    private String phoneNum; //从上一界面传来的电话号码
-    private String ucode; //获取的会员编号
     SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
     TimePickerDialog mDialogYearMonthDay;
     private String memberBirth;
@@ -134,7 +135,40 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
     private String user;
     // 自定dialog
     private CommonDialog dialog;
+    //    private String memberCode; //会员卡号
     private int memberType; //会员类型 1 是个人会员 2 是企业会员
+    private String phoneNum;
+    private String moneyNum;
+    private PrintRechargeEntity printRechargeEntity;
+    private PrintEntity printEntity = new PrintEntity();
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case IS_SUCCESS:
+                    byte[] bytes = (byte[]) msg.obj;
+                    Bitmap qrCodeBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    if (qrCodeBitmap != null){
+                        Intent intent = new Intent(OfflineMemberAddActivity.this,PrintActivity.class);
+                        intent.putExtra("extra_from",OfflineMemberRechargeActivity.FROM_MEMBER_RECHARGE_ACT);
+                        intent.putExtra("print_entity",printEntity);
+                        intent.putExtra("qrCode_bitmap",qrCodeBitmap);
+                        startActivity(intent);
+                        ToastUtil.shortShow(OfflineMemberAddActivity.this,"支付成功");
+                        if (dialog.isShowing()){
+                            dialog.dismiss();
+                        }
+                        finish();
+                    }
+                    break;
+                case IS_FAIL:
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     private MerchantCardListEntities merchantCardListEntities;
     private String inputMemberName;
     private String inputMemberAddress;
@@ -162,13 +196,6 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
         params.put("token", UserCenter.getToken(this));
         requestHttpData(Constants.Urls.URL_POST_MERCHANT_CARD_LIST,REQUEST_CODE_MERCHANT_CARD_LIST,
                 FProtocol.HttpMethod.POST,params);
-    }
-
-    private void loadMemberNumData() {
-//        IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
-//        params.put("token", UserCenter.getToken(this));
-//        requestHttpData(Constants.Urls.URL_POST_ADD_MEMBER_NUM,REQUEST_CODE_ADD_MEMBER_NUM,
-//                                    FProtocol.HttpMethod.POST,params);
     }
 
     private void initView() {
@@ -232,73 +259,6 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
     protected void parseData(int requestCode, String data) {
         super.parseData(requestCode, data);
         switch (requestCode){
-            case REQUEST_CODE_ADD_MEMBER:
-                if (data != null){
-                    OfflineAddVisitorEntity offlineAddVisitorEntity = Parsers.getOfflineAddVisitorEntity(data);
-//                    setLoadingStatus(LoadingStatus.GONE);
-                    if (dialog.isShowing()){
-                        dialog.dismiss();
-                    }
-                    if (offlineAddVisitorEntity != null){
-                        if (offlineAddVisitorEntity.getRetcode() == 0){
-                            if (offlineAddVisitorEntity.getDatas() != null){
-                                user = offlineAddVisitorEntity.getDatas().getUser();
-                                if (isCashPay){
-                                    confirmAdd("");
-                                }else {
-                                    startActivityForResult(new Intent(this,ScanActivity.class),SCAN_SUCCESS);
-                                }
-                            }
-                        }else {
-                            ToastUtil.shortShow(this,offlineAddVisitorEntity.getStatus());
-                        }
-                    }
-                }
-                break;
-            case REQUEST_CODE_BUY_MERCHANT_CARD:
-                if (data != null){
-                    Entity entity = Parsers.getEntity(data);
-//                    setLoadingStatus(LoadingStatus.GONE);
-                    if (dialog.isShowing()){
-                        dialog.dismiss();
-                    }
-                    if (entity != null){
-                        if (entity.getRetcode() == 0){
-                            finish();
-                            ToastUtil.shortShow(this,"支付成功");
-                        }else {
-                            finish();
-                            ToastUtil.shortShow(this,entity.getStatus());
-                        }
-                    }
-                }
-                break;
-            case REQUEST_CODE_MERCHANT_INFO:
-                if (data != null){
-                    StoreInfoEntity storeInfoEntity = Parsers.getStoreInfoEntity(data);
-                    if (storeInfoEntity != null){
-//                        if (storeInfoEntity.getCards() != null && storeInfoEntity.getCards().size() > 0){
-//                            //设置普通会员信息
-//                            tvMemberNormal.setText(storeInfoEntity.getCards().get(0).getCardName());
-//                            if (storeInfoEntity.getCards().get(0).getDiscount().equals("10.0")){
-//                                memberNormalDiscount.setText("无折扣");
-//                            }else {
-//                                memberNormalDiscount.setText(storeInfoEntity.getCards().get(0).getDiscount() + "折");
-//                            }
-//                            memberNormalRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(0).getPrice());
-//                            //设置黄金会员信息
-//                            tvMemberGold.setText(storeInfoEntity.getCards().get(1).getCardName());
-//                            memberGoldDiscount.setText(storeInfoEntity.getCards().get(1).getDiscount() + "折");
-//                            memberGoldRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(1).getPrice());
-//                            //设置钻石会员信息
-//                            tvMemberDiamond.setText(storeInfoEntity.getCards().get(2).getCardName());
-//                            memberDiamondDiscount.setText(storeInfoEntity.getCards().get(2).getDiscount() + "折");
-//                            memberDiamondRechargeMoney.setText("充值" + storeInfoEntity.getCards().get(2).getPrice());
-//                        }
-                    }
-                }
-                break;
-
             case REQUEST_CODE_MERCHANT_CARD_LIST:
                 if (data != null){
                     merchantCardListEntities = Parsers.getMerchantCardListEntities(data);
@@ -335,15 +295,90 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
                 break;
             case REQUEST_CODE_ADD_MEMBER_PERSONAL:
                 if (data != null){
-                    Entity entity = Parsers.getEntity(data);
-                    if (entity.getRetcode() == 0){
-                        // TODO: 2018/1/6 缺少打印接口
+                    UploadAddPhotoEntity uploadAddPhotoEntity = Parsers.getUploadAddPhotoEntity(data);
+                    if (uploadAddPhotoEntity.getCode() == 0){
+                        dialog.setContent("加载中");
+                        dialog.show();
+                        memberRecharge(uploadAddPhotoEntity.getResult());
                     }else {
-                        ToastUtil.shortShow(this,entity.getStatus());
+                        ToastUtil.shortShow(this,uploadAddPhotoEntity.getMsg());
                     }
                 }
                 break;
+            case REQUEST_CODE_RECHARGE_PRINT:
+                if (data != null){
+                    printRechargeEntity = Parsers.getPrintRechargeEntity(data);
+                    if (printRechargeEntity != null){
+                        if (printRechargeEntity.getCode() == 0){
+                            if (printRechargeEntity.getResult() != null){
+                                setRechargePrint();
+                            }
+                        }else {
+                            ToastUtil.shortShow(this, printRechargeEntity.getMsg());
+                        }
+                    }
+
+                }
+                break;
         }
+    }
+
+    /**
+     * 打印接口
+     * @param rechargeId 充值id
+     */
+    private void memberRecharge(String rechargeId) {
+        IdentityHashMap<String,String> params = new IdentityHashMap<>();
+        params.put("token",UserCenter.getToken(this));
+        params.put("record_id",rechargeId);
+        requestHttpData(Constants.Urls.URL_POST_RECHARGE_PRINT,REQUEST_CODE_RECHARGE_PRINT, FProtocol.HttpMethod.POST,params);
+    }
+
+    //设置打印页面的数据
+    private void setRechargePrint() {
+        PrintEntity.RechargePrintEntity rechargePrintEntity = printEntity.new RechargePrintEntity();
+        rechargePrintEntity.setTradeSn(printRechargeEntity.getResult().getTradeSn());
+        rechargePrintEntity.setUmobile(printRechargeEntity.getResult().getUmobile());
+        rechargePrintEntity.setAmount(printRechargeEntity.getResult().getAmount());
+        rechargePrintEntity.setGive(printRechargeEntity.getResult().getGive());
+        rechargePrintEntity.setMaddress(printRechargeEntity.getResult().getMaddress());
+        rechargePrintEntity.setPhone_number(printRechargeEntity.getResult().getPhoneNumber());
+        rechargePrintEntity.setMid(printRechargeEntity.getResult().getMid());
+        rechargePrintEntity.setMname(printRechargeEntity.getResult().getmName());
+        rechargePrintEntity.setEmployee(printRechargeEntity.getResult().getEmployee());
+        rechargePrintEntity.setGateway(printRechargeEntity.getResult().getGateway());
+        printEntity.setRechargePrintEntity(rechargePrintEntity);
+
+        String qrcodeUrl = printRechargeEntity.getResult().getQrcode();
+        asyncGetImage(qrcodeUrl); //从图片链接 byte数组，然后转成bitmap对象
+    }
+
+    private void asyncGetImage(String qrcodeUrl) {
+        OkHttpClient client = new OkHttpClient();
+        final Request request = new Request.Builder().get()
+                .url(qrcodeUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                Message message = handler.obtainMessage();
+                if (response.isSuccessful()) {
+                    message.what = IS_SUCCESS;
+                    message.obj = response.body().bytes();
+                    handler.sendMessage(message);
+                } else {
+                    handler.sendEmptyMessage(IS_FAIL);
+                }
+            }
+
+
+        });
     }
 
     @Override
@@ -599,7 +634,6 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
                 params.put("cid",merchantCardListEntities.getResult().get(1).getId());
             }
             url = Constants.Urls.URL_POST_ADD_MEMBER_PERSONAL;
-//            requestHttpData(Constants.Urls.URL_POST_ADD_MEMBER_PERSONAL,REQUEST_CODE_ADD_MEMBER_PERSONAL, FProtocol.HttpMethod.POST,params);
         }else {
             params.put("cdiscount",inputDiscountNum);
             params.put("amount",inputMoneyNum);

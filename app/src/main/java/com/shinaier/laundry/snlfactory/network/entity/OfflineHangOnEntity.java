@@ -9,48 +9,75 @@ import java.util.List;
  */
 
 public class OfflineHangOnEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private List<OfflineHangOnDatas> datas;
+    /**
+     * {
+     "code": 0,
+     "msg": "SUCCESS",
+     "result": [
+     {
+     "id": "181",  项目编号
+     "item_name": "衬衣",  项目名称
+     "clean_sn": "",     水洗码
+     "take_time": "1514682000",  取衣时间
+     "state": 1   状态（0，无状态；1，提醒；2，预警）
+     }
+     ]
+     }
+     */
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private List<OfflineHangOnResult> results;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public List<OfflineHangOnDatas> getDatas() {
-        return datas;
+    public List<OfflineHangOnResult> getResults() {
+        return results;
     }
 
-    public void setDatas(List<OfflineHangOnDatas> datas) {
-        this.datas = datas;
+    public void setResults(List<OfflineHangOnResult> results) {
+        this.results = results;
     }
 
-    public class OfflineHangOnDatas{
+    public class OfflineHangOnResult{
         @SerializedName("id")
         private String id;
-        @SerializedName("ordersn")
-        private String ordersn;
-        @SerializedName("number")
-        private String number;
-        @SerializedName("name")
-        private String name;
+        @SerializedName("clean_sn")
+        private String cleanSn;
+        @SerializedName("item_name")
+        private String itemName;
+        @SerializedName("take_time")
+        private String takeTime;
+        @SerializedName("state")
+        private String state;
+        @SerializedName("assist")
+        private String assist;
 
         public boolean isSelect = false;
+
+        public String getAssist() {
+            return assist;
+        }
+
+        public void setAssist(String assist) {
+            this.assist = assist;
+        }
 
         public String getId() {
             return id;
@@ -60,28 +87,36 @@ public class OfflineHangOnEntity {
             this.id = id;
         }
 
-        public String getOrdersn() {
-            return ordersn;
+        public String getCleanSn() {
+            return cleanSn;
         }
 
-        public void setOrdersn(String ordersn) {
-            this.ordersn = ordersn;
+        public void setCleanSn(String cleanSn) {
+            this.cleanSn = cleanSn;
         }
 
-        public String getNumber() {
-            return number;
+        public String getItemName() {
+            return itemName;
         }
 
-        public void setNumber(String number) {
-            this.number = number;
+        public void setItemName(String itemName) {
+            this.itemName = itemName;
         }
 
-        public String getName() {
-            return name;
+        public String getTakeTime() {
+            return takeTime;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setTakeTime(String takeTime) {
+            this.takeTime = takeTime;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
         }
     }
 }

@@ -21,6 +21,7 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.MessageNoticeActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.OfflineRefluxActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineAuthorityEntity;
@@ -28,9 +29,16 @@ import com.shinaier.laundry.snlfactory.network.entity.TakeClothesEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.OfflineAuthorityAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.SpacesItemDecoration;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.IntoFactoryActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.LeaveFactoryActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.MemberInfoActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineAddVisitorActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineHangOnActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineMemberManageActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineWashActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.OfflineWashingActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.ScanActivity;
+import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.StatisticsActivity;
 import com.shinaier.laundry.snlfactory.offlinecash.ui.activity.TakeClothesActivity;
 import com.shinaier.laundry.snlfactory.setting.view.CollectClothesDialog;
 import com.shinaier.laundry.snlfactory.util.CommonTools;
@@ -199,7 +207,7 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
                             if (takeClothesEntity.getResult() != null){
                                 int countTotal = takeClothesEntity.getResult().getCountTotal();
                                 if (countTotal == 0){
-                                    ToastUtil.shortShow(context,takeClothesEntity.getMsg());
+                                    ToastUtil.shortShow(context,"没有可取的衣服");
                                 }else {
 
                                     Intent intent = new Intent(context,TakeClothesActivity.class);
@@ -235,66 +243,58 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
                                         switch (offlineAuthorityEntity.getResult().getMights().get(position).getModule()){
                                             case "1":
                                                 //收件
-                                                LogUtil.e("zhang","收件");
                                                 inputNumOrScan(1);
                                                 break;
                                             case "8":
-                                                //清洗
-                                                LogUtil.e("zhang","入厂");
-//                                                startActivity(new Intent(context,OfflineWashActivity.class));
+                                                //入厂
+                                                startActivity(new Intent(context,IntoFactoryActivity.class));
                                                 break;
                                             case "2":
-                                                LogUtil.e("zhang","清洗");
+                                                //清洗
+                                                startActivity(new Intent(context,OfflineWashActivity.class));
                                                 break;
                                             case "50":
                                                 //烘干
-                                                LogUtil.e("zhang","烘干");
-//                                                Intent intent = new Intent(context,OfflineWashingActivity.class);
-//                                                intent.putExtra("extra_from",DRYING);
-//                                                startActivity(intent);
+                                                Intent dryingIntent = new Intent(context,OfflineWashingActivity.class);
+                                                dryingIntent.putExtra("extra_from",DRYING);
+                                                startActivity(dryingIntent);
                                                 break;
                                             case "51":
                                                 //熨烫
-                                                LogUtil.e("zhang","熨烫");
-//                                            Intent intent = new Intent(context,OfflineWashingActivity.class);
-//                                            intent.putExtra("extra_from",IRONING);
-//                                            startActivity(intent);
+                                                Intent ironingIntent = new Intent(context,OfflineWashingActivity.class);
+                                                ironingIntent.putExtra("extra_from",IRONING);
+                                                startActivity(ironingIntent);
                                                 break;
                                             case "52":
                                                 //质检
-                                                LogUtil.e("zhang","质检");
-//                                            startActivity(new Intent(context,OfflineWashingActivity.class));
+                                                startActivity(new Intent(context,OfflineWashingActivity.class));
                                                 break;
                                             case "3":
                                                 //上挂
-                                                LogUtil.e("zhang","上挂");
-//                                            startActivity(new Intent(context, OfflineHangOnActivity.class));
+                                                startActivity(new Intent(context, OfflineHangOnActivity.class));
                                                 break;
                                             case "9":
-                                                LogUtil.e("zhang","出厂");
+                                                //出厂
+                                                startActivity(new Intent(context, LeaveFactoryActivity.class));
                                                 break;
                                             case "4":
                                                 //取衣
-                                                LogUtil.e("zhang","取衣");
-//                                            inputNumOrScan(2);
+                                                inputNumOrScan(2);
                                                 break;
                                             case "5":
                                                 //业务统计
-                                                LogUtil.e("zhang","业务统计");
-//                                            startActivity(new Intent(context,StatisticsActivity.class));
+                                                startActivity(new Intent(context,StatisticsActivity.class));
                                                 break;
                                             case "6":
                                                 //会员管理
-                                                LogUtil.e("zhang","会员管理");
-//                                            Intent intent = new Intent(context,OfflineMemberManageActivity.class);
-//                                            intent.putExtra("m_name",offlineAuthorityEntity.getResult().getMerName());
-//                                            intent.putExtra("m_logo",offlineAuthorityEntity.getResult().getMerLogo());
-//                                            startActivity(intent);
+                                                Intent intent = new Intent(context,OfflineMemberManageActivity.class);
+                                                intent.putExtra("m_name",offlineAuthorityEntity.getResult().getMerName());
+                                                intent.putExtra("m_logo",offlineAuthorityEntity.getResult().getMerLogo());
+                                                startActivity(intent);
                                                 break;
                                             case "7":
                                                 //返流审核
-                                                LogUtil.e("zhang","返流审核");
-//                                            startActivity(new Intent(context,OfflineRefluxActivity.class));
+                                                startActivity(new Intent(context,OfflineRefluxActivity.class));
                                                 break;
                                         }
                                     }

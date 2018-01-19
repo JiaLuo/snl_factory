@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shinaier.laundry.snlfactory.manage.entities.AddEmployeeJurisdictionEntity;
 import com.shinaier.laundry.snlfactory.network.entity.AddCommodityEntities;
+import com.shinaier.laundry.snlfactory.network.entity.AddExecEntity;
 import com.shinaier.laundry.snlfactory.network.entity.AddItemShowEntities;
 import com.shinaier.laundry.snlfactory.network.entity.AddProjectOfflineConfirmEntity;
 import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
@@ -16,6 +17,7 @@ import com.shinaier.laundry.snlfactory.network.entity.CashCouponEntity;
 import com.shinaier.laundry.snlfactory.network.entity.CheckClothesEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ColorSettingSuccessEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CooperativeStoreEntities;
+import com.shinaier.laundry.snlfactory.network.entity.CooperativeStoreOperateEntities;
 import com.shinaier.laundry.snlfactory.network.entity.CraftworkAddPriceEntities;
 import com.shinaier.laundry.snlfactory.network.entity.EditCommodityEntity;
 import com.shinaier.laundry.snlfactory.network.entity.EditEmployeeInfoEntity;
@@ -23,7 +25,9 @@ import com.shinaier.laundry.snlfactory.network.entity.EditItemShowEntities;
 import com.shinaier.laundry.snlfactory.network.entity.EmployeeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.EvaluateEntities;
+import com.shinaier.laundry.snlfactory.network.entity.IntoFactoryEntities;
 import com.shinaier.laundry.snlfactory.network.entity.InviteFriendEntity;
+import com.shinaier.laundry.snlfactory.network.entity.LeaveFactoryEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageCommodityEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceDetailEntities;
 import com.shinaier.laundry.snlfactory.network.entity.ManageFinanceEntities;
@@ -45,7 +49,7 @@ import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberRechargeEntit
 import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberRechargeListEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineOrderDetailEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OfflineOrderPayEntity;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineSendLaundryEntity;
+import com.shinaier.laundry.snlfactory.network.entity.OfflineRefluxEntity;
 import com.shinaier.laundry.snlfactory.network.entity.OperateAnalysisEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleanEntities;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleaningEntities;
@@ -73,6 +77,8 @@ import com.shinaier.laundry.snlfactory.network.entity.UpdataEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UploadAddPhotoEntity;
 import com.shinaier.laundry.snlfactory.network.entity.UserEntity;
 import com.shinaier.laundry.snlfactory.network.entity.VerifyCodeEntity;
+import com.shinaier.laundry.snlfactory.network.entity.WashEntity;
+import com.shinaier.laundry.snlfactory.network.entity.WashingEntity;
 import com.shinaier.laundry.snlfactory.network.json.GsonObjectDeserializer;
 
 import org.json.JSONException;
@@ -571,14 +577,6 @@ public class Parsers {
         return gson.fromJson(data,new TypeToken<OfflineOrderPayEntity>(){}.getType());
     }
 
-    /**
-     * 送洗列表
-     * @param data
-     * @return
-     */
-    public static OfflineSendLaundryEntity getOfflineSendLaundryEntity(String data){
-        return gson.fromJson(data,new TypeToken<OfflineSendLaundryEntity>(){}.getType());
-    }
 
     /**
      * 上挂列表
@@ -838,5 +836,68 @@ public class Parsers {
      */
     public static CooperativeStoreEntities getCooperativeStoreEntities(String data){
         return gson.fromJson(data,new TypeToken<CooperativeStoreEntities>(){}.getType());
+    }
+
+    /**
+     * 入厂列表
+     * @param data
+     * @return
+     */
+    public static IntoFactoryEntities getIntoFactoryEntities(String data){
+        return gson.fromJson(data,new TypeToken<IntoFactoryEntities>(){}.getType());
+    }
+
+    /**
+     * 获取烘干、熨烫、质检数据
+     * @param data
+     * @return
+     */
+    public static WashingEntity getWashingEntity(String data){
+        return gson.fromJson(data,new TypeToken<WashingEntity>(){}.getType());
+    }
+
+    /**
+     * 做清洗操作
+     * @param data
+     * @return
+     */
+    public static AddExecEntity getAddExecEntity(String data){
+        return gson.fromJson(data,new TypeToken<AddExecEntity>(){}.getType());
+    }
+
+    /**
+     * 返流列表
+     * @param data
+     * @return
+     */
+    public static OfflineRefluxEntity getOfflineRefluxEntity(String data){
+        return gson.fromJson(data,new TypeToken<OfflineRefluxEntity>(){}.getType());
+    }
+
+    /**
+     * 合作店铺 操作
+     * @param data
+     * @return
+     */
+    public static CooperativeStoreOperateEntities getCooperativeStoreOperateEntities(String data){
+        return gson.fromJson(data,new TypeToken<CooperativeStoreOperateEntities>(){}.getType());
+    }
+
+    /**
+     * 出厂列表
+     * @param data
+     * @return
+     */
+    public static LeaveFactoryEntities getLeaveFactoryEntities(String data){
+        return gson.fromJson(data,new TypeToken<LeaveFactoryEntities>(){}.getType());
+    }
+
+    /**
+     * 清洗列表
+     * @param data
+     * @return
+     */
+    public static WashEntity getWashEntity(String data){
+        return gson.fromJson(data,new TypeToken<WashEntity>(){}.getType());
     }
 }

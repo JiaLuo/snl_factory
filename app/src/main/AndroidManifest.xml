@@ -171,11 +171,6 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
-        <activity android:name=".offlinecash.ui.activity.SendLaundryActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustNothing"
-            />
         <activity android:name=".offlinecash.ui.activity.TakeClothesActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
@@ -289,6 +284,31 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
+        <activity android:name=".offlinecash.ui.activity.OfflineWashingActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".offlinecash.ui.activity.RefluxAddPhotoActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".offlinecash.ui.activity.OfflineRefluxEditActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".offlinecash.ui.activity.OfflineHangOnActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".manage.ui.activity.OfflineRefluxActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+        <activity android:name=".offlinecash.ui.activity.OfflineWashActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
+
 
 
         <service

@@ -360,7 +360,15 @@ public class PrintUtil {
             pUtil.printLine();
             pUtil.printLine();
             pUtil.printAlignment(1);
-            pUtil.printText("美国GEP干洗");
+
+            if (printEntity.getPayOrderPrintEntity() != null){
+                pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getmName());
+            }else {
+//                pUtil.printText("美国GEP干洗");
+                pUtil.printText(printEntity.getRechargePrintEntity().getMname());
+
+            }
+
             pUtil.printLine();
 
 
@@ -378,19 +386,21 @@ public class PrintUtil {
             if (printEntity.getPayOrderPrintEntity() != null){
                 pUtil.printTwoColumn("交易单号:",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getOrdersn());
             }else {
-                pUtil.printTwoColumn("交易单号:",printEntity.getRechargePrintEntity().getOrderNumber());
+                if (!printEntity.getRechargePrintEntity().getGateway().equals("0")){
+                    pUtil.printTwoColumn("交易单号:",printEntity.getRechargePrintEntity().getTradeSn());
+                }
             }
             pUtil.printLine();
 
             if (printEntity.getPayOrderPrintEntity() != null){
-                pUtil.printTwoColumn("顾客电话:",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getMobile());
+                pUtil.printTwoColumn("顾客电话:",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getUmobile());
             }else {
-                pUtil.printTwoColumn("顾客电话:",printEntity.getRechargePrintEntity().getMobile());
+                pUtil.printTwoColumn("顾客电话:",printEntity.getRechargePrintEntity().getUmobile());
             }
 //            pUtil.printLine();
 
             if (printEntity.getPayOrderPrintEntity() != null){
-                pUtil.printTwoColumn("   件数:",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPieceNum());
+                pUtil.printTwoColumn("   件数:",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getCount());
             }
             pUtil.printLine();
 
@@ -406,11 +416,19 @@ public class PrintUtil {
                 pUtil.printDashLine();
                 pUtil.printLine();
 
-                for (int i = 0; i < printEntity.getPayOrderPrintEntity().getPayOrderPrintItems().size(); i++) {
-                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintItems().get(i).getName() + "   ");
-                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintItems().get(i).getPrice() + "   ");
-                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintItems().get(i).getColor() + "   ");
-                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintItems().get(i).getItemNote() + "   ");
+                for (int i = 0; i < printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().size(); i++) {
+                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getItemName() + "   ");
+                    pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getItemRealPrice() + "   ");
+                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getColor() != null){
+                        pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getColor() + ",");
+                    }else {
+                        pUtil.printText(",");
+                    }
+                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getProblem() != null){
+                        pUtil.printText(printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getItemses().get(i).getProblem() + "   ");
+                    }else {
+                        pUtil.printText("");
+                    }
                     pUtil.printLine();
                 }
                 pUtil.printLine();
@@ -418,7 +436,7 @@ public class PrintUtil {
                 pUtil.printTwoColumn("总额:", printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getAmount() + "元（附加费：0.00元）");
                 pUtil.printLine();
             }else {
-                pUtil.printTwoColumn("总额:", printEntity.getRechargePrintEntity().getRechargeAmount() + "元（附加费：" +
+                pUtil.printTwoColumn("总额:", printEntity.getRechargePrintEntity().getAmount() + "元（附加费：" +
                         printEntity.getRechargePrintEntity().getGive()+"元）");
                 pUtil.printLine();
             }
@@ -437,7 +455,7 @@ public class PrintUtil {
                     pUtil.printLargeText("未付款");
                 }
             }else {
-                pUtil.printLargeText("实收：" + printEntity.getRechargePrintEntity().getRechargeAmount() + "元");
+                pUtil.printLargeText("实收：" + printEntity.getRechargePrintEntity().getAmount() + "元");
             }
             pUtil.printLine();
             pUtil.printLine();
@@ -447,29 +465,41 @@ public class PrintUtil {
             pUtil.printAlignment(0);
             if (printEntity.getPayOrderPrintEntity() != null){
                 if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayState().equals("1")){
-                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("1")){
+                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("0")){
                         pUtil.printTwoColumn("付款方式：","现金支付");
-                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("2")){
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("1")){
+                        pUtil.printTwoColumn("付款方式：","零钱支付");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("2")){
+                        pUtil.printTwoColumn("付款方式：","免洗");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("3")){
                         pUtil.printTwoColumn("付款方式：","平台会员卡");
-                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("3")){
-                        pUtil.printTwoColumn("付款方式：","专店会员卡");
-                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("4")){
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("4")){
+                        pUtil.printTwoColumn("付款方式：","商家会员卡");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("5")){
+                        pUtil.printTwoColumn("付款方式：","企业会员卡");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("10")){
+                        pUtil.printTwoColumn("付款方式：","微信公众号");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("11")
+                            || printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("12")){
                         pUtil.printTwoColumn("付款方式：","微信");
-                    }else {
-                        pUtil.printTwoColumn("付款方式：","支付宝");
+                    }else if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("20") ||
+                            printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("21")){
+                        pUtil.printTwoColumn("付款方式：","微信");
                     }
                     pUtil.printLine();
                 }
             }else {
-                if (printEntity.getRechargePrintEntity().getPayType().equals("1")){
+                if (printEntity.getRechargePrintEntity().getGateway().equals("0")){
                     pUtil.printTwoColumn("付款方式：","现金支付");
-                }else if (printEntity.getRechargePrintEntity().getPayType().equals("2")){
+                }else if (printEntity.getRechargePrintEntity().getGateway().equals("3")){
                     pUtil.printTwoColumn("付款方式：","平台会员卡");
-                }else if (printEntity.getRechargePrintEntity().getPayType().equals("3")){
+                }else if (printEntity.getRechargePrintEntity().getGateway().equals("4")){
                     pUtil.printTwoColumn("付款方式：","专店会员卡");
-                }else if (printEntity.getRechargePrintEntity().getPayType().equals("4")){
+                }else if (printEntity.getRechargePrintEntity().getGateway().equals("11") ||
+                        printEntity.getRechargePrintEntity().getGateway().equals("12")){
                     pUtil.printTwoColumn("付款方式：","微信");
-                }else {
+                }else if (printEntity.getRechargePrintEntity().getGateway().equals("20") ||
+                        printEntity.getRechargePrintEntity().getGateway().equals("21")){
                     pUtil.printTwoColumn("付款方式：","支付宝");
                 }
                 pUtil.printLine();
@@ -486,31 +516,34 @@ public class PrintUtil {
 
             if (printEntity.getPayOrderPrintEntity() != null){
                 if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayState().equals("1")){
-                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("2") &&
-                            printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayChannel().equals("3")){
-                        pUtil.printAlignment(0);
-                        pUtil.printTwoColumn("会员卡号：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getCardNumber());
-                        pUtil.printLine();
+                    if (printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("3") ||
+                            printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("4")||
+                            printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayGateway().equals("5")){
+//                        pUtil.printAlignment(0);
+//                        pUtil.printTwoColumn("会员卡号：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getCardNumber());
+//                        pUtil.printLine();
 
                         pUtil.printAlignment(0);
                         pUtil.printTwoColumn("卡支付：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPayAmount() + "元");
                         pUtil.printLine();
 
                         pUtil.printAlignment(0);
-                        pUtil.printTwoColumn("卡内余额：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getCardBalance() + "元");
+                        pUtil.printTwoColumn("卡内余额：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getcBalance() + "元");
                         pUtil.printLine();
                         pUtil.printLine();
                         pUtil.printLine();
                     }
                 }
             }else {
-                if (!printEntity.getRechargePrintEntity().getPayType().equals("1")){
+                if (printEntity.getRechargePrintEntity().getGateway().equals("3") ||
+                        printEntity.getRechargePrintEntity().getGateway().equals("4") ||
+                        printEntity.getRechargePrintEntity().getGateway().equals("5")){
                     pUtil.printAlignment(0);
-                    pUtil.printTwoColumn("会员卡号：",printEntity.getRechargePrintEntity().getUcode());
+                    pUtil.printTwoColumn("会员卡号：",printEntity.getRechargePrintEntity().getUmobile());
                     pUtil.printLine();
 
                     pUtil.printAlignment(0);
-                    pUtil.printTwoColumn("卡内余额：",printEntity.getRechargePrintEntity().getBalance() + "元");
+                    pUtil.printTwoColumn("卡内余额：",printEntity.getRechargePrintEntity().getcBalance() + "元");
                     pUtil.printLine();
                     pUtil.printLine();
                     pUtil.printLine();
@@ -520,25 +553,25 @@ public class PrintUtil {
 
             pUtil.printAlignment(0);
             if (printEntity.getPayOrderPrintEntity() != null){
-                pUtil.printTwoColumn("本店地址：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getAddress());
+                pUtil.printTwoColumn("本店地址：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getmAddress());
             }else {
-                pUtil.printTwoColumn("本店地址：",printEntity.getRechargePrintEntity().getAddress());
+                pUtil.printTwoColumn("本店地址：",printEntity.getRechargePrintEntity().getMaddress());
             }
             pUtil.printLine();
 
             pUtil.printAlignment(0);
             if (printEntity.getPayOrderPrintEntity() != null){
-                pUtil.printTwoColumn("服务热线：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPhone());
+                pUtil.printTwoColumn("服务热线：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getPhoneNumber());
             }else {
-                pUtil.printTwoColumn("服务热线：",printEntity.getRechargePrintEntity().getPhone());
+                pUtil.printTwoColumn("服务热线：",printEntity.getRechargePrintEntity().getPhone_number());
             }
             pUtil.printLine();
 
             pUtil.printAlignment(0);
             if (printEntity.getPayOrderPrintEntity() != null){
-                pUtil.printTwoColumn("店    员：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getClerkName());
+                pUtil.printTwoColumn("店    员：",printEntity.getPayOrderPrintEntity().getPayOrderPrintInfo().getEmployee());
             }else {
-                pUtil.printTwoColumn("店    员：",printEntity.getRechargePrintEntity().getClerkName());
+                pUtil.printTwoColumn("店    员：",printEntity.getRechargePrintEntity().getEmployee());
             }
 
             if (printEntity.getPayOrderPrintEntity() != null){

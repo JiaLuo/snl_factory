@@ -16,14 +16,12 @@ import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
-import com.shinaier.laundry.snlfactory.network.entity.BuildOrderEntity;
-import com.shinaier.laundry.snlfactory.network.entity.Entity;
-import com.shinaier.laundry.snlfactory.network.entity.OfflineMemberNumEntity;
+import com.shinaier.laundry.snlfactory.network.entity.OfflineAddVisitorEntity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.view.OnDateSetListener;
 import com.shinaier.laundry.snlfactory.offlinecash.view.TimePickerDialog;
 import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectActivity;
+import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectsActivity;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
 import java.text.SimpleDateFormat;
@@ -37,12 +35,8 @@ import java.util.IdentityHashMap;
  */
 
 public class OfflineAddVisitorActivity extends ToolBarActivity implements View.OnClickListener, OnDateSetListener {
-    private static final int REQUEST_CODE_ADD_MEMBER_NUM = 0x1;
     private static final int REQUEST_CODE_ADD_MEMBER = 0x2;
-    private static final int REQUEST_CODE_BUILD_ORDER = 0x3;
 
-    @ViewInject(R.id.tv_member_num)
-    private TextView tvMemberNum;
     @ViewInject(R.id.ed_input_member_name)
     private EditText edInputMemberName;
     @ViewInject(R.id.sex_man)
@@ -66,7 +60,6 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
     SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
     TimePickerDialog mDialogYearMonthDay;
     private String memberBirth;
-    private String ucode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +67,7 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
         setContentView(R.layout.offline_add_visitor_act);
         ViewInjectUtils.inject(this);
         phoneNum = getIntent().getStringExtra("phone_num");
-//        loadMemberNum();
         initView();
-    }
-
-    private void loadMemberNum() {
-        IdentityHashMap<String,String> params = new IdentityHashMap<>();
-        params.put("token", UserCenter.getToken(this));
-        requestHttpData(Constants.Urls.URL_POST_ADD_MEMBER_NUM,REQUEST_CODE_ADD_MEMBER_NUM,
-                FProtocol.HttpMethod.POST,params);
     }
 
     private void initView() {
@@ -104,66 +89,22 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.parseData(requestCode, data);
         switch (requestCode){
-            case REQUEST_CODE_ADD_MEMBER_NUM:
-                if(data != null){
-                    OfflineMemberNumEntity offlineMemberNumEntity = Parsers.getOfflineMemberNumEntity(data);
-                    if (offlineMemberNumEntity != null){
-                        if (offlineMemberNumEntity.getRetcode() == 0){
-                            if (offlineMemberNumEntity.getDatas() != null){
-                                ucode = offlineMemberNumEntity.getDatas().getUcode();//获取会员卡号
-                                tvMemberNum.setText(ucode);
-                            }
-                        }else {
-                            ToastUtil.shortShow(this,offlineMemberNumEntity.getStatus());
-                        }
-                    }
-                }
-                break;
             case REQUEST_CODE_ADD_MEMBER:
                 if (data != null){
-                    // TODO: 2017/12/27 先注释，添加项目页面完成之后 再看这块儿的逻辑
-//                    OfflineAddVisitorEntity offlineAddVisitorEntity = Parsers.getOfflineAddVisitorEntity(data);
-//
-//                    if (offlineAddVisitorEntity != null){
-//                        if (offlineAddVisitorEntity.getRetcode() == 0){
-//                            if (offlineAddVisitorEntity.getDatas() != null){
-//                                String user = offlineAddVisitorEntity.getDatas().getUser();
-//                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
-//                                params.put("token", UserCenter.getToken(this));
-//                                params.put("uid",user);
-//                                requestHttpData(Constants.Urls.URL_POST_BUILD_ORDER,REQUEST_CODE_BUILD_ORDER, FProtocol.HttpMethod.POST,params);
-//                            }
-//                        }else {
-//                            ToastUtil.shortShow(this,offlineAddVisitorEntity.getStatus());
-//                        }
-//                    }
-                    Entity entity = Parsers.getEntity(data);
-                    if (entity != null) {
-                        if (entity.getRetcode() == 0){
-                            LogUtil.e("zhang","进入添加项目页面 ");
+                    OfflineAddVisitorEntity offlineAddVisitorEntity = Parsers.getOfflineAddVisitorEntity(data);
+                    if (offlineAddVisitorEntity != null){
+                        if (offlineAddVisitorEntity.getCode() == 0){
+                            String uId = offlineAddVisitorEntity.getUid();
+                            Intent intent = new Intent(this, AddProjectsActivity.class);
+                            intent.putExtra("extraFrom", MemberInfoActivity.FROM_MEMBER_INFO_ACT);
+                            intent.putExtra("user_id", uId);
+                            startActivity(intent);
+                            finish();
                         }else {
-                            ToastUtil.shortShow(this,entity.getStatus());
-                        }
-                    }
-                }
-                break;
-            case REQUEST_CODE_BUILD_ORDER:
-                if(data != null){
-                    BuildOrderEntity buildOrderEntity = Parsers.getBuildOrderEntity(data);
-                    if (buildOrderEntity != null){
-                        if(buildOrderEntity.getRetcode() == 0){
-                            if(buildOrderEntity.getDatas() != null){
-                                String orderId = buildOrderEntity.getDatas().getOrderId();
-                                Intent intent = new Intent(this, AddProjectActivity.class);
-                                intent.putExtra("extraFrom", MemberInfoActivity.FROM_MEMBER_INFO_ACT);
-                                intent.putExtra("orderId", orderId);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }else {
-                            ToastUtil.shortShow(this,buildOrderEntity.getStatus());
+                            ToastUtil.shortShow(this,offlineAddVisitorEntity.getMsg());
                         }
                     }
                 }
@@ -182,7 +123,6 @@ public class OfflineAddVisitorActivity extends ToolBarActivity implements View.O
                 if (!TextUtils.isEmpty(inputMemberName)){
                     IdentityHashMap<String,String> params = new IdentityHashMap<>();
                     params.put("token",UserCenter.getToken(this));
-//                    params.put("ucode",ucode);
                     params.put("uname",inputMemberName);
                     if (isMan){
                         params.put("sex","1");

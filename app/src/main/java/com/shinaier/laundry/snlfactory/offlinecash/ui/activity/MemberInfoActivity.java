@@ -21,7 +21,6 @@ import com.shinaier.laundry.snlfactory.offlinecash.adapter.NoTakeOrderAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectsActivity;
 import com.shinaier.laundry.snlfactory.util.ExitManager;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
-import com.shinaier.laundry.snlfactory.view.CommonDialog;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
 import java.util.IdentityHashMap;
@@ -44,23 +43,19 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
     private TextView customLastTime;
     @ViewInject(R.id.not_take_order)
     private WrapHeightListView notTakeOrder;
-//    @ViewInject(R.id.member_num)
-//    private TextView memberNum;
     @ViewInject(R.id.member_category)
     private TextView memberCategory;
     @ViewInject(R.id.member_balance)
     private TextView memberBalance;
     @ViewInject(R.id.rl_take_clothes_bt)
     private RelativeLayout rlTakeClothesBt;
-//    @ViewInject(R.id.vip_member_num)
-//    private TextView vipMemberNum;
     @ViewInject(R.id.vip_member_category)
     private TextView vipMemberCategory;
     @ViewInject(R.id.vip_member_balance)
     private TextView vipMemberBalance;
     @ViewInject(R.id.left_button)
     private ImageView leftButton;
-    private CommonDialog dialog;
+
     private OfflineCustomInfoEntity offlineCustomInfoEntity;
     private String phoneNum;
 
@@ -88,7 +83,6 @@ public class MemberInfoActivity extends ToolBarActivity implements View.OnClickL
         setCenterTitle("客户信息");
         initLoadingView(this);
         setLoadingStatus(LoadingStatus.LOADING);
-        dialog = new CommonDialog(this);
         rlTakeClothesBt.setOnClickListener(this);
         leftButton.setOnClickListener(this);
 

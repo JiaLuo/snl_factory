@@ -57,24 +57,26 @@ public class TakeClothesInnerAdapter extends BaseAdapterNew<TakeClothesEntity.Ta
 
         if(item != null){
             takeClothesName.setText(item.getItemName());
-            if(item.getStatus().equals("1")){
+            if(item.getStatus().equals("0")){
                 takeClothesStatus.setText("已收衣");
                 takeClothesName.setTextColor(context.getResources().getColor(R.color.black_text));
                 takeClothesStatus.setTextColor(context.getResources().getColor(R.color.black_text));
-            }else if(item.getStatus().equals("3")){
+            }else if(item.getStatus().equals("3") ||
+                    item.getStatus().equals("50") ||
+                    item.getStatus().equals("51") ||
+                    item.getStatus().equals("52")){
                 takeClothesStatus.setText("清洗中");
                 takeClothesName.setTextColor(context.getResources().getColor(R.color.black_text));
                 takeClothesStatus.setTextColor(context.getResources().getColor(R.color.black_text));
-            }else if(item.getStatus().equals("5")){
-                takeClothesStatus.setText("熨烫中");
+            }else if (item.getStatus().equals("90")){
+                takeClothesStatus.setText("洗护完成");
                 takeClothesName.setTextColor(context.getResources().getColor(R.color.black_text));
-                takeClothesStatus.setTextColor(context.getResources().getColor(R.color.black_text));
-            }
-            else if(item.getStatus().equals("7")){
+                takeClothesStatus.setTextColor(context.getResources().getColor(R.color.red));
+            } else if(item.getStatus().equals("91")){
                 takeClothesStatus.setText("已上挂");
                 takeClothesName.setTextColor(context.getResources().getColor(R.color.black_text));
                 takeClothesStatus.setTextColor(context.getResources().getColor(R.color.red));
-            }else if(item.getStatus().equals("9")){
+            }else if(item.getStatus().equals("100")){
                 takeClothesStatus.setText("已取走");
                 takeClothesName.setTextColor(context.getResources().getColor(R.color.black_text));
                 takeClothesStatus.setTextColor(context.getResources().getColor(R.color.store_switch_off));

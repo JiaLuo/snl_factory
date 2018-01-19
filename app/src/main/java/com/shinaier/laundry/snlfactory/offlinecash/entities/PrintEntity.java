@@ -28,9 +28,8 @@ public class PrintEntity implements Serializable {
         this.payOrderPrintEntity = payOrderPrintEntity;
     }
 
-    public class PayOrderPrintEntity implements Serializable {
+    public class PayOrderPrintEntity implements Serializable{
         private PayOrderPrintInfo payOrderPrintInfo;
-        private List<PayOrderPrintItems> payOrderPrintItems;
 
         public PayOrderPrintInfo getPayOrderPrintInfo() {
             return payOrderPrintInfo;
@@ -40,117 +39,64 @@ public class PrintEntity implements Serializable {
             this.payOrderPrintInfo = payOrderPrintInfo;
         }
 
-        public List<PayOrderPrintItems> getPayOrderPrintItems() {
-            return payOrderPrintItems;
-        }
-
-        public void setPayOrderPrintItems(List<PayOrderPrintItems> payOrderPrintItems) {
-            this.payOrderPrintItems = payOrderPrintItems;
-        }
-
-        public class PayOrderPrintItems implements Serializable {
-            private String itemNote;
-            private String color;
-            private String price;
-            private String putNumber;
-            private String name;
-            private String noteText;
-            private String colorText;
-            private String assess;
-            private String assessText;
-
-            public String getNoteText() {
-                return noteText;
-            }
-
-            public void setNoteText(String noteText) {
-                this.noteText = noteText;
-            }
-
-            public String getColorText() {
-                return colorText;
-            }
-
-            public void setColorText(String colorText) {
-                this.colorText = colorText;
-            }
-
-            public String getAssess() {
-                return assess;
-            }
-
-            public void setAssess(String assess) {
-                this.assess = assess;
-            }
-
-            public String getAssessText() {
-                return assessText;
-            }
-
-            public void setAssessText(String assessText) {
-                this.assessText = assessText;
-            }
-
-            public String getItemNote() {
-                return itemNote;
-            }
-
-            public void setItemNote(String itemNote) {
-                this.itemNote = itemNote;
-            }
-
-            public String getColor() {
-                return color;
-            }
-
-            public void setColor(String color) {
-                this.color = color;
-            }
-
-            public String getPrice() {
-                return price;
-            }
-
-            public void setPrice(String price) {
-                this.price = price;
-            }
-
-            public String getPutNumber() {
-                return putNumber;
-            }
-
-            public void setPutNumber(String putNumber) {
-                this.putNumber = putNumber;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-        }
-
-        public class PayOrderPrintInfo implements Serializable {
+        public class PayOrderPrintInfo implements Serializable{
             private String ordersn;
-            private String mobile;
-            private String pieceNum;
-            private String hedging;
+            private String umobile;
+            private String amount;
             private String payAmount;
             private String reducePrice;
-            private String payChannel;
-            private String userId;
-            private String address;
-            private String phone;
-            private String mid;
-            private String clerkName;
             private String payState;
-            private String amount;
-            private String cardNumber;
-            private String cardBalance;
+            private String payGateway;
+            private String mAddress;
+            private String phoneNumber;
+            private String mid;
+            private String append;
+            private String totalAmount;
+            private String cBalance;
+            private List<PayOrderPrintItems> itemses;
+            private String count;
+            private String employee;
             private String qrcode;
             private String mName;
+
+            public class PayOrderPrintItems implements Serializable{
+                private String itemName;
+                private String color;
+                private String problem;
+                private String itemRealPrice;
+
+                public String getItemName() {
+                    return itemName;
+                }
+
+                public void setItemName(String itemName) {
+                    this.itemName = itemName;
+                }
+
+                public String getColor() {
+                    return color;
+                }
+
+                public void setColor(String color) {
+                    this.color = color;
+                }
+
+                public String getProblem() {
+                    return problem;
+                }
+
+                public void setProblem(String problem) {
+                    this.problem = problem;
+                }
+
+                public String getItemRealPrice() {
+                    return itemRealPrice;
+                }
+
+                public void setItemRealPrice(String itemRealPrice) {
+                    this.itemRealPrice = itemRealPrice;
+                }
+            }
 
             public String getmName() {
                 return mName;
@@ -168,28 +114,20 @@ public class PrintEntity implements Serializable {
                 this.ordersn = ordersn;
             }
 
-            public String getMobile() {
-                return mobile;
+            public String getUmobile() {
+                return umobile;
             }
 
-            public void setMobile(String mobile) {
-                this.mobile = mobile;
+            public void setUmobile(String umobile) {
+                this.umobile = umobile;
             }
 
-            public String getPieceNum() {
-                return pieceNum;
+            public String getAmount() {
+                return amount;
             }
 
-            public void setPieceNum(String pieceNum) {
-                this.pieceNum = pieceNum;
-            }
-
-            public String getHedging() {
-                return hedging;
-            }
-
-            public void setHedging(String hedging) {
-                this.hedging = hedging;
+            public void setAmount(String amount) {
+                this.amount = amount;
             }
 
             public String getPayAmount() {
@@ -208,36 +146,36 @@ public class PrintEntity implements Serializable {
                 this.reducePrice = reducePrice;
             }
 
-            public String getPayChannel() {
-                return payChannel;
+            public String getPayState() {
+                return payState;
             }
 
-            public void setPayChannel(String payChannel) {
-                this.payChannel = payChannel;
+            public void setPayState(String payState) {
+                this.payState = payState;
             }
 
-            public String getUserId() {
-                return userId;
+            public String getPayGateway() {
+                return payGateway;
             }
 
-            public void setUserId(String userId) {
-                this.userId = userId;
+            public void setPayGateway(String payGateway) {
+                this.payGateway = payGateway;
             }
 
-            public String getAddress() {
-                return address;
+            public String getmAddress() {
+                return mAddress;
             }
 
-            public void setAddress(String address) {
-                this.address = address;
+            public void setmAddress(String mAddress) {
+                this.mAddress = mAddress;
             }
 
-            public String getPhone() {
-                return phone;
+            public String getPhoneNumber() {
+                return phoneNumber;
             }
 
-            public void setPhone(String phone) {
-                this.phone = phone;
+            public void setPhoneNumber(String phoneNumber) {
+                this.phoneNumber = phoneNumber;
             }
 
             public String getMid() {
@@ -248,44 +186,52 @@ public class PrintEntity implements Serializable {
                 this.mid = mid;
             }
 
-            public String getClerkName() {
-                return clerkName;
+            public String getAppend() {
+                return append;
             }
 
-            public void setClerkName(String clerkName) {
-                this.clerkName = clerkName;
+            public void setAppend(String append) {
+                this.append = append;
             }
 
-            public String getPayState() {
-                return payState;
+            public String getTotalAmount() {
+                return totalAmount;
             }
 
-            public void setPayState(String payState) {
-                this.payState = payState;
+            public void setTotalAmount(String totalAmount) {
+                this.totalAmount = totalAmount;
             }
 
-            public String getAmount() {
-                return amount;
+            public String getcBalance() {
+                return cBalance;
             }
 
-            public void setAmount(String amount) {
-                this.amount = amount;
+            public void setcBalance(String cBalance) {
+                this.cBalance = cBalance;
             }
 
-            public String getCardNumber() {
-                return cardNumber;
+            public List<PayOrderPrintItems> getItemses() {
+                return itemses;
             }
 
-            public void setCardNumber(String cardNumber) {
-                this.cardNumber = cardNumber;
+            public void setItemses(List<PayOrderPrintItems> itemses) {
+                this.itemses = itemses;
             }
 
-            public String getCardBalance() {
-                return cardBalance;
+            public String getCount() {
+                return count;
             }
 
-            public void setCardBalance(String cardBalance) {
-                this.cardBalance = cardBalance;
+            public void setCount(String count) {
+                this.count = count;
+            }
+
+            public String getEmployee() {
+                return employee;
+            }
+
+            public void setEmployee(String employee) {
+                this.employee = employee;
             }
 
             public String getQrcode() {
@@ -296,39 +242,52 @@ public class PrintEntity implements Serializable {
                 this.qrcode = qrcode;
             }
         }
-
     }
 
-    public class RechargePrintEntity implements Serializable {
-        private String mobile;
-        private String rechargeAmount;
+    public class RechargePrintEntity implements Serializable{
+        private String tradeSn;
+        private String umobile;
+        private String amount;
         private String give;
-        private String ucode;
-        private String balance;
-        private String address;
-        private String phone;
+        private String maddress;
+        private String phone_number;
         private String mid;
-        private String payType;
-        private String clerkName;
-        private String qrcodeUrl;
-        private String orderNumber;
-        private String ordersn;
+        private String mname;
+        private String employee;
         private String qrcode;
+        private String gateway;
+        private String cBalance;
 
-        public String getMobile() {
-            return mobile;
+        public String getcBalance() {
+            return cBalance;
         }
 
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
+        public void setcBalance(String cBalance) {
+            this.cBalance = cBalance;
         }
 
-        public String getRechargeAmount() {
-            return rechargeAmount;
+        public String getTradeSn() {
+            return tradeSn;
         }
 
-        public void setRechargeAmount(String rechargeAmount) {
-            this.rechargeAmount = rechargeAmount;
+        public void setTradeSn(String tradeSn) {
+            this.tradeSn = tradeSn;
+        }
+
+        public String getUmobile() {
+            return umobile;
+        }
+
+        public void setUmobile(String umobile) {
+            this.umobile = umobile;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
         }
 
         public String getGive() {
@@ -339,36 +298,20 @@ public class PrintEntity implements Serializable {
             this.give = give;
         }
 
-        public String getUcode() {
-            return ucode;
+        public String getMaddress() {
+            return maddress;
         }
 
-        public void setUcode(String ucode) {
-            this.ucode = ucode;
+        public void setMaddress(String maddress) {
+            this.maddress = maddress;
         }
 
-        public String getBalance() {
-            return balance;
+        public String getPhone_number() {
+            return phone_number;
         }
 
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
+        public void setPhone_number(String phone_number) {
+            this.phone_number = phone_number;
         }
 
         public String getMid() {
@@ -379,44 +322,20 @@ public class PrintEntity implements Serializable {
             this.mid = mid;
         }
 
-        public String getPayType() {
-            return payType;
+        public String getMname() {
+            return mname;
         }
 
-        public void setPayType(String payType) {
-            this.payType = payType;
+        public void setMname(String mname) {
+            this.mname = mname;
         }
 
-        public String getClerkName() {
-            return clerkName;
+        public String getEmployee() {
+            return employee;
         }
 
-        public void setClerkName(String clerkName) {
-            this.clerkName = clerkName;
-        }
-
-        public String getQrcodeUrl() {
-            return qrcodeUrl;
-        }
-
-        public void setQrcodeUrl(String qrcodeUrl) {
-            this.qrcodeUrl = qrcodeUrl;
-        }
-
-        public String getOrderNumber() {
-            return orderNumber;
-        }
-
-        public void setOrderNumber(String orderNumber) {
-            this.orderNumber = orderNumber;
-        }
-
-        public String getOrdersn() {
-            return ordersn;
-        }
-
-        public void setOrdersn(String ordersn) {
-            this.ordersn = ordersn;
+        public void setEmployee(String employee) {
+            this.employee = employee;
         }
 
         public String getQrcode() {
@@ -426,7 +345,14 @@ public class PrintEntity implements Serializable {
         public void setQrcode(String qrcode) {
             this.qrcode = qrcode;
         }
-    }
 
+        public String getGateway() {
+            return gateway;
+        }
+
+        public void setGateway(String gateway) {
+            this.gateway = gateway;
+        }
+    }
 
 }

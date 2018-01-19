@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.common.widget.FootLoadingListView;
@@ -81,6 +82,7 @@ public class UserEvaluateActivity extends ToolBarActivity implements View.OnClic
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_EVALUATE_SHOW:
@@ -105,6 +107,8 @@ public class UserEvaluateActivity extends ToolBarActivity implements View.OnClic
                             }else {
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
+                        }else {
+                            setLoadingStatus(LoadingStatus.EMPTY);
                         }
                     }else {
                         setLoadingStatus(LoadingStatus.EMPTY);

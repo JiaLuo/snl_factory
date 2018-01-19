@@ -292,7 +292,7 @@ public class OperateAnalysisActivity extends ToolBarActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.rl_analysis_time:
-                mCheckSpinnerView.showSpinnerPop(rlAnalysisTime, animation, optionEntities, orderByPosition);
+                mCheckSpinnerView.showSpinnerPop(rlAnalysisTime, animation, optionEntities, orderByPosition,0);
                 break;
             case R.id.left_button:
                 finish();

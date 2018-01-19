@@ -1,6 +1,7 @@
 package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -82,15 +83,15 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
         setContentView(R.layout.offline_member_mamage_act);
         ViewInjectUtils.inject(this);
         Intent intent = getIntent();
-        String storeLogo = intent.getStringExtra("store_logo");
-        String storeName = intent.getStringExtra("store_name");
+        String storeLogo = intent.getStringExtra("m_logo");
+        String storeName = intent.getStringExtra("m_name");
         initView(storeLogo,storeName);
     }
 
     private void initView(String logo, String name) {
         setCenterTitle("会员管理");
-//        offlineMemberManageImg.setImageURI(Uri.parse(logo)); //设置logo
-//        offlineMemberStoreName.setText(name); //设置店名字
+        offlineMemberManageImg.setImageURI(Uri.parse(logo)); //设置logo
+        offlineMemberStoreName.setText(name); //设置店名字
 
         offlineSearchMember.setOnClickListener(this);
         offlineMemberConsumeList.setOnClickListener(this);

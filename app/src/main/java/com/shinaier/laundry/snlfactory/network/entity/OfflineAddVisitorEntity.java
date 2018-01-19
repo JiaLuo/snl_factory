@@ -7,47 +7,34 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class OfflineAddVisitorEntity {
-    @SerializedName("retcode")
-    private int retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("data")
-    private OfflineAddVisitorDatas datas;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("uid")
+    private String uid;
 
-    public int getRetcode() {
-        return retcode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRetcode(int retcode) {
-        this.retcode = retcode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public OfflineAddVisitorDatas getDatas() {
-        return datas;
+    public String getUid() {
+        return uid;
     }
 
-    public void setDatas(OfflineAddVisitorDatas datas) {
-        this.datas = datas;
-    }
-
-    public class OfflineAddVisitorDatas{
-        @SerializedName("user")
-        private String user;
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
-        }
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
