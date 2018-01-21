@@ -65,6 +65,7 @@ import com.shinaier.laundry.snlfactory.network.entity.PlatformPaySuccessEntity;
 import com.shinaier.laundry.snlfactory.network.entity.PrintRechargeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.QuestionSettingSuccessEntities;
 import com.shinaier.laundry.snlfactory.network.entity.RechargeSuccessEntity;
+import com.shinaier.laundry.snlfactory.network.entity.RefluxEditEntity;
 import com.shinaier.laundry.snlfactory.network.entity.SettingsEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsIncomeEntity;
 import com.shinaier.laundry.snlfactory.network.entity.StatisticsNoPayEntity;
@@ -899,5 +900,14 @@ public class Parsers {
      */
     public static WashEntity getWashEntity(String data){
         return gson.fromJson(data,new TypeToken<WashEntity>(){}.getType());
+    }
+
+    /**
+     * 返流
+     * @param data
+     * @return
+     */
+    public static RefluxEditEntity getRefluxEditEntity(String data){
+        return gson.fromJson(data,new TypeToken<RefluxEditEntity>(){}.getType());
     }
 }

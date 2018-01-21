@@ -107,7 +107,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
                 myViewGoodsHolder.item_clothes_discount.setVisibility(View.GONE);
             }else {
                 myViewGoodsHolder.item_clothes_discount.setVisibility(View.VISIBLE);
-                myViewGoodsHolder.item_clothes_discount.setText(data.get(position).getItem_discount());
+                myViewGoodsHolder.item_clothes_discount.setText(data.get(position).getItem_discount() + "折");
             }
             if (badges.containsKey(data.get(position).getItem_name()) && badges.get(data.get(position).getItem_name()) > 0) {
                 myViewGoodsHolder.item_clothes_num.setVisibility(View.VISIBLE);

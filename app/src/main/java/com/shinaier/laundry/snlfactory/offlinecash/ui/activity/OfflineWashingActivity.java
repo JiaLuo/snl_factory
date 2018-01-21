@@ -347,8 +347,6 @@ public class OfflineWashingActivity extends ToolBarActivity implements View.OnCl
                             }
                             offlineWashingAdapter.notifyDataSetChanged();
                             ToastUtil.shortShow(this,addExecEntity.getMsg());
-                        }else if (addExecEntity.getCode() == 2){
-                            ToastUtil.shortShow(this,"衣物编码不存在");
                         } else {
                             ToastUtil.shortShow(this,addExecEntity.getMsg());
                         }

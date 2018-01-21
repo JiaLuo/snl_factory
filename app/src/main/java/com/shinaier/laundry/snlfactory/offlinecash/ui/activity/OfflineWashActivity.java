@@ -31,6 +31,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 
 
+
 /**
  * Created by 张家洛 on 2018/1/11.
  */
@@ -65,6 +66,7 @@ public class OfflineWashActivity extends ToolBarActivity implements View.OnClick
     private List<WashEntity.WashResult> results;
     private StringBuffer stringBuffer = new StringBuffer();
     private OfflineWashAdapter offlineWashAdapter;
+    private  boolean isClickAll = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class OfflineWashActivity extends ToolBarActivity implements View.OnClick
     private void loadData() {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
+        params.put("type","1");
         requestHttpData(Constants.Urls.URL_POST_WASH_LIST,REQUEST_CODE_WASH_LIST,
                 FProtocol.HttpMethod.POST,params);
     }
@@ -114,36 +117,28 @@ public class OfflineWashActivity extends ToolBarActivity implements View.OnClick
                         SCAN_ADD_CLOTHES);
                 break;
             case R.id.rl_add_select:
-                boolean isClickAll = false;
-                for (int i = 0; i < results.size(); i++) {
-                    String assist = results.get(i).getAssist();
-                    if (assist.equals("0")){
-                        isClickAll = true;
-                    }
-                }
-                if (isClickAll){
-                    if (rlAddSelect.isSelected()){
-                        rlAddSelect.setSelected(false);
-                        for (int i = 0; i < results.size(); i++) {
-                            results.get(i).isSelect = false;
-                        }
-                    }else {
-                        rlAddSelect.setSelected(true);
-                        for (int i = 0; i < results.size(); i++) {
+                if (!isClickAll){
+                    isClickAll = true;
+                    rlAddSelect.setSelected(true);
+                    for (int i = 0; i < results.size(); i++) {
+                        String assist = results.get(i).getAssist();
+                        if (assist.equals("0")){
                             results.get(i).isSelect = true;
                         }
                     }
-                }else {
-                    ToastUtil.shortShow(this,"没有可选项目");
-                }
 
-                if (offlineWashAdapter != null){
-                    if (offlineWashAdapter.isTrue){
-                        offlineWashAdapter.allSelect(false);
-                    }else{
-                        offlineWashAdapter.allSelect(true);
+                }else{
+                    isClickAll = false;
+                    rlAddSelect.setSelected(false);
+                    for (int i = 0; i < results.size(); i++) {
+                        String assist = results.get(i).getAssist();
+                        if (assist.equals("0")){
+                            results.get(i).isSelect = false;
+                        }
                     }
                 }
+
+                offlineWashAdapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -215,13 +210,13 @@ public class OfflineWashActivity extends ToolBarActivity implements View.OnClick
                                     public void onSelect(int position,ImageView imageView) {
                                         if (results.get(position).isSelect){
                                             results.get(position).isSelect = false;
-                                            imageView.setSelected(false);
+//                                            imageView.setSelected(false);
                                         }else {
                                             results.get(position).isSelect = true;
-                                            imageView.setSelected(true);
+//                                            imageView.setSelected(true);
                                         }
 
-//                                        offlineWashAdapter.notifyDataSetChanged();
+                                        offlineWashAdapter.notifyDataSetChanged();
                                     }
                                 });
                             }else {
@@ -298,7 +293,6 @@ public class OfflineWashActivity extends ToolBarActivity implements View.OnClick
                             offlineWashAdapter.notifyDataSetChanged();
                             ToastUtil.shortShow(this,addExecEntity.getMsg());
                         }else {
-                            LogUtil.e("zhang","msg = " + addExecEntity.getMsg());
                             ToastUtil.shortShow(this,addExecEntity.getMsg());
                         }
                     }

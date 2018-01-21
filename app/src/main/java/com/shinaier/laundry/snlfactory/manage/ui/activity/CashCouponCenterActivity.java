@@ -23,6 +23,7 @@ import com.shinaier.laundry.snlfactory.offlinecash.view.Type;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.IdentityHashMap;
@@ -46,6 +47,8 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
     private TextView tvSelectTime;
     @ViewInject(R.id.card_coupons_list)
     private ListView cardCouponsList;
+    @ViewInject(R.id.left_button)
+    private ImageView leftButton;
 
     SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
     TimePickerDialog mDialogYearMonthDay;
@@ -62,10 +65,13 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
 
     private void initView() {
         setCenterTitle("卡券中心");
+        initLoadingView(this);
+        setLoadingStatus(LoadingStatus.LOADING);
         ivMakeCashCoupon.setOnClickListener(this);
         ivMakeRechargeCard.setOnClickListener(this);
         ivSelectTime.setOnClickListener(this);
         tvSelectTime.setOnClickListener(this);
+        leftButton.setOnClickListener(this);
 
         //获取当前月份
         Calendar calendar = Calendar.getInstance();
@@ -101,9 +107,11 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
             case REQUEST_CODE_CASH_COUPON_CENTER:
                 if (data != null){
                     final CashCouponCenterEntity cashCouponCenterEntity = Parsers.getCashCouponCenterEntity(data);
+                    setLoadingStatus(LoadingStatus.GONE);
                     if (cashCouponCenterEntity != null){
                         if (cashCouponCenterEntity.getCode() == 0){
                             if (cashCouponCenterEntity.getResult() != null && cashCouponCenterEntity.getResult().size() > 0){
+                                setLoadingStatus(LoadingStatus.GONE);
                                 CashCouponCenterAdapter cashCouponCenterAdapter = new CashCouponCenterAdapter(this,cashCouponCenterEntity.getResult());
                                 cardCouponsList.setAdapter(cashCouponCenterAdapter);
                                 cashCouponCenterAdapter.setPositionListener(new CashCouponCenterAdapter.PositionListener() {
@@ -117,6 +125,10 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
                                         startActivity(intent);
                                     }
                                 });
+                            }else {
+                                setLoadingStatus(LoadingStatus.EMPTY);
+                                CashCouponCenterAdapter cashCouponCenterAdapter = new CashCouponCenterAdapter(this,new ArrayList<CashCouponCenterEntity.CashCouponCenterResult>());
+                                cardCouponsList.setAdapter(cashCouponCenterAdapter);
                             }
 
                         }else {
@@ -148,6 +160,12 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
                 //时间选择
                 mDialogYearMonthDay.show(getSupportFragmentManager(), "year_month");
                 break;
+            case R.id.left_button:
+                finish();
+                break;
+            case R.id.loading_layout:
+                loadData(nowTime);
+                break;
         }
     }
 
@@ -155,11 +173,22 @@ public class CashCouponCenterActivity extends ToolBarActivity implements View.On
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         String dateToString = getDateToString(millseconds);
         tvSelectTime.setText(dateToString);
+        setLoadingStatus(LoadingStatus.LOADING);
         loadData(dateToString);
     }
 
     public String getDateToString(long time) {
         Date d = new Date(time);
         return sf.format(d);
+    }
+
+    @Override
+    public void mistake(int requestCode, FProtocol.NetDataProtocol.ResponseStatus status, String errorMessage) {
+        super.mistake(requestCode, status, errorMessage);
+        switch (requestCode){
+            case REQUEST_CODE_CASH_COUPON_CENTER:
+                setLoadingStatus(LoadingStatus.RETRY);
+                break;
+        }
     }
 }

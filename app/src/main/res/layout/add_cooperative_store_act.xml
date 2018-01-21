@@ -40,7 +40,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:singleLine="true"
-                    android:hint="请输入订单号"
+                    android:hint="请输入门店名称/门店编码"
                     android:imeOptions="actionSearch"
                     android:textColor="#000"
                     android:textColorHint="#c7c7cc"

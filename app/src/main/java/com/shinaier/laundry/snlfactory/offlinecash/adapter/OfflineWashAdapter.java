@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
-import com.common.utils.LogUtil;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.WashEntity;
 
@@ -20,7 +19,6 @@ import java.util.List;
 
 public class OfflineWashAdapter extends BaseAdapterNew<WashEntity.WashResult> {
     private Context context;
-    public boolean isTrue = false;
     private SelectListener selectListener;
 
     public interface SelectListener{
@@ -32,11 +30,6 @@ public class OfflineWashAdapter extends BaseAdapterNew<WashEntity.WashResult> {
     public OfflineWashAdapter(Context context, List<WashEntity.WashResult> mDatas) {
         super(context, mDatas);
         this.context = context;
-    }
-
-    public void allSelect(boolean isTrue){
-        this.isTrue = isTrue;
-        this.notifyDataSetChanged();
     }
 
     @Override
@@ -74,19 +67,14 @@ public class OfflineWashAdapter extends BaseAdapterNew<WashEntity.WashResult> {
                     }
                 }
             });
-            if(isTrue){
-                if (item.getAssist().equals("0")){
+            if (item.getAssist().equals("0")){
+                if (item.isSelect){
                     ivItemSelect.setSelected(true);
-                    item.isSelect = true;
-                    LogUtil.e("zhang","bbbbbbbbbbbbbbbbbbb");
-                }else {
+                }else{
                     ivItemSelect.setSelected(false);
-                    item.isSelect = false;
-                    LogUtil.e("zhang","cccccccccccccccccc");
                 }
-            }else {
+            }else{
                 ivItemSelect.setSelected(false);
-                item.isSelect = false;
             }
         }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SnlFactory</string>
+    <string name="app_name">速洗达工厂版</string>
     <string name="order_manage">订单处理</string>
     <string name="offline_cash">线下收银</string>
     <string name="manage">管理</string>

@@ -103,7 +103,6 @@ public class OrderManageWillCleanFragment extends BaseFragment implements View.O
                                     @Override
                                     public void onClick(int position) {
                                         Intent intent = new Intent(context,OrderDetailActivity.class);
-//                                        intent.putExtra("extra_from", OrderCategoryFragment.FROM_ONLIEN);
                                         intent.putExtra("id",orderCleanEntities.getResults().get(position).getId());
                                         startActivity(intent);
                                     }

@@ -1,8 +1,10 @@
 package com.shinaier.laundry.snlfactory.offlinecash.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,13 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
+import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.activity.ToolBarActivity;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.RefluxEditEntity;
+import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.RefluxClothesImgAdapter;
 import com.shinaier.laundry.snlfactory.offlinecash.adapter.RefluxModuleAdapter;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.BigPhotoActivity;
@@ -71,6 +77,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
     private RefluxClothesImgAdapter refluxClothesImgAdapter;
     private String delImag;
     private CommonDialog dialog;
+    private ArrayList<String> uploadPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +195,166 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.left_button:
+            case R.id.repulse_edit_btn:
+                finish();
+                break;
+            case R.id.reflux_edit_normal:
+                if (refluxEditNormal.isSelected()){
+                    refluxEditNormal.setSelected(false);
+                }else {
+                    refluxEditNormal.setSelected(true);
+                    if (refluxEditNotNormal.isSelected()){
+                        refluxEditNotNormal.setSelected(false);
+                    }
+                }
+                break;
+            case R.id.reflux_edit_not_normal:
+                if (refluxEditNotNormal.isSelected()){
+                    refluxEditNotNormal.setSelected(false);
+                }else {
+                    refluxEditNotNormal.setSelected(true);
+                    if (refluxEditNormal.isSelected()){
+                        refluxEditNormal.setSelected(false);
+                    }
+                }
+                break;
+            case R.id.agree_edit_btn:
+                String inputRefluxDescribe = etRefluxEditDescribe.getText().toString();
+//                if (uploadPhoto != null && uploadPhoto.size() > 0){
+                    if (!TextUtils.isEmpty(inputRefluxDescribe)){
+                        if (refluxEditNormal.isSelected() || refluxEditNotNormal.isSelected()){
+                            if (!TextUtils.isEmpty(stringBuffer.toString())){
+                                //同意返流
+                                loadData(false,inputRefluxDescribe);
+                            }else {
+                                ToastUtil.shortShow(this,"请选择返流步骤");
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,"请选择是否正常返流");
+                        }
+                    }else {
+                        ToastUtil.shortShow(this,"请输入描述");
+                    }
+//                }else {
+//                    ToastUtil.shortShow(this,"请上传图片");
+//                }
+                break;
+            case R.id.loading_layout:
+                loadData(true,"");
+                break;
+        }
+    }
 
+    @Override
+    protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
+        super.parseData(requestCode, data);
+        switch (requestCode){
+            case REQUEST_CODE_REFLUX_EDIT:
+                if (data != null){
+                    setLoadingStatus(LoadingStatus.GONE);
+                    RefluxEditEntity refluxEditEntity = Parsers.getRefluxEditEntity(data);
+                    if (refluxEditEntity != null){
+                        if (refluxEditEntity.getCode() == 0){
+                            if (refluxEditEntity.getResult() != null){
+                                setLoadingStatus(LoadingStatus.GONE);
+                                result = refluxEditEntity.getResult();
+                                if (result.getData() != null){
+                                    refluxEditImg.setImageURI(Uri.parse(result.getData().getImage()));
+                                    refluxEditName.setText(result.getData().getItemName());
+                                    refluxEditNumber.setText("衣物编码：" + result.getData().getCleanSn());
+                                }
+
+                                if (result.getData().getUrl() != null && result.getData().getUrl().size() > 0){
+                                    refluxClothesImgAdapter = new RefluxClothesImgAdapter(this,result.getData().getUrl());
+                                    refluxClothesImg.setAdapter(refluxClothesImgAdapter);
+                                    refluxClothesImgAdapter.setDeletePhotoListener(new RefluxClothesImgAdapter.DeletePhotoListener() {
+                                        @Override
+                                        public void onDelete(int position) {
+                                            dialog.setContent("删除中");
+                                            dialog.show();
+                                            delImag = result.getData().getUrl().get(position);
+                                            IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
+                                            params.put("token",UserCenter.getToken(OfflineRefluxEditActivity.this));
+                                            params.put("url",delImag);
+                                            requestHttpData(Constants.Urls.URL_POST_REFLUX_DELETE_CLOTHES_PHOTO,REQUEST_CODE_DELETE_PHOTO, FProtocol.HttpMethod.POST,params);
+                                        }
+                                    });
+                                }else {
+                                    refluxClothesImgAdapter = new RefluxClothesImgAdapter(this,new ArrayList<String>());
+                                    refluxClothesImg.setAdapter(refluxClothesImgAdapter);
+                                }
+
+                                if (result.getRefluxEditModules() != null && result.getRefluxEditModules().size() > 0){
+                                    refluxModuleAdapter = new RefluxModuleAdapter(this, result.getRefluxEditModules());
+                                    gvRefluxStepList.setAdapter(refluxModuleAdapter);
+                                }
+                            }else {
+                                setLoadingStatus(LoadingStatus.EMPTY);
+                            }
+                        }else {
+                            ToastUtil.shortShow(this,refluxEditEntity.getMsg());
+                        }
+                    }else {
+                        setLoadingStatus(LoadingStatus.EMPTY);
+                    }
+                }
+                break;
+            case REQUEST_CODE_DELETE_PHOTO:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+                            result.getData().getUrl().remove(delImag);
+                            refluxClothesImgAdapter.notifyDataSetChanged();
+                        }else {
+                            ToastUtil.shortShow(this,entity.getStatus());
+                        }
+                    }
+                }
+                break;
+            case REQUEST_CODE_REFLUX:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+                            ToastUtil.shortShow(this,"操作成功");
+                            finish();
+                        }else {
+                            ToastUtil.shortShow(this,entity.getStatus());
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_CODE_ADD_PHOTO:
+                if (resultCode == RESULT_OK){
+                    uploadPhoto = data.getStringArrayListExtra("upload_photo");
+
+                    loadData(true,"");
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void mistake(int requestCode, FProtocol.NetDataProtocol.ResponseStatus status, String errorMessage) {
+        super.mistake(requestCode, status, errorMessage);
+        switch (requestCode){
+            case REQUEST_CODE_REFLUX_EDIT:
+                setLoadingStatus(LoadingStatus.RETRY);
+                break;
+        }
     }
 }

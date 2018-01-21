@@ -127,8 +127,8 @@ public class OfflineCashFragment extends BaseFragment implements View.OnClickLis
         ImageView ivScan = (ImageView) view.findViewById(R.id.iv_scan);
         if(witch == 1){
             ivScan.setVisibility(View.GONE);
-            tvInputNum.setText("请输入客户手机号/会员卡号");
-            edPhoneOrderNum.setHint("请输入客户手机号/会员卡号");
+            tvInputNum.setText("请输入客户手机号");
+            edPhoneOrderNum.setHint("请输入客户手机号");
         }else if(witch == 2){
             tvInputNum.setText("请输入客户手机号/扫描订单号");
             edPhoneOrderNum.setHint("请输入客户手机号/扫描订单号");

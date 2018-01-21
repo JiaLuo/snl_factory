@@ -10,6 +10,7 @@ import com.common.adapter.BaseAdapterNew;
 import com.common.adapter.ViewHolder;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.network.entity.TakeClothesEntity;
+import com.shinaier.laundry.snlfactory.util.TimeUtils;
 import com.shinaier.laundry.snlfactory.view.WrapHeightListView;
 
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class TakeClothesAdapter extends BaseAdapterNew<TakeClothesEntity.TakeClo
                     }
                 }
             });
-            takeClothesOrderNowTime.setText(item.getoTime());
+            takeClothesOrderNowTime.setText(TimeUtils.formatTime(item.getoTime()));
             if (item.getPayState().equals("0")){
                 takeClothesPayStatus.setText("未支付");
                 takeClothesPayStatus.setTextColor(context.getResources().getColor(R.color.red));

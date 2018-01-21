@@ -2,6 +2,7 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,13 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
-import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.widget.FootLoadingListView;
 import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderDetailActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderCleaningEntities;
@@ -118,7 +119,10 @@ public class OrderManageWillCleaningFragment extends BaseFragment implements Vie
                                 categoryCleaningAdapter.setGotoDetailListener(new CategoryCleaningAdapter.GotoDetailListener() {
                                     @Override
                                     public void onClick(int position) {
-                                        LogUtil.e("zhang","进入订单详情");
+                                        //订单详情
+                                        Intent intent = new Intent(context,OrderDetailActivity.class);
+                                        intent.putExtra("id",orderCleaningEntities.getResults().get(position).getId());
+                                        startActivity(intent);
                                     }
                                 });
 
