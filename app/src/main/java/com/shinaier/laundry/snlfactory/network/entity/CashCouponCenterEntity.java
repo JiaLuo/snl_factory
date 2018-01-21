@@ -74,6 +74,16 @@ public class CashCouponCenterEntity {
             private String usedCount;
             @SerializedName("make_time")
             private String makeTime;
+            @SerializedName("make_value")
+            private String makeValue;
+
+            public String getMakeValue() {
+                return makeValue;
+            }
+
+            public void setMakeValue(String makeValue) {
+                this.makeValue = makeValue;
+            }
 
             public String getId() {
                 return id;

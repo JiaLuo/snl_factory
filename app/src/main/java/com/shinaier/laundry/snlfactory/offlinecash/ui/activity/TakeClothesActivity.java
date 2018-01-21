@@ -118,6 +118,7 @@ public class TakeClothesActivity extends ToolBarActivity implements View.OnClick
                 break;
             case REQUEST_CODE_TAKE_CLOTHES_LIST:
                 TakeClothesEntity takeClothesEntity = Parsers.getTakeClothesEntity(data); //获取取衣列表数据
+                takeClothesList.onRefreshComplete();
                 setLoadingStatus(LoadingStatus.GONE);
                 if(takeClothesEntity != null){
                     if(takeClothesEntity.getCode() == 0){

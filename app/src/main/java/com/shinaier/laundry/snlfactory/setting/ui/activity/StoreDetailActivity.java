@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
-import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -334,7 +333,7 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         }else if (what == 3){
             revisePhoneParams.put("freight_price", edRevisePhone);
             revisePhoneParams.put("freight_free_num", s);
-            revisePhoneParams.put(";freight_free_amount", s1);
+            revisePhoneParams.put("freight_free_amount", s1);
         }
         requestHttpData(Constants.Urls.URL_POST_STORE_INFO,REQUEST_CODE_REVISE_PHONE, FProtocol.HttpMethod.POST,revisePhoneParams);
     }
@@ -393,37 +392,16 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         singleTakeClothesConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                        storeInfoEntity.getAllModule().get()
                 modularStrings.clear();
-                StringBuffer stringBuffer = new StringBuffer();
                 for (int i = 0; i < storeInfoEntity.getAllModule().size(); i++) {
                     if (storeModulars.get(i).isSelect == 0){
                         modularStrings.add(storeInfoEntity.getAllModule().get(i).getModule());
                     }
                 }
 
-                if (modularStrings.size() > 0) {
-                    for (int i = 0; i < modularStrings.size(); i++) {
-                        if (i == 0) {
-                            if (modularStrings.size() == 1) {
-                                stringBuffer.append("[").append('"').append(modularStrings.get(i)).append('"').append("]");
-                            } else {
-                                stringBuffer.append("[").append('"').append(modularStrings.get(i)).append('"').append(",");
-                            }
-                        } else if (i > 0 && i < modularStrings.size() - 1) {
-                            stringBuffer.append('"').append(modularStrings.get(i)).append('"').append(",");
-                        } else {
-                            stringBuffer.append('"').append(modularStrings.get(i)).append('"').append("]");
-                        }
-                    }
-                } else {
-                    LogUtil.e("zhang","aaaaaaaaaa");
-                    return;
-                }
-
                 IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
                 params.put("token",UserCenter.getToken(StoreDetailActivity.this));
-                params.put("modules",stringBuffer.toString());
+                params.put("modules",modularStrings.toString());
                 requestHttpData(Constants.Urls.URL_POST_REVISE_STORE_MODULAR,REQUEST_CODE_REVISE_STORE_MODULAR, FProtocol.HttpMethod.POST,params);
             }
         });

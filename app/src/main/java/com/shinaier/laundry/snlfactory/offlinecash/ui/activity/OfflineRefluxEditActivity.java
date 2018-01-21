@@ -77,7 +77,6 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
     private RefluxClothesImgAdapter refluxClothesImgAdapter;
     private String delImag;
     private CommonDialog dialog;
-    private ArrayList<String> uploadPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +221,6 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                 break;
             case R.id.agree_edit_btn:
                 String inputRefluxDescribe = etRefluxEditDescribe.getText().toString();
-//                if (uploadPhoto != null && uploadPhoto.size() > 0){
                     if (!TextUtils.isEmpty(inputRefluxDescribe)){
                         if (refluxEditNormal.isSelected() || refluxEditNotNormal.isSelected()){
                             if (!TextUtils.isEmpty(stringBuffer.toString())){
@@ -237,9 +235,6 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                     }else {
                         ToastUtil.shortShow(this,"请输入描述");
                     }
-//                }else {
-//                    ToastUtil.shortShow(this,"请上传图片");
-//                }
                 break;
             case R.id.loading_layout:
                 loadData(true,"");
@@ -340,8 +335,6 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
         switch (requestCode){
             case REQUEST_CODE_ADD_PHOTO:
                 if (resultCode == RESULT_OK){
-                    uploadPhoto = data.getStringArrayListExtra("upload_photo");
-
                     loadData(true,"");
                 }
                 break;

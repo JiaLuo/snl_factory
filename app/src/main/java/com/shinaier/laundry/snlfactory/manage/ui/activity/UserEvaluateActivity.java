@@ -47,7 +47,7 @@ public class UserEvaluateActivity extends ToolBarActivity implements View.OnClic
                     String replyContent = (String)msg.obj;
                     IdentityHashMap<String,String> params = new IdentityHashMap<>();
                     params.put("token",UserCenter.getToken(UserEvaluateActivity.this));
-                    params.put("commendid",evaluateResult.getId());
+                    params.put("commentid",evaluateResult.getId());
                     params.put("manswer",replyContent);
                     requestHttpData(Constants.Urls.URL_POST_EVALUATE_REPLY,REQUEST_CODE_EVALUATE_REPLY, FProtocol.HttpMethod.POST,params);
                     break;

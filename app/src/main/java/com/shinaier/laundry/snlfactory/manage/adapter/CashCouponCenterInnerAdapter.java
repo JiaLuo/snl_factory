@@ -41,6 +41,7 @@ public class CashCouponCenterInnerAdapter extends BaseAdapterNew<CashCouponCente
         TextView cashCouponType = ViewHolder.get(convertView,R.id.cash_coupon_type);
         TextView cashCouponNum = ViewHolder.get(convertView,R.id.cash_coupon_num);
         TextView cashCouponTime = ViewHolder.get(convertView,R.id.cash_coupon_time);
+        TextView cashValue = ViewHolder.get(convertView,R.id.cash_value);
 
         if (item != null){
             if (item.getType().equals("1")){//记录类型：1-充值卡；0-优惠券;
@@ -50,6 +51,7 @@ public class CashCouponCenterInnerAdapter extends BaseAdapterNew<CashCouponCente
             }
             cashCouponNum.setText("张数：" + item.getUsedCount() + "/" + item.getMakeCount());
             cashCouponTime.setText(item.getMakeTime());
+            cashValue.setText("¥" + item.getMakeValue());
             llCashCouponCenterInner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

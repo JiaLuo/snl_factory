@@ -224,7 +224,7 @@
                 android:background="@color/base_color"
                 android:layout_weight="1"
                 android:drawablePadding="8dp"
-                android:text="同意"
+                android:text="确定"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_width="0dp"
