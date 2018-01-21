@@ -35,7 +35,7 @@ public class CarAdapter extends BaseQuickAdapter<GoodsBean, BaseViewHolder> {
             car_discount.setVisibility(View.GONE);
         }else {
             car_discount.setVisibility(View.VISIBLE);
-            car_discount.setText(item.getItem_discount());
+            car_discount.setText(item.getItem_discount() + "折");
         }
 
 		helper.setText(R.id.car_name, item.getItem_name())

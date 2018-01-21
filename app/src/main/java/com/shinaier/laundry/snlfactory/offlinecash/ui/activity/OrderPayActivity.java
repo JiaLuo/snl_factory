@@ -119,6 +119,10 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private RelativeLayout rlPlatformMember; //平台会员卡
     @ViewInject(R.id.tv_vip_member_balance)
     private TextView tvVipMemberBalance;
+    @ViewInject(R.id.rl_wxpay)
+    private RelativeLayout rlWxpay;
+    @ViewInject(R.id.rl_alipay)
+    private RelativeLayout rlAlipay;
 
     private CollectClothesDialog collectClothesDialog;
 
@@ -330,6 +334,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 //项目优惠价格
                                 reducePrice = result.getReducePrice();
 
+                                LogUtil.e("zhang","defaultNetReceipts = " + defaultNetReceipts);
 
                                 //默认显示品项折扣和实收价格
                                 showBrandDiscountNumAndNetReceiptsNormal(reducePrice, defaultNetReceipts);
@@ -514,12 +519,21 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 specialCashDiscount.setOnClickListener(null); //代金券金额比订单总额打的话 现金支付特殊折扣不让点
                                 specialWxpayDiscount.setOnClickListener(null);//代金券金额比订单总额打的话 微信支付特殊折扣不让点
                                 specialAlipayDiscount.setOnClickListener(null);//代金券金额比订单总额打的话 支付宝支付特殊折扣不让点
+                                //满足这个条件 微信支付和支付宝支付不让支付
+                                rlWxpay.setBackgroundColor(this.getResources().getColor(R.color.ccccc));
+                                rlAlipay.setBackgroundColor(this.getResources().getColor(R.color.ccccc));
+                                wxPaySelector.setOnClickListener(null);
+                                aliPaySelector.setOnClickListener(null);
                             }else {
                                 tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(defaultNetReceipts - cashCouponValue))); //设置实收显示
                                 tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue + reducePrice))); //设置品项折扣显示
                                 specialCashDiscount.setOnClickListener(this);
                                 specialWxpayDiscount.setOnClickListener(this);
                                 specialAlipayDiscount.setOnClickListener(this);
+                                wxPaySelector.setOnClickListener(this);
+                                aliPaySelector.setOnClickListener(this);
+                                rlWxpay.setBackgroundColor(this.getResources().getColor(R.color.white));
+                                rlAlipay.setBackgroundColor(this.getResources().getColor(R.color.white));
                             }
                         }else {
                             ToastUtil.shortShow(this,cashConponEntity.getMsg());
@@ -560,16 +574,17 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 if (isDiscount){
                     if (itemDiscount > cardDiscount){
                         double v = itemPrice - discountFunc(itemPrice, cardDiscount);
+                        LogUtil.e("zhang","discountFunc(itemPrice, cardDiscount) = " + discountFunc(itemPrice, cardDiscount));
                         doubles.add(v);
                     }else {
                         double v = itemPrice - discountFunc(itemPrice, itemDiscount);
                         doubles.add(v);
                     }
                 } else {
-                    doubles.add(itemRealPrice);
+                    doubles.add(itemPrice);
                 }
             }else {
-                doubles.add(itemPrice);
+                doubles.add(itemRealPrice);
             }
         }
 
@@ -577,6 +592,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
         for (int i = 0; i < doubles.size(); i++) {
             sum += doubles.get(i);
         }
+        LogUtil.e("zhang","sum = " + sum);
         return sum;
     }
 

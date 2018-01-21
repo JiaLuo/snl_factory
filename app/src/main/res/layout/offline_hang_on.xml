@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"/>
                 <com.shinaier.laundry.snlfactory.view.ClearEditText
                     android:id="@+id/edit_search_hang_on"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:layout_weight="0.6"
                     android:background="@null"
                     android:layout_width="match_parent"
