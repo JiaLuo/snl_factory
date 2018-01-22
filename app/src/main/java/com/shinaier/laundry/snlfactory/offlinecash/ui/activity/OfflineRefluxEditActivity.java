@@ -33,6 +33,7 @@ import com.shinaier.laundry.snlfactory.view.WrapHeightGridView;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.List;
 
 /**
  * Created by 张家洛 on 2018/1/18.
@@ -72,11 +73,13 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
 
     private String itemId;
     private RefluxEditEntity.RefluxEditResult result;
-    private StringBuffer stringBuffer = new StringBuffer(); //存权限id
+//    private StringBuffer stringBuffer = new StringBuffer(); //存权限id
     private RefluxModuleAdapter refluxModuleAdapter;
     private RefluxClothesImgAdapter refluxClothesImgAdapter;
     private String delImag;
     private CommonDialog dialog;
+
+    private List<String> strings = new ArrayList<>();//存权限id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                 params.put("is_back","1");
             }
 
-            params.put("back_state",stringBuffer.toString());
+            params.put("back_state",strings.toString());
             code = REQUEST_CODE_REFLUX;
         }else {
             code = REQUEST_CODE_REFLUX_EDIT;
@@ -144,17 +147,17 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
         gvRefluxStepList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                stringBuffer.delete(0,stringBuffer.length());
+                strings.clear();
                 if (result.getRefluxEditModules().get(position).isSelect){
                     result.getRefluxEditModules().get(position).isSelect = false;
-                    stringBuffer.append(result.getRefluxEditModules().get(position).getModule()); //如果没有选就remove掉已经选择的
+                    strings.remove(result.getRefluxEditModules().get(position).getModule()); //如果没有选就remove掉已经选择的
                 }else {
 
                     for (int i = 0; i < result.getRefluxEditModules().size(); i++) {
                         result.getRefluxEditModules().get(i).isSelect = false;
                     }
                     result.getRefluxEditModules().get(position).isSelect = true;
-                    stringBuffer.append(result.getRefluxEditModules().get(position).getModule()); //选择的权限加入到集合里
+                    strings.add(result.getRefluxEditModules().get(position).getModule()); //选择的权限加入到集合里
                 }
                 refluxModuleAdapter.notifyDataSetChanged();
             }
@@ -223,7 +226,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                 String inputRefluxDescribe = etRefluxEditDescribe.getText().toString();
                     if (!TextUtils.isEmpty(inputRefluxDescribe)){
                         if (refluxEditNormal.isSelected() || refluxEditNotNormal.isSelected()){
-                            if (!TextUtils.isEmpty(stringBuffer.toString())){
+                            if (!TextUtils.isEmpty(strings.toString())){
                                 //同意返流
                                 loadData(false,inputRefluxDescribe);
                             }else {
@@ -265,6 +268,17 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                                 if (result.getData().getUrl() != null && result.getData().getUrl().size() > 0){
                                     refluxClothesImgAdapter = new RefluxClothesImgAdapter(this,result.getData().getUrl());
                                     refluxClothesImg.setAdapter(refluxClothesImgAdapter);
+
+                                    if (strings.size() > 0){
+                                        for (int i = 0; i < result.getRefluxEditModules().size(); i++) {
+                                            for (int j = 0; j < strings.size(); j++) {
+                                                if (strings.get(j).equals(result.getRefluxEditModules().get(i).getModule())){
+                                                    result.getRefluxEditModules().get(j).isSelect = true;
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     refluxClothesImgAdapter.setDeletePhotoListener(new RefluxClothesImgAdapter.DeletePhotoListener() {
                                         @Override
                                         public void onDelete(int position) {

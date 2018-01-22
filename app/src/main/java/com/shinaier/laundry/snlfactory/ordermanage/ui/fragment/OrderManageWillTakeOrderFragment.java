@@ -14,6 +14,7 @@ import com.common.utils.ToastUtil;
 import com.common.widget.FootLoadingListView;
 import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
+import com.shinaier.laundry.snlfactory.base.activity.WebViewActivity;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderDetailActivity;
@@ -21,7 +22,6 @@ import com.shinaier.laundry.snlfactory.network.Constants;
 import com.shinaier.laundry.snlfactory.network.entity.OrderTakeOrderEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategoryTakeOrderAdapter;
-import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.AddProjectsActivity;
 import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CancelOrderActivity;
 
 import java.util.ArrayList;
@@ -110,9 +110,16 @@ public class OrderManageWillTakeOrderFragment extends BaseFragment implements Vi
 
                                     @Override
                                     public void confirmOnClick(int position) {
-                                        Intent intent = new Intent(context,AddProjectsActivity.class);
-                                        intent.putExtra("order_id",orderTakeOrderEntities.getResults()
-                                                .get(position).getId());
+//                                        Intent intent = new Intent(context,AddProjectsActivity.class);
+//                                        intent.putExtra("order_id",orderTakeOrderEntities.getResults()
+//                                                .get(position).getId());
+//                                        startActivity(intent);
+                                        String id = orderTakeOrderEntities.getResults().get(position).getId();
+                                        Intent intent = new Intent(context, WebViewActivity.class);
+                                        intent.putExtra(WebViewActivity.EXTRA_URL, "http://xiyi.wzj.dev.shuxier.com/mapi/merchantorder/additem?token=" + UserCenter.getToken(context) +
+                                                "&orderid=" + id + "&type=1");
+                                        intent.putExtra(WebViewActivity.EXTRA_TITLE, "添加项目");
+                                        intent.putExtra("order_id",id);
                                         startActivity(intent);
                                     }
 

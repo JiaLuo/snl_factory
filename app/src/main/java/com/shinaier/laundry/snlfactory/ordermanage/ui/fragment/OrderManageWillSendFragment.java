@@ -2,6 +2,7 @@ package com.shinaier.laundry.snlfactory.ordermanage.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +20,9 @@ import com.common.widget.PullToRefreshBase;
 import com.shinaier.laundry.snlfactory.R;
 import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.OrderDetailActivity;
 import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.entity.OrderSendEntities;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.ordermanage.adapter.CategorySendAdapter;
@@ -138,10 +141,9 @@ public class OrderManageWillSendFragment extends BaseFragment implements View.On
                                 categorySendAdapter.setGotoDetailListener(new CategorySendAdapter.GotoDetailListener() {
                                     @Override
                                     public void onClick(int position) {
-//                                        Intent intent = new Intent(context,OrderDetailActivity.class);
-//                                        intent.putExtra("extra_from", OrderCategoryFragment.FROM_ONLIEN);
-//                                        intent.putExtra("id", orderSendEntities.getResults().get(position).getId());
-//                                        startActivity(intent);
+                                        Intent intent = new Intent(context,OrderDetailActivity.class);
+                                        intent.putExtra("id", orderSendEntities.getResults().get(position).getId());
+                                        startActivity(intent);
                                     }
                                 });
 
@@ -188,7 +190,17 @@ public class OrderManageWillSendFragment extends BaseFragment implements View.On
                 }
                 break;
             case REQUEST_CODE_ORDER_SEND:
+                if(data != null){
+                    Entity checkedEntity = Parsers.getEntity(data);
+                    if(checkedEntity != null){
+                        if(checkedEntity.getRetcode() == 0){
+                            loadData(false);
+                        }else {
+                            ToastUtil.shortShow(context,checkedEntity.getStatus());
+                        }
+                    }
 
+                }
                 break;
             case REQUEST_CODE_WILL_SEND_MORE:
                 orderManageWillSendList.onRefreshComplete();

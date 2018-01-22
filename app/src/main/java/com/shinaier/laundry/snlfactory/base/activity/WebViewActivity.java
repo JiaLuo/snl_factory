@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,7 +23,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
+import com.common.utils.ToastUtil;
 import com.shinaier.laundry.snlfactory.R;
+import com.shinaier.laundry.snlfactory.main.UserCenter;
+import com.shinaier.laundry.snlfactory.network.Constants;
+import com.shinaier.laundry.snlfactory.network.entity.Entity;
+import com.shinaier.laundry.snlfactory.network.parser.Parsers;
+import com.shinaier.laundry.snlfactory.ordermanage.ui.activity.CraftworkAddPriceActivity;
+import com.shinaier.laundry.snlfactory.util.ExitManager;
+
+import java.util.IdentityHashMap;
 
 
 /**
@@ -30,6 +42,8 @@ import com.shinaier.laundry.snlfactory.R;
  */
 
 public class WebViewActivity extends ToolBarActivity {
+    private static final int REQUEST_ADD_PROJECT_CONFIRM = 0x1;
+
     public static final String EXTRA_URL = "URL";
     public static final String EXTRA_TITLE = "title";
     private String url;
@@ -55,14 +69,18 @@ public class WebViewActivity extends ToolBarActivity {
             }
         }
     };
+    private String orderId;
+
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview_act);
+        ExitManager.instance.addItemActivity(this);
 
         url = getIntent().getStringExtra(EXTRA_URL);
         title = getIntent().getStringExtra(EXTRA_TITLE);
+        orderId = getIntent().getStringExtra("order_id");
         if(!TextUtils.isEmpty(title)){
             setCenterTitle(title);
         }
@@ -141,6 +159,8 @@ public class WebViewActivity extends ToolBarActivity {
             mWebView.loadUrl(url);
 
         }
+
+        mWebView.addJavascriptInterface(new JsInterface(),"jsInterface" );
     }
 
     @Override
@@ -203,5 +223,41 @@ public class WebViewActivity extends ToolBarActivity {
     public void onDestroy() {
         mWebView.destroy();
         super.onDestroy();
+    }
+
+    /**
+     * 提供给js调用native
+     */
+    class JsInterface{
+        @JavascriptInterface
+        public void nextStep(String data){
+            IdentityHashMap<String,String> params = new IdentityHashMap<>();
+            params.put("token", UserCenter.getToken(WebViewActivity.this));
+            params.put("items",data);
+            params.put("oid",orderId);
+            requestHttpData(Constants.Urls.URL_POST_ADD_PROJECT_CONFIRM,REQUEST_ADD_PROJECT_CONFIRM, FProtocol.HttpMethod.POST,params);
+        }
+    }
+
+    @Override
+    protected void parseData(int requestCode, String data) {
+        super.parseData(requestCode, data);
+        switch (requestCode){
+            case REQUEST_ADD_PROJECT_CONFIRM:
+                if (data != null){
+                    Entity entity = Parsers.getEntity(data);
+                    if (entity != null){
+                        if (entity.getRetcode() == 0){
+                            LogUtil.e("zhang","添加成功");
+                            Intent intent = new Intent(this,CraftworkAddPriceActivity.class);
+                            intent.putExtra("id",orderId);
+                            startActivity(intent);
+                        }else {
+                            ToastUtil.shortShow(this,entity.getStatus());
+                        }
+                    }
+                }
+                break;
+        }
     }
 }

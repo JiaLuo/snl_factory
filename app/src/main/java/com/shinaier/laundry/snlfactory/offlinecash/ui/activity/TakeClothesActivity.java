@@ -100,6 +100,7 @@ public class TakeClothesActivity extends ToolBarActivity implements View.OnClick
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_SINGLE_TAKE_CLOTHES:
@@ -107,8 +108,16 @@ public class TakeClothesActivity extends ToolBarActivity implements View.OnClick
                     Entity entity = Parsers.getEntity(data);
                     if (entity != null){
                         if(entity.getRetcode() == 0){
-                            dialog.dismiss();
-                            collectClothesDialog.dismiss();
+                            if (collectClothesDialog != null){
+                                if (collectClothesDialog.isShowing())  collectClothesDialog.dismiss();
+                            }
+
+                            if (confirmTakeEnd != null){
+                                if (confirmTakeEnd.isShowing()) confirmTakeEnd.dismiss();
+                            }
+                            if (dialog.isShowing()){
+                                dialog.dismiss();
+                            }
                             takeOrderData(phoneNum); //重新刷一下界面
                         }else {
                             ToastUtil.shortShow(this,entity.getStatus());
@@ -314,7 +323,7 @@ public class TakeClothesActivity extends ToolBarActivity implements View.OnClick
                                                 params.put("moduleid","100");
                                                 params.put("itemids", "");
                                                 params.put("type","2");
-                                                params.put("orderid",lists.get(item).getId());
+                                                params.put("orderid",lists.get(position).getId());
                                                 requestHttpData(Constants.Urls.URL_POST_SINGLE_TAKE_CLOTHES, REQUEST_CODE_SINGLE_TAKE_CLOTHES,
                                                         FProtocol.HttpMethod.POST, params);
                                             }
