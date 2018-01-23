@@ -95,7 +95,7 @@
 #实体类
 -keep class com.shinaier.laundry.snlfactory.network.entity.** { *;}
 
--keep class com.shinaier.laundry.snlfactory.ordermanage.entity.** { *;}
+-keep class com.shinaier.laundry.snlfactory.ordermanage.entities.** { *;}
 
 #Gson specific classes
 -keep class sun.misc.Unsafe { *; }

@@ -266,14 +266,14 @@ public class OrderDetailActivity extends ToolBarActivity implements View.OnClick
 
             rlOrderRemarks.setVisibility(View.GONE);
         }else {
-            if (orderDetailEntity.getDetailResult().getPayState().equals("0")){ //支付状态：0-代支付，1-已支
+//            if (orderDetailEntity.getDetailResult().getPayState().equals("0")){ //支付状态：0-代支付，1-已支
                 //线上订单只显示共几件，活动优惠 ，上门服务费：
-                llProjectInfo.setVisibility(View.GONE);
+//                llProjectInfo.setVisibility(View.GONE);
                 //线上订单 显示总计 实付
-                llAltogether.setVisibility(View.GONE);
+//                llAltogether.setVisibility(View.GONE);
                 //预约上门时间
 //                llBespeaTime.setVisibility(View.GONE);
-            }else {
+//            }else {
                 //线上订单只显示共几件，活动优惠 ，上门服务费：
                 llProjectInfo.setVisibility(View.VISIBLE);
                 //线上订单 显示总计 实付
@@ -282,7 +282,7 @@ public class OrderDetailActivity extends ToolBarActivity implements View.OnClick
                 llBespeaTime.setVisibility(View.VISIBLE);
                 orderTotalNum.setText("总价：￥" + orderDetailEntity.getDetailResult().getAmount()); //设置总价
                 numOfPackages.setText("共" + orderDetailEntity.getDetailResult().getItemCount() + "件");
-            }
+//            }
 
 
             //判断活动优惠是否显示

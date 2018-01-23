@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
-import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -42,6 +41,7 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
     public static final int EXTRA_FROM = 0x4;
     public static final int REQUEST_CODE_EDIT_ITEM = 0x6;
     private static final int EDIT_PRICE_CODE = 0x7;
+    private static final int REQUEST_CODE_WX_MSG = 0x8;
 
     @ViewInject(R.id.editor_price_list)
     private WrapHeightListView editorPriceList;
@@ -191,6 +191,12 @@ public class CraftworkAddPriceActivity extends ToolBarActivity implements View.O
                             params.put("oid",id);
                             requestHttpData(Constants.Urls.URL_POST_CONFRIM_CONSIGNEE,REQUEST_CODE_CONFIRM_CONSIGEE,
                                     FProtocol.HttpMethod.POST,params);
+                            if (craftworkAddPriceEntities.getResult().getIsOnline().equals("1")){
+                                IdentityHashMap<String,String> sendWxMsgParams = new IdentityHashMap<String, String>();
+                                sendWxMsgParams.put("token",UserCenter.getToken(CraftworkAddPriceActivity.this));
+                                requestHttpData(Constants.Urls.URL_POST_WX_MSG,REQUEST_CODE_WX_MSG,
+                                        FProtocol.HttpMethod.POST,sendWxMsgParams);
+                            }
 
                         }
                     });
