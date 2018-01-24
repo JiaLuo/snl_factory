@@ -41,7 +41,7 @@ public class CooperativeStoreEntities {
     }
 
     public class CooperativeStoreResults{
-        @SerializedName("accept_id")
+        @SerializedName("crew")
         private String acceptId;
         @SerializedName("id")
         private String id;

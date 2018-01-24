@@ -133,18 +133,18 @@ public class CategoryCleaningAdapter extends BaseAdapterNew<OrderCleaningEntitie
 
 //            employeeLineNum.setText(String.valueOf(Integer.valueOf(countNum) - position));
 
-
-            if (item.getChecked().equals("0")){//是否可以检查完成:1-是;然否
-                cleaningContactStore.setBackgroundResource(R.drawable.login);
-                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
-                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
-            }else {
-                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
-                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
-                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
-                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
-            }
+            cleaningContactStore.setBackgroundResource(R.drawable.login);
+            cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+            cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+                    DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+//            if (item.getChecked().equals("0")){//是否可以检查完成:1-是;然否
+//
+//            }else {
+//                cleaningContactStore.setBackgroundResource(R.drawable.check_not);
+//                cleaningContactStore.setTextColor(context.getResources().getColor(R.color.white));
+//                cleaningContactStore.setPadding(DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5),
+//                        DeviceUtil.dp_to_px(context,7), DeviceUtil.dp_to_px(context,5));
+//            }
             cleaningContactStore.setText("清洗完成");
             cleaningContactStore.setOnClickListener(new View.OnClickListener() {
                 @Override

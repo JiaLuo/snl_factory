@@ -164,11 +164,17 @@ public class ManageCommodityEditActivity extends ToolBarActivity implements View
             case R.id.confirm:
                 //确认按钮
                 String desc = etColorSettingDescribe.getText().toString();
+                String inputDiscount = edInputNormalDiscount.getText().toString();
+                double v1 = Double.parseDouble(inputDiscount);
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
                 params.put("token",UserCenter.getToken(this));
                 params.put("item_id",itemId);
                 params.put("item_price",edInputClothesPrice.getText().toString());
                 params.put("item_cycle",edInputWashCycle.getText().toString());
+                if (v1 <= 1){
+                    ToastUtil.shortShow(this,"折扣不能是0折");
+                    return;
+                }
                 params.put("item_discount",edInputNormalDiscount.getText().toString());
                 params.put("has_discount",isDiscount);//是否打折：1-是，0-否
                 if (!TextUtils.isEmpty(desc)){  //洗后预估可以不填，所以做一个非空判断

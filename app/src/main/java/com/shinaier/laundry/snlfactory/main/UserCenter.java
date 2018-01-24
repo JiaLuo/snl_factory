@@ -16,6 +16,7 @@ public class UserCenter {
     public static final String USER_PRE_KEY_IS_ROOT = "user_pre_is_root";
     public static final String USER_PRE_KEY_UID = "user_pre_uid";
     public static final String USER_PRE_KEY_ROLE = "user_pre_role";
+    public static final String USER_PRE_KEY_STATE = "user_pre_state";
 
     private UserCenter(){
     }
@@ -70,6 +71,14 @@ public class UserCenter {
 
     public static void saveLoginStatus(Context context, boolean flag){
         PreferencesUtils.putBoolean(context,"USER_PRE_KEY_TOKEN",flag);
+    }
+
+    public static void setState(Context context,String state){
+        PreferencesUtils.putString(context,USER_PRE_KEY_STATE,state);
+    }
+
+    public static String getState(Context context){
+        return PreferencesUtils.getString(context,USER_PRE_KEY_STATE);
     }
 
 

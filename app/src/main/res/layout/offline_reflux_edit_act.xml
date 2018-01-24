@@ -65,7 +65,7 @@
                     android:background="@color/narrow_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"/>
-                <com.shinaier.laundry.snlstore.view.WrapHeightGridView
+                <com.shinaier.laundry.snlfactory.view.WrapHeightGridView
                     android:id="@+id/reflux_clothes_img"
                     android:numColumns="3"
                     android:layout_marginLeft="12dp"
@@ -190,7 +190,7 @@
                         android:textColor="@color/black_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
-                    <com.shinaier.laundry.snlstore.view.WrapHeightGridView
+                    <com.shinaier.laundry.snlfactory.view.WrapHeightGridView
                         android:id="@+id/gv_reflux_step_list"
                         android:numColumns="2"
                         android:verticalSpacing="20dp"

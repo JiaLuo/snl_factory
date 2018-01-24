@@ -115,8 +115,8 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                 TextView revisePhoneCancel = (TextView) view.findViewById(R.id.revise_phone_cancel);
                 TextView revisePhoneConfirm = (TextView) view.findViewById(R.id.revise_phone_confirm);
                 ivScan.setVisibility(View.GONE);
-                tvInputNum.setText("请输入会员手机号/会员卡号");
-                edPhoneOrderNum.setHint("请输入会员手机号/会员卡号");
+                tvInputNum.setText("请输入会员手机号");
+                edPhoneOrderNum.setHint("请输入会员手机号");
                 collectClothesDialog = new CollectClothesDialog(this, R.style.DialogTheme,view);
                 collectClothesDialog.show();
 
@@ -130,14 +130,14 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                 revisePhoneConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        isWhichClick = 1;
+                        searchMember = 1;
                         memberNum = edPhoneOrderNum.getText().toString();
                         if(!TextUtils.isEmpty(memberNum)){
 //                            if (CommonTools.checkPhoneNumber(OfflineMemberManageActivity.this,false,memberNum)){
-                                IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                                params.put("token", UserCenter.getToken(OfflineMemberManageActivity.this));
-                                params.put("number",memberNum);
-                                requestHttpData(Constants.Urls.URL_POST_CUSTOM_INFO,REQUEST_CODE_MEMBER_ADD, FProtocol.HttpMethod.POST,params);
+                            //判断手机号是否存在
+                                dialog.setContent("加载中");
+                                dialog.show();
+                                existMember(searchMember,memberNum);
 //                            }
                         }else {
                             ToastUtil.shortShow(OfflineMemberManageActivity.this,"请输入手机号/会员卡号");
@@ -397,7 +397,8 @@ public class OfflineMemberManageActivity extends ToolBarActivity implements View
                     }
                     if (entity.getRetcode() == 0){
                         Intent intent = new Intent(this,OfflineChangeMemberInfoActivity.class);
-                        intent.putExtra("member_number",memberNum);
+
+                        intent.putExtra("member_number",inputPhoneNum);
                         startActivity(intent);
                         if (collectClothesDialog.isShowing()){
                             collectClothesDialog.dismiss();

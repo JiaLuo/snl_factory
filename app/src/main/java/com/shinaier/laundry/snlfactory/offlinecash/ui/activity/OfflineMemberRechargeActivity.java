@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
+import com.common.utils.LogUtil;
 import com.common.utils.ToastUtil;
 import com.common.viewinject.annotation.ViewInject;
 import com.shinaier.laundry.snlfactory.R;
@@ -153,6 +154,7 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " +data);
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_OFFLINE_VIP_RECHARGE:
@@ -252,8 +254,7 @@ public class OfflineMemberRechargeActivity extends ToolBarActivity implements Vi
     private void memberRecharge(String rechargeId) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token",UserCenter.getToken(this));
-        params.put("clerk_id",UserCenter.getUid(this));
-        params.put("recharge_id",rechargeId);
+        params.put("record_id",rechargeId);
         requestHttpData(Constants.Urls.URL_POST_RECHARGE_PRINT,REQUEST_CODE_RECHARGE_PRINT, FProtocol.HttpMethod.POST,params);
     }
 

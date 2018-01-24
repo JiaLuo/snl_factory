@@ -14,6 +14,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.network.FProtocol;
@@ -75,6 +76,8 @@ public class AddProjectsActivity extends ToolBarActivity implements AddWidget.On
     private View blackView;
     @ViewInject(R.id.car_recyclerview)
     private RecyclerView carRecView;
+    @ViewInject(R.id.left_button)
+    private ImageView leftButton;
 
     public BottomSheetBehavior behavior;
     public ArrayList<TypeBean> typeBean;//分类
@@ -133,7 +136,12 @@ public class AddProjectsActivity extends ToolBarActivity implements AddWidget.On
 
     private void initViews() {
         setCenterTitle("添加项目");
-
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         initShopCar();
     }
 

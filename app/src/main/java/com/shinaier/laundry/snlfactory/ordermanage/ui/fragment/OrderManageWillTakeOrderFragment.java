@@ -116,7 +116,7 @@ public class OrderManageWillTakeOrderFragment extends BaseFragment implements Vi
 //                                        startActivity(intent);
                                         String id = orderTakeOrderEntities.getResults().get(position).getId();
                                         Intent intent = new Intent(context, WebViewActivity.class);
-                                        intent.putExtra(WebViewActivity.EXTRA_URL, "http://xiyi.wzj.dev.shuxier.com/mapi/merchantorder/additem?token=" + UserCenter.getToken(context) +
+                                        intent.putExtra(WebViewActivity.EXTRA_URL, "http://clean.shuxier.com/mapi/merchantorder/additem?token=" + UserCenter.getToken(context) +
                                                 "&orderid=" + id + "&type=1&is_online=1");
                                         intent.putExtra(WebViewActivity.EXTRA_TITLE, "添加项目");
                                         intent.putExtra("order_id",id);

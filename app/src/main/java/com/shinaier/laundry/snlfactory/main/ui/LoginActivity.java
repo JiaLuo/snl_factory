@@ -169,6 +169,7 @@ public class LoginActivity extends ToolBarActivity implements View.OnClickListen
                         UserCenter.setRoot(this,userEntity.getIsRoot());
 //                        UserCenter.setUid(this,userEntity.getData().getUid());
 //                        UserCenter.setRole(this,userEntity.getData().getRole());
+                        UserCenter.setState(this,userEntity.getOrder());
                         UserCenter.saveLoginStatus(this,true);
                         startActivity(new Intent(this, MainActivity.class));
                         finish();

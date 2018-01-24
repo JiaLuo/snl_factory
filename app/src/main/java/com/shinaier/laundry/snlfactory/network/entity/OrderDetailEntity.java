@@ -77,6 +77,16 @@ public class OrderDetailEntity {
         private String time;
         @SerializedName("is_company") // 线下订单 特有的字段     是否为企业会员:1-是;0-否
         private String isCompany;
+        @SerializedName("total_amount")
+        private String totalAmount;
+
+        public String getTotalAmount() {
+            return totalAmount;
+        }
+
+        public void setTotalAmount(String totalAmount) {
+            this.totalAmount = totalAmount;
+        }
 
         public String getIsCompany() {
             return isCompany;

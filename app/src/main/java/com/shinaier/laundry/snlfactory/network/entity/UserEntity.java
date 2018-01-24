@@ -15,6 +15,16 @@ public class UserEntity {
     private String token;
     @SerializedName("is_root")
     private String isRoot;
+    @SerializedName("order")
+    private String order;
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
     public String getIsRoot() {
         return isRoot;

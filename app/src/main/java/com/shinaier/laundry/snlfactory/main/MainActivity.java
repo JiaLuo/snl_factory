@@ -126,16 +126,26 @@ public class MainActivity extends TabsActivity {
 
     @Override
     protected void addTabs() {
-        addTab(initTabView(R.drawable.navigation_order_manage_selector, R.string.order_manage),
-                OrderManageFragment.class, null);
-        addTab(initTabView(R.drawable.navigation_order_inquiry_selector, R.string.offline_cash),
-                OfflineCashFragment.class, null);
         if(UserCenter.getRoot(this).equals("1")){ //是否为店长 1 是 0 否
+            addTab(initTabView(R.drawable.navigation_order_manage_selector, R.string.order_manage),
+                    OrderManageFragment.class, null);
+            addTab(initTabView(R.drawable.navigation_order_inquiry_selector, R.string.offline_cash),
+                    OfflineCashFragment.class, null);
             addTab(initTabView(R.drawable.navigation_manage_selector, R.string.manage),
                     ManageFragment.class, null);
+            addTab(initTabView(R.drawable.navigation_settings_selector, R.string.settings),
+                    SettingsManageFragment.class, null);
+
+        }else {
+            if (UserCenter.getState(this).equals("1")){  // 1 是有 2
+                addTab(initTabView(R.drawable.navigation_order_manage_selector, R.string.order_manage),
+                        OrderManageFragment.class, null);
+            }
+            addTab(initTabView(R.drawable.navigation_order_inquiry_selector, R.string.offline_cash),
+                    OfflineCashFragment.class, null);
+            addTab(initTabView(R.drawable.navigation_settings_selector, R.string.settings),
+                    SettingsManageFragment.class, null);
         }
-        addTab(initTabView(R.drawable.navigation_settings_selector, R.string.settings),
-                SettingsManageFragment.class, null);
     }
 
     private View initTabView(int tabIcon, int tabText) {

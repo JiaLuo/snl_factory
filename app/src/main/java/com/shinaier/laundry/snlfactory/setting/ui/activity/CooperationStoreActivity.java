@@ -96,6 +96,7 @@ public class CooperationStoreActivity extends ToolBarActivity implements View.On
 
     @Override
     protected void parseData(int requestCode, String data) {
+        LogUtil.e("zhang","data = " + data);
         super.parseData(requestCode, data);
         switch (requestCode){
             case REQUEST_CODE_COOPERATIVE_STORE:

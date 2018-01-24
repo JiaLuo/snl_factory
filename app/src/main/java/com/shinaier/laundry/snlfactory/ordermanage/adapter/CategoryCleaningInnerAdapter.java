@@ -55,7 +55,7 @@ public class CategoryCleaningInnerAdapter extends BaseAdapterNew<OrderCleaningEn
         if(item != null){
             cleaningClothesName.setText(item.getItemName());
             if (item.getPutSn() != null){
-                cleaningClothesNum.setText("x" + item.getPutSn());
+                cleaningClothesNum.setText(item.getPutSn());
             }else {
                 cleaningClothesNum.setText("");
             }

@@ -147,8 +147,7 @@ public class OrderDetailActivity extends ToolBarActivity implements View.OnClick
                 dialog.setContent("加载中");
                 dialog.show();
                 IdentityHashMap<String,String> params = new IdentityHashMap<>();
-                params.put("order_id",id);
-                params.put("clerk_id", UserCenter.getUid(this));
+                params.put("oid",id);
                 params.put("token",UserCenter.getToken(this));
                 requestHttpData(Constants.Urls.URL_POST_ORDER_PRINT,REQUEST_CODE_ORDER_PRINT, FProtocol.HttpMethod.POST,params);
                 break;
@@ -305,18 +304,18 @@ public class OrderDetailActivity extends ToolBarActivity implements View.OnClick
             //显示总计处理
             if(!orderDetailEntity.getDetailResult().getPayAmount().equals("0")){
                 altogetherNum.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                if(orderDetailEntity.getDetailResult().getAmount() != null){
+                if(orderDetailEntity.getDetailResult().getTotalAmount() != null){
                     altogetherNum.setVisibility(View.VISIBLE);
-                    altogetherNum.setText("总计：￥" + orderDetailEntity.getDetailResult().getAmount());
+                    altogetherNum.setText("总计：￥" + orderDetailEntity.getDetailResult().getTotalAmount());
                     altogetherNum.setTextColor(Color.parseColor("#999999"));
                 }else {
                     altogetherNum.setVisibility(View.GONE);
                 }
             }else {
                 altogetherNum.getPaint().setFlags(0);
-                if(orderDetailEntity.getDetailResult().getAmount() != null){
+                if(orderDetailEntity.getDetailResult().getPayAmount() != null){
                     altogetherNum.setVisibility(View.VISIBLE);
-                    altogetherNum.setText("总计：￥" + orderDetailEntity.getDetailResult().getAmount());
+                    altogetherNum.setText("总计：￥" + orderDetailEntity.getDetailResult().getPayAmount());
                     altogetherNum.setTextColor(this.getResources().getColor(R.color.black_text));
                 }else {
                     altogetherNum.setVisibility(View.GONE);

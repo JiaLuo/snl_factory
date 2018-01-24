@@ -1245,7 +1245,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 params.put("amount",cashInputSpecial);
             }else if (roundingCashDiscount.isSelected()){
                 params.put("reduce","floor");
-            }else {
+            }else if (freeCleanDiscount.isSelected()){
                 params.put("sms_code",inputCode);
                 params.put("reduce","free");
             }
