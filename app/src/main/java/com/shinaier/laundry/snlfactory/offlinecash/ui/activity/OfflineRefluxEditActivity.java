@@ -80,6 +80,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
     private CommonDialog dialog;
 
     private List<String> strings = new ArrayList<>();//存权限id
+    private String module;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +108,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                 params.put("is_back","1");
             }
 
-            params.put("back_state",strings.toString());
+            params.put("back_state",module);
             code = REQUEST_CODE_REFLUX;
         }else {
             code = REQUEST_CODE_REFLUX_EDIT;
@@ -157,6 +158,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                         result.getRefluxEditModules().get(i).isSelect = false;
                     }
                     result.getRefluxEditModules().get(position).isSelect = true;
+                    module = result.getRefluxEditModules().get(position).getModule();
                     strings.add(result.getRefluxEditModules().get(position).getModule()); //选择的权限加入到集合里
                 }
                 refluxModuleAdapter.notifyDataSetChanged();
@@ -226,7 +228,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                 String inputRefluxDescribe = etRefluxEditDescribe.getText().toString();
                     if (!TextUtils.isEmpty(inputRefluxDescribe)){
                         if (refluxEditNormal.isSelected() || refluxEditNotNormal.isSelected()){
-                            if (!TextUtils.isEmpty(strings.toString())){
+                            if (module != null && !TextUtils.isEmpty(module)){
                                 //同意返流
                                 loadData(false,inputRefluxDescribe);
                             }else {
