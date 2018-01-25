@@ -75,7 +75,7 @@ public class CooperationStoreAdapter extends BaseAdapterNew<CooperativeStoreEnti
         if (item != null){
             cooperativeStoreImg.setImageURI(Uri.parse(item.getmLogo()));
             cooperativeStoreName.setText(item.getmName());
-            cooperativeStoreNum.setText(item.getAcceptId());
+            cooperativeStoreNum.setText(item.getId());
             cooperativeStorePhone.setText(item.getPhoneNumber());
             cooperativeStoreAddress.setText(item.getmAddress());
 

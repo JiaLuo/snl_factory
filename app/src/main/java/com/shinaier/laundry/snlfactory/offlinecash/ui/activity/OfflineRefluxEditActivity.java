@@ -273,7 +273,7 @@ public class OfflineRefluxEditActivity extends ToolBarActivity implements View.O
                                         for (int i = 0; i < result.getRefluxEditModules().size(); i++) {
                                             for (int j = 0; j < strings.size(); j++) {
                                                 if (strings.get(j).equals(result.getRefluxEditModules().get(i).getModule())){
-                                                    result.getRefluxEditModules().get(j).isSelect = true;
+                                                    result.getRefluxEditModules().get(i).isSelect = true;
                                                 }
                                             }
                                         }
