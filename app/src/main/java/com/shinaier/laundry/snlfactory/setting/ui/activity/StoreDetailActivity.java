@@ -160,13 +160,8 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
         initLoadingView(this);
         setLoadingStatus(LoadingStatus.LOADING);
 //        rlStoreQrCode.setOnClickListener(this);
-        rlStorePhone.setOnClickListener(this);
-        rlServiceScope.setOnClickListener(this);
-        rlDoorToDoorService.setOnClickListener(this);
         leftButton.setOnClickListener(this);
-        rlVipInfo.setOnClickListener(this);
-        rlStoreInfo.setOnClickListener(this);
-        rlStoreModular.setOnClickListener(this);
+
     }
 
     private void loadData() {
@@ -187,6 +182,14 @@ public class StoreDetailActivity extends ToolBarActivity implements View.OnClick
                         if (storeInfoEntity.getCode() == 0){
                             StoreInfoEntity.StoreInfoResult result = storeInfoEntity.getResult();
                             setStoreInfo(result);
+                            rlStorePhone.setOnClickListener(this);
+                            rlServiceScope.setOnClickListener(this);
+                            rlDoorToDoorService.setOnClickListener(this);
+                            rlVipInfo.setOnClickListener(this);
+                            rlStoreInfo.setOnClickListener(this);
+                            rlStoreModular.setOnClickListener(this);
+                        }else {
+                            ToastUtil.shortShow(this,storeInfoEntity.getMsg());
                         }
                     }
 
