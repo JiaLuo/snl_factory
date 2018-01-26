@@ -561,6 +561,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
 
     private double computeAfterDiscount(List<OfflineOrderPayEntity.OfflineOrderPayResult.OfflineOrderPayItems> itemses, boolean isDiscount, double cardDiscount) {
         double sum = 0;
+        doubles.clear();
         for (int i = 0; i < itemses.size(); i++) {
             //项目是否有折扣标识
             String hasDiscount = itemses.get(i).getHasDiscount();
@@ -1256,7 +1257,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 params.put("sms_code",inputCode);
                 params.put("reduce","special");
                 params.put("amount",inputSpecial);
-            }else {
+            }else if (roundingWxpayDiscount.isSelected()){
                 params.put("reduce","floor");
             }
         }else if (aliPaySelector.isSelected()){
@@ -1266,7 +1267,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 params.put("reduce","special");
                 params.put("sms_code",inputCode);
                 params.put("amount",inputAlipaySpecial);
-            }else {
+            }else if (roundingAlipayDiscount.isSelected()){
                 params.put("reduce","floor");
             }
         }else if (platformMemberSelector.isSelected()){
