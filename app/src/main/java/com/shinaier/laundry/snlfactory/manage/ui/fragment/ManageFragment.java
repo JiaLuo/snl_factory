@@ -26,6 +26,7 @@ import com.shinaier.laundry.snlfactory.base.fragment.BaseFragment;
 import com.shinaier.laundry.snlfactory.main.UserCenter;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.CashBackActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.CashCouponCenterActivity;
+import com.shinaier.laundry.snlfactory.manage.ui.activity.InviteFriendActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageCommodityActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageEmployeeActivity;
 import com.shinaier.laundry.snlfactory.manage.ui.activity.ManageFinanceActivity;
@@ -235,8 +236,7 @@ public class ManageFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.ll_invite_friend:
                 //邀请好友
-                // TODO: 2017/10/26  邀请好友麻烦 最后弄
-//                startActivity(new Intent(context,InviteFriendActivity.class));
+                startActivity(new Intent(context,InviteFriendActivity.class));
                 break;
             case R.id.ll_user_evaluate:
                 //用户评价

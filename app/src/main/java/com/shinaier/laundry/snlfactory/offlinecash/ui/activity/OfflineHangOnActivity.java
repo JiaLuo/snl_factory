@@ -229,6 +229,7 @@ public class OfflineHangOnActivity extends ToolBarActivity implements View.OnCli
                                 params.put("itemids",stringBuffer.toString());
                                 params.put("moduleid","91");
                                 params.put("startnum",beginInputNum);
+                                params.put("endnum",endInputNum);
                                 requestHttpData(Constants.Urls.URL_POST_HANG_ON,REQUEST_CODE_CLEANED_HANGON,
                                         FProtocol.HttpMethod.POST,params);
                             }else {

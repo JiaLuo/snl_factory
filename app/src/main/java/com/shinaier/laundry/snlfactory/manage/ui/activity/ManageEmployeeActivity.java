@@ -22,6 +22,7 @@ import com.shinaier.laundry.snlfactory.network.entity.Entity;
 import com.shinaier.laundry.snlfactory.network.parser.Parsers;
 import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class ManageEmployeeActivity extends ToolBarActivity implements View.OnCl
                             results = employeeEntity.getResults();
                             if (results != null && results.size() > 0){
                                 setLoadingStatus(LoadingStatus.GONE);
+                                employeeList.setVisibility(View.VISIBLE);
                                 ManageEmployeeAdapter manageEmployeeAdapter = new ManageEmployeeAdapter(this, results);
                                 employeeList.setAdapter(manageEmployeeAdapter);
                                 manageEmployeeAdapter.setOnEditorListener(new ManageEmployeeAdapter.OnEditorListener() {
@@ -120,6 +122,8 @@ public class ManageEmployeeActivity extends ToolBarActivity implements View.OnCl
 
                                 });
                             }else {
+                                ManageEmployeeAdapter manageEmployeeAdapter = new ManageEmployeeAdapter(this, new ArrayList<EmployeeEntity.EmployeeResult>());
+                                employeeList.setAdapter(manageEmployeeAdapter);
                                 setLoadingStatus(LoadingStatus.EMPTY);
                             }
                         }else {
@@ -127,9 +131,13 @@ public class ManageEmployeeActivity extends ToolBarActivity implements View.OnCl
                         }
 
                     }else {
+                        ManageEmployeeAdapter manageEmployeeAdapter = new ManageEmployeeAdapter(this, new ArrayList<EmployeeEntity.EmployeeResult>());
+                        employeeList.setAdapter(manageEmployeeAdapter);
                         setLoadingStatus(LoadingStatus.EMPTY);
                     }
                 }else {
+                    ManageEmployeeAdapter manageEmployeeAdapter = new ManageEmployeeAdapter(this, new ArrayList<EmployeeEntity.EmployeeResult>());
+                    employeeList.setAdapter(manageEmployeeAdapter);
                     setLoadingStatus(LoadingStatus.EMPTY);
                 }
                 break;

@@ -337,7 +337,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 LogUtil.e("zhang","defaultNetReceipts = " + defaultNetReceipts);
 
                                 //默认显示品项折扣和实收价格
-                                showBrandDiscountNumAndNetReceiptsNormal(reducePrice, defaultNetReceipts);
+                                showBrandDiscountNumAndNetReceiptsNormal(reducePrice, payAmount);
 
                                 //是否有平台卡的标识
                                 String hasPlatform = result.getHasPlatform();

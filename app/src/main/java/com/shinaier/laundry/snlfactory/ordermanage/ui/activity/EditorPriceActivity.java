@@ -142,7 +142,7 @@ public class EditorPriceActivity extends ToolBarActivity implements View.OnClick
         if (!TextUtils.isEmpty(craftworkAddPriceItems.getCraftDes())){
             tvRemarksNum.setText(craftworkAddPriceItems.getCraftDes().length()+ "/20");
         }
-        etInputHedgeValue.setText(formatMoney(craftworkAddPriceItems.getKeepPrice()));
+        etInputHedgeValue.setText(formatMoney(craftworkAddPriceItems.getKeepPrice() * 200));
 
         etInputTechnologyRemarks.addTextChangedListener(new TextWatcher() {
             @Override

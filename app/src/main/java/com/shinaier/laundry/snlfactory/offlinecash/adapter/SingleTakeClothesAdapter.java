@@ -52,17 +52,20 @@ public class SingleTakeClothesAdapter extends BaseAdapterNew<SingleTakeClothesEn
                 case "0":
                     singleTakeClothesStatus.setText("已收衣");
                     break;
-                case "1":
+                case "3":
                     singleTakeClothesStatus.setText("清洗中");
                     break;
-                case "2":
+                case "90":
+                    singleTakeClothesStatus.setText("洗护完成");
+                    break;
+                case "91":
                     singleTakeClothesStatus.setText("已上挂");
                     break;
-                case "3":
+                case "100":
                     singleTakeClothesStatus.setText("已取走");
                     break;
             }
-            singleTakeClothesNum.setText(item.getNumber());
+            singleTakeClothesNum.setText(item.getPutNumber());
 
             singleTakeClothesSelect.setOnClickListener(new View.OnClickListener() {
                 @Override

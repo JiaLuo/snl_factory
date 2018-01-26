@@ -83,7 +83,7 @@ public class LeaveFactoryActivity extends ToolBarActivity implements View.OnClic
     protected void onResume() {
         super.onResume();
         cooperativeStoreData(); //合作店铺列表数据
-        loadData(); //出厂列表数据
+        loadData(""); //出厂列表数据
     }
 
     private void cooperativeStoreData() {
@@ -93,9 +93,10 @@ public class LeaveFactoryActivity extends ToolBarActivity implements View.OnClic
                 REQUEST_CODE_COOPERATIVE_STORE_OPERATE, FProtocol.HttpMethod.POST,params);
     }
 
-    private void loadData() {
+    private void loadData(String acceptId) {
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
+        params.put("mer_id",acceptId);
         requestHttpData(Constants.Urls.URL_POST_LEAVE_FACTORY,REQUEST_CODE_LEAVE_FACTORY,
                 FProtocol.HttpMethod.POST,params);
     }
@@ -129,6 +130,7 @@ public class LeaveFactoryActivity extends ToolBarActivity implements View.OnClic
                 selectStoreId = optionEntities.get(position).getId();
                 chooseStoreName.setText(selectStoreName);
                 mCheckSpinnerView.close();
+                loadData(selectStoreId);
             }
         });
         animation = new TranslateAnimation(0, 0, -(DeviceUtil.getHeight(this)), 0);
@@ -301,7 +303,7 @@ public class LeaveFactoryActivity extends ToolBarActivity implements View.OnClic
                     if (entity != null){
                         if (entity.getRetcode() == 0){
                             ToastUtil.shortShow(this,"操作成功");
-                            loadData();
+                            loadData("");
                             if (rlAllSelect.isSelected()){
                                 rlAllSelect.setSelected(false);
                             }

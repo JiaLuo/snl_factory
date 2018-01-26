@@ -414,7 +414,7 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
                     if (!TextUtils.isEmpty(inputMemberName)){
                         if (!TextUtils.isEmpty(inputDiscountNum)){
                             double dDiscountNum = Double.parseDouble(inputDiscountNum);
-                            if (dDiscountNum > 1 && dDiscountNum < 10){
+                            if (dDiscountNum >= 1 && dDiscountNum <= 10){
                                 if (!TextUtils.isEmpty(inputMoneyNum)){
                                     if (isCashPay || isWxPay || isAliPay){
                                         if (isCashPay){
@@ -612,7 +612,7 @@ public class OfflineMemberAddActivity extends ToolBarActivity implements View.On
             params.put("auth_code",payCode);
         }
 
-        params.put("address",inputMemberAddress);
+        params.put("addr",inputMemberAddress);
         params.put("remark",inputMemberMark);
         if (memberType == 1 || memberType == 0){
             if (isMan){

@@ -7,44 +7,57 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class InviteFriendEntity {
-    @SerializedName("data")
-    private String data;
-    @SerializedName("retcode")
-    private String retcode;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("url")
-    private String url;
+    @SerializedName("code")
+    private int code;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("result")
+    private InviteFriendResult result;
 
-    public String getData() {
-        return data;
+    public int getCode() {
+        return code;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getRetcode() {
-        return retcode;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setRetcode(String retcode) {
-        this.retcode = retcode;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getStatus() {
-        return status;
+    public InviteFriendResult getResult() {
+        return result;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setResult(InviteFriendResult result) {
+        this.result = result;
     }
 
-    public String getUrl() {
-        return url;
-    }
+    public class InviteFriendResult{
+        @SerializedName("mcode")
+        private String mCode;
+        @SerializedName("url")
+        private String url;
 
-    public void setUrl(String url) {
-        this.url = url;
+        public String getmCode() {
+            return mCode;
+        }
+
+        public void setmCode(String mCode) {
+            this.mCode = mCode;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
     }
 }

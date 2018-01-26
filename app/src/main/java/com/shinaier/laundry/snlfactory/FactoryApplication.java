@@ -6,6 +6,7 @@ import com.common.utils.LogUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
 import com.shinaier.laundry.snlfactory.download.SystemParams;
+import com.umeng.socialize.PlatformConfig;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -14,6 +15,11 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class FactoryApplication extends Application {
+    {
+        PlatformConfig.setWeixin("wx9dc154e2c9c24fda", "9c7a2ce81acfce8a061e3f34e3460808");
+        PlatformConfig.setQQZone("1105958999", "TeX8QZWgMad1GsYH");
+        PlatformConfig.setSinaWeibo("4231394323", "f06421de21f050682b850196a24fb255","");
+    }
     @Override
     public void onCreate() {
         super.onCreate();

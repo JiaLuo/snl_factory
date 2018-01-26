@@ -3,7 +3,6 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <include layout="@layout/load_data_status_view"/>
     <LinearLayout
         android:id="@+id/ll_add_employee"
         android:layout_marginTop="15dp"
@@ -22,11 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-    <ListView
-        android:divider="#f5f5f5"
-        android:dividerHeight="8dp"
-        android:id="@+id/employee_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"/>
+        android:layout_height="match_parent">
+        <ListView
+            android:divider="#f5f5f5"
+            android:dividerHeight="8dp"
+            android:id="@+id/employee_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"/>
+        <include layout="@layout/load_data_status_view"/>
+    </FrameLayout>
 </LinearLayout>

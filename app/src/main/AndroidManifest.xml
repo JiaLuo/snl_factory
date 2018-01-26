@@ -322,6 +322,10 @@
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />
+        <activity android:name=".manage.ui.activity.InviteFriendActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
+                  android:screenOrientation="portrait"
+            />
 
 
         <!-- Required SDK核心功能-->
@@ -395,6 +399,59 @@
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
         <meta-data android:name="JPUSH_APPKEY" android:value="72d12d36511ee42f79f92553" /> <!--  </>值来自开发者平台取得的AppKey-->
 
+        //微信
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        // qq完整版：
+
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1105958999" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        //新浪微博
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" >
+        </activity>
+        <service android:name="com.sina.weibo.sdk.net.DownloadService"
+                 android:exported="false"></service>
+
+        <!-- 友盟-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="58c145db8630f519a00009b9" >
+        </meta-data>
 
         <service
             android:name=".service.JobSchedulerService"
