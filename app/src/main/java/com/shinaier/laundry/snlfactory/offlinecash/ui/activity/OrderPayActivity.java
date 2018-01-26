@@ -376,6 +376,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
 
 
 
+
                                 //是否有赚点卡的标识
                                 String hasMerchant = result.getHasMerchant();
 
