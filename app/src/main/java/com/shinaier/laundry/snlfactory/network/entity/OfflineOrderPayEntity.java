@@ -46,9 +46,9 @@ public class OfflineOrderPayEntity {
         @SerializedName("keep_price")
         private double keepPrice;
         @SerializedName("freight_price")
-        private String freightPrice;
+        private double freightPrice;
         @SerializedName("craft_price")
-        private String craftPrice;
+        private double craftPrice;
         @SerializedName("reduce_price")
         private double reducePrice;
         @SerializedName("amount")
@@ -96,19 +96,19 @@ public class OfflineOrderPayEntity {
             this.keepPrice = keepPrice;
         }
 
-        public String getFreightPrice() {
+        public double getFreightPrice() {
             return freightPrice;
         }
 
-        public void setFreightPrice(String freightPrice) {
+        public void setFreightPrice(double freightPrice) {
             this.freightPrice = freightPrice;
         }
 
-        public String getCraftPrice() {
+        public double getCraftPrice() {
             return craftPrice;
         }
 
-        public void setCraftPrice(String craftPrice) {
+        public void setCraftPrice(double craftPrice) {
             this.craftPrice = craftPrice;
         }
 

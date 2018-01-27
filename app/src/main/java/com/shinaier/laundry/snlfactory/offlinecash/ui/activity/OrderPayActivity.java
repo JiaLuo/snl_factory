@@ -141,12 +141,12 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 case 2:
                     platformPayDialog.dismiss();
                     platformMemberSelector.setSelected(false);
-                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
+                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,totalAmount - reducePrice);
                     break;
                 case 4:
                     merchantPayDialog.dismiss();
                     vipMemberSelector.setSelected(false);
-                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
+                    showBrandDiscountNumAndNetReceiptsNormal(reducePrice,totalAmount - reducePrice);
                     break;
                 case 5:
                     //会员卡支付发送验证码接口
@@ -253,7 +253,9 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private SpecialPayConfirmDialog specialPayConfirmDialog;
     private double defaultNetReceipts;
     private double reducePrice;
-
+    private double keepPrice;
+    private double freightPrice;
+    private double craftPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,15 +327,21 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 totalAmount = result.getTotalAmount();
                                 //获取订单里的所有项目集合
                                 itemses = result.getItemses();
+                                //保值清洗费
+                                keepPrice = result.getKeepPrice();
+                                //运费
+                                freightPrice = result.getFreightPrice();
+                                //工艺加价
+                                craftPrice = result.getCraftPrice();
+                                //项目优惠价格
+                                reducePrice = result.getReducePrice();
+
                                 //设置应收价格
                                 tvOrderSum.setText(String.format(this.getResources().getString(R.string.show_money_value),
                                         formatMoney(totalAmount)));
 
                                 //默认实收价格
                                 defaultNetReceipts = computeAfterDiscount(itemses, false, 10);
-                                //项目优惠价格
-                                reducePrice = result.getReducePrice();
-
 
                                 //默认显示品项折扣和实收价格
                                 showBrandDiscountNumAndNetReceiptsNormal(reducePrice, payAmount);
