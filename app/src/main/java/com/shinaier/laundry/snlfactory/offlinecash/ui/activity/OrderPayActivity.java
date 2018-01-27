@@ -334,7 +334,6 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 //项目优惠价格
                                 reducePrice = result.getReducePrice();
 
-                                LogUtil.e("zhang","defaultNetReceipts = " + defaultNetReceipts);
 
                                 //默认显示品项折扣和实收价格
                                 showBrandDiscountNumAndNetReceiptsNormal(reducePrice, payAmount);

@@ -186,7 +186,7 @@ public class VipCardDetailActivity extends ToolBarActivity implements View.OnCli
     private void editMemberRule(String jsonData){
         IdentityHashMap<String,String> params = new IdentityHashMap<>();
         params.put("token", UserCenter.getToken(this));
-        params.put("json_data",jsonData);
+        params.put("cards",jsonData);
         requestHttpData(Constants.Urls.URL_POST_UPDATE_MERCHANT_RULE,REQUEST_CODE_UPDATE_MERCHANT_RULE,
                 FProtocol.HttpMethod.POST,params);
     }

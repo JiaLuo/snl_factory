@@ -187,7 +187,7 @@ public class CleanedAssessmentActivity extends ToolBarActivity implements View.O
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        for (int k = 0; k < 4; k++) {
+                        for (int k = 0; k < 1; k++) {
                             for (int l = 0; l <assessEntity.getAssesses().get(k).size() ; l++) {
                                 if (assessEntity.getAssesses().get(k).get(l).getAssesses().equals(outList.get(j))) {
                                     assessEntity.getAssesses().get(k).get(l).setIscheck(0);
