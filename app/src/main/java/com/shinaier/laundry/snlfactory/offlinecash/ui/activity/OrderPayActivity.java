@@ -341,7 +341,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                         formatMoney(totalAmount)));
 
                                 //默认实收价格
-                                defaultNetReceipts = computeAfterDiscount(itemses, false, 10);
+//                                defaultNetReceipts = computeAfterDiscount(itemses, false, 10);
 
                                 //默认显示品项折扣和实收价格
                                 showBrandDiscountNumAndNetReceiptsNormal(reducePrice, payAmount);
@@ -533,7 +533,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                                 wxPaySelector.setOnClickListener(null);
                                 aliPaySelector.setOnClickListener(null);
                             }else {
-                                tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(defaultNetReceipts - cashCouponValue))); //设置实收显示
+                                tvNetReceipts.setText(String.format(this.getResources().getString(R.string.show_money_value),formatMoney(payAmount - cashCouponValue))); //设置实收显示
                                 tvBrandDiscountNum.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue + reducePrice))); //设置品项折扣显示
                                 specialCashDiscount.setOnClickListener(this);
                                 specialWxpayDiscount.setOnClickListener(this);
@@ -590,10 +590,10 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                         doubles.add(v);
                     }
                 } else {
-                    doubles.add(itemPrice);
+                    doubles.add(itemRealPrice);
                 }
             }else {
-                doubles.add(itemRealPrice);
+                doubles.add(itemPrice);
             }
         }
 
@@ -602,7 +602,7 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
             sum += doubles.get(i);
         }
         LogUtil.e("zhang","sum = " + sum);
-        return sum;
+        return sum + keepPrice + freightPrice + craftPrice;
     }
 
     /**
@@ -895,12 +895,12 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                     tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue)));
                     //如果代金券金额比支付金额小的话，改变品项折扣 和实收 的金额 反之就默认
                     if (cashCouponValue < payAmount){
-                        useRoundingCashDiscount(roundingCashDiscount,cashCouponValue);
+                        useRoundingCashDiscount(roundingCashDiscount,payAmount - cashCouponValue);
                     }else {
                         useRoundingCashDiscount(roundingCashDiscount,0);
                     }
                 }else {
-                    useRoundingCashDiscount(roundingCashDiscount,defaultNetReceipts);
+                    useRoundingCashDiscount(roundingCashDiscount,payAmount);
                 }
                 if(specialCashDiscount.isSelected() || freeCleanDiscount.isSelected()){
                     specialCashDiscount.setSelected(false);
@@ -981,9 +981,11 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 break;
             case R.id.rounding_wxpay_discount:
                 if (isGetCashConpon){
+                    //设置代金券设置金额数据
+                    tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue)));
                     //如果代金券金额比支付金额小的话，改变品项折扣 和实收 的金额 反之就默认
                     if (cashCouponValue < payAmount){
-                        useRoundingCashDiscount(roundingWxpayDiscount,cashCouponValue);
+                        useRoundingCashDiscount(roundingWxpayDiscount,payAmount - cashCouponValue);
                     }else {
                         useRoundingCashDiscount(roundingWxpayDiscount,0);
                     }
@@ -1047,8 +1049,10 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
                 break;
             case R.id.rounding_alipay_discount:
                 if (isGetCashConpon){
+                    //设置代金券设置金额数据
+                    tvCashCouponValue.setText(String.format(this.getResources().getString(R.string.brandDiscount_value),formatMoney(cashCouponValue)));
                     if (cashCouponValue < payAmount){
-                        useRoundingCashDiscount(roundingAlipayDiscount,cashCouponValue);
+                        useRoundingCashDiscount(roundingAlipayDiscount,payAmount - cashCouponValue);
                     }else {
                         useRoundingCashDiscount(roundingAlipayDiscount,0);
                     }
@@ -1144,12 +1148,12 @@ public class OrderPayActivity extends ToolBarActivity implements View.OnClickLis
     private void payModeSelectShowBrandDiscountAndNetReceipts() {
         if (isGetCashConpon){
             if (cashCouponValue < payAmount){
-                showBrandDiscountNumAndNetReceiptsBeforeDiscout(defaultNetReceipts - cashCouponValue,reducePrice + cashCouponValue);
+                showBrandDiscountNumAndNetReceiptsBeforeDiscout(payAmount - cashCouponValue,reducePrice + cashCouponValue);
             }else {
-                showBrandDiscountNumAndNetReceiptsBeforeDiscout(reducePrice,defaultNetReceipts);
+                showBrandDiscountNumAndNetReceiptsBeforeDiscout(reducePrice,payAmount - reducePrice);
             }
         }else {
-            showBrandDiscountNumAndNetReceiptsNormal(reducePrice,defaultNetReceipts);
+            showBrandDiscountNumAndNetReceiptsNormal(reducePrice,payAmount);
         }
     }
 

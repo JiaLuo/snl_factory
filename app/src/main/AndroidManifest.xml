@@ -52,7 +52,6 @@
         </activity>
 
         <activity android:name=".main.ui.GuideActivity"
-                  android:noHistory="true"
                   android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|locale"
                   android:screenOrientation="portrait"
             />

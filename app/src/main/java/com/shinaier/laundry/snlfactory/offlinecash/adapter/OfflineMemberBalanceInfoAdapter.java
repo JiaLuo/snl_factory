@@ -34,7 +34,7 @@ public class OfflineMemberBalanceInfoAdapter extends BaseAdapterNew<OfflineMembe
         TextView tvBalanceMoney = ViewHolder.get(convertView,R.id.tv_balance_money);
 
         if(item != null){
-            if (item.getType().equals("0")){
+            if (item.getType().equals("1")){
                 tvBalanceType.setText("会员洗衣消费");
                 tvBalanceMoney.setText("-￥" + item.getAmount());
             }else {
