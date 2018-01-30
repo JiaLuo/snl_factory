@@ -31,6 +31,7 @@ import com.shinaier.laundry.snlfactory.util.ViewInjectUtils;
 
 import java.util.IdentityHashMap;
 
+import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -58,9 +59,6 @@ public class LoginActivity extends ToolBarActivity implements View.OnClickListen
     @ViewInject(R.id.picture_verify_code)
     private EditText pictureVerifyCode;
 
-    private String phoneNum;
-    private String userPassword;
-    private String registrationID;
     private String captcha;
     private String unique;
 
@@ -130,7 +128,7 @@ public class LoginActivity extends ToolBarActivity implements View.OnClickListen
         params.put("captcha",captcha);
         params.put("unique",unique);
         params.put("code",photoCode);
-        params.put("bind_id", PreferencesUtils.getString(this,"registrationID"));
+        params.put("bind_id", JPushInterface.getRegistrationID(this));
         params.put("is_factory","1");
         requestHttpData(Constants.Urls.URL_POST_LOGIN,REQUEST_CODE_LOGIN, FProtocol.HttpMethod.POST,params);
     }

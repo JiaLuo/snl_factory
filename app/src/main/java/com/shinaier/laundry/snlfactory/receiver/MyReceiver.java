@@ -37,7 +37,6 @@ public class MyReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		String registrationID = JPushInterface.getRegistrationID(context);
-		PreferencesUtils.putString(context,"registrationID",registrationID);
 		LogUtil.e(TAG,"registrationID = " + registrationID);
 		try {
 			Bundle bundle = intent.getExtras();

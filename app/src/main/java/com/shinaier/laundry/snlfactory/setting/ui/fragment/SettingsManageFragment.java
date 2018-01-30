@@ -151,7 +151,6 @@ public class SettingsManageFragment extends BaseFragment implements View.OnClick
                         //退出登录 清除registrationID 防止退出登录之后还有消息推送
                         IdentityHashMap<String,String> params = new IdentityHashMap<String, String>();
                         params.put("token",UserCenter.getToken(context));
-//                        params.put("registration_id",PreferencesUtils.getString(context,"registrationID"));
                         requestHttpData(Constants.Urls.URL_POST_QUIT_LOGIN,REQUEST_CODE_QUIT_LOGIN, FProtocol.HttpMethod.POST,params);
                     }
                 });
