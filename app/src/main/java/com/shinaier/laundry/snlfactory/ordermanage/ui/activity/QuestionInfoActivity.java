@@ -106,6 +106,7 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
             }
         });
 
+        cquestionTitle.add("常用类");
         cquestionTitle.add("污渍情况（食品类）");
         cquestionTitle.add("污渍情况（颜色类）");
         cquestionTitle.add("污渍情况（其他生活类）");
@@ -142,7 +143,7 @@ public class QuestionInfoActivity extends ToolBarActivity implements View.OnClic
 
         for (int k = 0; k < options.size(); k++) {
             String s = options.get(k);
-            for (int i = 0; i < 4 ; i++) {
+            for (int i = 0; i < 12 ; i++) {
                 for (int j = 0; j < questionsEntitys.getQuestions().get(i).size(); j++) {
                     if (s.equals(questionsEntitys.getQuestions().get(i).get(j).getQuestion())){
                         questionsEntitys.getQuestions().get(i).get(j).setIscheck(1);

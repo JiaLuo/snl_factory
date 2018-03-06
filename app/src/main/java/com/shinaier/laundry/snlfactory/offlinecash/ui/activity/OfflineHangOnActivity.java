@@ -197,7 +197,6 @@ public class OfflineHangOnActivity extends ToolBarActivity implements View.OnCli
                     ToastUtil.shortShow(this,"返流操作只能单件处理");
                 }
             }else {
-                LogUtil.e("zhang","stringbuffer = " + stringBuffer.toString());
                 View view = View.inflate(this,R.layout.hang_on_view,null);
                 final EditText edBeginOrderNum = (EditText) view.findViewById(R.id.ed_begin_order_num);
                 final EditText edEndOrderNum = (EditText) view.findViewById(R.id.ed_end_order_num);

@@ -93,7 +93,7 @@ public class ColorSettingActivity extends ToolBarActivity implements View.OnClic
 
         for (int k = 0; k < options.size(); k++) {
             String s = options.get(k);
-            for (int i = 0; i < 4 ; i++) {
+            for (int i = 0; i < 5 ; i++) {
                 for (int j = 0; j < colorsEntities.getColorsEntities().get(i).size(); j++) {
                     if (s.equals(colorsEntities.getColorsEntities().get(i).get(j).getColor())){
                         colorsEntities.getColorsEntities().get(i).get(j).setIscheck(1);
@@ -155,6 +155,7 @@ public class ColorSettingActivity extends ToolBarActivity implements View.OnClic
             }
         });
 
+        colorTitle.add("常用类");
         colorTitle.add("花色");
         colorTitle.add("暖色调（纯色）");
         colorTitle.add("中色调（纯色）");
